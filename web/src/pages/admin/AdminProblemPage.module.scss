@@ -1,0 +1,9 @@
+.content {
+  display: flex;
+  flex-direction: column;
+
+  .operation {
+    display: flex;
+    justify-content: space-between;
+  }
+}

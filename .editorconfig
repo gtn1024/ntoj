@@ -1,0 +1,34 @@
+# http://editorconfig.org
+root = true
+
+[*]
+charset = utf-8
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+
+[*.{kt,kts}]
+ktlint_standard = enabled
+ij_kotlin_packages_to_use_import_on_demand = enabled
+
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 2
+
+[*.{yml,yaml,json,xml}]
+indent_style = space
+indent_size = 2
+
+[*.java]
+align_multiline_chained_methods=true
+align_multiline_parameters=true
+align_multiline_parameters_in_calls=true
+align_multiline_ternary_operation=true
+align_subsequent_simple_methods=true
+
+[*.{java,kt}]
+wildcard_import_limit = 999
+ij_kotlin_name_count_to_use_star_import = 999
+ij_kotlin_name_count_to_use_star_import_for_members = 999

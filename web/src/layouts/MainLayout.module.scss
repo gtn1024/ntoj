@@ -1,0 +1,36 @@
+.layout {
+  .header {
+    display: flex;
+
+    .logo {
+      display: flex;
+      font-size: 1.2rem;
+      padding-right: 1rem;
+    }
+
+    .menu {
+      display: flex;
+      justify-content: flex-start;
+      flex-grow: 1;
+    }
+
+    .account {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+
+  .content {
+    min-height: calc(100vh - 64px - 80px);
+  }
+
+  .footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    background-color: #fff;
+    height: 80px;
+  }
+}

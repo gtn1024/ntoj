@@ -1,0 +1,49 @@
+server:
+  port: 18080
+
+spring:
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      write-dates-as-timestamps: true
+    deserialization:
+      fail-on-unknown-properties: false
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:15432}/${PG_DATABASE:ntoj}
+    username: ${PG_USER:ntoj}
+    password: ${PG_PASSWORD:123456}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  flyway:
+    enabled: false
+    baseline-version: 1.0
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    out-of-order: false
+    target: latest
+    locations: classpath:db/migration
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    default-schema: public
+
+sa-token:
+  token-name: Authorization
+  # token前缀
+  token-prefix: Bearer
+  # jwt 密钥
+  jwt-secret-key: ${JWT_SECRET_KEY:JzNuZP2nGuBgPtKe3A0rxuYhExezSghw}
+  # token有效期
+  token-expire-timeout: ${TOKEN_EXPIRE_TIMEOUT:604800}
+  # 关闭 Cookie 功能
+  is-read-cookie: false
+  is-write-header: false
+
+ntoj:
+  file:
+    service-impl: zip.ntoj.server.service.FileSystemFileService
+    file-system:
+      base-dir: ${TOJ_FILE_BASE_DIR:data}

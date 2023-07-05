@@ -1,0 +1,23 @@
+.wrapper {
+  margin: 20px;
+
+  .content {
+    .title {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .content {
+      padding-top: 20px;
+
+      * {
+        max-width: 100%;
+      }
+    }
+  }
+}

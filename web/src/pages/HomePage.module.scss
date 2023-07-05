@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px;
+
+  .announcement {
+    width: 70%;
+
+    .title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding-bottom: 1rem;
+    }
+  }
+}
