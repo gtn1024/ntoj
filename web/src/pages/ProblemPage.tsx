@@ -110,7 +110,7 @@ export const ProblemPage: React.FC = () => {
         <div>
           <h2 className="font-bold">{data?.title}</h2>
         </div>
-        <div className="pb-[20px]">
+        <div className="pb-[20px] text-xs">
           <span className="mr-1">时间限制：{data?.timeLimit} ms</span>
           <span className="mr-1">内存限制：{data?.memoryLimit} MB</span>
         </div>

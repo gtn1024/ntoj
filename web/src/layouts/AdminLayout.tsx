@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react'
 import {
   AlertOutlined,
   HomeOutlined,
-  MenuFoldOutlined,
+  MenuFoldOutlined, MenuOutlined,
   MenuUnfoldOutlined, QuestionOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Button, Layout, Menu, Space, theme } from 'antd'
+import { Button, Dropdown, Layout, Menu, theme } from 'antd'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/useUserStore.tsx'
+import { useLayout } from '../hooks/useLayout.ts'
 
 const { Header, Sider, Content } = Layout
 
 export const AdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
   const [current, setCurrent] = useState('')
+  const { isMobile, breakpoint } = useLayout()
+  useEffect(() => {
+    setCollapsed(breakpoint === 'sm')
+  }, [breakpoint])
 
   const { pathname } = useLocation()
   const {
@@ -30,12 +35,12 @@ export const AdminLayout: React.FC = () => {
     },
     {
       key: '/admin/announcement',
-      icon: <AlertOutlined />,
+      icon: <AlertOutlined/>,
       label: '公告',
     },
     {
       key: '/admin/problem',
-      icon: <QuestionOutlined />,
+      icon: <QuestionOutlined/>,
       label: '题目',
     },
   ]
@@ -58,39 +63,64 @@ export const AdminLayout: React.FC = () => {
   }
   return (
     <Layout className="min-h-screen">
-      <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
-        {/* <div className="logo" /> */}
-        <Menu
-          mode="inline"
-          selectedKeys={[current]}
-          items={items}
-          onClick={onClickMenu}
-        />
-      </Sider>
+      {
+        !isMobile && (
+          <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
+            {/* <div className="logo" /> */}
+            <Menu
+              style={{ height: '100vh' }}
+              mode="inline"
+              selectedKeys={[current]}
+              items={items}
+              onClick={onClickMenu}
+            />
+          </Sider>
+        )
+      }
       <Layout className="flex">
         <Header className="flex justify-between" style={{ padding: 0, background: colorBgContainer }}>
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
+          {
+            !isMobile
+              ? (
+                <Button
+                  type="text"
+                  icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: '16px',
+                    width: 64,
+                    height: 64,
+                  }}
+                />
+                )
+              : (
+                <Dropdown menu={{
+                  items,
+                  onClick: onClickMenu,
+                  selectable: true,
+                  selectedKeys: [current],
+                }} trigger={['click']}>
+                  <Button
+                    type="text"
+                    icon={<MenuOutlined/>}
+                    style={{
+                      fontSize: '16px',
+                      width: 64,
+                      height: 64,
+                    }}
+                  />
+                </Dropdown>
+                )
+          }
           <div className="mr-4">
-            <Space>
-              <span> {user.username} </span>
-              <Link to='/'>
-                返回主站
-              </Link>
-            </Space>
+            <span className="mr-2">{user.username}</span>
+            <Link to='/'>
+              返回主站
+            </Link>
           </div>
         </Header>
         <Content
           style={{
-            margin: '24px 16px',
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
