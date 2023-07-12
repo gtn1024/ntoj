@@ -1,7 +1,7 @@
 package zip.ntoj.server.service
 
 import org.springframework.stereotype.Service
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.FileUpload
 import zip.ntoj.server.repository.FileUploadRepository
 
@@ -30,10 +30,10 @@ class FileUploadServiceImpl(
     }
 
     override fun get(id: Long): FileUpload {
-        return fileUploadRepository.findById(id).orElseThrow { TojException("文件不存在", 404) }
+        return fileUploadRepository.findById(id).orElseThrow { AppException("文件不存在", 404) }
     }
 
     override fun get(filename: String): FileUpload {
-        return fileUploadRepository.findByFilename(filename).orElseThrow { TojException("文件不存在", 404) }
+        return fileUploadRepository.findByFilename(filename).orElseThrow { AppException("文件不存在", 404) }
     }
 }

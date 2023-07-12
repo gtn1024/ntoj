@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort.Direction.ASC
 import org.springframework.data.domain.Sort.Direction.DESC
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Announcement
 import zip.ntoj.server.repository.AnnouncementRepository
 
@@ -34,7 +34,7 @@ class AnnouncementServiceImpl(
     val announcementRepository: AnnouncementRepository,
 ) : AnnouncementService {
     override fun getAnnouncementsById(id: Long): Announcement {
-        return announcementRepository.findById(id).orElseThrow { TojException("公告不存在", 404) }
+        return announcementRepository.findById(id).orElseThrow { AppException("公告不存在", 404) }
     }
 
     override fun getAnnouncements(

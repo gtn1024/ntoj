@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.config.SecurityConfig
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.R
 import zip.ntoj.server.model.User
 import zip.ntoj.server.model.UserRole
@@ -43,7 +43,7 @@ class AuthController(
 
     private fun userLogin(username: String, password: String, user: User): String {
         if (!checkPassword(password, user.salt!!, user.password!!)) {
-            throw TojException("密码错误", 401)
+            throw AppException("密码错误", 401)
         }
         StpUtil.login(user.userId, SaLoginConfig.setTimeout(securityConfig.tokenExpireTime))
         return StpUtil.getTokenInfo().getTokenValue()
@@ -57,7 +57,7 @@ class AuthController(
         // 判断用户是否存在
         if (userService.existsByUsername(request.username!!)) {
             // 用户已存在
-            throw TojException("用户已存在", 400)
+            throw AppException("用户已存在", 400)
         }
         // 创建用户
         val salt = getSalt()

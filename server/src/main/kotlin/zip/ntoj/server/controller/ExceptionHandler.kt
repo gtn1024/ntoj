@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.R
 import zip.ntoj.server.util.randomString
 
@@ -15,8 +15,8 @@ import zip.ntoj.server.util.randomString
 class ExceptionHandler(
     val logger: Logger = LoggerFactory.getLogger(ExceptionHandler::class.java),
 ) {
-    @ExceptionHandler(TojException::class)
-    fun handleTojException(e: TojException): ResponseEntity<R<Void>> {
+    @ExceptionHandler(AppException::class)
+    fun handleTojException(e: AppException): ResponseEntity<R<Void>> {
         logger.error(e.message, e)
         return R.fail(e.code, e.message)
     }

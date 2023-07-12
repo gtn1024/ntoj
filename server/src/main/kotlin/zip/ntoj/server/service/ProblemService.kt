@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.repository.ProblemRepository
 
@@ -34,11 +34,11 @@ class ProblemServiceImpl(
     val problemRepository: ProblemRepository,
 ) : ProblemService {
     override fun get(id: Long): Problem {
-        return problemRepository.findById(id).orElseThrow { TojException("题目不存在", 404) }
+        return problemRepository.findById(id).orElseThrow { AppException("题目不存在", 404) }
     }
 
     override fun get(alias: String): Problem {
-        return problemRepository.findByAlias(alias).orElseThrow { TojException("题目不存在", 404) }
+        return problemRepository.findByAlias(alias).orElseThrow { AppException("题目不存在", 404) }
     }
 
     override fun get(onlyVisible: Boolean, page: Int, pageSize: Int, desc: Boolean): List<Problem> {

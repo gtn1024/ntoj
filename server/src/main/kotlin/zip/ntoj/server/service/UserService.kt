@@ -1,7 +1,7 @@
 package zip.ntoj.server.service
 
 import org.springframework.stereotype.Service
-import zip.ntoj.server.exception.TojException
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.User
 import zip.ntoj.server.repository.UserRepository
 
@@ -24,11 +24,11 @@ class UserServiceImpl(
     }
 
     override fun getUserByUsername(username: String): User {
-        return userRepository.findByUsername(username).orElseThrow { TojException("用户不存在", 404) }
+        return userRepository.findByUsername(username).orElseThrow { AppException("用户不存在", 404) }
     }
 
     override fun getUserById(loginIdAsLong: Long): User {
-        return userRepository.findById(loginIdAsLong).orElseThrow { TojException("用户不存在", 404) }
+        return userRepository.findById(loginIdAsLong).orElseThrow { AppException("用户不存在", 404) }
     }
 
     override fun count(): Long {
