@@ -76,7 +76,7 @@ export const AdminAnnouncementEditPage: React.FC = () => {
         label="内容"
         name="content"
       >
-         <RichEditor data={content} setData={setContent} />
+         <RichEditor height='49vh' data={content} setData={setContent} />
       </Form.Item>
 
       <Form.Item
