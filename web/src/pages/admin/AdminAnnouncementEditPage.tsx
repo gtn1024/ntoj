@@ -12,6 +12,7 @@ interface Params {
   content: string
   visible: boolean
 }
+
 export const AdminAnnouncementEditPage: React.FC = () => {
   const [content, setContent] = useState<string>('')
   const { pathname } = useLocation()
@@ -61,37 +62,39 @@ export const AdminAnnouncementEditPage: React.FC = () => {
   }
 
   return (
-    <Form
-      name="basic"
-      layout='vertical'
-      onFinish={onSubmit}
-      autoComplete="off"
-      ref={formRef}
-    >
-      <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title">
-        <Input />
-      </Form.Item>
-
-      <Form.Item
-        label="内容"
-        name="content"
+    <div className='p-4'>
+      <Form
+        name="basic"
+        layout='vertical'
+        onFinish={onSubmit}
+        autoComplete="off"
+        ref={formRef}
       >
-         <RichEditor height='49vh' data={content} setData={setContent} />
-      </Form.Item>
+        <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title">
+          <Input/>
+        </Form.Item>
 
-      <Form.Item
-        label="是否可见"
-        name="visible"
-        valuePropName="checked"
-      >
-        <Switch />
-      </Form.Item>
+        <Form.Item
+          label="内容"
+          name="content"
+        >
+          <RichEditor height='49vh' data={content} setData={setContent}/>
+        </Form.Item>
 
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          {mode === '新建' ? '发布' : '修改'}
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          label="是否可见"
+          name="visible"
+          valuePropName="checked"
+        >
+          <Switch/>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            {mode === '新建' ? '发布' : '修改'}
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }

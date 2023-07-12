@@ -19,6 +19,7 @@ import { AdminProblemPage } from '../pages/admin/AdminProblemPage.tsx'
 import { ProblemListPage } from '../pages/ProblemListPage.tsx'
 import { ProblemPage } from '../pages/ProblemPage.tsx'
 import { NotFoundPage } from '../pages/404.tsx'
+import { AdminProblemEditPage } from '../pages/admin/AdminProblemEditPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -79,6 +80,8 @@ export const router = createBrowserRouter(
           path: 'problem',
           children: [
             { index: true, element: <AdminProblemPage/> },
+            { path: 'new', element: <AdminProblemEditPage/> },
+            { path: ':id/edit', element: <AdminProblemEditPage/> },
           ],
         },
       ],

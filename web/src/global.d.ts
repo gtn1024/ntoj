@@ -40,12 +40,16 @@ interface Problem {
   timeLimit?: number
   memoryLimit?: number
   judgeTimes?: number
-  samples?: {
-    input?: string
-    output?: string
-  }[]
+  samples: ProblemSample[]
+  note?: string
   author?: string
   createdAt?: string
+  visible?: boolean
+}
+
+interface ProblemSample {
+  input: string
+  output: string
 }
 
 interface Pagination {

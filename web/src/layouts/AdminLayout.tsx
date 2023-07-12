@@ -121,7 +121,6 @@ export const AdminLayout: React.FC = () => {
         </Header>
         <Content
           style={{
-            padding: 24,
             minHeight: 280,
             background: colorBgContainer,
             overflowY: 'auto',
