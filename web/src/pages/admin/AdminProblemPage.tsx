@@ -121,6 +121,7 @@ export const AdminProblemPage: React.FC = () => {
   ]
   return (
     <div className="flex flex-col">
+      <h2 className='mb-2'>题目管理</h2>
       <Space direction='vertical'>
         <div className="flex justify-between">
           <div>

@@ -62,13 +62,13 @@ export const AdminLayout: React.FC = () => {
     nav(e.key)
   }
   return (
-    <Layout className="min-h-screen">
+    <Layout className="h-screen">
       {
         !isMobile && (
           <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
             {/* <div className="logo" /> */}
             <Menu
-              style={{ height: '100vh' }}
+              style={{ height: '100vh', overflowY: 'auto' }}
               mode="inline"
               selectedKeys={[current]}
               items={items}
@@ -124,6 +124,7 @@ export const AdminLayout: React.FC = () => {
             padding: 24,
             minHeight: 280,
             background: colorBgContainer,
+            overflowY: 'auto',
           }}
         >
           <Outlet/>

@@ -116,6 +116,7 @@ export const AdminAnnouncementPage: React.FC = () => {
   ]
   return (
     <div className="flex flex-col">
+      <h2 className='mb-2'>公告管理</h2>
       <Space direction='vertical'>
         <div className="flex justify-between">
           <div>
