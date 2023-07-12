@@ -65,10 +65,10 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
     <div className="w-full mt-1">
       <div className="flex flex-row justify-between items-center mb-1">
         <span className="grow">{props.title}</span>
-        <button className="justify-end border px-2 py-0.5 rounded hover:bg-gray-300" onClick={() => copyToClipBoard(props.data)}>复制</button>
+        <button className="justify-end" onClick={() => copyToClipBoard(props.data)}>复制</button>
       </div>
-      <div className="bg-white p-2 border-l-2 border-solid border-green-300">
-        <pre>{props.data}</pre>
+      <div className="bg-white p-2 border-0 border-l-2 border-solid border-green-300">
+        <pre className='m-0'>{props.data}</pre>
       </div>
     </div>
     )
