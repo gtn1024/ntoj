@@ -119,7 +119,7 @@ export const AdminAnnouncementPage: React.FC = () => {
       <Space direction='vertical'>
         <div className="flex justify-between">
           <div>
-            <Button type="primary" size='small' onClick={() => nav('/admin/announcement/new')}>新建</Button>
+            <button className="border px-1 py-0.5 rounded" onClick={() => nav('/admin/announcement/new')}>新建</button>
           </div>
         </div>
         <div>

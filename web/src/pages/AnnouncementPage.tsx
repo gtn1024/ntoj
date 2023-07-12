@@ -22,7 +22,7 @@ export const AnnouncementPage: React.FC = () => {
   return (
     <div className="m-5">
       <div>
-        <h1 className="text-6 font-bold">
+        <h1 className="text-lg font-bold">
           {data?.title}
         </h1>
         <div className="flex justify-between">

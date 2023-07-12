@@ -1,7 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import useSWR from 'swr'
-import { Button, Space, message } from 'antd'
+import { message } from 'antd'
 import { http } from '../lib/Http.tsx'
 import { mdit } from '../lib/mdit.ts'
 
@@ -38,7 +38,7 @@ const ProblemSection: React.FC<SectionProps> = (props) => {
     markdown
       ? (
         <div className="mb-[20px]">
-          <h3>{title}</h3>
+          <h4 className="font-bold mb-1">{title}</h4>
           <div dangerouslySetInnerHTML={{ __html: html }}/>
         </div>
         )
@@ -60,28 +60,29 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
         void message.error('复制失败')
       })
   }
+  const SampleField: React.FC<{ title: string; data: string }> = (props) => {
+    return (
+    <div className="w-full mt-1">
+      <div className="flex flex-row justify-between items-center mb-1">
+        <span className="grow">{props.title}</span>
+        <button className="justify-end border px-2 py-0.5 rounded hover:bg-gray-300" onClick={() => copyToClipBoard(props.data)}>复制</button>
+      </div>
+      <div className="bg-white p-2 border-l-2 border-solid border-green-300">
+        <pre>{props.data}</pre>
+      </div>
+    </div>
+    )
+  }
   return (
     <div className="mb-[20px]">
       {props.samples?.map((item, idx) => {
         return (
           <div key={idx}>
             <div key={item.input}>
-              <h3>样例 {idx + 1}</h3>
-              <div className="flex justify-between">
-                <div className="w-1/2 mr-5">
-                  <div className="flex flex-row justify-between">
-                    <span className="text-center w-full">输入</span>
-                    <Button size='small' type='primary' onClick={() => copyToClipBoard(item.input)}>复制</Button>
-                  </div>
-                  <pre>{item.input}</pre>
-                </div>
-                <div className="w-1/2 ml-5">
-                  <div className="flex justify-between">
-                    <span className="text-center w-full">输出</span>
-                    <Button size='small' type='primary' onClick={() => copyToClipBoard(item.output)}>复制</Button>
-                  </div>
-                  <pre>{item.output}</pre>
-                </div>
+              <h4 className="font-bold mb-1">样例 {idx + 1}</h4>
+              <div className="flex flex-col">
+                <SampleField title='输入' data={item.input} />
+                <SampleField title='输出' data={item.output} />
               </div>
             </div>
           </div>
@@ -107,13 +108,11 @@ export const ProblemPage: React.FC = () => {
     <div className="m-4">
       <div className="p-4">
         <div>
-          <h2>{data?.title}</h2>
+          <h2 className="font-bold">{data?.title}</h2>
         </div>
         <div className="pb-[20px]">
-          <Space>
-            <span>时间限制：{data?.timeLimit} ms</span>
-            <span>内存限制：{data?.memoryLimit} MB</span>
-          </Space>
+          <span className="mr-1">时间限制：{data?.timeLimit} ms</span>
+          <span className="mr-1">内存限制：{data?.memoryLimit} MB</span>
         </div>
         <div>
           <ProblemSection title='题目背景' markdown={data?.background}/>

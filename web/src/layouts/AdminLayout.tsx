@@ -24,7 +24,7 @@ export const AdminLayout: React.FC = () => {
   const nav = useNavigate()
   const items: MenuProps['items'] = [
     {
-      key: '/admin/',
+      key: '/admin',
       icon: <HomeOutlined/>,
       label: '首页',
     },
@@ -47,8 +47,8 @@ export const AdminLayout: React.FC = () => {
     if (pathname.includes('/admin/problem')) {
       return setCurrent('/admin/problem')
     }
-    if (pathname.includes('/admin/')) {
-      return setCurrent('/admin/')
+    if (pathname.includes('/admin')) {
+      return setCurrent('/admin')
     }
     return setCurrent('')
   }, [pathname])

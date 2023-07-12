@@ -14,7 +14,7 @@ export const MainLayout: React.FC = () => {
   return (
     <Layout>
       <Header className="flex" style={{ background: colorBgContainer }}>
-        <div className="flex justify-center items-center text-xl">
+        <div className="flex justify-center items-center text-xl mr-1">
           <span>NTOJ</span>
         </div>
         <MenuComponent className="flex grow"/>
