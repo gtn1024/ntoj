@@ -1,16 +1,15 @@
 import React from 'react'
 import { NotificationOutlined } from '@ant-design/icons'
 import { AnnouncementList } from '../components/AnnouncementList.tsx'
-import s from './HomePage.module.scss'
 
 export const HomePage: React.FC = () => {
   return (
-    <div className={s.wrapper}>
-      <div className={s.announcement}>
-        <div className={s.title}>
+    <div className="flex justify-between m-[15px]">
+      <div className="w-full">
+        <div className="text-xl font-bold pb-4">
           <NotificationOutlined/> 公告
         </div>
-        <div className={s.content}>
+        <div>
           <AnnouncementList/>
         </div>
       </div>

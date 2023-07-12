@@ -4,7 +4,6 @@ import useSWR from 'swr'
 import { Button, Space, message } from 'antd'
 import { http } from '../lib/Http.tsx'
 import { mdit } from '../lib/mdit.ts'
-import s from './ProblemPage.module.scss'
 
 interface ProblemSample {
   input: string
@@ -38,7 +37,7 @@ const ProblemSection: React.FC<SectionProps> = (props) => {
   return (
     markdown
       ? (
-        <div className={s.section}>
+        <div className="mb-[20px]">
           <h3>{title}</h3>
           <div dangerouslySetInnerHTML={{ __html: html }}/>
         </div>
@@ -62,23 +61,23 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
       })
   }
   return (
-    <div className={s.section}>
+    <div className="mb-[20px]">
       {props.samples?.map((item, idx) => {
         return (
-          <div className={s.samples} key={idx}>
-            <div key={item.input} className={s.sample}>
+          <div key={idx}>
+            <div key={item.input}>
               <h3>样例 {idx + 1}</h3>
-              <div className={s.sampleBody}>
-                <div className={s.input}>
-                  <div className={s.title}>
-                    <span>输入</span>
+              <div className="flex justify-between">
+                <div className="w-1/2 mr-5">
+                  <div className="flex flex-row justify-between">
+                    <span className="text-center w-full">输入</span>
                     <Button size='small' type='primary' onClick={() => copyToClipBoard(item.input)}>复制</Button>
                   </div>
                   <pre>{item.input}</pre>
                 </div>
-                <div className={s.output}>
-                  <div className={s.title}>
-                    <span>输出</span>
+                <div className="w-1/2 ml-5">
+                  <div className="flex justify-between">
+                    <span className="text-center w-full">输出</span>
                     <Button size='small' type='primary' onClick={() => copyToClipBoard(item.output)}>复制</Button>
                   </div>
                   <pre>{item.output}</pre>
@@ -105,18 +104,18 @@ export const ProblemPage: React.FC = () => {
   })
 
   return (
-    <div className={s.wrapper}>
-      <div className={s.body}>
-        <div className={s.title}>
+    <div className="m-4">
+      <div className="p-4">
+        <div>
           <h2>{data?.title}</h2>
         </div>
-        <div className={s.meta}>
+        <div className="pb-[20px]">
           <Space>
             <span>时间限制：{data?.timeLimit} ms</span>
             <span>内存限制：{data?.memoryLimit} MB</span>
           </Space>
         </div>
-        <div className={s.content}>
+        <div>
           <ProblemSection title='题目背景' markdown={data?.background}/>
           <ProblemSection title='题目描述' markdown={data?.description}/>
           <ProblemSection title='输入描述' markdown={data?.inputDescription}/>

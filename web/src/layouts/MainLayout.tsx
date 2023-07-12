@@ -4,7 +4,6 @@ import { Outlet } from 'react-router-dom'
 import { MenuComponent } from '../components/MenuComponent.tsx'
 import { AccountComponent } from '../components/AccountComponent.tsx'
 import { useInformationStore } from '../stores/useInformationStore.tsx'
-import s from './MainLayout.module.scss'
 
 const { Header, Content, Footer } = Layout
 export const MainLayout: React.FC = () => {
@@ -13,18 +12,18 @@ export const MainLayout: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken()
   return (
-    <Layout className={s.layout}>
-      <Header className={s.header} style={{ background: colorBgContainer }}>
-        <div className={s.logo}>
-          NTOJ
+    <Layout>
+      <Header className="flex" style={{ background: colorBgContainer }}>
+        <div className="flex justify-center items-center text-xl">
+          <span>NTOJ</span>
         </div>
-        <MenuComponent className={s.menu}/>
-        <AccountComponent className={s.account}/>
+        <MenuComponent className="flex grow"/>
+        <AccountComponent className="flex justify-end"/>
       </Header>
-      <Content className={s.content}>
+      <Content className="min-h-[calc(100vh-64px-80px)]">
         <Outlet/>
       </Content>
-      <Footer className={s.footer}>
+      <Footer className="flex justify-center items-center flex-col text-center bg-white h-[80px]">
         <div>NTOJ ©2023</div>
         <div>
           {information.beian ? `备案号：${information.beian}` : null}

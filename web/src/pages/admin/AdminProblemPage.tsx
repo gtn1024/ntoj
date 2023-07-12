@@ -7,7 +7,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
-import s from './AdminProblemPage.module.scss'
 
 export const AdminProblemPage: React.FC = () => {
   const nav = useNavigate()
@@ -121,9 +120,9 @@ export const AdminProblemPage: React.FC = () => {
     },
   ]
   return (
-    <div className={s.content}>
+    <div className="flex flex-col">
       <Space direction='vertical'>
-        <div className={s.operation}>
+        <div className="flex justify-between">
           <div>
             <Button type="primary" size='small' onClick={() => nav('/admin/problem/new')}>新建</Button>
           </div>

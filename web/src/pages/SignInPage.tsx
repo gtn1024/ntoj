@@ -7,7 +7,6 @@ import type { HttpResponse } from '../lib/Http'
 import { http } from '../lib/Http'
 import { useUserStore } from '../stores/useUserStore'
 import { setToken } from '../lib/token.ts'
-import s from './SignInPage.module.scss'
 
 interface SignInProps {
   username: string
@@ -99,9 +98,9 @@ export const SignInPage: React.FC = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+             <Button type="primary" htmlType="submit">
               登录
-            </Button>
+             </Button>
           </Form.Item>
         </Form>
       ),
@@ -190,13 +189,13 @@ export const SignInPage: React.FC = () => {
     },
   ]
   return (
-    <div className={s.wrapper}>
-      <div className={s.main}>
-        <div className={s.loginWrapper}>
-          <div className={s.siteName}>
+    <div className="h-screen flex justify-center items-center bg-[#f5f5f5]">
+      <div className="flex bg-white rounded shadow">
+        <div className="min-w-[480px] min-h-[500px] p-4">
+          <div className="text-2xl font-bold text-center py-4">
             NTOJ
           </div>
-          <div className={s.loginForm}>
+          <div className="px-8">
             <Tabs defaultActiveKey="1" centered items={items} />
           </div>
         </div>

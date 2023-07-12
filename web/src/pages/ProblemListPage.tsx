@@ -6,7 +6,6 @@ import type { AxiosError } from 'axios'
 import { Link, useSearchParams } from 'react-router-dom'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
-import s from './ProblemListPage.module.scss'
 
 interface Problem {
   id?: number
@@ -64,7 +63,7 @@ export const ProblemListPage: React.FC = () => {
   ]
 
   return (
-    <div className={s.wrapper}>
+    <div className="m-[15px]">
       <Table
         loading={loading}
         dataSource={data}

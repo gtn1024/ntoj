@@ -55,7 +55,10 @@ async function adminLoader() {
 
 export const router = createBrowserRouter(
   [
-    { path: '/sign_in', element: <SignInPage/> },
+    {
+      path: '/sign_in',
+      element: <SignInPage/>,
+    },
     {
       path: '/admin',
       element: <AdminLayout/>,

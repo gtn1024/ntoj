@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   AlertOutlined,
   HomeOutlined,
@@ -7,14 +7,16 @@ import {
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Button, Layout, Menu, Space, theme } from 'antd'
-import { Link, Outlet, useNavigate } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useUserStore } from '../stores/useUserStore.tsx'
-import s from './AdminLayout.module.scss'
 
 const { Header, Sider, Content } = Layout
 
 export const AdminLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false)
+  const [current, setCurrent] = useState('')
+
+  const { pathname } = useLocation()
   const {
     token: { colorBgContainer },
   } = theme.useToken()
@@ -22,37 +24,51 @@ export const AdminLayout: React.FC = () => {
   const nav = useNavigate()
   const items: MenuProps['items'] = [
     {
-      key: '',
+      key: '/admin/',
       icon: <HomeOutlined/>,
       label: '首页',
     },
     {
-      key: 'announcement',
+      key: '/admin/announcement',
       icon: <AlertOutlined />,
       label: '公告',
     },
     {
-      key: 'problem',
+      key: '/admin/problem',
       icon: <QuestionOutlined />,
       label: '题目',
     },
   ]
+
+  useEffect(() => {
+    if (pathname.includes('/admin/announcement')) {
+      return setCurrent('/admin/announcement')
+    }
+    if (pathname.includes('/admin/problem')) {
+      return setCurrent('/admin/problem')
+    }
+    if (pathname.includes('/admin/')) {
+      return setCurrent('/admin/')
+    }
+    return setCurrent('')
+  }, [pathname])
+
   const onClickMenu: MenuProps['onClick'] = (e) => {
-    nav(`/admin/${e.key}`)
+    nav(e.key)
   }
   return (
-    <Layout className={s.layout}>
+    <Layout className="min-h-screen">
       <Sider theme="light" trigger={null} collapsible collapsed={collapsed}>
         {/* <div className="logo" /> */}
         <Menu
           mode="inline"
-          defaultSelectedKeys={['1']}
+          selectedKeys={[current]}
           items={items}
           onClick={onClickMenu}
         />
       </Sider>
-      <Layout>
-        <Header className={s.header} style={{ padding: 0, background: colorBgContainer }}>
+      <Layout className="flex">
+        <Header className="flex justify-between" style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
@@ -63,7 +79,7 @@ export const AdminLayout: React.FC = () => {
               height: 64,
             }}
           />
-          <div className={s.user}>
+          <div className="mr-4">
             <Space>
               <span> {user.username} </span>
               <Link to='/'>

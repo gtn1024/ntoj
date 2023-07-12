@@ -5,7 +5,6 @@ import type { AxiosError } from 'axios'
 import { message } from 'antd'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
-import s from './UserProfilePage.module.scss'
 
 export const UserProfilePage: React.FC = () => {
   const { username } = useParams()
@@ -18,13 +17,13 @@ export const UserProfilePage: React.FC = () => {
       })
   })
   return (
-    <div className={s.wrapper}>
-      <div className={s.card}>
-        <div className={s.main}>
-          <div className={s.left}>
-            <div className={s.nickname}>{data?.realName}</div>
-            <div className={s.username}>@{data?.username}</div>
-            <div className={s.registerAt}>{data?.registerAt}</div>
+    <div className="h-[calc(100vh-64px-80px)] flex justify-center items-center">
+      <div className="bg-white w-[700px] h-[500px] border border-solid border-[#e0e0e0] rounded-2xl shadow">
+        <div className="m-[20px] flex justify-between items-center">
+          <div >
+            <div className="text-xl font-bold">{data?.realName}</div>
+            <div>@{data?.username}</div>
+            <div>{data?.registerAt}</div>
           </div>
         </div>
       </div>

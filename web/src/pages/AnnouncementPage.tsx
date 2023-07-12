@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons'
 import { message } from 'antd'
 import type { AxiosError } from 'axios'
+import c from 'classnames'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import s from './AnnouncementPage.module.scss'
@@ -19,21 +20,21 @@ export const AnnouncementPage: React.FC = () => {
       })
   })
   return (
-    <div className={s.wrapper}>
-      <div className={s.content}>
-        <h1 className={s.title}>
+    <div className="m-5">
+      <div>
+        <h1 className="text-6 font-bold">
           {data?.title}
         </h1>
-        <div className={s.meta}>
-          <div className={s.author}>
-            <UserOutlined />  {data?.author}
+        <div className="flex justify-between">
+          <div>
+            <UserOutlined /> {data?.author}
           </div>
-          <div className={s.createdAt}>
+          <div>
             <CalendarOutlined/> {data?.createdAt}
           </div>
         </div>
-        <div className={s.content}>
-          <article dangerouslySetInnerHTML={{ __html: data?.content ?? '' }}/>
+        <div className={c(s.content, 'pt-4')}>
+          <article dangerouslySetInnerHTML={{ __html: data?.content ?? '' }} />
         </div>
       </div>
     </div>

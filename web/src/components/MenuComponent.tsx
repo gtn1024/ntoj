@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { HomeOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Menu } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 interface Props {
   className?: string
@@ -27,8 +27,23 @@ const items: MenuProps['items'] = [
 ]
 
 export const MenuComponent: React.FC<Props> = (props) => {
-  const [current, setCurrent] = useState('/')
+  const [current, setCurrent] = useState<string>('')
   const nav = useNavigate()
+
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    if (pathname.includes('/problem')) {
+      return setCurrent('/problem')
+    }
+    if (pathname.includes('/about')) {
+      return setCurrent('/about')
+    }
+    if (pathname.includes('/')) {
+      return setCurrent('/')
+    }
+    return setCurrent('')
+  }, [pathname])
 
   const onClick: MenuProps['onClick'] = (e) => {
     setCurrent(e.key)
