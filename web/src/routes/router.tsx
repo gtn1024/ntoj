@@ -18,6 +18,7 @@ import { UserProfilePage } from '../pages/UserProfilePage.tsx'
 import { AdminProblemPage } from '../pages/admin/AdminProblemPage.tsx'
 import { ProblemListPage } from '../pages/ProblemListPage.tsx'
 import { ProblemPage } from '../pages/ProblemPage.tsx'
+import { NotFoundPage } from '../pages/404.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -100,6 +101,10 @@ export const router = createBrowserRouter(
         { path: 'announcement/:id', element: <AnnouncementPage/> },
         { path: 'user/:username', element: <UserProfilePage/> },
       ],
+    },
+    {
+      path: '*',
+      element: <NotFoundPage/>,
     },
   ],
 )
