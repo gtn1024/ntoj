@@ -3,10 +3,12 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import type { TabsProps } from 'antd'
 import { Button, Form, Input, Tabs, message } from 'antd'
 import type { AxiosError } from 'axios'
+import c from 'classnames'
 import type { HttpResponse } from '../lib/Http'
 import { http } from '../lib/Http'
 import { useUserStore } from '../stores/useUserStore'
 import { setToken } from '../lib/token.ts'
+import { useLayout } from '../hooks/useLayout.ts'
 
 interface SignInProps {
   username: string
@@ -31,6 +33,7 @@ export const SignInPage: React.FC = () => {
   const nav = useNavigate()
   const userStore = useUserStore()
   const redirect = search.get('redirect') || '/'
+  const { isMobile } = useLayout()
   const login = async (props: SignInProps) => {
     const res = await http.get<SignInResponse>('/auth/login', { ...props })
     const { token, user } = res.data.data
@@ -189,9 +192,9 @@ export const SignInPage: React.FC = () => {
     },
   ]
   return (
-    <div className="h-screen flex justify-center items-center bg-[#f5f5f5]">
-      <div className="flex bg-white rounded shadow">
-        <div className="min-w-[480px] min-h-[500px] p-4">
+    <div className={c('h-screen', 'flex', 'justify-center', 'items-center', !isMobile && 'bg-[#f5f5f5]')}>
+       <div className={c('flex bg-white', !isMobile && 'rounded shadow')}>
+        <div className={c('p-4', !isMobile && 'min-w-[480px]', !isMobile && 'min-h-[500px]')}>
           <div className="text-2xl font-bold text-center py-4">
             NTOJ
           </div>
@@ -199,7 +202,7 @@ export const SignInPage: React.FC = () => {
             <Tabs defaultActiveKey="1" centered items={items} />
           </div>
         </div>
-      </div>
+       </div>
     </div>
   )
 }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { HomeOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons'
+import { HomeOutlined, MenuOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
-import { Menu } from 'antd'
+import { Button, Dropdown, Menu } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useLayout } from '../hooks/useLayout.ts'
 
 interface Props {
   className?: string
@@ -12,23 +13,24 @@ const items: MenuProps['items'] = [
   {
     label: '首页',
     key: '/',
-    icon: <HomeOutlined />,
+    icon: <HomeOutlined/>,
   },
   {
     label: '题库',
     key: '/problem',
-    icon: <QuestionOutlined />,
+    icon: <QuestionOutlined/>,
   },
   {
     label: '关于',
     key: '/about',
-    icon: <SettingOutlined />,
+    icon: <SettingOutlined/>,
   },
 ]
 
 export const MenuComponent: React.FC<Props> = (props) => {
   const [current, setCurrent] = useState<string>('')
   const nav = useNavigate()
+  const { isMobile } = useLayout()
 
   const { pathname } = useLocation()
 
@@ -50,5 +52,29 @@ export const MenuComponent: React.FC<Props> = (props) => {
     nav(e.key)
   }
 
-  return <Menu className={props.className} onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
+  return (
+    <div className={props.className}>
+      {!isMobile
+        ? (
+          <Menu className={props.className} onClick={onClick} selectedKeys={[current]} mode="horizontal"
+                items={items}/>
+          )
+        : (<Dropdown menu={{
+            items,
+            onClick,
+            selectable: true,
+            selectedKeys: [current],
+          }} trigger={['click']}>
+          <Button
+            type="text"
+            icon={<MenuOutlined/>}
+            style={{
+              fontSize: '16px',
+              width: 64,
+              height: 64,
+            }}
+          />
+        </Dropdown>)
+      }
+    </div>)
 }
