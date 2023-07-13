@@ -74,7 +74,7 @@ export const AdminProblemEditPage: React.FC = () => {
   return (<>
     <div className="flex justify-between w-full h-[calc(100vh-64px)]">
       <div className="w-1/2 overflow-y-auto p-4">
-        <h1 className="text-2xl">{mode}题目</h1>
+        <h2 className="text-xl">{mode}题目</h2>
         <Form
           name="basic"
           layout='vertical'
@@ -177,7 +177,8 @@ export const AdminProblemEditPage: React.FC = () => {
           </Form.Item>
         </Form>
       </div>
-      <div className="w-1/2 overflow-y-auto">
+      <div className="w-1/2 overflow-y-auto p-4">
+        <h2 className="text-xl">预览</h2>
         <ProblemDetail data={data}/>
       </div>
     </div>
