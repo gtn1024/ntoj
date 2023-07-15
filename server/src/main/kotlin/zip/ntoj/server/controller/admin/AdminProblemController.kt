@@ -120,7 +120,7 @@ class AdminProblemController(
 
     @DeleteMapping("{id}")
     fun delete(@PathVariable id: Long): ResponseEntity<R<Void>> {
-        if (!problemService.exists(id)) return R.fail(404, "公告不存在")
+        if (!problemService.exists(id)) return R.fail(404, "题目不存在")
         problemService.delete(id)
         return R.success(200, "删除成功")
     }

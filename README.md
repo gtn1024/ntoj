@@ -18,11 +18,11 @@
   - [x] Update (Admin)
   - [x] Delete (Admin)
 - [ ] Problem
-  - [ ] List
-  - [ ] Create (Admin)
-  - [ ] Show
-  - [ ] Update (Admin)
-  - [ ] Delete (Admin)
+  - [x] List
+  - [x] Create (Admin)
+  - [x] Show
+  - [x] Update (Admin)
+  - [x] Delete (Admin)
 - [ ] Contest
   - [ ] List
   - [ ] Create (Admin)
