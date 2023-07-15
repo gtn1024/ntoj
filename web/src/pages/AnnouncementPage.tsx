@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import { CalendarOutlined, UserOutlined } from '@ant-design/icons'
 import { message } from 'antd'
@@ -10,12 +10,18 @@ import { http } from '../lib/Http.tsx'
 import s from './AnnouncementPage.module.scss'
 
 export const AnnouncementPage: React.FC = () => {
+  const nav = useNavigate()
   const { id } = useParams()
   const { data } = useSWR(`/announcement/${id ?? 0}`, async (path) => {
     return http.get<Announcement>(path)
       .then(res => res.data.data)
       .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '获取公告失败')
+        if (err.response?.status === 404) {
+          void message.error('公告不存在！')
+          nav('/404')
+        } else {
+          void message.error(err.response?.data.message ?? '获取公告失败')
+        }
         throw err
       })
   })
