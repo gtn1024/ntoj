@@ -4,7 +4,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = "NTOJ"
+rootProject.name = "ntoj"
 
 require(JavaVersion.current() >= JavaVersion.VERSION_17) {
     "You must use at least Java 17 to build the project, you're currently using ${System.getProperty("java.version")}"
