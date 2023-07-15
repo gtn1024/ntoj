@@ -56,3 +56,7 @@ interface Pagination {
   page: number
   pageSize: number
 }
+
+interface Submission {
+  id: number
+}

@@ -4,16 +4,17 @@ import { cpp } from '@codemirror/lang-cpp'
 import { python } from '@codemirror/lang-python'
 import { java } from '@codemirror/lang-java'
 
-interface Props {
+interface EditorProps {
   height?: string
   value: string
   setValue: (value: string) => void
+  className?: string
 }
 
-export const CodeMirrorEditor: React.FC<Props> = (props) => {
+export const CodeMirrorEditor: React.FC<EditorProps> = (props) => {
   return (
     <>
-      <div>
+      <div className={props.className}>
         <CodeMirror
           value={props.value}
           height={props.height}
