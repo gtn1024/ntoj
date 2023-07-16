@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import { Button, Select, message } from 'antd'
 import c from 'classnames'
-import { useWindowSize } from 'react-use'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
@@ -14,7 +13,6 @@ import { useLayout } from '../hooks/useLayout.ts'
 export const ProblemPage: React.FC = () => {
   const nav = useNavigate()
   const { isMobile } = useLayout()
-  const { height } = useWindowSize()
   const { alias } = useParams()
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState('gnu_cpp17')
@@ -51,19 +49,22 @@ export const ProblemPage: React.FC = () => {
     void message.info(`提交成功，提交ID：${res.data.data.id}`)
   }
 
+  const editorWrapperRef = useRef<HTMLDivElement>(null)
+
   return (
     <div className={c('flex', isMobile && 'flex-col', 'h-[calc(100vh-64px-80px)]')}>
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
         <ProblemDetail data={data}/>
       </div>
       <div className={c('flex', 'flex-col', !isMobile && ['w-1/2', 'overflow-y-auto'])}>
-        <CodeMirrorEditor
-          className={c('grow')}
-          height={!isMobile ? `${height - 80 - 64 - 40}px` : '300px'}
-          value={code}
-          setValue={setCode}
-        />
-        <div className={c('h-[40px]')}>
+        <div className={c('grow')} ref={editorWrapperRef}>
+          <CodeMirrorEditor
+            height={!isMobile ? `${editorWrapperRef.current?.clientHeight ?? 0}px` : '300px'}
+            value={code}
+            setValue={setCode}
+          />
+        </div>
+        <div className={c('')}>
           <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
             <div className={''}>
               <Select
@@ -76,6 +77,9 @@ export const ProblemPage: React.FC = () => {
             <div className={''}>
               <Button type="primary" onClick={onSubmitCode} disabled={!code || !language}>提交</Button>
             </div>
+          </div>
+          <div className={c('invisible', 'h-0')}>
+           放置提交结果、测试用例等
           </div>
         </div>
       </div>
