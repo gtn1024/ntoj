@@ -10,7 +10,6 @@ export const ErrorPage: React.FC = () => {
   } else if (error instanceof ErrorForbidden) {
     return <div>403 Forbidden</div>
   } else {
-    console.log(error)
     return <div>未知错误</div>
   }
 }

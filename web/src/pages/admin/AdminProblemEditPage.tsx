@@ -79,7 +79,7 @@ export const AdminProblemEditPage: React.FC = () => {
           name="basic"
           layout='vertical'
           onFinish={onSubmit}
-          onChange={() => setData(formRef.current?.getFieldsValue())}
+          onChange={() => setData(formRef.current?.getFieldsValue() as Problem)}
           autoComplete="off"
           ref={formRef}
         >

@@ -16,8 +16,8 @@ interface Problem {
 export const ProblemListPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: parseInt(searchParams.get('current') ?? '1'),
-    pageSize: parseInt(searchParams.get('size') ?? '20'),
+    current: Number.parseInt(searchParams.get('current') ?? '1'),
+    pageSize: Number.parseInt(searchParams.get('size') ?? '20'),
     showTotal: total => `共 ${total} 条`,
     showSizeChanger: true,
     onChange: (current, pageSize) => {

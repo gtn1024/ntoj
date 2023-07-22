@@ -17,7 +17,6 @@ import zip.ntoj.server.model.R
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
-import zip.ntoj.server.service.SubmissionServiceImpl
 import zip.ntoj.server.service.UserService
 
 @RestController

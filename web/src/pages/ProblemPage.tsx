@@ -40,13 +40,15 @@ export const ProblemPage: React.FC = () => {
         throw err
       })
   })
-  const onSubmitCode = async () => {
-    const res = await http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language })
+  const onSubmitCode = () => {
+    http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language })
+      .then((res) => {
+        void message.info(`提交成功，提交ID：${res.data.data.id}`)
+      })
       .catch((err: AxiosError<HttpResponse>) => {
         void message.error(err.response?.data.message ?? '提交失败')
         throw err
       })
-    void message.info(`提交成功，提交ID：${res.data.data.id}`)
   }
 
   const editorWrapperRef = useRef<HTMLDivElement>(null)

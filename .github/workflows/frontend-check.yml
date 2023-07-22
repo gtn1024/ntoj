@@ -1,0 +1,33 @@
+name: Frontend Check
+
+on:
+  push:
+    paths:
+      - 'web/**/*'
+  pull_request:
+    paths:
+      - 'web/**/*'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./web
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      - name: Use Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'pnpm'
+          cache-dependency-path: './web/pnpm-lock.yaml'
+      - name: Install dependencies
+        run: pnpm install
+      - name: ESlint check
+        run: pnpm run lint
+      - name: Build
+        run: pnpm run build

@@ -1,0 +1,56 @@
+name: Backend Check
+
+on:
+  push:
+    paths-ignore:
+      - '**/*.md'
+      - 'web/**/*'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'web/**/*'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      PG_PORT: 5432
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: ntoj
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: ntoj
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'corretto'
+          java-version: 17
+      - name: Ktlint
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: ktlint -DagreePublicBuildScanTermOfService=yes
+      - name: Migrate Database
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: flywayMigrate -DagreePublicBuildScanTermOfService=yes
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check -DagreePublicBuildScanTermOfService=yes
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: artifacts
+          path: |
+            server/build/reports/tests
