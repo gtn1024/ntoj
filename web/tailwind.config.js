@@ -2,7 +2,8 @@
 export default {
   content: ["./src/**/*.{html,js,jsx,tsx,ts}"],
   theme: {
-    extend: {},
+    extend: {
+    },
     screens: {
       'xs': '0px',
       'sm': '576px',

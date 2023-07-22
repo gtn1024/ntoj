@@ -56,7 +56,7 @@ export const ProblemPage: React.FC = () => {
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
         <ProblemDetail data={data}/>
       </div>
-      <div className={c('flex', 'flex-col', !isMobile && ['w-1/2', 'overflow-y-auto'])}>
+      <div className={c('flex', 'flex-col', !isMobile && ['w-1/2'])}>
         <div className={c('grow')} ref={editorWrapperRef}>
           <CodeMirrorEditor
             height={!isMobile ? `${editorWrapperRef.current?.clientHeight ?? 0}px` : '300px'}
@@ -78,7 +78,7 @@ export const ProblemPage: React.FC = () => {
               <Button type="primary" onClick={onSubmitCode} disabled={!code || !language}>提交</Button>
             </div>
           </div>
-          <div className={c('invisible', 'h-0')}>
+            <div className={c('invisible', 'h-0')}> 
            放置提交结果、测试用例等
           </div>
         </div>
