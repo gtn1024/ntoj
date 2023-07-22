@@ -56,7 +56,7 @@ export const ProblemPage: React.FC = () => {
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
         <ProblemDetail data={data}/>
       </div>
-      <div className={c('flex', 'flex-col', !isMobile && ['w-1/2', 'overflow-y-auto'])}>
+      <div className={c('flex', 'flex-col', !isMobile && ['w-1/2'])}>
         <div className={c('grow')} ref={editorWrapperRef}>
           <CodeMirrorEditor
             height={!isMobile ? `${editorWrapperRef.current?.clientHeight ?? 0}px` : '300px'}
