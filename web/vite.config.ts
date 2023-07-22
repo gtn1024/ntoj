@@ -10,18 +10,20 @@ export default defineConfig(({command}) => ({
     react(),
     splitVendorChunkPlugin(),
   ],
-  build: {
-    chunkSizeWarningLimit: 750,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          'antd': ['antd', '@ant-design/icons'],
-          'http': ['axios', 'swr'],
-          'react': ['react', 'react-dom', 'react-router-dom'],
-          'markdown': ['markdown-it'],
-          'mathjax': ['markdown-it-mathjax3'],
-          'editor': ['@wangeditor/editor', '@wangeditor/editor-for-react'],
-        },
+  server: {
+    port: 2023,
+    fs: {
+      strict: true,
+    },
+    proxy: {
+      '/api': {
+        target: 'http://localhost:18080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/assets': {
+        target: 'http://localhost:18080',
+        changeOrigin: true,
       },
     },
   },
