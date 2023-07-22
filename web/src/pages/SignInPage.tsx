@@ -175,7 +175,7 @@ export const SignInPage: React.FC = () => {
             label="真实姓名"
             name="realName"
             rules={[
-              { required: true, message: '请输入电子邮箱！' },
+              { required: true, message: '请输入真实姓名！' },
               { max: 4, message: '真实姓名最长为4个字符！' },
             ]}
           >
