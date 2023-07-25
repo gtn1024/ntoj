@@ -57,6 +57,20 @@ interface Pagination {
   pageSize: number
 }
 
+type SubmissionStatus = |
+  'PENDING' |
+  'JUDGING' |
+  'ACCEPTED' |
+  'WRONG_ANSWER' |
+  'TIME_LIMIT_EXCEEDED' |
+  'MEMORY_LIMIT_EXCEEDED' |
+  'RUNTIME_ERROR' |
+  'COMPILE_ERROR' |
+  'SYSTEM_ERROR' |
+  'PRESENTATION_ERROR' |
+  'DEPRECATED'
+
 interface Submission {
   id: number
+  status: SubmissionStatus
 }

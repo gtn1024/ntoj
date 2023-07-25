@@ -27,6 +27,8 @@ export const ProblemPage: React.FC = () => {
     { value: 'python_2', label: 'Python2' },
     { value: 'python_3', label: 'Python3' },
   ]
+  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | '正在提交' | null >(null)
+  const [intervalId, setIntervalId] = useState<number | null>(null)
   const { data } = useSWR(`/problem/${alias ?? ''}`, async (path) => {
     return http.get<Problem>(path)
       .then((res) => {
@@ -40,10 +42,53 @@ export const ProblemPage: React.FC = () => {
         throw err
       })
   })
+
+  function statusToMessage(status: SubmissionStatus | '正在提交' | null): string {
+    switch (status) {
+      case 'PENDING':
+        return '正在评测'
+      case 'ACCEPTED':
+        return '通过'
+      case 'WRONG_ANSWER':
+        return '答案错误'
+      case 'TIME_LIMIT_EXCEEDED':
+        return '超时'
+      case 'MEMORY_LIMIT_EXCEEDED':
+        return '超内存'
+      case 'RUNTIME_ERROR':
+        return '运行错误'
+      case 'COMPILE_ERROR':
+        return '编译错误'
+      case 'SYSTEM_ERROR':
+        return '系统错误'
+    }
+    return status as string ?? ''
+  }
+
   const onSubmitCode = () => {
+    setJudgeMessage('正在提交')
     http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language })
       .then((res) => {
         void message.info(`提交成功，提交ID：${res.data.data.id}`)
+        setJudgeMessage(res.data.data.status)
+        if (intervalId) {
+          clearInterval(intervalId)
+        }
+        const id = setInterval(() => {
+          http.get<Submission>(`/submission/${res.data.data.id}`)
+            .then((res) => {
+              setJudgeMessage(res.data.data.status)
+              if (res.data.data.status !== 'PENDING') {
+                setJudgeMessage(res.data.data.status)
+                clearInterval(id)
+              }
+            })
+            .catch((err: AxiosError<HttpResponse>) => {
+              void message.error(err.response?.data.message)
+              throw err
+            })
+        }, 1500)
+        setIntervalId(id)
       })
       .catch((err: AxiosError<HttpResponse>) => {
         void message.error(err.response?.data.message ?? '提交失败')
@@ -68,13 +113,16 @@ export const ProblemPage: React.FC = () => {
         </div>
         <div className={c('')}>
           <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
-            <div className={''}>
+            <div className={'flex'}>
               <Select
                 className={c('w-[150px]')}
                 value={language}
                 onChange={setLanguage}
                 options={languageOptions}
               />
+              <div className={c('flex', 'items-center')}>
+                <span>{statusToMessage(judgeMessage)}</span>
+              </div>
             </div>
             <div className={''}>
               <Button type="primary" onClick={onSubmitCode} disabled={!code || !language}>提交</Button>
