@@ -34,7 +34,7 @@
     "@antfu/eslint-config": "^0.39.8",
     "@mdit/plugin-img-lazyload": "0.4.8",
     "@types/markdown-it": "12.2.3",
-    "@types/react": "18.2.15",
+    "@types/react": "18.2.16",
     "@types/react-dom": "18.2.7",
     "@typescript-eslint/eslint-plugin": "6.1.0",
     "@typescript-eslint/parser": "6.1.0",
