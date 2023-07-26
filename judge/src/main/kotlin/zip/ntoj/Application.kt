@@ -1,7 +1,8 @@
 package zip.ntoj
 
-import io.ktor.server.application.*
-import zip.ntoj.plugins.*
+import io.ktor.server.application.Application
+import zip.ntoj.plugins.configureRouting
+import zip.ntoj.plugins.configureSerialization
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)

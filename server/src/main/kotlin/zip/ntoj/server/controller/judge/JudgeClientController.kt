@@ -11,7 +11,7 @@ import java.time.Instant
 @RequestMapping("/judge_client")
 class JudgeClientController {
     @GetMapping("/ping")
-    fun ping() : ResponseEntity<R<PingResponse>> {
+    fun ping(): ResponseEntity<R<PingResponse>> {
         return R.success(200, "Pong", PingResponse("Pong"))
     }
 }
