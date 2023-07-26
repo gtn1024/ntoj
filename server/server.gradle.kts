@@ -1,3 +1,5 @@
+import zip.ntoj.buildsupport.lib
+
 plugins {
     id("configure-kotlin")
     id("configure-ktlint")
@@ -8,8 +10,6 @@ plugins {
     id("org.flywaydb.flyway") version "9.8.1"
 }
 
-val saTokenVersion = "1.34.0"
-
 dependencies {
     implementation(project(":shared"))
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -18,10 +18,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("cn.dev33:sa-token-spring-boot3-starter:$saTokenVersion")
-    implementation("cn.dev33:sa-token-jwt:$saTokenVersion")
-    implementation("commons-codec:commons-codec:1.15")
-    implementation("commons-io:commons-io:2.12.0")
+    implementation(lib("saToken-spring"))
+    implementation(lib("saToken-jwt"))
+    implementation(lib("commons-codec"))
+    implementation(lib("commons-io"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")

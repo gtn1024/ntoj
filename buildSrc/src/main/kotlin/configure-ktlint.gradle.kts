@@ -1,7 +1,9 @@
 configurations.create("ktlint")
+
+val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
 dependencies {
-    val ktlintVersion = "0.48.2"
-    "ktlint"("com.pinterest:ktlint:$ktlintVersion")
+    "ktlint"(versionCatalog.findLibrary("ktlint").get())
 }
 
 val ktlintTask = tasks.register<JavaExec>("ktlint") {
