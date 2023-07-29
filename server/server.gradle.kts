@@ -1,8 +1,10 @@
+import zip.ntoj.buildsupport.bundle
 import zip.ntoj.buildsupport.lib
 
 plugins {
     id("configure-kotlin")
     id("configure-ktlint")
+    id("configure-groovy")
     id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("plugin.spring") version "1.8.20"
@@ -22,6 +24,7 @@ dependencies {
     implementation(lib("saToken-jwt"))
     implementation(lib("commons-codec"))
     implementation(lib("commons-io"))
+    testImplementation(bundle("spock"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
