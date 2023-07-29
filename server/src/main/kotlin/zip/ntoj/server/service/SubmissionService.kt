@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.repository.SubmissionRepository
+import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
     fun get(id: Long): Submission
+    fun getPendingSubmission(): Submission?
     fun new(submission: Submission): Submission
     fun update(submission: Submission): Submission
 }
@@ -17,6 +19,11 @@ class SubmissionServiceImpl(
 ) : SubmissionService {
     override fun get(id: Long): Submission {
         return submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
+    }
+
+    override fun getPendingSubmission(): Submission? {
+        return submissionRepository.findFirstByStatus(Submission.SubmissionStatus.PENDING)
+            .getOrNull()
     }
 
     override fun new(submission: Submission): Submission {
