@@ -5,7 +5,7 @@ plugins {
     id("configure-kotlin")
     id("configure-ktlint")
     id("io.ktor.plugin") version "2.3.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 application {
