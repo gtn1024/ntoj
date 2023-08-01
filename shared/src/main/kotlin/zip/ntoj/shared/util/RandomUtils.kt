@@ -1,4 +1,4 @@
-package zip.ntoj.server.util
+package zip.ntoj.shared.util
 
 import java.util.UUID
 

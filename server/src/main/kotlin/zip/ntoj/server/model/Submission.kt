@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import zip.ntoj.shared.dtos.judge.SubmissionStatus
 
 @Entity(name = "t_submissions")
 class Submission(
@@ -22,6 +23,9 @@ class Submission(
     @Enumerated(EnumType.STRING)
     var status: SubmissionStatus = SubmissionStatus.PENDING,
 
+    var time: Int? = null,
+    var memory: Int? = null,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")
@@ -29,19 +33,5 @@ class Submission(
 ) : BaseEntity() {
     enum class SubmissionOrigin {
         PROBLEM, // 0
-    }
-
-    enum class SubmissionStatus {
-        PENDING, // 0
-        JUDGING, // 1
-        ACCEPTED, // 2
-        WRONG_ANSWER, // 3
-        TIME_LIMIT_EXCEEDED, // 4
-        MEMORY_LIMIT_EXCEEDED, // 5
-        RUNTIME_ERROR, // 6
-        COMPILE_ERROR, // 7
-        SYSTEM_ERROR, // 8
-        PRESENTATION_ERROR, // 9
-        DEPRECATED, // 10
     }
 }

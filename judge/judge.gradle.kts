@@ -1,28 +1,23 @@
 val ktor_version = "2.3.2"
-val logback_version = "1.2.11"
 
 plugins {
     id("configure-kotlin")
     id("configure-ktlint")
     id("io.ktor.plugin") version "2.3.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-}
-
-application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 dependencies {
     implementation(project(":shared"))
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-status-pages-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+
+    // logback
+    implementation("org.slf4j:slf4j-api:2.0.7")
+    implementation("ch.qos.logback:logback-core:1.4.8")
+    implementation("ch.qos.logback:logback-classic:1.4.8")
+
+    // jackson
+    implementation("io.ktor:ktor-serialization-jackson:$ktor_version")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 }

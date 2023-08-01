@@ -3,7 +3,7 @@ package zip.ntoj.server.config
 import cn.dev33.satoken.jwt.SaJwtTemplate
 import cn.dev33.satoken.util.SaFoxUtil
 import cn.hutool.jwt.JWT
-import zip.ntoj.server.util.randomString
+import zip.ntoj.shared.util.randomString
 import java.util.Date
 
 class CustomSaJwtTemplate : SaJwtTemplate() {

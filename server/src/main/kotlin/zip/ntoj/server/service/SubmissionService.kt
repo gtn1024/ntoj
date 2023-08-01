@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.repository.SubmissionRepository
+import zip.ntoj.shared.dtos.judge.SubmissionStatus
 import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
@@ -22,7 +23,7 @@ class SubmissionServiceImpl(
     }
 
     override fun getPendingSubmission(): Submission? {
-        return submissionRepository.findFirstByStatus(Submission.SubmissionStatus.PENDING)
+        return submissionRepository.findFirstByStatus(SubmissionStatus.PENDING)
             .getOrNull()
     }
 

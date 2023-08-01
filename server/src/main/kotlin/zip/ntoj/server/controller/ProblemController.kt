@@ -18,6 +18,7 @@ import zip.ntoj.server.model.Submission
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.server.service.UserService
+import zip.ntoj.shared.dtos.judge.SubmissionStatus
 
 @RestController
 @RequestMapping("/problem")
@@ -58,7 +59,7 @@ class ProblemController(
             origin = Submission.SubmissionOrigin.PROBLEM,
             language = problemSubmissionRequest.language,
             code = problemSubmissionRequest.code,
-            status = Submission.SubmissionStatus.PENDING,
+            status = SubmissionStatus.PENDING,
         )
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))
@@ -67,7 +68,7 @@ class ProblemController(
 
 data class SubmissionDto(
     val id: Long,
-    val status: Submission.SubmissionStatus,
+    val status: SubmissionStatus,
 ) {
     companion object {
         fun from(submission: Submission) = SubmissionDto(

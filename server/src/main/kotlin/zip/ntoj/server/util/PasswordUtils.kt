@@ -1,6 +1,7 @@
 package zip.ntoj.server.util
 
 import org.apache.commons.codec.digest.DigestUtils
+import zip.ntoj.shared.util.randomString
 
 fun getSalt() = randomString()
 

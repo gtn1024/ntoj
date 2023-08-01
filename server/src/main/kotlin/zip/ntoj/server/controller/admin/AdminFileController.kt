@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile
 import zip.ntoj.server.model.FileUpload
 import zip.ntoj.server.model.R
 import zip.ntoj.server.service.FileService
-import zip.ntoj.server.util.randomString
+import zip.ntoj.shared.util.randomString
 import java.time.Instant
 
 @RestController

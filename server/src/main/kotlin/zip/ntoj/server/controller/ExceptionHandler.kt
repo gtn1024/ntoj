@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.R
-import zip.ntoj.server.util.randomString
+import zip.ntoj.shared.util.randomString
 
 @RestControllerAdvice
 class ExceptionHandler(
