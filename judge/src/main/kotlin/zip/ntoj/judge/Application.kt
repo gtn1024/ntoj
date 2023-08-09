@@ -15,6 +15,7 @@ import io.ktor.serialization.jackson.jackson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
+import zip.ntoj.judge.config.NTOJ_CLIENT_ID
 import zip.ntoj.judge.config.NTOJ_SERVER_URL
 import zip.ntoj.shared.dtos.judge.GetSubmissionResponse
 import zip.ntoj.shared.dtos.judge.SubmissionJudgeResult
@@ -68,6 +69,8 @@ fun judge(submission: GetSubmissionResponse): SubmissionJudgeResult {
         result = SubmissionStatus.entries[Random().nextInt(0, 8) + 2],
         time = 0,
         memory = 0,
+
+        judgerId = NTOJ_CLIENT_ID,
     )
 }
 

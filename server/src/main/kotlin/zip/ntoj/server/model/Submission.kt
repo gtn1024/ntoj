@@ -26,6 +26,8 @@ class Submission(
     var time: Int? = null,
     var memory: Int? = null,
 
+    var judgerId: String? = null,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")

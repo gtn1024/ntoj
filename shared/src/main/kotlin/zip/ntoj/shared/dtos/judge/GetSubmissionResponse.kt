@@ -15,6 +15,8 @@ data class SubmissionJudgeResult(
     val result: SubmissionStatus,
     val time: Int,
     val memory: Int,
+
+    val judgerId: String? = null,
 )
 
 enum class SubmissionStatus {

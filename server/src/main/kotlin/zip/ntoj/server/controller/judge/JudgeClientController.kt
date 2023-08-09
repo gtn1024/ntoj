@@ -51,6 +51,7 @@ class JudgeClientController(
         submission.status = submissionStatus.result
         submission.time = submissionStatus.time
         submission.memory = submissionStatus.memory
+        submission.judgerId = submissionStatus.judgerId
         submissionService.update(submission)
         return R.success(200, "更新成功")
     }
