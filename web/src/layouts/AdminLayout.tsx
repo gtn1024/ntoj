@@ -43,7 +43,16 @@ export const AdminLayout: React.FC = () => {
       icon: <QuestionOutlined/>,
       label: '题目',
     },
+    {
+      key: '/admin/language',
+      icon: <QuestionOutlined/>,
+      label: '语言',
+    },
   ]
+
+  if (user.role !== 'SUPER_ADMIN') {
+    items.pop()
+  }
 
   useEffect(() => {
     if (pathname.includes('/admin/announcement')) {
@@ -51,6 +60,9 @@ export const AdminLayout: React.FC = () => {
     }
     if (pathname.includes('/admin/problem')) {
       return setCurrent('/admin/problem')
+    }
+    if (pathname.includes('/admin/language')) {
+      return setCurrent('/admin/language')
     }
     if (pathname.includes('/admin')) {
       return setCurrent('/admin')

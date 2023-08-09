@@ -74,3 +74,14 @@ interface Submission {
   id: number
   status: SubmissionStatus
 }
+
+interface Language {
+  id: number
+  languageName: string
+  compileCommand?: string
+  executeCommand?: string
+  type: LanguageType
+  enabled: boolean
+}
+
+type LanguageType = 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'

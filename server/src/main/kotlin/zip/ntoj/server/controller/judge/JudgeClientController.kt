@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.model.R
-import zip.ntoj.server.model.Submission
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.shared.dtos.judge.GetSubmissionResponse
 import zip.ntoj.shared.dtos.judge.SubmissionJudgeResult
