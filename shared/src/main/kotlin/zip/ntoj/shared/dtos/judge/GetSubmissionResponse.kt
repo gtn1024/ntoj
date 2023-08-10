@@ -30,5 +30,6 @@ enum class SubmissionStatus {
     COMPILE_ERROR, // 7
     SYSTEM_ERROR, // 8
     PRESENTATION_ERROR, // 9
-    DEPRECATED, // 10
+    OUTPUT_LIMIT_EXCEEDED, // 10
+    DEPRECATED, // 11
 }
