@@ -1,16 +1,18 @@
-import type { FormInstance } from 'antd'
-import { Button, Form, Input, InputNumber, Switch, message } from 'antd'
+import type { FormInstance, UploadFile, UploadProps } from 'antd'
+import { Button, Form, Input, InputNumber, Switch, Transfer, Upload, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import type { HttpResponse } from '../../lib/Http.tsx'
+import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
+import type { RcFile } from 'antd/es/upload'
+import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { ProblemDetail } from '../../components/ProblemDetail.tsx'
 
 interface Params {
   title: string
   content: string
+  languages: number[]
   visible: boolean
 }
 
@@ -21,11 +23,16 @@ export const AdminProblemEditPage: React.FC = () => {
   const nav = useNavigate()
   const formRef = useRef<FormInstance>(null)
   const [data, setData] = useState<Problem>()
+  const [languages, setLanguages] = useState<string[]>([])
+  const [allLanguages, setAllLanguages] = useState<{ key: string; title: string }[]>([])
+  const [testcaseFileId, setTestcaseFileId] = useState<number>()
   useEffect(() => {
     if (mode === '修改' && id) {
       http.get<Problem>(`/admin/problem/${id}`)
         .then((res) => {
           setData(res.data.data)
+          setLanguages(res.data.data.languages?.map(l => l.toString()) ?? [])
+          setTestcaseFileId(res.data.data.testcase?.fileId)
           formRef?.current?.setFieldsValue({
             alias: res.data.data.alias ?? '',
             title: res.data.data.title ?? '',
@@ -38,6 +45,7 @@ export const AdminProblemEditPage: React.FC = () => {
             samples: res.data.data.samples ?? [{ input: '', output: '' }],
             note: res.data.data.note ?? '',
             visible: res.data.data.visible ?? false,
+            languages,
           })
         })
         .catch((err: AxiosError<HttpResponse>) => {
@@ -45,11 +53,25 @@ export const AdminProblemEditPage: React.FC = () => {
           throw err
         })
     }
+    http.get<L<Language>>('/admin/language')
+      .then((res) => {
+        const ls = res.data.data.list
+        setAllLanguages(ls.map(l => ({ key: l.id.toString(), title: l.languageName })))
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '获取语言失败')
+        throw err
+      })
   }, [mode, id, formRef])
 
   const onSubmit = (v: Params) => {
+    if (!testcaseFileId) {
+      void message.error('请上传测试数据')
+      return
+    }
+    const data = { ...v, languages: v.languages.map(Number), testcase: testcaseFileId }
     if (mode === '新建') {
-      http.post<Problem>('/admin/problem', { ...v })
+      http.post<Problem>('/admin/problem', data)
         .then(() => {
           void message.success('创建成功')
           nav('/admin/problem')
@@ -59,7 +81,7 @@ export const AdminProblemEditPage: React.FC = () => {
           throw err
         })
     } else {
-      http.patch<void>(`/admin/problem/${id ?? 0}`, { ...v })
+      http.patch<void>(`/admin/problem/${id ?? 0}`, data)
         .then(() => {
           void message.success('修改成功')
           nav('/admin/problem')
@@ -71,6 +93,61 @@ export const AdminProblemEditPage: React.FC = () => {
     }
   }
 
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+  const handleChange: UploadProps['onChange'] = (info) => {
+    let newFileList = [...info.fileList]
+
+    // 1. Limit the number of uploaded files
+    // Only to show one recent uploaded file, and old ones will be replaced by the new
+    newFileList = newFileList.slice(-1)
+
+    // 2. Read from response and show file link
+    newFileList = newFileList.map((file) => {
+      if (file.response) {
+        // Component will show file.url as link
+        file.url = file.response.url
+      }
+      return file
+    })
+
+    setFileList(newFileList)
+  }
+  const props: UploadProps = {
+    onChange: handleChange,
+    multiple: false,
+    accept: 'application/zip',
+    beforeUpload: (file) => {
+      const isZIP = file.type === 'application/zip'
+      if (!isZIP) {
+        void message.error(`${file.name} is not a zip file`)
+        return false
+      }
+      return isZIP || Upload.LIST_IGNORE
+    },
+    customRequest: (options) => {
+      if (fileList.length !== 1) {
+        void message.error('请上传一个文件')
+        return
+      }
+      const formData = new FormData()
+      formData.append('file', fileList[0].originFileObj as RcFile)
+      http.post<{
+        fileId: number
+      }>('/admin/problem/uploadTestcase', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+        .then((res) => {
+          setTestcaseFileId(res.data.data.fileId)
+          options.onSuccess?.(res.data)
+        })
+        .catch((err: AxiosError<HttpResponse>) => {
+          void message.error(err.response?.data.message ?? 'upload failed.')
+          options.onError?.(err)
+        })
+    },
+  }
   return (<>
     <div className="flex justify-between w-full h-[calc(100vh-64px)]">
       <div className="w-1/2 overflow-y-auto p-4">
@@ -160,6 +237,21 @@ export const AdminProblemEditPage: React.FC = () => {
 
           <Form.Item label="提示" name="note">
             <Input.TextArea rows={4}/>
+          </Form.Item>
+
+          <Form.Item label="语言" name="languages">
+            <Transfer
+              dataSource={allLanguages}
+              targetKeys={languages}
+              onChange={setLanguages}
+              render={item => item.title}
+            />
+          </Form.Item>
+
+          <Form.Item label="测试数据">
+            <Upload {...props} fileList={fileList}>
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
 
           <Form.Item

@@ -45,6 +45,12 @@ interface Problem {
   author?: string
   createdAt?: string
   visible?: boolean
+  languages?: number[]
+  testcase?: TestcaseDto
+}
+
+interface TestcaseDto {
+  fileId: number
 }
 
 interface ProblemSample {
@@ -85,3 +91,10 @@ interface Language {
 }
 
 type LanguageType = 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'
+
+interface JudgeClientToken {
+  id: number
+  name: string
+  token: string
+  enabled: boolean
+}

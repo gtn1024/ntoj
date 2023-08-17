@@ -7,6 +7,7 @@ import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
+import org.apache.commons.io.FileUtils
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,12 +18,22 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.multipart.MultipartFile
+import zip.ntoj.server.exception.AppException
+import zip.ntoj.server.model.FileUpload
 import zip.ntoj.server.model.L
+import zip.ntoj.server.model.Language
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.ProblemSample
 import zip.ntoj.server.model.R
+import zip.ntoj.server.service.FileService
+import zip.ntoj.server.service.FileUploadService
+import zip.ntoj.server.service.LanguageService
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.UserService
+import zip.ntoj.server.util.ZipUtils
+import zip.ntoj.shared.util.randomString
+import java.io.File
 import java.time.Instant
 
 @RestController
@@ -32,6 +43,9 @@ import java.time.Instant
 class AdminProblemController(
     val problemService: ProblemService,
     val userService: UserService,
+    val languageService: LanguageService,
+    val fileService: FileService,
+    val fileUploadService: FileUploadService,
 ) {
     @GetMapping("{id}")
     fun get(@PathVariable id: Long): ResponseEntity<R<ProblemDto>> {
@@ -43,12 +57,18 @@ class AdminProblemController(
         )
     }
 
+    private fun languageIdToLanguage(id: Long): Language {
+        return languageService.get(id)
+    }
+
     @PostMapping
     fun create(
         @RequestBody @Valid
         problemRequest: ProblemRequest,
     ): ResponseEntity<R<ProblemDto>> {
         val author = userService.getUserById(StpUtil.getLoginIdAsLong())
+        val languages = problemRequest.languages.map { languageIdToLanguage(it) }
+        val testcase = fileUploadService.get(problemRequest.testcase)
         return R.success(
             200,
             "创建成功",
@@ -66,9 +86,10 @@ class AdminProblemController(
                         samples = problemRequest.samples,
                         note = problemRequest.note,
                         visible = problemRequest.visible,
+                        languages = languages,
                         author = author,
                         judgeTimes = 1,
-                        testCases = null,
+                        testCases = testcase,
                     ),
                 ),
             ),
@@ -82,6 +103,8 @@ class AdminProblemController(
         @PathVariable id: Long,
     ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(id)
+        val testcase = fileUploadService.get(problemRequest.testcase)
+        val languages = problemRequest.languages.map { languageIdToLanguage(it) }
         problem.alias = problemRequest.alias
         problem.title = problemRequest.title
         problem.background = problemRequest.background
@@ -93,6 +116,8 @@ class AdminProblemController(
         problem.samples = problemRequest.samples
         problem.note = problemRequest.note
         problem.visible = problemRequest.visible
+        problem.languages = languages
+        problem.testCases = testcase
         return R.success(
             200,
             "修改成功",
@@ -124,6 +149,46 @@ class AdminProblemController(
         problemService.delete(id)
         return R.success(200, "删除成功")
     }
+
+    @PostMapping("uploadTestcase")
+    fun updateTestcase(@RequestParam("file") multipartFile: MultipartFile): ResponseEntity<R<TestcaseDto>> {
+        if (multipartFile.isEmpty) {
+            throw AppException("文件为空", 400)
+        }
+        // check whether zip file
+        if (multipartFile.originalFilename?.endsWith(".zip") != true || multipartFile.contentType != "application/zip") {
+            throw AppException("文件格式错误", 400)
+        }
+        // get files from zip
+        val file: File = File.createTempFile("testcase_", ".zip")
+        FileUtils.copyInputStreamToFile(multipartFile.inputStream, file)
+        val fileList = ZipUtils.getFilenamesFromZip(file)
+        // check whether files are valid
+        if (!checkTestcaseFile(fileList)) {
+            throw AppException("文件格式错误", 400)
+        }
+        val fileUpload =
+            fileService.uploadTestCase(file, "${Instant.now().toEpochMilli()}-${randomString()}.zip")
+        return R.success(200, "上传成功", TestcaseDto.from(fileUpload))
+    }
+
+    private fun checkTestcaseFile(fileList: List<String>): Boolean {
+        if (fileList.size % 2 != 0) {
+            return false
+        }
+        val files = fileList.filter { it.endsWith(".in") }.map { it.replace(".in", "") }
+        for (i in 1..files.size) {
+            if (!files.contains(i.toString())) {
+                return false
+            }
+        }
+        files.forEach {
+            if (!fileList.contains("$it.in") || !fileList.contains("$it.out")) {
+                return false
+            }
+        }
+        return true
+    }
 }
 
 data class ProblemRequest(
@@ -137,7 +202,9 @@ data class ProblemRequest(
     val memoryLimit: Int? = 64,
     val samples: List<ProblemSample> = mutableListOf(),
     val note: String?,
+    val languages: List<Long> = listOf(),
     val visible: Boolean? = null,
+    val testcase: Long,
 )
 
 data class ProblemDto(
@@ -155,7 +222,9 @@ data class ProblemDto(
     val note: String?,
     val author: String?,
     val visible: Boolean?,
+    val languages: List<Long> = listOf(),
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val createdAt: Instant?,
+    val testcase: TestcaseDto,
 ) {
     companion object {
         fun from(problem: Problem): ProblemDto = ProblemDto(
@@ -174,6 +243,20 @@ data class ProblemDto(
             author = problem.author?.username,
             createdAt = problem.createdAt,
             visible = problem.visible,
+            languages = problem.languages.map { it.languageId!! },
+            testcase = TestcaseDto.from(problem.testCases!!),
+        )
+    }
+}
+
+data class TestcaseDto(
+    val fileId: Long,
+    val hash: String,
+) {
+    companion object {
+        fun from(fileUpload: FileUpload) = TestcaseDto(
+            fileId = fileUpload.fileId!!,
+            hash = fileUpload.hash,
         )
     }
 }

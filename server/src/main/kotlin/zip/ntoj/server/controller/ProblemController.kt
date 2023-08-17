@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.ProblemSample
@@ -51,15 +52,20 @@ class ProblemController(
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
     ): ResponseEntity<R<SubmissionDto>> {
         val problem = problemService.get(alias)
+        if (problem.languages.none { it.languageId == problemSubmissionRequest.language }) {
+            throw AppException("不支持的语言", 400)
+        }
+        val language = problem.languages.find { it.languageId == problemSubmissionRequest.language }!!
         val user = userService
             .getUserById(StpUtil.getLoginIdAsLong())
         var submission = Submission(
             user = user,
             problem = problem,
             origin = Submission.SubmissionOrigin.PROBLEM,
-            language = problemSubmissionRequest.language,
+            language = language,
             code = problemSubmissionRequest.code,
             status = SubmissionStatus.PENDING,
+            judgeStage = Submission.JudgeStage.PENDING,
         )
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))
@@ -80,7 +86,7 @@ data class SubmissionDto(
 
 data class ProblemSubmissionRequest(
     val code: String,
-    val language: String,
+    val language: Long,
 )
 
 data class ProblemListDto(
@@ -111,6 +117,7 @@ data class ProblemDto(
     val samples: List<ProblemSample>,
     val note: String?,
     val author: String?,
+    val languages: List<Long> = listOf(),
 ) {
     companion object {
         fun from(problem: Problem): ProblemDto = ProblemDto(
@@ -127,6 +134,7 @@ data class ProblemDto(
             samples = problem.samples ?: listOf(),
             note = problem.note,
             author = problem.author?.username,
+            languages = problem.languages.map { it.languageId!! },
         )
     }
 }

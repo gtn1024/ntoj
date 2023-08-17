@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import { Button, Select, message } from 'antd'
 import c from 'classnames'
-import type { HttpResponse } from '../lib/Http.tsx'
+import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
 import { CodeMirrorEditor } from '../components/CodeMirrorEditor.tsx'
@@ -15,33 +14,51 @@ export const ProblemPage: React.FC = () => {
   const { isMobile } = useLayout()
   const { alias } = useParams()
   const [code, setCode] = useState('')
-  const [language, setLanguage] = useState('gnu_cpp17')
-  const languageOptions: { value: string;label: string }[] = [
-    { value: 'gnu_c11', label: 'C11 (GCC)' },
-    { value: 'gnu_cpp14', label: 'C++14 (G++)' },
-    { value: 'gnu_cpp17', label: 'C++17 (G++)' },
-    { value: 'gnu_cpp20', label: 'C++20 (G++)' },
-    { value: 'java_8', label: 'Java8' },
-    { value: 'java_11', label: 'Java11' },
-    { value: 'java_17', label: 'Java17' },
-    { value: 'python_2', label: 'Python2' },
-    { value: 'python_3', label: 'Python3' },
-  ]
-  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | '正在提交' | null >(null)
+  const [language, setLanguage] = useState<string>()
+  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | '正在提交' | null>(null)
   const [intervalId, setIntervalId] = useState<number | null>(null)
-  const { data } = useSWR(`/problem/${alias ?? ''}`, async (path) => {
-    return http.get<Problem>(path)
-      .then((res) => {
-        return res.data.data
+  const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
+  const [data, setData] = useState<Problem>()
+
+  useEffect(() => {
+    Promise.all([
+      http.get<L<{
+        id: number
+        name: string
+      }>>('/language')
+        .then((res) => {
+          return res.data.data.list
+        })
+        .catch((err: AxiosError<HttpResponse>) => {
+          throw err
+        }),
+      http.get<Problem>(`/problem/${alias ?? ''}`)
+        .then((res) => {
+          return res.data.data
+        })
+        .catch((err: AxiosError) => {
+          throw err
+        }),
+    ])
+      .then(([languages, problem]) => {
+        setData(problem)
+        const availableLanguages = languages
+          .filter((language) => {
+            return problem.languages?.includes(language.id)
+          })
+        setLanguageOptions(
+          availableLanguages
+            .map(language => ({
+              value: language.id.toString(),
+              label: language.name,
+            })),
+        )
       })
-      .catch((err: AxiosError) => {
-        if (err.response?.status === 404) {
-          void message.error('题目不存在！')
-          nav('/404')
-        }
+      .catch((err) => {
+        void message.error('题目获取失败！')
         throw err
       })
-  })
+  }, [alias, nav])
 
   function statusToMessage(status: SubmissionStatus | '正在提交' | null): string {
     switch (status) {
@@ -66,8 +83,12 @@ export const ProblemPage: React.FC = () => {
   }
 
   const onSubmitCode = () => {
+    if (!language) {
+      void message.error('请选择语言')
+      return
+    }
     setJudgeMessage('正在提交')
-    http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language })
+    http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language: Number.parseInt(language) })
       .then((res) => {
         void message.info(`提交成功，提交ID：${res.data.data.id}`)
         setJudgeMessage(res.data.data.status)

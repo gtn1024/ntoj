@@ -22,6 +22,8 @@ import { NotFoundPage } from '../pages/404.tsx'
 import { AdminProblemEditPage } from '../pages/admin/AdminProblemEditPage.tsx'
 import { AdminLanguagePage } from '../pages/admin/AdminLanguagePage.tsx'
 import { AdminLanguageEditPage } from '../pages/admin/AdminLanguageEditPage.tsx'
+import { AdminJudgeClientTokenPage } from '../pages/admin/AdminJudgeClientTokenPage.tsx'
+import { AdminJudgeClientTokenEditPage } from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -101,6 +103,23 @@ export const router = createBrowserRouter(
             { index: true, element: <AdminLanguagePage/> },
             { path: 'new', element: <AdminLanguageEditPage/> },
             { path: ':id/edit', element: <AdminLanguageEditPage/> },
+          ],
+        },
+        {
+          path: 'judge_client_token',
+          loader: async () => {
+            await adminLoader()
+            const user = useUserStore.getState().user
+            if (user.role === 'SUPER_ADMIN') {
+              return true
+            } else {
+              throw new ErrorForbidden()
+            }
+          },
+          children: [
+            { index: true, element: <AdminJudgeClientTokenPage/> },
+            { path: 'new', element: <AdminJudgeClientTokenEditPage/> },
+            { path: ':id/edit', element: <AdminJudgeClientTokenEditPage/> },
           ],
         },
       ],

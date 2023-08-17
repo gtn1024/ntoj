@@ -48,9 +48,15 @@ export const AdminLayout: React.FC = () => {
       icon: <QuestionOutlined/>,
       label: '语言',
     },
+    {
+      key: '/admin/judge_client_token',
+      icon: <QuestionOutlined/>,
+      label: '评测机',
+    },
   ]
 
   if (user.role !== 'SUPER_ADMIN') {
+    items.pop()
     items.pop()
   }
 
@@ -63,6 +69,9 @@ export const AdminLayout: React.FC = () => {
     }
     if (pathname.includes('/admin/language')) {
       return setCurrent('/admin/language')
+    }
+    if (pathname.includes('/admin/judge_client_token')) {
+      return setCurrent('/admin/judge_client_token')
     }
     if (pathname.includes('/admin')) {
       return setCurrent('/admin')

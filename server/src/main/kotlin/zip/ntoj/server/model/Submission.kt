@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToOne
 import zip.ntoj.shared.dtos.judge.SubmissionStatus
 
 @Entity(name = "t_submissions")
@@ -17,7 +18,7 @@ class Submission(
     @ManyToOne
     var problem: Problem? = null,
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
-    var language: String? = null,
+    @OneToOne var language: Language? = null,
     @Column(columnDefinition = "text", length = 65535)
     var code: String? = null,
     @Enumerated(EnumType.STRING)
@@ -28,6 +29,9 @@ class Submission(
 
     var judgerId: String? = null,
 
+    @Enumerated(EnumType.STRING)
+    var judgeStage: JudgeStage = JudgeStage.PENDING,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")
@@ -35,5 +39,12 @@ class Submission(
 ) : BaseEntity() {
     enum class SubmissionOrigin {
         PROBLEM, // 0
+    }
+
+    enum class JudgeStage {
+        PENDING,
+        COMPILING,
+        JUDGING,
+        FINISHED,
     }
 }

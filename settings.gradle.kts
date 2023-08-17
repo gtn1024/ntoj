@@ -12,7 +12,6 @@ require(JavaVersion.current() >= JavaVersion.VERSION_17) {
 
 include(":shared")
 include(":server")
-include(":judge")
 
 rootProject.children.forEach { it.configureBuildScriptName() }
 

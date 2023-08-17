@@ -31,6 +31,7 @@ class Language(
 ) : BaseEntity() {
     enum class LanguageType {
         CPP,
+        C,
         JAVA,
         PYTHON,
         OTHER,

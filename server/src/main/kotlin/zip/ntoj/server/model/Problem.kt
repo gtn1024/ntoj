@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes.JSON
@@ -22,6 +23,8 @@ class Problem(
     var timeLimit: Int?,
     var memoryLimit: Int?,
     var judgeTimes: Int?,
+
+    @OneToMany var languages: List<Language> = mutableListOf(),
 
     @OneToOne var testCases: FileUpload?,
 
