@@ -36,7 +36,7 @@ class ProblemController(
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
     ): ResponseEntity<R<L<ProblemListDto>>> {
         val list =
-            problemService.get(onlyVisible = true, desc = true, page = current, pageSize = pageSize)
+            problemService.get(onlyVisible = true, page = current, pageSize = pageSize)
         val count = problemService.count(true)
         return R.success(200, "获取成功", L(count, current, list.map { ProblemListDto.from(it) }))
     }
