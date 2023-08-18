@@ -76,7 +76,7 @@ object TestcaseRunner {
         return SandboxRequest(
             cmd = listOf(
                 Cmd(
-                    args = executeCommand.split(" "),
+                    args = listOf("/usr/bin/bash", "-c", executeCommand),
                     env = listOf("PATH=/usr/bin:/bin"),
                     files = listOf(
                         MemoryFile(inData),

@@ -224,7 +224,7 @@ fun getCompileBody(submission: GetSubmissionResponse, sourceName: String, target
     return SandboxRequest(
         cmd = listOf(
             Cmd(
-                args = compileCommand.split(" "),
+                args = listOf("/usr/bin/bash", "-c", compileCommand),
                 env = listOf("PATH=/usr/bin:/bin"),
                 files = listOf(
                     MemoryFile(content = ""),

@@ -19,6 +19,6 @@ object SourceFilename {
 object TargetFilename {
     const val CPP = "a"
     const val C = "a"
-    const val JAVA = "Main"
+    const val JAVA = "Main.jar"
     const val PYTHON = "main.py"
 }
