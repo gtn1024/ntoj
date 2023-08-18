@@ -172,12 +172,12 @@ export const AdminProblemEditPage: React.FC = () => {
 
           <div className="flex">
             <Form.Item label="内存限制" rules={[{ required: true, message: '请输入内存限制！' }]}
-                       name="memoryLimit" className="mr-2" initialValue={128}>
+                       name="memoryLimit" className="mr-2" initialValue={256}>
               <InputNumber addonAfter="MB" />
             </Form.Item>
 
             <Form.Item label="时间限制" rules={[{ required: true, message: '请输入时间限制！' }]}
-                       name="timeLimit" className="grow" initialValue={128} >
+                       name="timeLimit" className="grow" initialValue={1000} >
               <InputNumber addonAfter="ms" />
             </Form.Item>
           </div>
