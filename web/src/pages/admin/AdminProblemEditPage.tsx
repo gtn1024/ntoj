@@ -69,7 +69,7 @@ export const AdminProblemEditPage: React.FC = () => {
       void message.error('请上传测试数据')
       return
     }
-    const data = { ...v, languages: v.languages.map(Number), testcase: testcaseFileId }
+    const data = { ...v, languages: languages.map(Number), testcase: testcaseFileId }
     if (mode === '新建') {
       http.post<Problem>('/admin/problem', data)
         .then(() => {
