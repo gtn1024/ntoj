@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class ServerApplication
 
 fun main(args: Array<String>) {
-    runApplication<zip.ntoj.server.ServerApplication>(*args)
+    runApplication<ServerApplication>(*args)
 }

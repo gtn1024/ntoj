@@ -1,6 +1,8 @@
 package zip.ntoj.judger
 
 import com.fasterxml.jackson.annotation.JsonCreator
+import zip.ntoj.shared.model.SubmissionStatus
+import zip.ntoj.shared.model.TestcaseJudgeResult
 
 data class SandboxRequest(
     val requestId: String? = null,
@@ -129,4 +131,11 @@ data class SandboxVersion(
     val os: String,
     val copyOutOptional: Boolean? = null,
     val pipeProxy: Boolean? = null,
+)
+
+data class JudgeResult(
+    val testcases: List<TestcaseJudgeResult> = listOf(),
+    val status: SubmissionStatus,
+    val maxTime: Long,
+    val maxMemory: Long,
 )

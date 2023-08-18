@@ -8,6 +8,7 @@ ktlint = "0.50.0"
 junit5 = "5.10.0"
 spock = "2.3-groovy-4.0"
 ktor = "2.3.3"
+jackson = "2.15.2"
 
 [libraries]
 saToken-spring = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "sa-token" }
@@ -25,7 +26,12 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", version.ref = "ktor" }
 
+jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+
 [bundles]
 spock = ["spock-core", "spock-spring"]
+jackson = ["jackson-module-kotlin", "jackson-databind", "jackson-core"]
 
 [plugins]

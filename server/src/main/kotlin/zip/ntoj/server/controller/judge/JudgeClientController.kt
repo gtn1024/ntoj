@@ -66,6 +66,7 @@ class JudgeClientController(
             submission.time = submissionStatus.time
             submission.memory = submissionStatus.memory
             submission.judgerId = submissionStatus.judgerId
+            submission.testcaseResult = submissionStatus.testcaseResult
         }
         submission.judgeStage = submissionStatus.judgeStage
         submissionService.update(submission)

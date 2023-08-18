@@ -1,3 +1,4 @@
+import zip.ntoj.buildsupport.bundle
 import zip.ntoj.buildsupport.lib
 
 plugins {
@@ -7,4 +8,5 @@ plugins {
 
 dependencies {
     api(lib("commons-codec"))
+    implementation(bundle("jackson"))
 }

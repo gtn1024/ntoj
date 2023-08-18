@@ -9,4 +9,6 @@ data class UpdateSubmissionRequest(
 
     val judgerId: String? = null,
     val judgeStage: JudgeStage,
+
+    val testcaseResult: List<TestcaseJudgeResult> = listOf(),
 )
