@@ -6,6 +6,7 @@ import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.LanguageType
 import zip.ntoj.shared.model.SubmissionStatus
+import zip.ntoj.shared.model.TestcaseJudgeResult
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import zip.ntoj.shared.util.ZipUtils
 import zip.ntoj.shared.util.fileMd5
@@ -57,27 +58,20 @@ suspend fun main() {
                 continue
             }
             if (result[0].status != SandboxStatus.Accepted) {
-                val body = UpdateSubmissionRequest(
-                    submissionId = submission.submissionId,
-                    time = 0,
-                    memory = 0,
-                    judgerId = Configuration.JUDGER_ID,
-                    judgeStage = JudgeStage.FINISHED,
-                    result = when (result[0].status) {
-                        SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-                        else -> SubmissionStatus.COMPILE_ERROR
-                    },
-                )
-                Client.Backend.updateSubmission(submission.submissionId, body)
+                val res = when (result[0].status) {
+                    SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                    else -> SubmissionStatus.COMPILE_ERROR
+                }
+                setSubmissionResult(submission.submissionId, res)
                 continue
             }
             if (result[0].fileIds.size != 1) {
-                println("result[0].fileIds.size != 1")
+                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
                 continue
             }
             fileId = result[0].fileIds[targetName]
             if (fileId == null) {
-                println("fileId == null")
+                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
                 continue
             }
             setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
@@ -89,16 +83,13 @@ suspend fun main() {
 
             val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
 
-            val body = UpdateSubmissionRequest(
-                submissionId = submission.submissionId,
-                time = judgeResult.maxTime.toInt(),
-                memory = judgeResult.maxMemory.toInt(),
-                judgerId = Configuration.JUDGER_ID,
-                judgeStage = JudgeStage.FINISHED,
-                result = judgeResult.status,
-                testcaseResult = judgeResult.testcases,
+            setSubmissionResult(
+                submission.submissionId,
+                judgeResult.status,
+                judgeResult.maxTime.toInt(),
+                judgeResult.maxMemory.toInt(),
+                judgeResult.testcases,
             )
-            Client.Backend.updateSubmission(submission.submissionId, body)
 
             Client.Sandbox.deleteFile(fileId)
         } catch (e: ConnectException) {
@@ -155,6 +146,25 @@ private suspend fun setSubmissionJudgeStage(submissionId: Long, judgeStage: Judg
         judgerId = Configuration.JUDGER_ID,
         judgeStage = judgeStage,
         result = SubmissionStatus.JUDGING,
+    )
+    Client.Backend.updateSubmission(submissionId, body)
+}
+
+private suspend fun setSubmissionResult(
+    submissionId: Long,
+    result: SubmissionStatus,
+    time: Int = 0,
+    memory: Int = 0,
+    testcaseResult: List<TestcaseJudgeResult> = listOf(),
+) {
+    val body = UpdateSubmissionRequest(
+        submissionId = submissionId,
+        time = time,
+        memory = memory,
+        judgerId = Configuration.JUDGER_ID,
+        judgeStage = JudgeStage.FINISHED,
+        result = result,
+        testcaseResult = testcaseResult,
     )
     Client.Backend.updateSubmission(submissionId, body)
 }
