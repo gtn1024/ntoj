@@ -48,6 +48,9 @@ export const ProblemPage: React.FC = () => {
           })
         setLanguageOptions(
           availableLanguages
+            .sort((a, b) => {
+              return a.name.localeCompare(b.name)
+            })
             .map(language => ({
               value: language.id.toString(),
               label: language.name,
