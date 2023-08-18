@@ -35,7 +35,7 @@ suspend fun main() {
                 continue
             }
             println("收到提交 ${submission.submissionId}")
-            setSubmissionJudgeStage(submission.submissionId, submission.problemId, JudgeStage.COMPILING)
+            setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
             val sourceName: String = when (submission.language.type) {
                 LanguageType.C -> SourceFilename.C
                 LanguageType.CPP -> SourceFilename.CPP
@@ -59,7 +59,6 @@ suspend fun main() {
             if (result[0].status != SandboxStatus.Accepted) {
                 val body = UpdateSubmissionRequest(
                     submissionId = submission.submissionId,
-                    problemId = submission.problemId,
                     time = 0,
                     memory = 0,
                     judgerId = Configuration.JUDGER_ID,
@@ -81,7 +80,7 @@ suspend fun main() {
                 println("fileId == null")
                 continue
             }
-            setSubmissionJudgeStage(submission.submissionId, submission.problemId, JudgeStage.JUDGING)
+            setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
             println("编译结果 $fileId")
             if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
                 downloadTestcase(submission.testcase.fileId)
@@ -92,7 +91,6 @@ suspend fun main() {
 
             val body = UpdateSubmissionRequest(
                 submissionId = submission.submissionId,
-                problemId = submission.problemId,
                 time = judgeResult.maxTime.toInt(),
                 memory = judgeResult.maxMemory.toInt(),
                 judgerId = Configuration.JUDGER_ID,
@@ -149,10 +147,9 @@ suspend fun unzipTestcase(testcase: Long) {
     }
 }
 
-private suspend fun setSubmissionJudgeStage(submissionId: Long, problemId: Long, judgeStage: JudgeStage) {
+private suspend fun setSubmissionJudgeStage(submissionId: Long, judgeStage: JudgeStage) {
     val body = UpdateSubmissionRequest(
         submissionId = submissionId,
-        problemId = problemId,
         time = 0,
         memory = 0,
         judgerId = Configuration.JUDGER_ID,
