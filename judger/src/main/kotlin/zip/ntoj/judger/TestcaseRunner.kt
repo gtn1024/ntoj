@@ -85,8 +85,8 @@ object TestcaseRunner {
                     ),
                     cpuLimit = 1L * submission.timeLimit * 1000 * 1000,
                     clockLimit = 1L * submission.timeLimit * 1000 * 1000 * 2,
-                    memoryLimit = 1L * submission.memoryLimit * 1024,
-                    stackLimit = 1L * submission.memoryLimit * 1024,
+                    memoryLimit = 1L * submission.memoryLimit * 1024 * 1024,
+                    stackLimit = 1L * submission.memoryLimit * 1024 * 1024,
                     procLimit = 50,
                     copyIn = mapOf(
                         targetName to PreparedFile(fileId),
