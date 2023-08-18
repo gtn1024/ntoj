@@ -9,6 +9,7 @@ import zip.ntoj.server.repository.JudgeClientTokenRepository
 interface JudgeClientTokenService {
     fun get(id: Long): JudgeClientToken
     fun get(token: String): JudgeClientToken
+    fun exists(token: String): Boolean
     fun get(
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
@@ -34,6 +35,10 @@ class JudgeClientTokenServiceImpl(
 
     override fun get(page: Int, pageSize: Int): List<JudgeClientToken> {
         return judgeClientTokenRepository.findAll(PageRequest.of(page - 1, pageSize)).toList()
+    }
+
+    override fun exists(token: String): Boolean {
+        return judgeClientTokenRepository.existsByToken(token)
     }
 
     override fun new(judgeClientToken: JudgeClientToken): JudgeClientToken {

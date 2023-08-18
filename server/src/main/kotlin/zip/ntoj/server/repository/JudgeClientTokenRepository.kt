@@ -9,4 +9,5 @@ interface JudgeClientTokenRepository :
     JpaRepository<JudgeClientToken, Long>,
     JpaSpecificationExecutor<JudgeClientToken> {
     fun findByToken(token: String): Optional<JudgeClientToken>
+    fun existsByToken(token: String): Boolean
 }

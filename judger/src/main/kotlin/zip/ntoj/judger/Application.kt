@@ -92,6 +92,8 @@ suspend fun main() {
             )
 
             Client.Sandbox.deleteFile(fileId)
+        } catch (e: IllegalStateException) {
+            throw e
         } catch (e: ConnectException) {
             connected = false
             e.printStackTrace()

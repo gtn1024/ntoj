@@ -13,6 +13,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsChannel
 import io.ktor.http.ContentType
+import io.ktor.http.HttpStatusCode.Companion.Forbidden
 import io.ktor.http.HttpStatusCode.Companion.NoContent
 import io.ktor.http.contentType
 import io.ktor.serialization.jackson.jackson
@@ -39,6 +40,9 @@ object Client {
             val response = client.get("$SERVER_HOST/judge_client/get_submission") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+            }
+            if (response.status == Forbidden) {
+                throw IllegalStateException("Token 无效")
             }
             if (response.status == NoContent) {
                 return null
