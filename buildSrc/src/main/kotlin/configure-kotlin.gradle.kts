@@ -5,8 +5,7 @@ plugins {
 }
 
 dependencies {
-    add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    add("implementation", "org.jetbrains.kotlin:kotlin-reflect")
+    add("implementation", kotlin("reflect"))
 }
 
 kotlin {
