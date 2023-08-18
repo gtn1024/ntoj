@@ -77,11 +77,13 @@ class ProblemController(
 data class SubmissionDto(
     val id: Long,
     val status: SubmissionStatus,
+    val stage: JudgeStage,
 ) {
     companion object {
         fun from(submission: Submission) = SubmissionDto(
             id = submission.submissionId!!,
             status = submission.status,
+            stage = submission.judgeStage,
         )
     }
 }

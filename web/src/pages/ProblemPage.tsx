@@ -15,7 +15,7 @@ export const ProblemPage: React.FC = () => {
   const { alias } = useParams()
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState<string>()
-  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | '正在提交' | null>(null)
+  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | JudgeStage>()
   const [intervalId, setIntervalId] = useState<number | null>(null)
   const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
   const [data, setData] = useState<Problem>()
@@ -60,28 +60,6 @@ export const ProblemPage: React.FC = () => {
       })
   }, [alias, nav])
 
-  function statusToMessage(status: SubmissionStatus | '正在提交' | null): string {
-    switch (status) {
-      case 'PENDING':
-        return '正在评测'
-      case 'ACCEPTED':
-        return '通过'
-      case 'WRONG_ANSWER':
-        return '答案错误'
-      case 'TIME_LIMIT_EXCEEDED':
-        return '超时'
-      case 'MEMORY_LIMIT_EXCEEDED':
-        return '超内存'
-      case 'RUNTIME_ERROR':
-        return '运行错误'
-      case 'COMPILE_ERROR':
-        return '编译错误'
-      case 'SYSTEM_ERROR':
-        return '系统错误'
-    }
-    return status as string ?? ''
-  }
-
   const onSubmitCode = () => {
     if (!language) {
       void message.error('请选择语言')
@@ -98,10 +76,11 @@ export const ProblemPage: React.FC = () => {
         const id = setInterval(() => {
           http.get<Submission>(`/submission/${res.data.data.id}`)
             .then((res) => {
-              setJudgeMessage(res.data.data.status)
-              if (res.data.data.status !== 'PENDING') {
+              if (res.data.data.stage === 'FINISHED') {
                 setJudgeMessage(res.data.data.status)
                 clearInterval(id)
+              } else {
+                setJudgeMessage(res.data.data.stage)
               }
             })
             .catch((err: AxiosError<HttpResponse>) => {
@@ -142,7 +121,7 @@ export const ProblemPage: React.FC = () => {
                 options={languageOptions}
               />
               <div className={c('flex', 'items-center')}>
-                <span>{statusToMessage(judgeMessage)}</span>
+                <span>{judgeMessage}</span>
               </div>
             </div>
             <div className={''}>

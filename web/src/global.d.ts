@@ -79,7 +79,10 @@ type SubmissionStatus = |
 interface Submission {
   id: number
   status: SubmissionStatus
+  stage: JudgeStage
 }
+
+type JudgeStage = 'PENDING' | 'COMPILING' | 'JUDGING' | 'FINISHED'
 
 interface Language {
   id: number
