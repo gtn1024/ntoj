@@ -93,7 +93,7 @@ interface Language {
   enabled: boolean
 }
 
-type LanguageType = 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'
+type LanguageType = 'C' | 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'
 
 interface JudgeClientToken {
   id: number

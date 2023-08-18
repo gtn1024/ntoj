@@ -88,6 +88,7 @@ export const AdminLanguageEditPage: React.FC = () => {
 
                 <Form.Item label="类型" rules={[{ required: true, message: '请选择类型！' }]} name="type">
                     <Select>
+                        <Option value="C">C</Option>
                         <Option value="CPP">CPP</Option>
                         <Option value="JAVA">JAVA</Option>
                         <Option value="PYTHON">PYTHON</Option>

@@ -243,4 +243,3 @@ fun getCompileBody(submission: GetSubmissionResponse, sourceName: String, target
         ),
     )
 }
-
