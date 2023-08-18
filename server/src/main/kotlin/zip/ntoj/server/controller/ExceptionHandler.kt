@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import zip.ntoj.server.exception.AppException
-import zip.ntoj.server.model.R
+import zip.ntoj.server.ext.fail
+import zip.ntoj.shared.model.R
 import zip.ntoj.shared.util.randomString
 
 @RestControllerAdvice

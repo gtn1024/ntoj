@@ -22,7 +22,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(lib("saToken-spring"))
     implementation(lib("saToken-jwt"))
-    implementation(lib("commons-codec"))
     implementation(lib("commons-io"))
     testImplementation(bundle("spock"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

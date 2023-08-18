@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import zip.ntoj.shared.model.LanguageType
 
 @Entity(name = "t_languages")
 class Language(
@@ -28,12 +29,4 @@ class Language(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
     var languageId: Long? = null,
-) : BaseEntity() {
-    enum class LanguageType {
-        CPP,
-        C,
-        JAVA,
-        PYTHON,
-        OTHER,
-    }
-}
+) : BaseEntity()

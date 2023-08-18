@@ -12,9 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import zip.ntoj.server.model.R
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.User
 import zip.ntoj.server.service.UserService
+import zip.ntoj.shared.model.R
 import java.time.Instant
 
 @RestController

@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.Announcement
 import zip.ntoj.server.model.L
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.AnnouncementService
+import zip.ntoj.shared.model.R
 import java.time.Instant
 
 @RestController

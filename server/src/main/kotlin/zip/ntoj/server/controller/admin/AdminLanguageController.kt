@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Language
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.LanguageService
+import zip.ntoj.shared.model.LanguageType
+import zip.ntoj.shared.model.R
 
 @RestController
 @RequestMapping("/admin/language")
@@ -68,7 +70,7 @@ class AdminLanguageController(
                         languageName = languageRequest.languageName,
                         compileCommand = languageRequest.compileCommand,
                         executeCommand = languageRequest.executeCommand,
-                        type = Language.LanguageType.valueOf(languageRequest.type),
+                        type = LanguageType.valueOf(languageRequest.type),
                         enabled = languageRequest.enabled,
                     ),
                 ),
@@ -92,8 +94,8 @@ class AdminLanguageController(
         if (language.executeCommand != languageRequest.executeCommand) {
             language.executeCommand = languageRequest.executeCommand
         }
-        if (language.type != Language.LanguageType.valueOf(languageRequest.type)) {
-            language.type = Language.LanguageType.valueOf(languageRequest.type)
+        if (language.type != LanguageType.valueOf(languageRequest.type)) {
+            language.type = LanguageType.valueOf(languageRequest.type)
         }
         if (language.enabled != languageRequest.enabled) {
             language.enabled = languageRequest.enabled
@@ -116,7 +118,7 @@ data class LanguageDto(
     var languageName: String,
     var compileCommand: String?,
     var executeCommand: String?,
-    var type: Language.LanguageType,
+    var type: LanguageType,
     var enabled: Boolean,
     var id: Long,
 ) {

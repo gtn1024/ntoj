@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.config.SecurityConfig
 import zip.ntoj.server.exception.AppException
-import zip.ntoj.server.model.R
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.User
 import zip.ntoj.server.model.UserRole
 import zip.ntoj.server.service.UserService
 import zip.ntoj.server.util.checkPassword
 import zip.ntoj.server.util.getSalt
 import zip.ntoj.server.util.hashPassword
+import zip.ntoj.shared.model.R
 import java.time.Instant
 
 @RestController

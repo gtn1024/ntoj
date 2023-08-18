@@ -10,14 +10,17 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import zip.ntoj.server.controller.admin.TestcaseDto
-import zip.ntoj.server.model.Language
-import zip.ntoj.server.model.R
-import zip.ntoj.server.model.Submission
+import zip.ntoj.server.ext.from
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.service.FileService
 import zip.ntoj.server.service.FileUploadService
 import zip.ntoj.server.service.SubmissionService
-import zip.ntoj.shared.dtos.judge.SubmissionStatus
+import zip.ntoj.shared.model.GetSubmissionResponse
+import zip.ntoj.shared.model.JudgeStage
+import zip.ntoj.shared.model.R
+import zip.ntoj.shared.model.SubmissionStatus
+import zip.ntoj.shared.model.TestcaseDto
+import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.time.Instant
 
 @RestController
@@ -55,10 +58,10 @@ class JudgeClientController(
     @PatchMapping("/update_submission/{submissionId}")
     fun updateSubmission(
         @PathVariable submissionId: Long,
-        @RequestBody submissionStatus: SubmissionJudgeResult,
+        @RequestBody submissionStatus: UpdateSubmissionRequest,
     ): ResponseEntity<R<Void>> {
         val submission = submissionService.get(submissionId)
-        if (submissionStatus.judgeStage == Submission.JudgeStage.FINISHED) {
+        if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
             submission.status = submissionStatus.result
             submission.time = submissionStatus.time
             submission.memory = submissionStatus.memory
@@ -79,45 +82,6 @@ class JudgeClientController(
             .contentType(MediaType.parseMediaType("application/zip"))
             .body(resource)
     }
-
-    data class GetSubmissionResponse(
-        val submissionId: Long,
-        val problemId: Long,
-        val code: String,
-        val language: LanguageDto,
-        val testcase: TestcaseDto,
-        val timeLimit: Int,
-        val memoryLimit: Int,
-    ) {
-        data class LanguageDto(
-            val languageId: Long,
-            val name: String,
-            val compileCommand: String?,
-            val executeCommand: String?,
-            val type: Language.LanguageType,
-        ) {
-            companion object {
-                fun from(language: Language) = LanguageDto(
-                    languageId = language.languageId!!,
-                    name = language.languageName,
-                    compileCommand = language.compileCommand,
-                    executeCommand = language.executeCommand,
-                    type = language.type,
-                )
-            }
-        }
-    }
-
-    data class SubmissionJudgeResult(
-        val submissionId: Long,
-        val problemId: Long,
-        val result: SubmissionStatus,
-        val time: Int?,
-        val memory: Int?,
-
-        val judgerId: String? = null,
-        val judgeStage: Submission.JudgeStage,
-    )
 }
 
 data class PingResponse(

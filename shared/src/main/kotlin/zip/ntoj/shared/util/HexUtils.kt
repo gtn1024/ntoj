@@ -1,4 +1,4 @@
-package zip.ntoj.server.util
+package zip.ntoj.shared.util
 
 import org.apache.commons.codec.digest.DigestUtils
 import java.io.InputStream

@@ -9,7 +9,8 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
-import zip.ntoj.shared.dtos.judge.SubmissionStatus
+import zip.ntoj.shared.model.JudgeStage
+import zip.ntoj.shared.model.SubmissionStatus
 
 @Entity(name = "t_submissions")
 class Submission(
@@ -39,12 +40,5 @@ class Submission(
 ) : BaseEntity() {
     enum class SubmissionOrigin {
         PROBLEM, // 0
-    }
-
-    enum class JudgeStage {
-        PENDING,
-        COMPILING,
-        JUDGING,
-        FINISHED,
     }
 }

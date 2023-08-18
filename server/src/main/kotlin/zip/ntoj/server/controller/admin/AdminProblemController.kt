@@ -20,18 +20,21 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import zip.ntoj.server.exception.AppException
-import zip.ntoj.server.model.FileUpload
+import zip.ntoj.server.ext.fail
+import zip.ntoj.server.ext.from
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Language
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.ProblemSample
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.FileService
 import zip.ntoj.server.service.FileUploadService
 import zip.ntoj.server.service.LanguageService
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.UserService
-import zip.ntoj.server.util.ZipUtils
+import zip.ntoj.shared.model.R
+import zip.ntoj.shared.model.TestcaseDto
+import zip.ntoj.shared.util.ZipUtils
 import zip.ntoj.shared.util.randomString
 import java.io.File
 import java.time.Instant
@@ -245,18 +248,6 @@ data class ProblemDto(
             visible = problem.visible,
             languages = problem.languages.map { it.languageId!! },
             testcase = TestcaseDto.from(problem.testCases!!),
-        )
-    }
-}
-
-data class TestcaseDto(
-    val fileId: Long,
-    val hash: String,
-) {
-    companion object {
-        fun from(fileUpload: FileUpload) = TestcaseDto(
-            fileId = fileUpload.fileId!!,
-            hash = fileUpload.hash,
         )
     }
 }

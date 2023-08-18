@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.FileUpload
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.FileService
+import zip.ntoj.shared.model.R
 import zip.ntoj.shared.util.randomString
 import java.time.Instant
 

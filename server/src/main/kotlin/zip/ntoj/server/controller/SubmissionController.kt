@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import zip.ntoj.server.model.R
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.service.SubmissionService
+import zip.ntoj.shared.model.R
 
 @RestController
 @RequestMapping("/submission")

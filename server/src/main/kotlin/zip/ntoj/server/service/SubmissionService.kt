@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.repository.SubmissionRepository
-import zip.ntoj.shared.dtos.judge.SubmissionStatus
+import zip.ntoj.shared.model.SubmissionStatus
 import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {

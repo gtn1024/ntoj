@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.JudgeClientToken
 import zip.ntoj.server.model.L
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.JudgeClientTokenService
+import zip.ntoj.shared.model.R
 import zip.ntoj.shared.util.randomString
 
 @RestController

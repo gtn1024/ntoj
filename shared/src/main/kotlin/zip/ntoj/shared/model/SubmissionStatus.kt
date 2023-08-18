@@ -1,4 +1,4 @@
-package zip.ntoj.shared.dtos.judge
+package zip.ntoj.shared.model
 
 enum class SubmissionStatus {
     PENDING, // 0

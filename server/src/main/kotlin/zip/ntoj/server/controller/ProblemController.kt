@@ -11,15 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.exception.AppException
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.ProblemSample
-import zip.ntoj.server.model.R
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.server.service.UserService
-import zip.ntoj.shared.dtos.judge.SubmissionStatus
+import zip.ntoj.shared.model.JudgeStage
+import zip.ntoj.shared.model.R
+import zip.ntoj.shared.model.SubmissionStatus
 
 @RestController
 @RequestMapping("/problem")
@@ -65,7 +67,7 @@ class ProblemController(
             language = language,
             code = problemSubmissionRequest.code,
             status = SubmissionStatus.PENDING,
-            judgeStage = Submission.JudgeStage.PENDING,
+            judgeStage = JudgeStage.PENDING,
         )
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))

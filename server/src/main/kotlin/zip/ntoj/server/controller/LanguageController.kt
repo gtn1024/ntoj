@@ -4,10 +4,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Language
-import zip.ntoj.server.model.R
 import zip.ntoj.server.service.LanguageService
+import zip.ntoj.shared.model.R
 
 @RestController
 @RequestMapping("/language")

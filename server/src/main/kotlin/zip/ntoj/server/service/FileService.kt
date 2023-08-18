@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.config.FileConfig
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.FileUpload
-import zip.ntoj.server.util.fileMd5
+import zip.ntoj.shared.util.fileMd5
 import java.io.File
 import java.io.InputStream
 import java.nio.file.Paths
