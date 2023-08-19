@@ -112,7 +112,6 @@ suspend fun main() {
     }
 }
 
-
 private suspend fun unzipTestcase(testcase: Long) {
     removeOldTestcaseFolder(testcase)
     // unzip testcase
@@ -220,7 +219,7 @@ private suspend fun sleep(ms: Long) {
 private fun getCompileBody(
     submission: GetSubmissionResponse,
     sourceName: String,
-    targetName: String
+    targetName: String,
 ): SandboxRequest {
     val compileCommand = submission.language.compileCommand!!
         .replace("{src}", sourceName)
