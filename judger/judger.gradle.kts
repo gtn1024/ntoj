@@ -6,7 +6,7 @@ plugins {
     id("configure-ktlint")
 }
 
-dependencies{
+dependencies {
     implementation(project(":shared"))
     implementation(lib("ktor-client-core"))
     implementation(lib("ktor-client-cio"))

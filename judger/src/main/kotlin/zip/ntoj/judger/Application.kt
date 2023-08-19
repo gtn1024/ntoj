@@ -81,8 +81,8 @@ suspend fun main() {
             LOGGER.info("开始评测 ${submission.submissionId}")
             if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
                 downloadTestcase(submission.testcase.fileId)
+                unzipTestcase(submission.testcase.fileId)
             }
-            unzipTestcase(submission.testcase.fileId)
 
             val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
             LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
