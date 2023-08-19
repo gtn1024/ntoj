@@ -9,6 +9,7 @@ junit5 = "5.10.0"
 spock = "2.3-groovy-4.0"
 ktor = "2.3.3"
 jackson = "2.15.2"
+logback = "1.4.11"
 
 [libraries]
 saToken-spring = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "sa-token" }
@@ -29,6 +30,8 @@ ktor-serialization-jackson = { module = "io.ktor:ktor-serialization-jackson", ve
 jackson-module-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 
 [bundles]
 spock = ["spock-core", "spock-spring"]

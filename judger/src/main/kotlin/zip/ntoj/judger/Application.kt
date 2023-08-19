@@ -2,13 +2,13 @@ package zip.ntoj.judger
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.slf4j.LoggerFactory
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.LanguageType
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseJudgeResult
 import zip.ntoj.shared.model.UpdateSubmissionRequest
-import zip.ntoj.shared.util.ZipUtils
 import zip.ntoj.shared.util.fileMd5
 import java.io.File
 import java.net.ConnectException
@@ -20,6 +20,8 @@ import kotlin.io.path.deleteRecursively
 import kotlin.io.path.exists
 import kotlin.io.path.outputStream
 
+private val LOGGER = LoggerFactory.getLogger("zip.ntoj.judger.Application")
+
 suspend fun main() {
     var connected = false
     while (true) {
@@ -27,7 +29,7 @@ suspend fun main() {
         try {
             val submission = Client.Backend.getSubmission()
             if (!connected) {
-                println("连接成功，正在监听提交")
+                LOGGER.info("连接成功，正在监听提交")
             }
             connected = true
             if (submission == null) {
@@ -35,8 +37,9 @@ suspend fun main() {
                 sleep(1000)
                 continue
             }
-            println("收到提交 ${submission.submissionId}")
+            LOGGER.info("收到提交 ${submission.submissionId}")
             setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
+            LOGGER.info("开始编译 ${submission.submissionId}")
             val sourceName: String = when (submission.language.type) {
                 LanguageType.C -> SourceFilename.C
                 LanguageType.CPP -> SourceFilename.CPP
@@ -54,7 +57,7 @@ suspend fun main() {
             val compileBody = getCompileBody(submission, sourceName, targetName)
             val result = Client.Sandbox.run(compileBody)
             if (result.size != 1) {
-                println("result.size != 1")
+                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
                 continue
             }
             if (result[0].status != SandboxStatus.Accepted) {
@@ -75,13 +78,14 @@ suspend fun main() {
                 continue
             }
             setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
-            println("编译结果 $fileId")
+            LOGGER.info("开始评测 ${submission.submissionId}")
             if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
                 downloadTestcase(submission.testcase.fileId)
             }
             unzipTestcase(submission.testcase.fileId)
 
             val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
+            LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
 
             setSubmissionResult(
                 submission.submissionId,
@@ -97,23 +101,19 @@ suspend fun main() {
         } catch (e: ConnectException) {
             connected = false
             e.printStackTrace()
-            println("服务器连接失败，5秒后重试")
+            LOGGER.error("服务器连接失败，5秒后重试")
             sleep(5000)
         } catch (e: Exception) {
             connected = false
-            println("未知错误")
-            e.printStackTrace()
+            LOGGER.error("未知错误", e)
         } finally {
             sleep(1000)
         }
     }
 }
 
-fun getTestcaseNumber(testcase: Long): Int {
-    return ZipUtils.getFilenamesFromZip(File("testcase/$testcase.zip")).size / 2
-}
 
-suspend fun unzipTestcase(testcase: Long) {
+private suspend fun unzipTestcase(testcase: Long) {
     removeOldTestcaseFolder(testcase)
     // unzip testcase
     val file = File("testcase/$testcase.zip")
@@ -171,7 +171,7 @@ private suspend fun setSubmissionResult(
     Client.Backend.updateSubmission(submissionId, body)
 }
 
-suspend fun downloadTestcase(testcase: Long) {
+private suspend fun downloadTestcase(testcase: Long) {
     // remove old testcase
     if (isTestcaseExists(testcase)) {
         File("testcase/$testcase.zip").delete()
@@ -183,18 +183,18 @@ suspend fun downloadTestcase(testcase: Long) {
 }
 
 @OptIn(ExperimentalPathApi::class)
-fun removeOldTestcaseFolder(testcase: Long) {
+private fun removeOldTestcaseFolder(testcase: Long) {
     if (Path("testcase/$testcase").exists()) {
         Path("testcase/$testcase").deleteRecursively()
     }
 }
 
-fun getTestcaseArchiveMD5(testcase: Long): String {
+private fun getTestcaseArchiveMD5(testcase: Long): String {
     val file = File("testcase/$testcase.zip").inputStream()
     return fileMd5(file)
 }
 
-fun isTestcaseExists(testcase: Long): Boolean {
+private fun isTestcaseExists(testcase: Long): Boolean {
     // check whether testcase folder exists
     if (!Path("testcase").exists()) {
         Path("testcase").createDirectory()
@@ -203,7 +203,7 @@ fun isTestcaseExists(testcase: Long): Boolean {
     return Path("testcase/$testcase.zip").exists()
 }
 
-fun isDownloadNeeded(testcase: Long, hash: String): Boolean {
+private fun isDownloadNeeded(testcase: Long, hash: String): Boolean {
     if (!isTestcaseExists(testcase)) {
         return true
     }
@@ -211,13 +211,17 @@ fun isDownloadNeeded(testcase: Long, hash: String): Boolean {
     return md5.lowercase() != hash.lowercase()
 }
 
-suspend fun sleep(ms: Long) {
+private suspend fun sleep(ms: Long) {
     withContext(Dispatchers.IO) {
         Thread.sleep(ms)
     }
 }
 
-fun getCompileBody(submission: GetSubmissionResponse, sourceName: String, targetName: String): SandboxRequest {
+private fun getCompileBody(
+    submission: GetSubmissionResponse,
+    sourceName: String,
+    targetName: String
+): SandboxRequest {
     val compileCommand = submission.language.compileCommand!!
         .replace("{src}", sourceName)
         .replace("{target}", targetName)

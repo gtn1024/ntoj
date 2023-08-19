@@ -3,6 +3,7 @@ package zip.ntoj.judger
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseJudgeResult
+import zip.ntoj.shared.util.ZipUtils
 import zip.ntoj.shared.util.removeLastEmptyLine
 import zip.ntoj.shared.util.trimByLine
 import java.io.File
@@ -31,6 +32,10 @@ object TestcaseRunner {
         return JudgeResult(testcaseJudgeResults, judgeResult, maxTime, maxMemory)
     }
 
+    private fun getTestcaseNumber(testcase: Long): Int {
+        return ZipUtils.getFilenamesFromZip(File("testcase/$testcase.zip")).size / 2
+    }
+
     private suspend fun runSingleTestcase(
         submission: GetSubmissionResponse,
         targetName: String,
@@ -41,7 +46,6 @@ object TestcaseRunner {
         val body = getRunBody(submission, targetName, inData, fileId)
         val result = Client.Sandbox.run(body)
         if (result.size != 1) {
-            println("result.size != 1")
             return TestcaseJudgeResult(SubmissionStatus.SYSTEM_ERROR, 0, 0)
         }
         val res = result[0]
