@@ -15,7 +15,7 @@ export const ProblemPage: React.FC = () => {
   const { alias } = useParams()
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState<string>()
-  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | JudgeStage>()
+  const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | JudgeStage | '正在提交'>()
   const [intervalId, setIntervalId] = useState<number | null>(null)
   const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
   const [data, setData] = useState<Problem>()
@@ -68,14 +68,14 @@ export const ProblemPage: React.FC = () => {
       void message.error('请选择语言')
       return
     }
+    if (intervalId) {
+      clearInterval(intervalId)
+    }
     setJudgeMessage('正在提交')
     http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language: Number.parseInt(language) })
       .then((res) => {
         void message.info(`提交成功，提交ID：${res.data.data.id}`)
         setJudgeMessage(res.data.data.status)
-        if (intervalId) {
-          clearInterval(intervalId)
-        }
         const id = setInterval(() => {
           http.get<Submission>(`/submission/${res.data.data.id}`)
             .then((res) => {
