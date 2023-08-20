@@ -18,6 +18,6 @@ class WebMvcConfig(
     }
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
-        registry.addResourceHandler("assets/**").addResourceLocations("file:" + fileConfig.fileSystem.baseDir + "/assets/")
+        registry.addResourceHandler("upload/**").addResourceLocations("file:" + fileConfig.fileSystem.baseDir + "/upload/")
     }
 }

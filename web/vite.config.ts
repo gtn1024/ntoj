@@ -21,7 +21,7 @@ export default defineConfig(({command}) => ({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      '/assets': {
+      '/upload': {
         target: 'http://localhost:18080',
         changeOrigin: true,
       },

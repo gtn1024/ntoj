@@ -28,7 +28,7 @@ interface FileService {
     }
 
     fun uploadAsset(stream: InputStream, filename: String): FileUpload {
-        return uploadFile(stream, filename, "assets")
+        return uploadFile(stream, filename, "upload")
     }
 }
 
