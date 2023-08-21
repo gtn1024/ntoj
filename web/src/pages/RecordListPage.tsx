@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import type { TablePaginationConfig } from 'antd'
-import { Table, message } from 'antd'
+import { Button, Table, message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
+import { useUserStore } from '../stores/useUserStore.tsx'
+import { hasAdminPermissions } from '../lib/UserUtils.ts'
 
 interface SubmissionDto {
   id: number
@@ -24,6 +26,7 @@ interface SubmissionDto {
 }
 
 export const RecordListPage: React.FC = () => {
+  const userStore = useUserStore()
   const [searchParams, setSearchParams] = useSearchParams()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number.parseInt(searchParams.get('current') ?? '1'),
@@ -61,6 +64,15 @@ export const RecordListPage: React.FC = () => {
       })
   })
   const loading = !data && !error
+  const rejudge = (id: number) => {
+    http.post(`/submission/${id}/rejudge`)
+      .then(() => {
+        void message.success('已开始重测')
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '重测失败')
+      })
+  }
   const columns = [
     {
       title: '状态',
@@ -105,6 +117,16 @@ export const RecordListPage: React.FC = () => {
       dataIndex: 'submitTime',
       key: 'submitTime',
     },
+    hasAdminPermissions(userStore.user.role)
+      ? ({
+          title: '操作',
+          render: (_value: string, record: SubmissionDto) => {
+            return (
+              <Button onClick={() => rejudge(record.id)}>重测</Button>
+            )
+          },
+        })
+      : {},
   ]
 
   return (

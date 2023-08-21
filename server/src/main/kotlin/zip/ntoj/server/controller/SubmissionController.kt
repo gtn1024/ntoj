@@ -1,9 +1,13 @@
 package zip.ntoj.server.controller
 
+import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckRole
+import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -11,6 +15,7 @@ import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.service.SubmissionService
+import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.R
 import zip.ntoj.shared.model.SubmissionStatus
 import java.time.Instant
@@ -87,5 +92,16 @@ class SubmissionController(
     fun get(@PathVariable id: Long): ResponseEntity<R<SubmissionDto>> {
         val submission = submissionService.get(id)
         return R.success(200, "获取成功", SubmissionDto.from(submission))
+    }
+
+    @PostMapping("/{id}/rejudge")
+    @SaCheckLogin
+    @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
+    fun rejudge(@PathVariable id: Long): ResponseEntity<R<Void>> {
+        val submission = submissionService.get(id)
+        submission.judgeStage = JudgeStage.PENDING
+        submission.status = SubmissionStatus.PENDING
+        submissionService.update(submission)
+        return R.success(200, "操作成功")
     }
 }
