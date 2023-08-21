@@ -87,7 +87,12 @@ export const SignInPage: React.FC = () => {
           <Form.Item
             label="用户名"
             name="username"
-            rules={[{ required: true, message: '请输入用户名！' }]}
+            rules={[
+              { required: true, message: '请输入用户名！' },
+              { min: 6, message: '用户名至少为6位！' },
+              { max: 16, message: '用户名最长为16位！' },
+              { pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含字母或数字！' },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -123,7 +128,12 @@ export const SignInPage: React.FC = () => {
           <Form.Item
             label="用户名"
             name="username"
-            rules={[{ required: true, message: '请输入用户名！' }]}
+            rules={[
+              { required: true, message: '请输入用户名！' },
+              { min: 6, message: '用户名至少为6位！' },
+              { max: 16, message: '用户名最长为16位！' },
+              { pattern: /^[a-zA-Z0-9]+$/, message: '用户名只能包含字母或数字！' },
+            ]}
           >
             <Input />
           </Form.Item>

@@ -55,8 +55,11 @@ class AuthController(
         @Valid @RequestBody
         request: UserRequest,
     ): ResponseEntity<R<UserDto>> {
+        if (!userService.isUsernameValid(request.username!!)) {
+            throw AppException("用户名不合法", 400)
+        }
         // 判断用户是否存在
-        if (userService.existsByUsername(request.username!!)) {
+        if (userService.existsByUsername(request.username)) {
             // 用户已存在
             throw AppException("用户已存在", 400)
         }

@@ -6,6 +6,9 @@ import zip.ntoj.server.model.User
 import zip.ntoj.server.repository.UserRepository
 
 interface UserService {
+    fun isUsernameValid(username: String): Boolean {
+        return username.length in 3..20 && username.all { it.isLetterOrDigit() }
+    }
     fun newUser(user: User): User
     fun existsByUsername(username: String): Boolean
     fun getUserByUsername(username: String): User
