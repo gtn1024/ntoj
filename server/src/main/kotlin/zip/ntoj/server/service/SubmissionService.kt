@@ -56,7 +56,6 @@ class SubmissionServiceImpl(
         }
     }
 
-
     override fun get(id: Long): Submission {
         return submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
     }
