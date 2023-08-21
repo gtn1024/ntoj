@@ -83,11 +83,17 @@ export const RecordListPage: React.FC = () => {
       title: '时间',
       dataIndex: 'time',
       key: 'time',
+      render: (value?: number) => {
+        return value ? `${value}ms` : '0ms'
+      },
     },
     {
       title: '内存',
       dataIndex: 'memory',
       key: 'memory',
+      render: (value?: number) => {
+        return value ? `${value}KiB` : '0KiB'
+      },
     },
     {
       title: '语言',
