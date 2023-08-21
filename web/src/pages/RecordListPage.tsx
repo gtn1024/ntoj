@@ -8,6 +8,7 @@ import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { useUserStore } from '../stores/useUserStore.tsx'
 import { hasAdminPermissions } from '../lib/UserUtils.ts'
+import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 
 interface SubmissionDto {
   id: number
@@ -78,6 +79,9 @@ export const RecordListPage: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
+      render: (value: SubmissionStatus) => {
+        return <span style={{ color: statusToColor(value) }}>{statusToMessage(value)}</span>
+      },
     },
     {
       title: '题目',

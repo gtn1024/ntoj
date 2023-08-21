@@ -8,6 +8,7 @@ import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
 import { CodeMirrorEditor } from '../components/CodeMirrorEditor.tsx'
 import { useLayout } from '../hooks/useLayout.ts'
+import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 
 export const ProblemPage: React.FC = () => {
   const nav = useNavigate()
@@ -124,7 +125,7 @@ export const ProblemPage: React.FC = () => {
                 options={languageOptions}
               />
               <div className={c('flex', 'items-center')}>
-                <span>{judgeMessage}</span>
+                <span style={{ color: statusToColor(judgeMessage as SubmissionStatus) }}>{statusToMessage(judgeMessage as SubmissionStatus)}</span>
               </div>
             </div>
             <div className={''}>
