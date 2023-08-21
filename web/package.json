@@ -17,7 +17,7 @@
     "@uiw/react-codemirror": "4.21.9",
     "@wangeditor/editor": "5.1.23",
     "@wangeditor/editor-for-react": "1.0.6",
-    "antd": "5.8.3",
+    "antd": "5.8.4",
     "axios": "1.4.0",
     "classnames": "2.3.2",
     "dayjs": "1.11.9",
