@@ -35,10 +35,15 @@ export const ProblemListPage: React.FC = () => {
   const { data, error } = useSWR(`/problem?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
     return http.get<L<Problem>>(path)
       .then((res) => {
-        return res.data.data.list
+        const data = res.data.data
+        setPagination({
+          ...pagination,
+          total: data.total,
+        })
+        return data.list
       })
       .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '获取公告列表失败')
+        void message.error(err.response?.data.message ?? '获取题目列表失败')
         throw err
       })
   })

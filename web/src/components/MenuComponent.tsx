@@ -21,6 +21,11 @@ const items: MenuProps['items'] = [
     icon: <QuestionOutlined/>,
   },
   {
+    label: '记录',
+    key: '/record',
+    icon: <QuestionOutlined/>,
+  },
+  {
     label: '关于',
     key: '/about',
     icon: <SettingOutlined/>,
@@ -37,6 +42,9 @@ export const MenuComponent: React.FC<Props> = (props) => {
   useEffect(() => {
     if (pathname.includes('/problem')) {
       return setCurrent('/problem')
+    }
+    if (pathname.includes('/record')) {
+      return setCurrent('/record')
     }
     if (pathname.includes('/about')) {
       return setCurrent('/about')

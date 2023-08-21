@@ -24,6 +24,7 @@ import { AdminLanguagePage } from '../pages/admin/AdminLanguagePage.tsx'
 import { AdminLanguageEditPage } from '../pages/admin/AdminLanguageEditPage.tsx'
 import { AdminJudgeClientTokenPage } from '../pages/admin/AdminJudgeClientTokenPage.tsx'
 import { AdminJudgeClientTokenEditPage } from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
+import { RecordListPage } from '../pages/RecordListPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -141,6 +142,12 @@ export const router = createBrowserRouter(
         },
         { path: 'announcement/:id', element: <AnnouncementPage/> },
         { path: 'user/:username', element: <UserProfilePage/> },
+        {
+          path: 'record',
+          children: [
+            { index: true, element: <RecordListPage/> },
+          ],
+        },
       ],
     },
     {
