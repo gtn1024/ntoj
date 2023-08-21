@@ -64,10 +64,10 @@ export const SignInPage: React.FC = () => {
             void message.error(err.response?.data.message ?? '登录失败')
             throw err
           })
-          .catch((err: AxiosError<HttpResponse>) => {
-            void message.error(err.response?.data.message ?? '注册失败')
-            throw err
-          })
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '注册失败')
+        throw err
       })
   }
 
