@@ -45,14 +45,14 @@ suspend fun main() {
                 LanguageType.CPP -> SourceFilename.CPP
                 LanguageType.PYTHON -> SourceFilename.PYTHON
                 LanguageType.JAVA -> SourceFilename.JAVA
-                LanguageType.OTHER -> throw IllegalStateException("不支持的语言类型")
+                LanguageType.OTHER -> SourceFilename.OTHER
             }
             val targetName: String = when (submission.language.type) {
                 LanguageType.C -> TargetFilename.C
                 LanguageType.CPP -> TargetFilename.CPP
                 LanguageType.PYTHON -> TargetFilename.PYTHON
                 LanguageType.JAVA -> TargetFilename.JAVA
-                LanguageType.OTHER -> throw IllegalStateException("不支持的语言类型")
+                LanguageType.OTHER -> TargetFilename.OTHER
             }
             val compileBody = getCompileBody(submission, sourceName, targetName)
             val result = Client.Sandbox.run(compileBody)
@@ -221,6 +221,9 @@ private fun getCompileBody(
     sourceName: String,
     targetName: String,
 ): SandboxRequest {
+    if (submission.language.compileCommand == null) {
+        throw IllegalStateException("compile command is null")
+    }
     val compileCommand = submission.language.compileCommand!!
         .replace("{src}", sourceName)
         .replace("{target}", targetName)
