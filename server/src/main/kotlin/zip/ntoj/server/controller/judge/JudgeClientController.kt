@@ -18,7 +18,6 @@ import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.R
-import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseDto
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.time.Instant
@@ -37,9 +36,7 @@ class JudgeClientController(
 
     @GetMapping("/get_submission")
     fun getSubmission(): ResponseEntity<R<GetSubmissionResponse>> {
-        var submission = submissionService.getPendingSubmission() ?: return R.success(204, "获取成功", null)
-        submission.status = SubmissionStatus.JUDGING
-        submission = submissionService.update(submission)
+        val submission = submissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功", null)
         return R.success(
             200,
             "获取成功",

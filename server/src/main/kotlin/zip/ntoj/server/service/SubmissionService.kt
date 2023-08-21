@@ -1,5 +1,6 @@
 package zip.ntoj.server.service
 
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Submission
@@ -9,7 +10,7 @@ import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
     fun get(id: Long): Submission
-    fun getPendingSubmission(): Submission?
+    fun getPendingSubmissionAndSetJudging(): Submission?
     fun new(submission: Submission): Submission
     fun update(submission: Submission): Submission
 }
@@ -22,9 +23,15 @@ class SubmissionServiceImpl(
         return submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
     }
 
-    override fun getPendingSubmission(): Submission? {
-        return submissionRepository.findFirstByJudgeStageOrderBySubmissionId(JudgeStage.PENDING)
+    @Transactional
+    override fun getPendingSubmissionAndSetJudging(): Submission? {
+        var submission = submissionRepository.findFirstByJudgeStageOrderBySubmissionId(JudgeStage.PENDING)
             .getOrNull()
+        if (submission != null) {
+            submission.judgeStage = JudgeStage.JUDGING
+            submission = submissionRepository.save(submission)
+        }
+        return submission
     }
 
     override fun new(submission: Submission): Submission {
