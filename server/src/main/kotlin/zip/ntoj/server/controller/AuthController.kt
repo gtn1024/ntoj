@@ -54,7 +54,7 @@ class AuthController(
     fun signup(
         @Valid @RequestBody
         request: UserRequest,
-    ): ResponseEntity<R<UserDto>> {
+    ): ResponseEntity<R<Void>> {
         if (!userService.isUsernameValid(request.username!!)) {
             throw AppException("用户名不合法", 400)
         }
@@ -65,23 +65,18 @@ class AuthController(
         }
         // 创建用户
         val salt = getSalt()
-        return R.success(
-            200,
-            "注册成功",
-            UserDto.from(
-                userService.newUser(
-                    User(
-                        username = request.username,
-                        password = hashPassword(request.password!!, salt),
-                        salt = salt,
-                        email = request.email,
-                        realName = request.realName,
-                        bio = request.bio,
-                        role = if (userService.count() == 0L) UserRole.SUPER_ADMIN else UserRole.USER,
-                    ),
-                ),
+        userService.newUser(
+            User(
+                username = request.username,
+                password = hashPassword(request.password!!, salt),
+                salt = salt,
+                email = request.email,
+                realName = request.realName,
+                bio = request.bio,
+                role = if (userService.count() == 0L) UserRole.SUPER_ADMIN else UserRole.USER,
             ),
         )
+        return R.success(200, "注册成功")
     }
 
     @GetMapping("/current")
