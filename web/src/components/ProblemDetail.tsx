@@ -75,7 +75,7 @@ export const ProblemDetail: React.FC<{ data?: Problem }> = (props) => {
     <div className="m-4">
       <div className="p-4">
         <div>
-          <h2 className="font-bold">{data?.title}</h2>
+          <h2 className="font-bold">{data?.alias} {data?.title}</h2>
         </div>
         <div className="pb-[20px] text-xs">
           <span className="mr-1">时间限制：{data?.timeLimit} ms</span>
