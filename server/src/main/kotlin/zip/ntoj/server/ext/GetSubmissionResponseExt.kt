@@ -18,4 +18,6 @@ fun GetSubmissionResponse.LanguageDto.Companion.from(language: Language) = GetSu
     type = language.type,
     timeLimitRate = language.timeLimitRate,
     memoryLimitRate = language.memoryLimitRate,
+    sourceFilename = language.sourceFilename,
+    targetFilename = language.targetFilename,
 )

@@ -8,19 +8,3 @@ object Configuration {
     val TOKEN = System.getenv("TOKEN") ?: throw IllegalStateException("TOKEN is not set")
     val JUDGER_ID = System.getenv("JUDGER_ID") ?: randomString()
 }
-
-object SourceFilename {
-    const val CPP = "a.cc"
-    const val C = "a.c"
-    const val JAVA = "Main.java"
-    const val PYTHON = "main.py"
-    const val OTHER = "a"
-}
-
-object TargetFilename {
-    const val CPP = "a"
-    const val C = "a"
-    const val JAVA = "Main.jar"
-    const val PYTHON = "main"
-    const val OTHER = "a"
-}

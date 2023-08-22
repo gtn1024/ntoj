@@ -16,6 +16,8 @@ interface Params {
   enabled: boolean
   memoryLimitRate: number
   timeLimitRate: number
+  sourceFilename: string
+  targetFilename: string
 }
 
 export const AdminLanguageEditPage: React.FC = () => {
@@ -35,6 +37,8 @@ export const AdminLanguageEditPage: React.FC = () => {
             type: res.data.data.type ?? 'CPP',
             memoryLimitRate: res.data.data.memoryLimitRate ?? 1,
             timeLimitRate: res.data.data.timeLimitRate ?? 1,
+            sourceFilename: res.data.data.sourceFilename ?? '',
+            targetFilename: res.data.data.targetFilename ?? '',
             enabled: res.data.data.enabled ?? false,
           })
         })
@@ -96,6 +100,14 @@ export const AdminLanguageEditPage: React.FC = () => {
 
                 <Form.Item label="空间倍率" name="memoryLimitRate">
                   <InputNumber defaultValue={1} min={1} max={10}/>
+                </Form.Item>
+
+                <Form.Item label="源代码文件名" name="sourceFilename">
+                  <Input/>
+                </Form.Item>
+
+                <Form.Item label="产物文件名" name="targetFilename">
+                  <Input/>
                 </Form.Item>
 
                 <Form.Item label="类型" rules={[{ required: true, message: '请选择类型！' }]} name="type">

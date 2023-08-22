@@ -40,20 +40,8 @@ suspend fun main() {
             LOGGER.info("收到提交 ${submission.submissionId}")
             setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
             LOGGER.info("开始编译 ${submission.submissionId}")
-            val sourceName: String = when (submission.language.type) {
-                LanguageType.C -> SourceFilename.C
-                LanguageType.CPP -> SourceFilename.CPP
-                LanguageType.PYTHON -> SourceFilename.PYTHON
-                LanguageType.JAVA -> SourceFilename.JAVA
-                LanguageType.OTHER -> SourceFilename.OTHER
-            }
-            val targetName: String = when (submission.language.type) {
-                LanguageType.C -> TargetFilename.C
-                LanguageType.CPP -> TargetFilename.CPP
-                LanguageType.PYTHON -> TargetFilename.PYTHON
-                LanguageType.JAVA -> TargetFilename.JAVA
-                LanguageType.OTHER -> TargetFilename.OTHER
-            }
+            val sourceName: String = submission.language.sourceFilename ?: "src"
+            val targetName: String = submission.language.targetFilename ?: "main"
             val compileBody = getCompileBody(submission, sourceName, targetName)
             val result = Client.Sandbox.run(compileBody)
             if (result.size != 1) {

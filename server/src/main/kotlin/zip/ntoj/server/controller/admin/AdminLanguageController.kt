@@ -72,6 +72,8 @@ class AdminLanguageController(
                         executeCommand = languageRequest.executeCommand,
                         type = LanguageType.valueOf(languageRequest.type),
                         enabled = languageRequest.enabled,
+                        sourceFilename = languageRequest.sourceFilename,
+                        targetFilename = languageRequest.targetFilename,
                     ),
                 ),
             ),
@@ -106,6 +108,12 @@ class AdminLanguageController(
         if (language.timeLimitRate != languageRequest.timeLimitRate) {
             language.timeLimitRate = languageRequest.timeLimitRate
         }
+        if (language.sourceFilename != languageRequest.sourceFilename) {
+            language.sourceFilename = languageRequest.sourceFilename
+        }
+        if (language.targetFilename != languageRequest.targetFilename) {
+            language.targetFilename = languageRequest.targetFilename
+        }
         return R.success(
             200,
             "修改成功",
@@ -129,6 +137,8 @@ data class LanguageDto(
     var id: Long,
     var memoryLimitRate: Int?,
     var timeLimitRate: Int?,
+    var sourceFilename: String?,
+    var targetFilename: String?,
 ) {
     companion object {
         fun from(language: Language): LanguageDto {
@@ -141,6 +151,8 @@ data class LanguageDto(
                 id = language.languageId!!,
                 memoryLimitRate = language.memoryLimitRate,
                 timeLimitRate = language.timeLimitRate,
+                sourceFilename = language.sourceFilename,
+                targetFilename = language.targetFilename,
             )
         }
     }
@@ -154,4 +166,6 @@ data class LanguageRequest(
     var enabled: Boolean,
     var memoryLimitRate: Int?,
     var timeLimitRate: Int?,
+    var sourceFilename: String,
+    var targetFilename: String,
 )

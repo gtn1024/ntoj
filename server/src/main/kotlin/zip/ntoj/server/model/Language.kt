@@ -28,6 +28,9 @@ class Language(
     var memoryLimitRate: Int? = null,
     var timeLimitRate: Int? = null,
 
+    var sourceFilename: String?,
+    var targetFilename: String?,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")
