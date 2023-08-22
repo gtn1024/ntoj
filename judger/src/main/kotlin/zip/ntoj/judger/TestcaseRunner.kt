@@ -77,6 +77,8 @@ object TestcaseRunner {
     ): SandboxRequest {
         val executeCommand = submission.language.executeCommand!!
             .replace("{target}", targetName)
+        val memoryLimitRate = submission.language.memoryLimitRate ?: 1
+        val timeLimitRate = submission.language.timeLimitRate ?: 1
         return SandboxRequest(
             cmd = listOf(
                 Cmd(
@@ -87,10 +89,10 @@ object TestcaseRunner {
                         Collector(name = "stdout", max = 10240),
                         Collector(name = "stderr", max = 10240),
                     ),
-                    cpuLimit = 1L * submission.timeLimit * 1000 * 1000,
-                    clockLimit = 1L * submission.timeLimit * 1000 * 1000 * 2,
-                    memoryLimit = 1L * submission.memoryLimit * 1024 * 1024,
-                    stackLimit = 1L * submission.memoryLimit * 1024 * 1024,
+                    cpuLimit = 1L * submission.timeLimit * 1000 * 1000 * timeLimitRate,
+                    clockLimit = 1L * submission.timeLimit * 1000 * 1000 * 2 * timeLimitRate,
+                    memoryLimit = 1L * submission.memoryLimit * 1024 * 1024 * memoryLimitRate,
+                    stackLimit = 1L * submission.memoryLimit * 1024 * 1024 * memoryLimitRate,
                     procLimit = 50,
                     copyIn = mapOf(
                         targetName to PreparedFile(fileId),

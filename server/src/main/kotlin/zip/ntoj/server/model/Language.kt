@@ -25,6 +25,9 @@ class Language(
 
     var enabled: Boolean = true,
 
+    var memoryLimitRate: Int? = null,
+    var timeLimitRate: Int? = null,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "language_id")

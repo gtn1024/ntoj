@@ -15,6 +15,8 @@ data class GetSubmissionResponse(
         val compileCommand: String?,
         val executeCommand: String?,
         val type: LanguageType,
+        val memoryLimitRate: Int?,
+        val timeLimitRate: Int?,
     ) {
         companion object
     }

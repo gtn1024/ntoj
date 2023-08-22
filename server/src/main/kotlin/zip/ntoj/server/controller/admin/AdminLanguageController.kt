@@ -100,6 +100,12 @@ class AdminLanguageController(
         if (language.enabled != languageRequest.enabled) {
             language.enabled = languageRequest.enabled
         }
+        if (language.memoryLimitRate != languageRequest.memoryLimitRate) {
+            language.memoryLimitRate = languageRequest.memoryLimitRate
+        }
+        if (language.timeLimitRate != languageRequest.timeLimitRate) {
+            language.timeLimitRate = languageRequest.timeLimitRate
+        }
         return R.success(
             200,
             "修改成功",
@@ -121,6 +127,8 @@ data class LanguageDto(
     var type: LanguageType,
     var enabled: Boolean,
     var id: Long,
+    var memoryLimitRate: Int?,
+    var timeLimitRate: Int?,
 ) {
     companion object {
         fun from(language: Language): LanguageDto {
@@ -131,6 +139,8 @@ data class LanguageDto(
                 type = language.type,
                 enabled = language.enabled,
                 id = language.languageId!!,
+                memoryLimitRate = language.memoryLimitRate,
+                timeLimitRate = language.timeLimitRate,
             )
         }
     }
@@ -142,4 +152,6 @@ data class LanguageRequest(
     var executeCommand: String?,
     var type: String,
     var enabled: Boolean,
+    var memoryLimitRate: Int?,
+    var timeLimitRate: Int?,
 )

@@ -91,6 +91,8 @@ interface Language {
   executeCommand?: string
   type: LanguageType
   enabled: boolean
+  memoryLimitRate?: number
+  timeLimitRate?: number
 }
 
 type LanguageType = 'C' | 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'

@@ -1,5 +1,5 @@
 import type { FormInstance } from 'antd'
-import { Button, Form, Input, Select, Switch, message } from 'antd'
+import { Button, Form, Input, InputNumber, Select, Switch, message } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -14,6 +14,8 @@ interface Params {
   executeCommand?: string
   type: LanguageType
   enabled: boolean
+  memoryLimitRate: number
+  timeLimitRate: number
 }
 
 export const AdminLanguageEditPage: React.FC = () => {
@@ -31,6 +33,8 @@ export const AdminLanguageEditPage: React.FC = () => {
             compileCommand: res.data.data.compileCommand ?? '',
             executeCommand: res.data.data.executeCommand ?? '',
             type: res.data.data.type ?? 'CPP',
+            memoryLimitRate: res.data.data.memoryLimitRate ?? 1,
+            timeLimitRate: res.data.data.timeLimitRate ?? 1,
             enabled: res.data.data.enabled ?? false,
           })
         })
@@ -84,6 +88,14 @@ export const AdminLanguageEditPage: React.FC = () => {
 
                 <Form.Item label="运行命令" name="executeCommand">
                     <Input/>
+                </Form.Item>
+
+                <Form.Item label="时间倍率" name="timeLimitRate">
+                  <InputNumber defaultValue={1} min={1} max={10}/>
+                </Form.Item>
+
+                <Form.Item label="空间倍率" name="memoryLimitRate">
+                  <InputNumber defaultValue={1} min={1} max={10}/>
                 </Form.Item>
 
                 <Form.Item label="类型" rules={[{ required: true, message: '请选择类型！' }]} name="type">
