@@ -1,6 +1,5 @@
 package zip.ntoj.judger
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
@@ -44,8 +43,6 @@ suspend fun main() {
             val targetName: String = submission.language.targetFilename ?: "main"
             val compileBody = getCompileBody(submission, sourceName, targetName)
             val result = Client.Sandbox.run(compileBody)
-            println(ObjectMapper().writer().writeValueAsString(compileBody))
-            println(ObjectMapper().writer().writeValueAsString(result))
             if (result.size != 1) {
                 setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
                 continue
