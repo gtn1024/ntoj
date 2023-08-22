@@ -67,11 +67,6 @@ export const AdminLanguagePage: React.FC = () => {
       key: 'languageName',
     },
     {
-      title: '语言类型',
-      dataIndex: 'type',
-      key: 'type',
-    },
-    {
       title: '是否启用',
       dataIndex: 'enabled',
       key: 'enabled',

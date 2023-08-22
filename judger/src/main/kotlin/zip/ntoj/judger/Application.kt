@@ -5,7 +5,6 @@ import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
-import zip.ntoj.shared.model.LanguageType
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseJudgeResult
 import zip.ntoj.shared.model.UpdateSubmissionRequest

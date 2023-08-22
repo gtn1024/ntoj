@@ -2,12 +2,9 @@ package zip.ntoj.server.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import zip.ntoj.shared.model.LanguageType
 
 @Entity(name = "t_languages")
 class Language(
@@ -19,9 +16,6 @@ class Language(
 
     @Column(columnDefinition = "TEXT")
     var executeCommand: String? = null,
-
-    @Enumerated(EnumType.STRING)
-    var type: LanguageType,
 
     var enabled: Boolean = true,
 

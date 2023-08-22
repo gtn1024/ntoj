@@ -18,7 +18,6 @@ import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Language
 import zip.ntoj.server.service.LanguageService
-import zip.ntoj.shared.model.LanguageType
 import zip.ntoj.shared.model.R
 
 @RestController
@@ -70,7 +69,6 @@ class AdminLanguageController(
                         languageName = languageRequest.languageName,
                         compileCommand = languageRequest.compileCommand,
                         executeCommand = languageRequest.executeCommand,
-                        type = LanguageType.valueOf(languageRequest.type),
                         enabled = languageRequest.enabled,
                         sourceFilename = languageRequest.sourceFilename,
                         targetFilename = languageRequest.targetFilename,
@@ -95,9 +93,6 @@ class AdminLanguageController(
         }
         if (language.executeCommand != languageRequest.executeCommand) {
             language.executeCommand = languageRequest.executeCommand
-        }
-        if (language.type != LanguageType.valueOf(languageRequest.type)) {
-            language.type = LanguageType.valueOf(languageRequest.type)
         }
         if (language.enabled != languageRequest.enabled) {
             language.enabled = languageRequest.enabled
@@ -132,7 +127,6 @@ data class LanguageDto(
     var languageName: String,
     var compileCommand: String?,
     var executeCommand: String?,
-    var type: LanguageType,
     var enabled: Boolean,
     var id: Long,
     var memoryLimitRate: Int?,
@@ -146,7 +140,6 @@ data class LanguageDto(
                 languageName = language.languageName,
                 compileCommand = language.compileCommand,
                 executeCommand = language.executeCommand,
-                type = language.type,
                 enabled = language.enabled,
                 id = language.languageId!!,
                 memoryLimitRate = language.memoryLimitRate,
@@ -162,7 +155,6 @@ data class LanguageRequest(
     var languageName: String,
     var compileCommand: String?,
     var executeCommand: String?,
-    var type: String,
     var enabled: Boolean,
     var memoryLimitRate: Int?,
     var timeLimitRate: Int?,

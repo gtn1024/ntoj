@@ -14,7 +14,6 @@ data class GetSubmissionResponse(
         val name: String,
         val compileCommand: String?,
         val executeCommand: String?,
-        val type: LanguageType,
         val memoryLimitRate: Int?,
         val timeLimitRate: Int?,
         val sourceFilename: String?,

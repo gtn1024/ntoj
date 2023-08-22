@@ -89,15 +89,12 @@ interface Language {
   languageName: string
   compileCommand?: string
   executeCommand?: string
-  type: LanguageType
   enabled: boolean
   memoryLimitRate?: number
   timeLimitRate?: number
   sourceFilename?: string
   targetFilename?: string
 }
-
-type LanguageType = 'C' | 'CPP' | 'JAVA' | 'PYTHON' | 'OTHER'
 
 interface JudgeClientToken {
   id: number

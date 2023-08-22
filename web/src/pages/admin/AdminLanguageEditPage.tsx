@@ -1,18 +1,15 @@
 import type { FormInstance } from 'antd'
-import { Button, Form, Input, InputNumber, Select, Switch, message } from 'antd'
+import { Button, Form, Input, InputNumber, Switch, message } from 'antd'
 import React, { useEffect, useRef } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 
-const { Option } = Select
-
 interface Params {
   languageName: string
   compileCommand?: string
   executeCommand?: string
-  type: LanguageType
   enabled: boolean
   memoryLimitRate: number
   timeLimitRate: number
@@ -34,7 +31,6 @@ export const AdminLanguageEditPage: React.FC = () => {
             languageName: res.data.data.languageName ?? '',
             compileCommand: res.data.data.compileCommand ?? '',
             executeCommand: res.data.data.executeCommand ?? '',
-            type: res.data.data.type ?? 'CPP',
             memoryLimitRate: res.data.data.memoryLimitRate ?? 1,
             timeLimitRate: res.data.data.timeLimitRate ?? 1,
             sourceFilename: res.data.data.sourceFilename ?? '',
@@ -108,16 +104,6 @@ export const AdminLanguageEditPage: React.FC = () => {
 
                 <Form.Item label="产物文件名" name="targetFilename">
                   <Input/>
-                </Form.Item>
-
-                <Form.Item label="类型" rules={[{ required: true, message: '请选择类型！' }]} name="type">
-                    <Select>
-                        <Option value="C">C</Option>
-                        <Option value="CPP">CPP</Option>
-                        <Option value="JAVA">JAVA</Option>
-                        <Option value="PYTHON">PYTHON</Option>
-                        <Option value="OTHER">OTHER</Option>
-                    </Select>
                 </Form.Item>
 
                 <Form.Item

@@ -15,7 +15,6 @@ fun GetSubmissionResponse.LanguageDto.Companion.from(language: Language) = GetSu
     name = language.languageName,
     compileCommand = language.compileCommand,
     executeCommand = language.executeCommand,
-    type = language.type,
     timeLimitRate = language.timeLimitRate,
     memoryLimitRate = language.memoryLimitRate,
     sourceFilename = language.sourceFilename,
