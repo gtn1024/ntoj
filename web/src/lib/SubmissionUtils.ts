@@ -31,5 +31,5 @@ export function statusToColor(status: SubmissionStatus) {
 }
 
 export function statusToMessage(status: SubmissionStatus) {
-  return statusMessageMap[status]
+  return statusMessageMap[status] || status
 }
