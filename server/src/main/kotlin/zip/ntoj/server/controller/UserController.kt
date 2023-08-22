@@ -42,25 +42,25 @@ class UserController(
         userService.updateUser(user)
         return R.success(200, "修改成功")
     }
-}
 
-data class UserDto(
-    val id: Long? = null,
-    val username: String? = null,
-    val realName: String? = null,
-    val bio: String? = null,
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
-    val registerAt: Instant? = null,
-) {
-    companion object {
-        fun from(user: User): UserDto {
-            return UserDto(
-                id = user.userId,
-                username = user.username,
-                realName = user.realName,
-                bio = user.bio,
-                registerAt = user.createdAt,
-            )
+    data class UserDto(
+        val id: Long? = null,
+        val username: String? = null,
+        val realName: String? = null,
+        val bio: String? = null,
+        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+        val registerAt: Instant? = null,
+    ) {
+        companion object {
+            fun from(user: User): UserDto {
+                return UserDto(
+                    id = user.userId,
+                    username = user.username,
+                    realName = user.realName,
+                    bio = user.bio,
+                    registerAt = user.createdAt,
+                )
+            }
         }
     }
 }

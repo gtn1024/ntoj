@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
+import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.Submission
+import zip.ntoj.server.model.User
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.R
 import zip.ntoj.shared.model.SubmissionStatus
+import zip.ntoj.shared.model.TestcaseJudgeResult
 import java.time.Instant
 
 @RestController
@@ -103,5 +106,73 @@ class SubmissionController(
         submission.status = SubmissionStatus.PENDING
         submissionService.update(submission)
         return R.success(200, "操作成功")
+    }
+
+    data class SubmissionDto(
+        val id: Long,
+        val user: UserDto,
+        val code: String,
+        val status: SubmissionStatus,
+        val stage: JudgeStage,
+        val memory: Int?,
+        val time: Int?,
+        val language: LanguageDto,
+        val problem: ProblemDto,
+        val compileLog: String?,
+        val testcaseResult: List<TestcaseJudgeResult>?,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val submitTime: Instant,
+    ) {
+        companion object {
+            fun from(submission: Submission) = SubmissionDto(
+                id = submission.submissionId!!,
+                status = submission.status,
+                user = UserDto.from(submission.user!!),
+                stage = submission.judgeStage,
+                code = submission.code!!,
+                compileLog = submission.compileLog,
+                testcaseResult = submission.testcaseResult,
+                memory = submission.memory,
+                time = submission.time,
+                language = LanguageDto.from(submission.language!!),
+                submitTime = submission.createdAt!!,
+                problem = ProblemDto.from(submission.problem!!),
+            )
+        }
+
+        data class ProblemDto(
+            val title: String?,
+            val alias: String?,
+        ) {
+            companion object {
+                fun from(problem: Problem): ProblemDto = ProblemDto(
+                    title = problem.title,
+                    alias = problem.alias,
+                )
+            }
+        }
+
+        data class UserDto(
+            val username: String? = null,
+        ) {
+            companion object {
+                fun from(user: User): UserDto {
+                    return UserDto(
+                        username = user.username,
+                    )
+                }
+            }
+        }
+
+        data class LanguageDto(
+            val languageName: String,
+        ) {
+            companion object {
+                fun from(language: zip.ntoj.server.model.Language): LanguageDto {
+                    return LanguageDto(
+                        languageName = language.languageName,
+                    )
+                }
+            }
+        }
     }
 }

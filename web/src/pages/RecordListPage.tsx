@@ -76,6 +76,14 @@ export const RecordListPage: React.FC = () => {
   }
   const columns = [
     {
+      title: '运行ID',
+      dataIndex: 'id',
+      key: 'id',
+      render: (value: string) => {
+        return <Link to={`/record/${value}`}>{value}</Link>
+      },
+    },
+    {
       title: '状态',
       dataIndex: 'status',
       key: 'status',

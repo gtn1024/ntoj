@@ -55,7 +55,7 @@ suspend fun main() {
                 setSubmissionResult(
                     submission.submissionId,
                     res,
-                    compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null
+                    compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null,
                 )
                 continue
             }

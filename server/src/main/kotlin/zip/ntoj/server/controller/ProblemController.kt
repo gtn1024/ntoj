@@ -72,19 +72,69 @@ class ProblemController(
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))
     }
-}
 
-data class SubmissionDto(
-    val id: Long,
-    val status: SubmissionStatus,
-    val stage: JudgeStage,
-) {
-    companion object {
-        fun from(submission: Submission) = SubmissionDto(
-            id = submission.submissionId!!,
-            status = submission.status,
-            stage = submission.judgeStage,
-        )
+    data class SubmissionDto(
+        val id: Long,
+        val status: SubmissionStatus,
+        val stage: JudgeStage,
+    ) {
+        companion object {
+            fun from(submission: Submission) = SubmissionDto(
+                id = submission.submissionId!!,
+                status = submission.status,
+                stage = submission.judgeStage,
+            )
+        }
+    }
+
+    data class ProblemDto(
+        val id: Long?,
+        val title: String?,
+        val alias: String?,
+        val background: String?,
+        val description: String?,
+        val inputDescription: String?,
+        val outputDescription: String?,
+        val timeLimit: Int?,
+        val memoryLimit: Int?,
+        val judgeTimes: Int?,
+        val samples: List<ProblemSample>,
+        val note: String?,
+        val author: String?,
+        val languages: List<Long> = listOf(),
+    ) {
+        companion object {
+            fun from(problem: Problem): ProblemDto = ProblemDto(
+                id = problem.problemId,
+                title = problem.title,
+                alias = problem.alias,
+                background = problem.background,
+                description = problem.description,
+                inputDescription = problem.inputDescription,
+                outputDescription = problem.outputDescription,
+                timeLimit = problem.timeLimit,
+                memoryLimit = problem.memoryLimit,
+                judgeTimes = problem.judgeTimes,
+                samples = problem.samples ?: listOf(),
+                note = problem.note,
+                author = problem.author?.username,
+                languages = problem.languages.map { it.languageId!! },
+            )
+        }
+    }
+
+    data class ProblemListDto(
+        val id: Long?,
+        val title: String?,
+        val alias: String?,
+    ) {
+        companion object {
+            fun from(problem: Problem): ProblemListDto = ProblemListDto(
+                id = problem.problemId,
+                title = problem.title,
+                alias = problem.alias,
+            )
+        }
     }
 }
 
@@ -93,52 +143,3 @@ data class ProblemSubmissionRequest(
     val language: Long,
 )
 
-data class ProblemListDto(
-    val id: Long?,
-    val title: String?,
-    val alias: String?,
-) {
-    companion object {
-        fun from(problem: Problem): ProblemListDto = ProblemListDto(
-            id = problem.problemId,
-            title = problem.title,
-            alias = problem.alias,
-        )
-    }
-}
-
-data class ProblemDto(
-    val id: Long?,
-    val title: String?,
-    val alias: String?,
-    val background: String?,
-    val description: String?,
-    val inputDescription: String?,
-    val outputDescription: String?,
-    val timeLimit: Int?,
-    val memoryLimit: Int?,
-    val judgeTimes: Int?,
-    val samples: List<ProblemSample>,
-    val note: String?,
-    val author: String?,
-    val languages: List<Long> = listOf(),
-) {
-    companion object {
-        fun from(problem: Problem): ProblemDto = ProblemDto(
-            id = problem.problemId,
-            title = problem.title,
-            alias = problem.alias,
-            background = problem.background,
-            description = problem.description,
-            inputDescription = problem.inputDescription,
-            outputDescription = problem.outputDescription,
-            timeLimit = problem.timeLimit,
-            memoryLimit = problem.memoryLimit,
-            judgeTimes = problem.judgeTimes,
-            samples = problem.samples ?: listOf(),
-            note = problem.note,
-            author = problem.author?.username,
-            languages = problem.languages.map { it.languageId!! },
-        )
-    }
-}

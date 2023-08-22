@@ -24,7 +24,11 @@ interface SubmissionService {
     fun count(
         onlyVisibleProblem: Boolean = false,
     ): Long
-    fun get(id: Long): Submission
+
+    fun get(
+        id: Long,
+        onlyVisibleProblem: Boolean = false,
+    ): Submission
     fun getPendingSubmissionAndSetJudging(): Submission?
     fun new(submission: Submission): Submission
     fun update(submission: Submission): Submission
@@ -56,8 +60,12 @@ class SubmissionServiceImpl(
         }
     }
 
-    override fun get(id: Long): Submission {
-        return submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
+    override fun get(id: Long, onlyVisibleProblem: Boolean): Submission {
+        val submission = submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
+        if (submission.problem?.visible != true) {
+            throw AppException("提交不存在", 404)
+        }
+        return submission
     }
 
     override fun count(onlyVisibleProblem: Boolean): Long {
