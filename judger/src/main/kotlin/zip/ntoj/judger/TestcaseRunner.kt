@@ -57,14 +57,14 @@ object TestcaseRunner {
                 SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
                 else -> SubmissionStatus.RUNTIME_ERROR
             }
-            return TestcaseJudgeResult(st, 0, 0)
+            return TestcaseJudgeResult(st, res.time / 1000 / 1000, res.memory / 1024)
         }
         val stdout = File("testcase/${submission.testcase.fileId}/$idx.out").readText()
             .trimByLine()
             .removeLastEmptyLine()
 
         if (res.files["stdout"]?.trimByLine()?.removeLastEmptyLine() != stdout) {
-            return TestcaseJudgeResult(SubmissionStatus.WRONG_ANSWER, 0, 0)
+            return TestcaseJudgeResult(SubmissionStatus.WRONG_ANSWER, res.time / 1000 / 1000, res.memory / 1024)
         }
         return TestcaseJudgeResult(SubmissionStatus.ACCEPTED, res.time / 1000 / 1000, res.memory / 1024)
     }
