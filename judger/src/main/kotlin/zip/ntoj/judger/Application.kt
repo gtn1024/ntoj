@@ -1,5 +1,6 @@
 package zip.ntoj.judger
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
@@ -43,6 +44,8 @@ suspend fun main() {
             val targetName: String = submission.language.targetFilename ?: "main"
             val compileBody = getCompileBody(submission, sourceName, targetName)
             val result = Client.Sandbox.run(compileBody)
+            println(ObjectMapper().writer().writeValueAsString(compileBody))
+            println(ObjectMapper().writer().writeValueAsString(result))
             if (result.size != 1) {
                 setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
                 continue
@@ -52,7 +55,11 @@ suspend fun main() {
                     SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
                     else -> SubmissionStatus.COMPILE_ERROR
                 }
-                setSubmissionResult(submission.submissionId, res)
+                setSubmissionResult(
+                    submission.submissionId,
+                    res,
+                    compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null
+                )
                 continue
             }
             if (result[0].fileIds.size != 1) {
@@ -144,6 +151,7 @@ private suspend fun setSubmissionResult(
     time: Int = 0,
     memory: Int = 0,
     testcaseResult: List<TestcaseJudgeResult> = listOf(),
+    compileLog: String? = null,
 ) {
     val body = UpdateSubmissionRequest(
         submissionId = submissionId,
@@ -152,6 +160,7 @@ private suspend fun setSubmissionResult(
         judgerId = Configuration.JUDGER_ID,
         judgeStage = JudgeStage.FINISHED,
         result = result,
+        compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
         testcaseResult = testcaseResult,
     )
     Client.Backend.updateSubmission(submissionId, body)

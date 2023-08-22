@@ -36,6 +36,9 @@ class Submission(
     @Enumerated(EnumType.STRING)
     var judgeStage: JudgeStage = JudgeStage.PENDING,
 
+    @Column(columnDefinition = "text", length = 65535)
+    var compileLog: String? = null,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")

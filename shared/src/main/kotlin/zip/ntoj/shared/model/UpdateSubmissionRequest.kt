@@ -6,6 +6,8 @@ data class UpdateSubmissionRequest(
     val time: Int?,
     val memory: Int?,
 
+    val compileLog: String? = null,
+
     val judgerId: String? = null,
     val judgeStage: JudgeStage,
 
