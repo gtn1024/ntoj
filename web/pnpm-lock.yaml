@@ -63,8 +63,8 @@ dependencies:
     specifier: 17.4.0
     version: 17.4.0(react-dom@18.2.0)(react@18.2.0)
   swr:
-    specifier: 2.2.0
-    version: 2.2.0(react@18.2.0)
+    specifier: 2.2.1
+    version: 2.2.1(react@18.2.0)
   zustand:
     specifier: 4.4.1
     version: 4.4.1(@types/react@18.2.20)(react@18.2.0)
@@ -2020,6 +2020,10 @@ packages:
     dependencies:
       escape-string-regexp: 1.0.5
     dev: true
+
+  /client-only@0.0.1:
+    resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
 
   /cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}
@@ -4851,11 +4855,12 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /swr@2.2.0(react@18.2.0):
-    resolution: {integrity: sha512-AjqHOv2lAhkuUdIiBu9xbuettzAzWXmCEcLONNKJRba87WAefz8Ca9d6ds/SzrPc235n1IxWYdhJ2zF3MNUaoQ==}
+  /swr@2.2.1(react@18.2.0):
+    resolution: {integrity: sha512-KJVA7dGtOBeZ+2sycEuzUfVIP5lZ/cd0xjevv85n2YG0x1uHJQicjAtahVZL6xG3+TjqhbBqimwYzVo3saeVXQ==}
     peerDependencies:
       react: ^16.11.0 || ^17.0.0 || ^18.0.0
     dependencies:
+      client-only: 0.0.1
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
