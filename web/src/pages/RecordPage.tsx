@@ -74,29 +74,29 @@ export const RecordPage: React.FC = () => {
                 </pre>
               </div>
               <div className={c()}>
-                <table className={c('w-full')}>
+                <table className={c('w-full')} border={1}>
                   <thead>
-                    <tr>
-                      <th className={c('text-left')}>#</th>
-                      <th className={c('text-left')}>状态</th>
-                      <th className={c('text-left')}>分数</th>
-                      <th className={c('text-left')}>时间</th>
-                      <th className={c('text-left')}>内存</th>
+                    <tr className={c('leading-8', 'text-gray-500')}>
+                      <th className={c('text-left', 'px-2')}>#</th>
+                      <th className={c('text-left', 'px-2')}>状态</th>
+                      <th className={c('text-left', 'px-2')}>分数</th>
+                      <th className={c('text-left', 'px-2')}>时间</th>
+                      <th className={c('text-left', 'px-2')}>内存</th>
                     </tr>
                   </thead>
                     <tbody>
                       {data?.testcaseResult?.map((item, index) => {
                         return (
-                          <tr key={index}>
-                            <td className={c('text-left')}>#{index + 1}</td>
-                            <td className={c('text-left')}>
+                          <tr key={index} className={c('leading-6')}>
+                            <td className={c('text-left', 'px-2')}>#{index + 1}</td>
+                            <td className={c('text-left', 'px-2')}>
                               <span style={{ color: statusToColor(item.status) }}>
                                 {statusToMessage(item.status)}
                               </span>
                             </td>
-                            <td className={c('text-left')}>{item.status === 'ACCEPTED' ? (100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
-                            <td className={c('text-left')}>{item.time}ms</td>
-                            <td className={c('text-left')}>{item.memory}Kib</td>
+                            <td className={c('text-left', 'px-2')}>{item.status === 'ACCEPTED' ? (100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
+                            <td className={c('text-left', 'px-2')}>{item.time}ms</td>
+                            <td className={c('text-left', 'px-2')}>{item.memory}Kib</td>
                           </tr>
                         )
                       })}
