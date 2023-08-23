@@ -7,6 +7,7 @@ import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
+import { toFixedNumber } from '../lib/misc.ts'
 
 interface Submission {
   id: number
@@ -105,7 +106,7 @@ export const RecordPage: React.FC = () => {
                             {statusToMessage(item.status)}
                           </span>
                             </td>
-                            <td className={c('text-left', 'px-2')}>{item.status === 'ACCEPTED' ? (100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
+                            <td className={c('text-left', 'px-2')}>{item.status === 'ACCEPTED' ? toFixedNumber(100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
                             <td className={c('text-left', 'px-2')}>{item.time}ms</td>
                             <td className={c('text-left', 'px-2')}>{item.memory}Kib</td>
                           </tr>
@@ -158,7 +159,7 @@ export const RecordPage: React.FC = () => {
               </div>
               <div className={c('flex justify-between')}>
                   <span className={c('text-gray-500')}>分数</span>
-                  <span className={c('text-gray-500')}>{score}</span>
+                  <span className={c('text-gray-500')}>{toFixedNumber(score)}</span>
               </div>
             </div>
           </div>
