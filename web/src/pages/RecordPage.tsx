@@ -6,6 +6,7 @@ import Highlight from 'react-highlight'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
+import { useLayout } from '../hooks/useLayout.ts'
 
 interface Submission {
   id: number
@@ -36,6 +37,7 @@ export const RecordPage: React.FC = () => {
   const { id } = useParams()
   const [data, setData] = useState<Submission>()
   const [score, setScore] = useState<number>()
+  const { isMobile } = useLayout()
   useEffect(() => {
     void http.get<Submission>(`/submission/${id}`)
       .then((res) => {
@@ -58,8 +60,8 @@ export const RecordPage: React.FC = () => {
 
   return (
     <div>
-      <div className={c('max-w-[1200px] mx-auto my-2 flex items-start')}>
-        <div className={c('bg-white rounded-lg shadow-md w-3/4 mx-2 pb-8')}>
+      <div className={c('max-w-[1200px] mx-auto my-2 flex items-start', isMobile && 'flex-col')}>
+        <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
           <div className={c('pt-8 px-4')}>
             <h2 className={c('font-light')}>
               <span style={{ color: statusToColor(data?.status ?? 'PENDING') }}>
@@ -114,7 +116,7 @@ export const RecordPage: React.FC = () => {
             </div>
           </div>
         </div>
-        <div className={c('bg-white rounded-lg shadow-md w-1/4 mx-2 pb-8')}>
+        <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
           <div className={c('pt-8 px-4')}>
             <h2 className={c('font-light')}>信息</h2>
           </div>
