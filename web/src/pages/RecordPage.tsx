@@ -69,6 +69,13 @@ export const RecordPage: React.FC = () => {
           </div>
           <div className={c()}>
             <div className={c('flex flex-col px-4 gap-1')}>
+              {data?.compileLog && (
+                  <div>
+                    <pre>
+                      {data?.compileLog}
+                    </pre>
+                  </div>
+              )}
               <div className={c()}>
                 <Highlight>
                   {data?.code}
