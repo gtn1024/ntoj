@@ -84,8 +84,9 @@ export const RecordPage: React.FC = () => {
                 </Highlight>
               </div>
               <div className={c()}>
-                <table className={c('w-full')} border={1}>
-                  <thead>
+                {!!data?.testcaseResult?.length && (
+                  <table className={c('w-full')} border={1}>
+                    <thead>
                     <tr className={c('leading-8', 'text-gray-500')}>
                       <th className={c('text-left', 'px-2')}>#</th>
                       <th className={c('text-left', 'px-2')}>状态</th>
@@ -93,30 +94,31 @@ export const RecordPage: React.FC = () => {
                       <th className={c('text-left', 'px-2')}>时间</th>
                       <th className={c('text-left', 'px-2')}>内存</th>
                     </tr>
-                  </thead>
+                    </thead>
                     <tbody>
-                      {data?.testcaseResult?.map((item, index) => {
-                        return (
+                    {data?.testcaseResult?.map((item, index) => {
+                      return (
                           <tr key={index} className={c('leading-6')}>
                             <td className={c('text-left', 'px-2')}>#{index + 1}</td>
                             <td className={c('text-left', 'px-2')}>
-                              <span style={{ color: statusToColor(item.status) }}>
-                                {statusToMessage(item.status)}
-                              </span>
+                          <span style={{ color: statusToColor(item.status) }}>
+                            {statusToMessage(item.status)}
+                          </span>
                             </td>
                             <td className={c('text-left', 'px-2')}>{item.status === 'ACCEPTED' ? (100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
                             <td className={c('text-left', 'px-2')}>{item.time}ms</td>
                             <td className={c('text-left', 'px-2')}>{item.memory}Kib</td>
                           </tr>
-                        )
-                      })}
-                  </tbody>
-                </table>
+                      )
+                    })}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>
         </div>
-        <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
+        <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-1/4')}>
           <div className={c('pt-8 px-4')}>
             <h2 className={c('font-light')}>信息</h2>
           </div>
