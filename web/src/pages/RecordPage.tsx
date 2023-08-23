@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import c from 'classnames'
 import type { AxiosError } from 'axios'
+import Highlight from 'react-highlight'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
@@ -69,9 +70,9 @@ export const RecordPage: React.FC = () => {
           <div className={c()}>
             <div className={c('flex flex-col px-4 gap-1')}>
               <div className={c()}>
-                <pre className={c('bg-gray-100 rounded-md p-4 text-sm')}>
+                <Highlight>
                   {data?.code}
-                </pre>
+                </Highlight>
               </div>
               <div className={c()}>
                 <table className={c('w-full')} border={1}>

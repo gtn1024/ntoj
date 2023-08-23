@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { App } from './App.tsx'
 import './main.scss'
+import 'highlight.js/styles/github.css'
 
 const div = document.getElementById('root') as HTMLElement
 

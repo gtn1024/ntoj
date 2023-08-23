@@ -7,7 +7,6 @@ import cpp from 'highlight.js/lib/languages/cpp'
 import java from 'highlight.js/lib/languages/java'
 import markdown from 'highlight.js/lib/languages/markdown'
 import python from 'highlight.js/lib/languages/python'
-import 'highlight.js/styles/github.css'
 
 export class MdIt {
   instance: MarkdownIt
