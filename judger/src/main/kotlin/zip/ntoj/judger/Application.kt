@@ -21,7 +21,16 @@ import kotlin.io.path.outputStream
 
 private val LOGGER = LoggerFactory.getLogger("zip.ntoj.judger.Application")
 
+fun showMessage() {
+    LOGGER.info("NTOJ Judger")
+    LOGGER.info("Server Host: ${Configuration.SERVER_HOST}")
+    LOGGER.info("Sandbox Server: ${Configuration.SANDBOX_SERVER}")
+    LOGGER.info("Judger ID: ${Configuration.JUDGER_ID}")
+    LOGGER.info("Token: ${Configuration.TOKEN}")
+}
+
 suspend fun main() {
+    showMessage()
     var connected = false
     while (true) {
         var fileId: String?

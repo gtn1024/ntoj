@@ -1,0 +1,10 @@
+{
+  "name": "judger",
+  "script": "/usr/bin/java",
+  "args": [
+    "-jar",
+    "/app/judger.jar"
+  ],
+  "exec_interpreter": "",
+  "exec_mode": "fork"
+}
