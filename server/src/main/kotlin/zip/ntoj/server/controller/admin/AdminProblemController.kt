@@ -93,6 +93,7 @@ class AdminProblemController(
                         author = author,
                         judgeTimes = 1,
                         testCases = testcase,
+                        allowAllLanguages = problemRequest.allowAllLanguages,
                     ),
                 ),
             ),
@@ -121,6 +122,7 @@ class AdminProblemController(
         problem.visible = problemRequest.visible
         problem.languages = languages
         problem.testCases = testcase
+        problem.allowAllLanguages = problemRequest.allowAllLanguages
         return R.success(
             200,
             "修改成功",
@@ -208,6 +210,7 @@ data class ProblemRequest(
     val languages: List<Long> = listOf(),
     val visible: Boolean? = null,
     val testcase: Long,
+    val allowAllLanguages: Boolean,
 )
 
 data class ProblemDto(
@@ -226,6 +229,7 @@ data class ProblemDto(
     val author: String?,
     val visible: Boolean?,
     val languages: List<Long> = listOf(),
+    val allowAllLanguages: Boolean,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
     val testcase: TestcaseDto,
 ) {
@@ -247,6 +251,7 @@ data class ProblemDto(
             createdAt = problem.createdAt,
             visible = problem.visible,
             languages = problem.languages.map { it.languageId!! },
+            allowAllLanguages = problem.allowAllLanguages,
             testcase = TestcaseDto.from(problem.testCases!!),
         )
     }

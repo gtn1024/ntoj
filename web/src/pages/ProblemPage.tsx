@@ -45,7 +45,7 @@ export const ProblemPage: React.FC = () => {
         setData(problem)
         const availableLanguages = languages
           .filter((language) => {
-            return problem.languages?.includes(language.id)
+            return problem.allowAllLanguages || problem.languages?.includes(language.id)
           })
         setLanguageOptions(
           availableLanguages

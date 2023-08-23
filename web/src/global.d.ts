@@ -47,6 +47,7 @@ interface Problem {
   visible?: boolean
   languages?: number[]
   testcase?: TestcaseDto
+  allowAllLanguages?: boolean
 }
 
 interface TestcaseDto {

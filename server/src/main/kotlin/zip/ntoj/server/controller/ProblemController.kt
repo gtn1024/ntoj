@@ -102,6 +102,7 @@ class ProblemController(
         val note: String?,
         val author: String?,
         val languages: List<Long> = listOf(),
+        val allowAllLanguages: Boolean,
     ) {
         companion object {
             fun from(problem: Problem): ProblemDto = ProblemDto(
@@ -119,6 +120,7 @@ class ProblemController(
                 note = problem.note,
                 author = problem.author?.username,
                 languages = problem.languages.map { it.languageId!! },
+                allowAllLanguages = problem.allowAllLanguages,
             )
         }
     }

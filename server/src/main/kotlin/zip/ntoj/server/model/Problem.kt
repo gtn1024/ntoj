@@ -25,6 +25,7 @@ class Problem(
     var judgeTimes: Int?,
 
     @ManyToMany var languages: List<Language> = mutableListOf(),
+    var allowAllLanguages: Boolean,
 
     @OneToOne var testCases: FileUpload?,
 

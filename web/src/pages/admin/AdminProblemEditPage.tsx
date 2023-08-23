@@ -46,6 +46,7 @@ export const AdminProblemEditPage: React.FC = () => {
             note: res.data.data.note ?? '',
             visible: res.data.data.visible ?? false,
             languages,
+            allowAllLanguages: res.data.data.allowAllLanguages ?? false,
           })
         })
         .catch((err: AxiosError<HttpResponse>) => {
@@ -237,6 +238,10 @@ export const AdminProblemEditPage: React.FC = () => {
 
           <Form.Item label="提示" name="note">
             <Input.TextArea rows={4}/>
+          </Form.Item>
+
+          <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
+            <Switch/>
           </Form.Item>
 
           <Form.Item label="语言" name="languages">
