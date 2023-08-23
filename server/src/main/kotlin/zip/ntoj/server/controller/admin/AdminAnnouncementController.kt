@@ -127,7 +127,7 @@ data class AnnouncementDto(
     val content: String?,
     val author: String?,
     val visible: Boolean?,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val createdAt: Instant?,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
 ) {
     companion object {
         fun from(announcement: Announcement) = AnnouncementDto(

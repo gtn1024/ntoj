@@ -48,7 +48,7 @@ class UserController(
         val username: String? = null,
         val realName: String? = null,
         val bio: String? = null,
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "UTC")
+        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
         val registerAt: Instant? = null,
     ) {
         companion object {

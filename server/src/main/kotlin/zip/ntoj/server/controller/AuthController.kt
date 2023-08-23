@@ -106,7 +106,7 @@ data class CurrentUserDto(
     val realName: String? = null,
     val bio: String? = null,
     val role: UserRole? = UserRole.USER,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     val registerAt: Instant? = null,
 ) {
     companion object {

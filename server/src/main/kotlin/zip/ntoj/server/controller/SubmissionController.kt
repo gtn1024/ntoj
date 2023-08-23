@@ -47,7 +47,7 @@ class SubmissionController(
         val language: String? = null,
         val user: SubmissionUserDto,
         val problem: SubmissionProblemDto,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val submitTime: Instant,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
             fun from(submission: Submission): SubmissionListDto {
@@ -120,7 +120,7 @@ class SubmissionController(
         val problem: ProblemDto,
         val compileLog: String?,
         val testcaseResult: List<TestcaseJudgeResult>?,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val submitTime: Instant,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
             fun from(submission: Submission) = SubmissionDto(

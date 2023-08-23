@@ -226,7 +226,7 @@ data class ProblemDto(
     val author: String?,
     val visible: Boolean?,
     val languages: List<Long> = listOf(),
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "UTC") val createdAt: Instant?,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
     val testcase: TestcaseDto,
 ) {
     companion object {
