@@ -36,14 +36,14 @@ interface Submission {
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
   const [data, setData] = useState<Submission>()
-  const [score, setScore] = useState<number>()
+  const [score, setScore] = useState<number>(0)
   const { isMobile } = useLayout()
   useEffect(() => {
     void http.get<Submission>(`/submission/${id}`)
       .then((res) => {
         const data = res.data.data
         setData(data)
-        if (data.testcaseResult) {
+        if (data.testcaseResult && !!data.testcaseResult.length) {
           const score = data.testcaseResult.reduce((acc, cur) => {
             if (cur.status === 'ACCEPTED') {
               return acc + 1
