@@ -16,6 +16,7 @@ import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.ProblemSample
 import zip.ntoj.server.model.Submission
+import zip.ntoj.server.service.LanguageService
 import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.server.service.UserService
@@ -29,6 +30,7 @@ class ProblemController(
     val problemService: ProblemService,
     val userService: UserService,
     val submissionService: SubmissionService,
+    val languageService: LanguageService,
 ) {
     @GetMapping
     fun index(
@@ -54,10 +56,10 @@ class ProblemController(
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
     ): ResponseEntity<R<SubmissionDto>> {
         val problem = problemService.get(alias)
-        if (problem.languages.none { it.languageId == problemSubmissionRequest.language }) {
+        if (!problem.allowAllLanguages && problem.languages.none { it.languageId == problemSubmissionRequest.language }) {
             throw AppException("不支持的语言", 400)
         }
-        val language = problem.languages.find { it.languageId == problemSubmissionRequest.language }!!
+        val language = languageService.get(problemSubmissionRequest.language)
         val user = userService
             .getUserById(StpUtil.getLoginIdAsLong())
         var submission = Submission(
