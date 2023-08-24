@@ -103,3 +103,9 @@ interface JudgeClientToken {
   token: string
   enabled: boolean
 }
+
+interface Contest {
+  id: number
+  title: string
+  description?: string
+}
