@@ -17,12 +17,12 @@ const items: MenuProps['items'] = [
   },
   {
     label: '题库',
-    key: '/problem',
+    key: '/p',
     icon: <QuestionOutlined/>,
   },
   {
     label: '记录',
-    key: '/record',
+    key: '/r',
     icon: <QuestionOutlined/>,
   },
   {
@@ -40,11 +40,11 @@ export const MenuComponent: React.FC<Props> = (props) => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (pathname.includes('/problem')) {
-      return setCurrent('/problem')
+    if (pathname.includes('/p')) {
+      return setCurrent('/p')
     }
-    if (pathname.includes('/record')) {
-      return setCurrent('/record')
+    if (pathname.includes('/r')) {
+      return setCurrent('/r')
     }
     if (pathname.includes('/about')) {
       return setCurrent('/about')

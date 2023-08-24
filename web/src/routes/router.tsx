@@ -135,16 +135,16 @@ export const router = createBrowserRouter(
         { index: true, element: <HomePage/> },
         { path: 'about', element: <div>About</div> },
         {
-          path: 'problem',
+          path: 'p',
           children: [
             { index: true, element: <ProblemListPage/> },
             { path: ':alias', element: <ProblemPage/> },
           ],
         },
-        { path: 'announcement/:id', element: <AnnouncementPage/> },
-        { path: 'user/:username', element: <UserProfilePage/> },
+        { path: 'a/:id', element: <AnnouncementPage/> },
+        { path: 'u/:username', element: <UserProfilePage/> },
         {
-          path: 'record',
+          path: 'r',
           children: [
             { index: true, element: <RecordListPage/> },
             { path: ':id', element: <RecordPage/> },

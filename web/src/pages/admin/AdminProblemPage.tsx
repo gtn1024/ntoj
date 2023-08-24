@@ -66,7 +66,7 @@ export const AdminProblemPage: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       render: (value, record) => {
-        return <Link to={`/problem/${record.alias ?? ''}`}>{value}</Link>
+        return <Link to={`/p/${record.alias ?? ''}`}>{value}</Link>
       },
     },
     {
