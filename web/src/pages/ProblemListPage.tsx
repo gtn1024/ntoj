@@ -54,7 +54,7 @@ export const ProblemListPage: React.FC = () => {
       dataIndex: 'alias',
       key: 'alias',
       render: (value: string) => {
-        return <Link to={`/problem/${value}`}>{value}</Link>
+        return <Link to={`/p/${value}`}>{value}</Link>
       },
     },
     {
@@ -62,7 +62,7 @@ export const ProblemListPage: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       render: (value: string, record: Problem) => {
-        return <Link to={`/problem/${record.alias ?? ''}`}>{value}</Link>
+        return <Link to={`/p/${record.alias ?? ''}`}>{value}</Link>
       },
     },
   ]

@@ -128,7 +128,7 @@ export const RecordPage: React.FC = () => {
               <div className={c('flex justify-between')}>
                 <span className={c('text-gray-500')}>提交者</span>
                 <span className={c('text-gray-500')}>
-                  <Link to={`/user/${data?.user.username}`}>
+                  <Link to={`/u/${data?.user.username}`}>
                     {data?.user.username}
                   </Link>
                 </span>
@@ -144,7 +144,7 @@ export const RecordPage: React.FC = () => {
               <div className={c('flex justify-between')}>
                 <span className={c('text-gray-500')}>题目</span>
                 <span className={c('text-gray-500')}>
-                  <Link to={`/problem/${data?.problem.alias}`}>{data?.problem.title}</Link>
+                  <Link to={`/p/${data?.problem.alias}`}>{data?.problem.title}</Link>
                 </span>
               </div>
             </div>

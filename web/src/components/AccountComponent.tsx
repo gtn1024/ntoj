@@ -25,7 +25,7 @@ export const AccountComponent: React.FC<Props> = (props) => {
     {
       key: 'user-center',
       label: (
-        <Link to={`/user/${user.username ?? ''}`}>
+        <Link to={`/u/${user.username ?? ''}`}>
           个人中心
         </Link>
       ),

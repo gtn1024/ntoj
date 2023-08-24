@@ -80,7 +80,7 @@ export const RecordListPage: React.FC = () => {
       dataIndex: 'id',
       key: 'id',
       render: (value: string) => {
-        return <Link to={`/record/${value}`}>{value}</Link>
+        return <Link to={`/r/${value}`}>{value}</Link>
       },
     },
     {
@@ -94,13 +94,13 @@ export const RecordListPage: React.FC = () => {
     {
       title: '题目',
       render: (_value: string, record: SubmissionDto) => {
-        return <Link to={`/problem/${record.problem.alias ?? ''}`}>{record.problem.alias} {record.problem.title}</Link>
+        return <Link to={`/p/${record.problem.alias ?? ''}`}>{record.problem.alias} {record.problem.title}</Link>
       },
     },
     {
       title: '提交者',
       render: (_value: string, record: SubmissionDto) => {
-        return <Link to={`/user/${record.user.username ?? ''}`}>{record.user.username}</Link>
+        return <Link to={`/u/${record.user.username ?? ''}`}>{record.user.username}</Link>
       },
     },
     {

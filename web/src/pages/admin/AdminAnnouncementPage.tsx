@@ -66,7 +66,7 @@ export const AdminAnnouncementPage: React.FC = () => {
       dataIndex: 'title',
       key: 'title',
       render: (value, record) => {
-        return <Link to={`/announcement/${record.id ?? 0}`}>{value}</Link>
+        return <Link to={`/a/${record.id ?? 0}`}>{value}</Link>
       },
     },
     {
