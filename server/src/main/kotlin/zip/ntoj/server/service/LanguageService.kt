@@ -37,7 +37,7 @@ class LanguageServiceImpl(
                 page - 1,
                 pageSize,
                 Sort.by(if (desc) Sort.Direction.DESC else Sort.Direction.ASC, "languageId"),
-            )
+            ),
         ).toList()
     }
 
