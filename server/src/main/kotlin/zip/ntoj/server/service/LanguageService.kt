@@ -1,6 +1,7 @@
 package zip.ntoj.server.service
 
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Language
@@ -11,6 +12,7 @@ interface LanguageService {
     fun get(
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
+        desc: Boolean = false,
     ): List<Language>
 
     fun new(problem: Language): Language
@@ -29,8 +31,14 @@ class LanguageServiceImpl(
         return languageRepository.findById(id).orElseThrow { AppException("语言不存在", 404) }
     }
 
-    override fun get(page: Int, pageSize: Int): List<Language> {
-        return languageRepository.findAll(PageRequest.of(page - 1, pageSize)).toList()
+    override fun get(page: Int, pageSize: Int, desc: Boolean): List<Language> {
+        return languageRepository.findAll(
+            PageRequest.of(
+                page - 1,
+                pageSize,
+                Sort.by(if (desc) Sort.Direction.DESC else Sort.Direction.ASC, "languageId"),
+            )
+        ).toList()
     }
 
     override fun new(problem: Language): Language {
