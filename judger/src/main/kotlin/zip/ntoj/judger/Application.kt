@@ -29,12 +29,26 @@ fun showMessage() {
     LOGGER.info("Token: ${Configuration.TOKEN}")
 }
 
+suspend fun sandboxAvailable(): Boolean {
+    return try {
+        Client.Sandbox.version()
+        true
+    } catch (e: Exception) {
+        false
+    }
+}
+
 suspend fun main() {
     showMessage()
     var connected = false
     while (true) {
         var fileId: String?
         try {
+            if (!sandboxAvailable()) {
+                LOGGER.error("沙箱服务器连接失败，5秒后重试")
+                sleep(5000)
+                continue
+            }
             val submission = Client.Backend.getSubmission()
             if (!connected) {
                 LOGGER.info("连接成功，正在监听提交")
