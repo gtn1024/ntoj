@@ -26,6 +26,7 @@ import { AdminJudgeClientTokenPage } from '../pages/admin/AdminJudgeClientTokenP
 import { AdminJudgeClientTokenEditPage } from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
 import { RecordListPage } from '../pages/RecordListPage.tsx'
 import { RecordPage } from '../pages/RecordPage.tsx'
+import { ContestListPage } from '../pages/ContestListPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -148,6 +149,12 @@ export const router = createBrowserRouter(
           children: [
             { index: true, element: <RecordListPage/> },
             { path: ':id', element: <RecordPage/> },
+          ],
+        },
+        {
+          path: 'c',
+          children: [
+            { index: true, element: <ContestListPage/> },
           ],
         },
       ],
