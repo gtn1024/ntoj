@@ -86,8 +86,8 @@ object TestcaseRunner {
                     env = listOf("PATH=/usr/bin:/bin"),
                     files = listOf(
                         MemoryFile(inData),
-                        Collector(name = "stdout", max = 10240),
-                        Collector(name = "stderr", max = 10240),
+                        Collector(name = "stdout", max = 51_200), // 50 KB
+                        Collector(name = "stderr", max = 51_200), // 50 KB
                     ),
                     cpuLimit = 1L * submission.timeLimit * 1000 * 1000 * timeLimitRate,
                     clockLimit = 1L * submission.timeLimit * 1000 * 1000 * 2 * timeLimitRate,
