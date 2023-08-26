@@ -48,6 +48,7 @@ interface Problem {
   languages?: number[]
   testcase?: TestcaseDto
   allowAllLanguages?: boolean
+  codeLength: number
 }
 
 interface TestcaseDto {

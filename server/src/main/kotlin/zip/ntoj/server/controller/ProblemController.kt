@@ -59,6 +59,9 @@ class ProblemController(
         if (!problem.allowAllLanguages && problem.languages.none { it.languageId == problemSubmissionRequest.language }) {
             throw AppException("不支持的语言", 400)
         }
+        if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
+            throw AppException("代码长度超过限制", 400)
+        }
         val language = languageService.get(problemSubmissionRequest.language)
         val user = userService
             .getUserById(StpUtil.getLoginIdAsLong())
@@ -105,6 +108,7 @@ class ProblemController(
         val author: String?,
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
+        val codeLength: Int,
     ) {
         companion object {
             fun from(problem: Problem): ProblemDto = ProblemDto(
@@ -123,6 +127,7 @@ class ProblemController(
                 author = problem.author?.username,
                 languages = problem.languages.map { it.languageId!! },
                 allowAllLanguages = problem.allowAllLanguages,
+                codeLength = problem.codeLength,
             )
         }
     }

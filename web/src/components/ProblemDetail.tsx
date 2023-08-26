@@ -80,6 +80,7 @@ export const ProblemDetail: React.FC<{ data?: Problem }> = (props) => {
         <div className="pb-[20px] text-xs">
           <span className="mr-1">时间限制：{data?.timeLimit} ms</span>
           <span className="mr-1">内存限制：{data?.memoryLimit} MB</span>
+          <span className="mr-1">代码长度限制：{data?.codeLength} KB</span>
         </div>
         <div>
           <ProblemSection title='题目背景' markdown={data?.background}/>
