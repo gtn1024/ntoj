@@ -23,7 +23,7 @@ class Submission(
     var problem: Problem? = null,
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     @OneToOne var language: Language? = null,
-    @Column(columnDefinition = "text", length = 65535)
+    @Column(columnDefinition = "text", length = 65_536) // 64KB
     var code: String? = null,
     @Enumerated(EnumType.STRING)
     var status: SubmissionStatus = SubmissionStatus.PENDING,
