@@ -50,4 +50,4 @@ ntoj:
   file:
     service-impl: zip.ntoj.server.service.FileSystemFileService
     file-system:
-      base-dir: ${TOJ_FILE_BASE_DIR:data}
+      base-dir: ${NTOJ_FILE_BASE_DIR:data}
