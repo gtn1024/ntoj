@@ -24,6 +24,8 @@ class Problem(
     var memoryLimit: Int?,
     var judgeTimes: Int?,
 
+    var codeLength: Int = 16,
+
     @ManyToMany var languages: List<Language> = mutableListOf(),
     var allowAllLanguages: Boolean,
 

@@ -47,6 +47,7 @@ export const AdminProblemEditPage: React.FC = () => {
             visible: res.data.data.visible ?? false,
             languages,
             allowAllLanguages: res.data.data.allowAllLanguages ?? false,
+            codeLength: res.data.data.codeLength ?? 16,
           })
         })
         .catch((err: AxiosError<HttpResponse>) => {
@@ -242,6 +243,11 @@ export const AdminProblemEditPage: React.FC = () => {
 
           <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
             <Switch/>
+          </Form.Item>
+
+          <Form.Item label="代码长度限制" rules={[{ required: true, message: '请输入代码长度限制！' }]}
+                     name="codeLength" initialValue={16}>
+            <InputNumber addonAfter="KB" />
           </Form.Item>
 
           <Form.Item label="语言" name="languages">

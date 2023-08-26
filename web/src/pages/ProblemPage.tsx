@@ -69,6 +69,10 @@ export const ProblemPage: React.FC = () => {
       void message.error('请选择语言')
       return
     }
+    if (code.length > (data?.codeLength ?? 0) * 1024) {
+      void message.error('代码长度超过限制')
+      return
+    }
     if (intervalId) {
       clearInterval(intervalId)
     }
