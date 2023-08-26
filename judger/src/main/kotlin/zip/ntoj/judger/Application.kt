@@ -250,8 +250,8 @@ private fun getCompileBody(
                 env = listOf("PATH=/usr/bin:/bin"),
                 files = listOf(
                     MemoryFile(content = ""),
-                    Collector(name = "stdout", max = 10240),
-                    Collector(name = "stderr", max = 10240),
+                    Collector(name = "stdout", max = 51_200), // 50 KB
+                    Collector(name = "stderr", max = 51_200), // 50 KB
                 ),
                 cpuLimit = 10_000_000_000L,
                 memoryLimit = 536_870_912L,
