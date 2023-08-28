@@ -17,7 +17,7 @@ ij_kotlin_packages_to_use_import_on_demand = enabled
 trim_trailing_whitespace = false
 indent_size = 2
 
-[*.{yml,yaml,json,xml}]
+[*.{yml,yaml,json,xml,js,jsx,ts,tsx}]
 indent_style = space
 indent_size = 2
 
