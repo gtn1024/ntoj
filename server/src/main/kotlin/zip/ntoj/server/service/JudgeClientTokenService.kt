@@ -1,5 +1,6 @@
 package zip.ntoj.server.service
 
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
@@ -37,6 +38,7 @@ class JudgeClientTokenServiceImpl(
         return judgeClientTokenRepository.findAll(PageRequest.of(page - 1, pageSize)).toList()
     }
 
+    @Cacheable("judgertoken", key = "#root.methodName +'_tk_'+ #token")
     override fun exists(token: String): Boolean {
         return judgeClientTokenRepository.existsByToken(token)
     }
