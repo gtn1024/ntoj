@@ -28,6 +28,9 @@ class Contest(
 
     @ManyToMany var users: List<User> = listOf(),
 
+    @ManyToMany var languages: List<Language> = mutableListOf(),
+    @Column(nullable = false) var allowAllLanguages: Boolean,
+
     @Column(nullable = false) var visible: Boolean = true,
 
     @Column(nullable = false) var showFinalBoard: Boolean = false,
