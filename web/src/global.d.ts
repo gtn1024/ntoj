@@ -109,4 +109,18 @@ interface Contest {
   id: number
   title: string
   description?: string
+  startTime: string
+  endTime: string
+  type: ContestType
+  permission: ContestPermission
+  userCount: number
 }
+
+type ContestType = |
+  'ICPC'
+
+type ContestPermission = |
+  'PUBLIC' |
+  'PRIVATE' |
+  'PASSWORD'
+
