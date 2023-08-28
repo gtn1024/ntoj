@@ -2,6 +2,10 @@ server:
   port: 18080
 
 spring:
+  cache:
+    type: caffeine
+    caffeine:
+      spec: initialCapacity=10
   servlet:
     multipart:
       max-file-size: 50MB
