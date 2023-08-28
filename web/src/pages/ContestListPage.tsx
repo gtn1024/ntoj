@@ -19,9 +19,9 @@ export const ContestListPage: React.FC = () => {
     <div className={c('max-w-[1200px]', 'mx-auto py-4')}>
       <div className={c('flex flex-col gap-4')}>
         {
-          list.map((contest) => {
+          list.map((contest, idx) => {
             return (
-              <SingleContestCard contest={contest}/>
+              <SingleContestCard contest={contest} key={idx}/>
             )
           })
         }
