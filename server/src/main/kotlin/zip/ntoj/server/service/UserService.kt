@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.User
 import zip.ntoj.server.repository.UserRepository
+import kotlin.jvm.optionals.getOrNull
 
 interface UserService {
     fun isUsernameValid(username: String): Boolean {
@@ -48,6 +49,10 @@ class UserServiceImpl(
     }
 
     override fun updateUser(user: User): User {
+        val userInDb = userRepository.findByUsername(user.username!!).getOrNull()
+        if (userInDb != null && userInDb.userId != user.userId) {
+            throw AppException("用户名已存在", 400)
+        }
         return userRepository.save(user)
     }
 }
