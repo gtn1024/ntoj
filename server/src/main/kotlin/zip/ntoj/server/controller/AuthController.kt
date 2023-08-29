@@ -55,14 +55,6 @@ class AuthController(
         @Valid @RequestBody
         request: UserRequest,
     ): ResponseEntity<R<Void>> {
-        if (!userService.isUsernameValid(request.username!!)) {
-            throw AppException("用户名不合法", 400)
-        }
-        // 判断用户是否存在
-        if (userService.existsByUsername(request.username)) {
-            // 用户已存在
-            throw AppException("用户已存在", 400)
-        }
         // 创建用户
         val salt = getSalt()
         userService.newUser(

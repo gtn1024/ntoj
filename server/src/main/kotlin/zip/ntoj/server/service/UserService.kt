@@ -21,7 +21,16 @@ interface UserService {
 class UserServiceImpl(
     val userRepository: UserRepository,
 ) : UserService {
-    override fun newUser(user: User) = userRepository.save(user)
+    override fun newUser(user: User): User {
+        if (!isUsernameValid(user.username!!)) {
+            throw AppException("用户名不合法", 400)
+        }
+        // 判断用户是否存在
+        if (existsByUsername(user.username!!)) {
+            throw AppException("用户已存在", 400)
+        }
+        return userRepository.save(user)
+    }
     override fun existsByUsername(username: String): Boolean {
         return userRepository.existsByUsername(username)
     }
