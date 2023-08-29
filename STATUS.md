@@ -1,6 +1,4 @@
-# NTOJ
-
-## Project Status
+# Project Status
 
 - [ ] User
   - [x] Register
@@ -24,7 +22,7 @@
   - [x] Update (Admin)
   - [x] Delete (Admin)
 - [ ] Contest
-  - [ ] List
+  - [x] List
   - [ ] Create (Admin)
   - [ ] Show
   - [ ] Update (Admin)
@@ -34,10 +32,10 @@
     - [ ] ACM
     - [ ] OI
     - [ ] IOI
-- [ ] Submission
-  - [ ] List
-  - [ ] Show
-  - [ ] Rejudge (Admin)
+- [x] Submission
+  - [x] List
+  - [x] Show
+  - [x] Rejudge (Admin)
 - [ ] Group
   - [ ] List
   - [ ] Create
