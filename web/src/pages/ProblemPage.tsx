@@ -107,7 +107,7 @@ export const ProblemPage: React.FC = () => {
   const editorWrapperRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className={c('flex', isMobile && 'flex-col', 'h-[calc(100vh-64px-80px)]')}>
+    <div className={c('flex', isMobile ? ['flex-col'] : ['h-[calc(100vh-64px-80px)]'])}>
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
         <ProblemDetail data={data}/>
       </div>

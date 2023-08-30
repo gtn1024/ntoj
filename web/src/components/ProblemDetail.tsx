@@ -1,6 +1,8 @@
 import React from 'react'
 import { message } from 'antd'
+import c from 'classnames'
 import { mdit } from '../lib/mdit.ts'
+import { useLayout } from '../hooks/useLayout.ts'
 
 interface SectionProps {
   title: string
@@ -70,9 +72,10 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
 
 export const ProblemDetail: React.FC<{ data?: Problem }> = (props) => {
   const { data } = props
+  const { isMobile } = useLayout()
 
   return (
-    <div className="m-4">
+    <div className={c(!isMobile && 'm-4')}>
       <div className="p-4">
         <div>
           <h2 className="font-bold">{data?.alias} {data?.title}</h2>
