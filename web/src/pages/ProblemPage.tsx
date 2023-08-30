@@ -21,6 +21,7 @@ export const ProblemPage: React.FC = () => {
   const [intervalId, setIntervalId] = useState<number | null>(null)
   const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
   const [data, setData] = useState<Problem>()
+  const [editorLanguage, setEditorLanguage] = useState('cpp')
 
   useEffect(() => {
     Promise.all([
@@ -108,6 +109,20 @@ export const ProblemPage: React.FC = () => {
   const editorWrapperRef = useRef<HTMLDivElement>(null)
   const { height } = useWindowSize()
 
+  function languageLabelToEditorLanguage(id: string) {
+    const label = languageOptions.find(language => language.value === id)?.label.toLowerCase()
+    if (!label) { return 'cpp' }
+    if (label.includes('c++') || label.toLowerCase().includes('cpp')) { return 'cpp' }
+    if (label.includes('c#') || label.toLowerCase().includes('csharp')) { return 'csharp' }
+    if (label.includes('java')) { return 'java' }
+    if (label.includes('py')) { return 'python' }
+    if (label.includes('go')) { return 'go' }
+    if (label.includes('rust')) { return 'rust' }
+    if (label.includes('pascal')) { return 'pascal' }
+    if (label.includes('c')) { return 'c' }
+    return 'cpp'
+  }
+
   return (
     <div className={c('flex', isMobile ? ['flex-col'] : ['h-[calc(100vh-64px-80px)]'])}>
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
@@ -119,6 +134,7 @@ export const ProblemPage: React.FC = () => {
             height={!isMobile ? `${height - 80 - 64 - 40}px` : '300px'}
             value={code}
             setValue={setCode}
+            language={editorLanguage}
           />
         </div>
         <div className={c('')}>
@@ -127,7 +143,10 @@ export const ProblemPage: React.FC = () => {
               <Select
                 className={c('w-[150px]')}
                 value={language}
-                onChange={setLanguage}
+                onChange={(e) => {
+                  setLanguage(e)
+                  setEditorLanguage(languageLabelToEditorLanguage(e))
+                }}
                 options={languageOptions}
               />
               <div className={c('flex', 'items-center')}>
