@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import { Button, Select, message } from 'antd'
 import c from 'classnames'
+import { useWindowSize } from 'react-use'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
@@ -105,6 +106,7 @@ export const ProblemPage: React.FC = () => {
   }
 
   const editorWrapperRef = useRef<HTMLDivElement>(null)
+  const { height } = useWindowSize()
 
   return (
     <div className={c('flex', isMobile ? ['flex-col'] : ['h-[calc(100vh-64px-80px)]'])}>
@@ -114,7 +116,7 @@ export const ProblemPage: React.FC = () => {
       <div className={c('flex', 'flex-col', !isMobile && ['w-1/2'])}>
         <div className={c('grow')} ref={editorWrapperRef}>
           <CodeMirrorEditor
-            height={!isMobile ? `${editorWrapperRef.current?.clientHeight ?? 0}px` : '300px'}
+            height={!isMobile ? `${height - 80 - 64 - 40}px` : '300px'}
             value={code}
             setValue={setCode}
           />
