@@ -4,6 +4,12 @@ import type { AxiosError } from 'axios'
 import { Button, Select, message } from 'antd'
 import c from 'classnames'
 import { useWindowSize } from 'react-use'
+import { Icon } from '@iconify/react'
+import baselineKeyboardArrowDown from '@iconify/icons-ic/baseline-keyboard-arrow-down'
+import baselineKeyboardArrowUp from '@iconify/icons-ic/baseline-keyboard-arrow-up'
+import loadingAltLoop from '@iconify/icons-line-md/loading-alt-loop'
+import clockOutline from '@iconify/icons-mdi/clock-outline'
+import hardwareChipOutline from '@iconify/icons-ion/hardware-chip-outline'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
@@ -22,6 +28,9 @@ export const ProblemPage: React.FC = () => {
   const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
   const [data, setData] = useState<Problem>()
   const [editorLanguage, setEditorLanguage] = useState('cpp')
+  const [toolbarVisible, setToolbarVisible] = useState(false)
+  const [toolbarSection, setToolbarSection] = useState<'result' | 'input'>('result')
+  const [isSubmissionOk, setIsSubmissionOk] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -66,6 +75,8 @@ export const ProblemPage: React.FC = () => {
       })
   }, [alias, nav])
 
+  const [submissionResult, setSubmissionResult] = useState<Submission>()
+
   const onSubmitCode = () => {
     if (!language) {
       void message.error('请选择语言')
@@ -78,15 +89,18 @@ export const ProblemPage: React.FC = () => {
     if (intervalId) {
       clearInterval(intervalId)
     }
+    setIsSubmissionOk(false)
+    setToolbarVisible(true)
     setJudgeMessage('正在提交')
     http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language: Number.parseInt(language) })
       .then((res) => {
-        void message.info(`提交成功，提交ID：${res.data.data.id}`)
         setJudgeMessage(res.data.data.status)
         const id = setInterval(() => {
           http.get<Submission>(`/submission/${res.data.data.id}`)
             .then((res) => {
               if (res.data.data.stage === 'FINISHED') {
+                setSubmissionResult(res.data.data)
+                setIsSubmissionOk(true)
                 setJudgeMessage(res.data.data.status)
                 clearInterval(id)
               } else {
@@ -128,37 +142,150 @@ export const ProblemPage: React.FC = () => {
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
         <ProblemDetail data={data}/>
       </div>
-      <div className={c('flex', 'flex-col', !isMobile && ['w-1/2'])}>
+      <div className={c('flex', 'flex-col', !isMobile ? ['w-1/2'] : ['p-2'])}>
+        <div className={c('h-[40px]', 'flex', 'items-center')}>
+          <div className={'flex'}>
+            <Select
+              className={c('w-[150px]')}
+              value={language}
+              onChange={(e) => {
+                setLanguage(e)
+                setEditorLanguage(languageLabelToEditorLanguage(e))
+              }}
+              options={languageOptions}
+            />
+          </div>
+        </div>
         <div className={c('grow')} ref={editorWrapperRef}>
           <CodeMirrorEditor
-            height={!isMobile ? `${height - 80 - 64 - 40}px` : '300px'}
+            height={!isMobile ? `${height - 80 - 64 - 40 - 40 - (toolbarVisible ? 160 : 0)}px` : '300px'}
             value={code}
             setValue={setCode}
             language={editorLanguage}
           />
         </div>
-        <div className={c('')}>
+        <div className={c('relative', 'bg-white')}>
+          <div className={c('h-[5px]', 'left-0', 'absolute', 'top-0', 'w-full')}>
+            <button
+              className={
+                c('h-[24px]', 'w-[24px]', 'bg-white', 'border-none', 'rounded-[12px]', 'text-[#666]', 'block',
+                  'cursor-pointer', 'left-1/2', 'ml-[-12px]', 'absolute', 'top-[-12px]', 'p-0')
+              }
+              onClick={() => {
+                setToolbarVisible(!toolbarVisible)
+              }}
+            >
+              {
+                toolbarVisible
+                  ? <Icon icon={isMobile ? baselineKeyboardArrowUp : baselineKeyboardArrowDown} width={24} height={24}/>
+                  : <Icon icon={isMobile ? baselineKeyboardArrowDown : baselineKeyboardArrowUp} width={24} height={24}/>
+              }
+            </button>
+          </div>
           <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
-            <div className={'flex'}>
-              <Select
-                className={c('w-[150px]')}
-                value={language}
-                onChange={(e) => {
-                  setLanguage(e)
-                  setEditorLanguage(languageLabelToEditorLanguage(e))
+            <div className={c('flex', 'gap-1')}>
+              <button
+                className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200',
+                  (toolbarVisible && toolbarSection === 'result') && 'bg-gray-200')}
+                onClick={() => {
+                  setToolbarVisible(true)
+                  setToolbarSection('result')
                 }}
-                options={languageOptions}
-              />
-              <div className={c('flex', 'items-center')}>
-                <span style={{ color: statusToColor(judgeMessage as SubmissionStatus) }}>{statusToMessage(judgeMessage as SubmissionStatus)}</span>
-              </div>
+              >
+                运行结果
+              </button>
+              {
+                /*
+              <button
+                className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200',
+                  (toolbarVisible && toolbarSection === 'input') && 'bg-gray-200')}
+                onClick={() => {
+                  setToolbarVisible(true)
+                  setToolbarSection('input')
+                }}
+              >
+                自测输入
+              </button>
+              <button
+                className={
+                c('px-2', 'border', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200', 'flex',
+                  'items-center', 'border-[#32ca99]', 'text-[#32ca99]', 'outline-none')
+              }>
+                <Icon icon={playIcon} width={24} height={24}/> 自测运行
+              </button>
+                 */
+              }
             </div>
             <div className={''}>
               <Button type="primary" onClick={onSubmitCode} disabled={!code || !language}>提交</Button>
             </div>
           </div>
-          <div className={c('invisible', 'h-0')}>
-           放置提交结果、测试用例等
+          <div className={c(toolbarVisible ? [!isMobile ? 'h-[160px]' : 'h-full'] : ['invisible', 'h-0'])}>
+            <div className={c('p-2', 'h-full', !isMobile && 'overflow-y-auto')}>
+              {
+                toolbarSection === 'result'
+                  ? (
+                    <div>
+                      {
+                        !judgeMessage
+                          ? (<div className={c('flex', 'justify-center', 'items-center', 'h-full', 'text-[#999]')}>
+                              提交之后，这里将会显示运行结果
+                            </div>)
+                          : !isSubmissionOk
+                              ? (<div className={c('flex', 'justify-center', 'items-center', 'h-full', 'text-[#999]')}>
+                                  <Icon icon={loadingAltLoop} height={24} width={24} /> 您的代码已提交，正在为您查询结果...
+                                </div>)
+                              : (<div
+                                    className={c('rounded', 'flex', 'flex-col', 'h-full', 'w-full')}
+                                    style={{
+                                      color: statusToColor(judgeMessage as SubmissionStatus),
+                                    }}
+                                 >
+                                  <div className={c('rounded-t', 'bg-[#f0faf7]', 'flex', 'gap-2', 'px-6', 'py-4')}>
+                                    <div style={{
+                                      color: statusToColor(judgeMessage as SubmissionStatus),
+                                      fontWeight: 'bold',
+                                    }}>
+                                      {statusToMessage(judgeMessage as SubmissionStatus)}
+                                    </div>
+                                    {
+                                      submissionResult?.status === 'ACCEPTED' && (<>
+                                        <div className={c('flex', 'items-center', 'gap-1')}>
+                                          <Icon icon={clockOutline} height={16} width={16} /> 运行时间 {submissionResult?.time}ms
+                                        </div>
+                                        <div className={c('flex', 'items-center', 'gap-1')}>
+                                          <Icon icon={hardwareChipOutline} height={16} width={16} /> 占用内存 {submissionResult?.memory}KB
+                                        </div>
+                                      </>
+                                      )
+                                    }
+                                  </div>
+                                  <div className={c('rounded-b', 'flex', 'flex-col', 'gap-1', 'px-6', 'py-4')}>
+                                    {
+                                      submissionResult?.status === 'ACCEPTED' && (<>
+                                        答案正确:恭喜！您提交的程序通过了所有的测试用例
+                                      </>)
+                                    }
+                                    {
+                                      submissionResult?.status === 'COMPILE_ERROR' && (<>
+                                        <div>编译错误:您提交的程序无法通过编译</div>
+                                        <div>
+                                          <pre>{submissionResult.compileLog}</pre>
+                                        </div>
+                                      </>)
+                                    }
+                                  </div>
+                                </div>)
+                      }
+                    </div>
+                    )
+                  : (
+                    <div>
+
+                    </div>
+                    )
+              }
+            </div>
           </div>
         </div>
       </div>

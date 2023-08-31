@@ -80,8 +80,28 @@ type SubmissionStatus = |
 
 interface Submission {
   id: number
+  user: {
+    username: string
+  }
+  code: string
   status: SubmissionStatus
   stage: JudgeStage
+  memory?: number
+  time?: number
+  compileLog?: string
+  language: {
+    languageName: string
+  }
+  problem: {
+    alias: string
+    title: string
+  }
+  submitTime: string
+  testcaseResult?: {
+    status: SubmissionStatus
+    time: number
+    memory: number
+  }[]
 }
 
 type JudgeStage = 'PENDING' | 'COMPILING' | 'JUDGING' | 'FINISHED'

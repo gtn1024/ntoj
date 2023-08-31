@@ -67,6 +67,15 @@ devDependencies:
   '@antfu/eslint-config':
     specifier: 0.40.2
     version: 0.40.2(eslint@8.47.0)(typescript@5.1.6)
+  '@iconify/icons-ic':
+    specifier: 1.2.13
+    version: 1.2.13
+  '@iconify/icons-ion':
+    specifier: 1.2.10
+    version: 1.2.10
+  '@iconify/icons-line-md':
+    specifier: 1.2.26
+    version: 1.2.26
   '@iconify/icons-material-symbols':
     specifier: 1.2.54
     version: 1.2.54
@@ -882,6 +891,24 @@ packages:
 
   /@humanwhocodes/object-schema@1.2.1:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
+    dev: true
+
+  /@iconify/icons-ic@1.2.13:
+    resolution: {integrity: sha512-TphrhwOvgd7CTmUhz6jgXF+SPnMtvTm03bZsAYbny2kwq4zlkhr9e16YEyPGMvKhjtTqNooA3iZ9Wa+pZ8moXQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify/icons-ion@1.2.10:
+    resolution: {integrity: sha512-8vd2gihc8fkugNH+bqnNpgAbXJl2AyTiGRgpDG/ELDUyscvUefEE/kW7uz6NnPUYH293vR+tdiruLIgvVsQfNA==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify/icons-line-md@1.2.26:
+    resolution: {integrity: sha512-H7oAE1kN64jfARLLhhmsQ8qLsOF66fX5LQqc9JfgEffX9+X2C9VUvE26YF41qZS1Nr6L2qlorZLjK6KXcXaHgQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify/icons-material-symbols@1.2.54:

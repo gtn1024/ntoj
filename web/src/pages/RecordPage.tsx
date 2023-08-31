@@ -9,31 +9,6 @@ import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
 import { toFixedNumber } from '../lib/misc.ts'
 
-interface Submission {
-  id: number
-  user: {
-    username: string
-  }
-  code: string
-  status: SubmissionStatus
-  memory?: number
-  time?: number
-  compileLog?: string
-  language: {
-    languageName: string
-  }
-  problem: {
-    alias: string
-    title: string
-  }
-  submitTime: string
-  testcaseResult?: {
-    status: SubmissionStatus
-    time: number
-    memory: number
-  }[]
-}
-
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
   const [data, setData] = useState<Submission>()
