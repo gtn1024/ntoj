@@ -185,8 +185,8 @@ export const ProblemPage: React.FC = () => {
           <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
             <div className={c('flex', 'gap-1')}>
               <button
-                className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200',
-                  (toolbarVisible && toolbarSection === 'result') && 'bg-gray-200')}
+                className={c('px-2', 'border-none', 'cursor-pointer', 'rounded', 'hover:bg-gray-200',
+                  (toolbarVisible && toolbarSection === 'result') ? 'bg-gray-200' : 'bg-white')}
                 onClick={() => {
                   setToolbarVisible(true)
                   setToolbarSection('result')
@@ -198,7 +198,7 @@ export const ProblemPage: React.FC = () => {
                 /*
               <button
                 className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200',
-                  (toolbarVisible && toolbarSection === 'input') && 'bg-gray-200')}
+                  (toolbarVisible && toolbarSection === 'input') ? 'bg-gray-200' : 'bg-white')}
                 onClick={() => {
                   setToolbarVisible(true)
                   setToolbarSection('input')
