@@ -21,6 +21,8 @@ class Submission(
     var user: User?,
     @ManyToOne
     var problem: Problem? = null,
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     @OneToOne var language: Language? = null,
     @Column(columnDefinition = "text", length = 65_536) // 64KB

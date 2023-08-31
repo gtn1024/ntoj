@@ -14,7 +14,8 @@ class User(
     var email: String?,
     @Column(name = "real_name") var realName: String?,
     var bio: String?,
-    @Column(name = "user_role") var role: UserRole = UserRole.USER,
+    @Column(name = "user_role", columnDefinition = "int4")
+    var role: UserRole = UserRole.USER,
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

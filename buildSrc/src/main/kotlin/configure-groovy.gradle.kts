@@ -1,7 +1,9 @@
+import zip.ntoj.buildsupport.lib
+
 plugins {
     id("groovy")
 }
 
 dependencies {
-    implementation("org.apache.groovy:groovy-all:4.0.13")
+    implementation(lib("groovy-all"))
 }

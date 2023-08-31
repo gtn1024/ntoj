@@ -11,6 +11,8 @@ ktor = "2.3.3"
 jackson = "2.15.2"
 logback = "1.4.11"
 
+groovy = "4.0.14"
+
 [libraries]
 saToken-spring = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "sa-token" }
 saToken-jwt = { module = "cn.dev33:sa-token-jwt", version.ref = "sa-token" }
@@ -32,6 +34,8 @@ jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", ver
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+groovy-all = { module = "org.apache.groovy:groovy-all", version.ref = "groovy" }
 
 [bundles]
 spock = ["spock-core", "spock-spring"]
