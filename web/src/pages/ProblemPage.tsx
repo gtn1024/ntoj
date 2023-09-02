@@ -4,12 +4,6 @@ import type { AxiosError } from 'axios'
 import { Button, Select, message } from 'antd'
 import c from 'classnames'
 import { useWindowSize } from 'react-use'
-import { Icon } from '@iconify/react'
-import baselineKeyboardArrowDown from '@iconify/icons-ic/baseline-keyboard-arrow-down'
-import baselineKeyboardArrowUp from '@iconify/icons-ic/baseline-keyboard-arrow-up'
-import loadingAltLoop from '@iconify/icons-line-md/loading-alt-loop'
-import clockOutline from '@iconify/icons-mdi/clock-outline'
-import hardwareChipOutline from '@iconify/icons-ion/hardware-chip-outline'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
@@ -186,8 +180,8 @@ export const ProblemPage: React.FC = () => {
             >
               {
                 toolbarVisible
-                  ? <Icon icon={isMobile ? baselineKeyboardArrowUp : baselineKeyboardArrowDown} width={24} height={24}/>
-                  : <Icon icon={isMobile ? baselineKeyboardArrowDown : baselineKeyboardArrowUp} width={24} height={24}/>
+                  ? <div className={isMobile ? 'i-material-symbols:keyboard-arrow-up' : 'i-material-symbols:keyboard-arrow-down'} h="[24px]" w="[24px]"/>
+                  : <div className={isMobile ? 'i-material-symbols:keyboard-arrow-down' : 'i-material-symbols:keyboard-arrow-up'} h="[24px]" w="[24px]"/>
               }
             </button>
           </div>
@@ -241,8 +235,8 @@ export const ProblemPage: React.FC = () => {
                               提交之后，这里将会显示运行结果
                             </div>)
                           : !isSubmissionOk
-                              ? (<div flex justify-center items-center h-full text="[#999]">
-                                  <Icon icon={loadingAltLoop} height={24} width={24} /> 您的代码已提交，正在为您查询结果...
+                              ? (<div flex justify-center items-center h-full gap-2 text="[#999]">
+                                  <div className="i-eos-icons:bubble-loading"/> 您的代码已提交，正在为您查询结果...
                                 </div>)
                               : (<div
                                     rounded flex flex-col h-full w-full
@@ -260,10 +254,10 @@ export const ProblemPage: React.FC = () => {
                                     {
                                       submissionResult?.status === 'ACCEPTED' && (<>
                                         <div flex items-center gap-1>
-                                          <Icon icon={clockOutline} height={16} width={16} /> 运行时间 {submissionResult?.time}ms
+                                          <div className="i-mdi:clock-outline"/> 运行时间 {submissionResult?.time}ms
                                         </div>
                                         <div flex items-center gap-1>
-                                          <Icon icon={hardwareChipOutline} height={16} width={16} /> 占用内存 {submissionResult?.memory}KB
+                                          <div className="i-ion:hardware-chip-outline"/> 占用内存 {submissionResult?.memory}KB
                                         </div>
                                       </>
                                       )

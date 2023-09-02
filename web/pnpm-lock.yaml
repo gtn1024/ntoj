@@ -70,24 +70,18 @@ devDependencies:
   '@antfu/eslint-config':
     specifier: 0.40.2
     version: 0.40.2(eslint@8.47.0)(typescript@5.1.6)
-  '@iconify/icons-ic':
-    specifier: 1.2.13
-    version: 1.2.13
-  '@iconify/icons-ion':
-    specifier: 1.2.10
-    version: 1.2.10
-  '@iconify/icons-line-md':
-    specifier: 1.2.26
-    version: 1.2.26
-  '@iconify/icons-material-symbols':
-    specifier: 1.2.54
-    version: 1.2.54
-  '@iconify/icons-mdi':
-    specifier: 1.2.47
-    version: 1.2.47
-  '@iconify/react':
-    specifier: 4.1.1
-    version: 4.1.1(react@18.2.0)
+  '@iconify-json/eos-icons':
+    specifier: 1.1.7
+    version: 1.1.7
+  '@iconify-json/ion':
+    specifier: 1.1.12
+    version: 1.1.12
+  '@iconify-json/material-symbols':
+    specifier: 1.1.57
+    version: 1.1.57
+  '@iconify-json/mdi':
+    specifier: 1.1.54
+    version: 1.1.54
   '@mdit/plugin-img-lazyload':
     specifier: 0.4.8
     version: 0.4.8
@@ -922,43 +916,28 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
-  /@iconify/icons-ic@1.2.13:
-    resolution: {integrity: sha512-TphrhwOvgd7CTmUhz6jgXF+SPnMtvTm03bZsAYbny2kwq4zlkhr9e16YEyPGMvKhjtTqNooA3iZ9Wa+pZ8moXQ==}
+  /@iconify-json/eos-icons@1.1.7:
+    resolution: {integrity: sha512-lAv0YFZlXrY5CaveJHvH9vOX2h+nprvvXayZijxR7lQprLmM9Pu2US9IQkEoI4iO8siLCUpM4KhjuxCg3WfI3A==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify/icons-ion@1.2.10:
-    resolution: {integrity: sha512-8vd2gihc8fkugNH+bqnNpgAbXJl2AyTiGRgpDG/ELDUyscvUefEE/kW7uz6NnPUYH293vR+tdiruLIgvVsQfNA==}
+  /@iconify-json/ion@1.1.12:
+    resolution: {integrity: sha512-YvVxa9pVUJFEp7S5n97VIYZv1/qU/aX1RSehDBQRfI0YsZCZhBQY77SxYXGCb/Gc0fP4//b9wtx8UE4hfwr0eQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify/icons-line-md@1.2.26:
-    resolution: {integrity: sha512-H7oAE1kN64jfARLLhhmsQ8qLsOF66fX5LQqc9JfgEffX9+X2C9VUvE26YF41qZS1Nr6L2qlorZLjK6KXcXaHgQ==}
+  /@iconify-json/material-symbols@1.1.57:
+    resolution: {integrity: sha512-HY/IB4kqa5+lFuLAuH4Aszi8wUrR0rxO72FsFQXRJD3rfF9mAEWnw8Mb3c6L+0M2UsEJkAg2cHAJ7Z1FUnN/cQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify/icons-material-symbols@1.2.54:
-    resolution: {integrity: sha512-t9qe8RVCgeAnZGTvcAo+wOlGwat3cIEGZu5Ete29oD6z8uEpf5UOeUhBruVQfWljhd1iX1o+ykAIRpdD7DS7CA==}
+  /@iconify-json/mdi@1.1.54:
+    resolution: {integrity: sha512-3QAsxte90EalbN2e8J30OqSSZz9qN2x+kmykQwsPahoW2dOtSvj+BR9YdiUd9A5XKk2nuU4UH5Gj/cq6WZ6CzQ==}
     dependencies:
       '@iconify/types': 2.0.0
-    dev: true
-
-  /@iconify/icons-mdi@1.2.47:
-    resolution: {integrity: sha512-QpiQxBFOnLqmGr2t+aTxFgfPLu1p6TNvRlrx17a962FJPdhOtMcEzpSOjFUHeCs8DVOumtFcKxxhW3bvzZ/96Q==}
-    dependencies:
-      '@iconify/types': 2.0.0
-    dev: true
-
-  /@iconify/react@4.1.1(react@18.2.0):
-    resolution: {integrity: sha512-jed14EjvKjee8mc0eoscGxlg7mSQRkwQG3iX3cPBCO7UlOjz0DtlvTqxqEcHUJGh+z1VJ31Yhu5B9PxfO0zbdg==}
-    peerDependencies:
-      react: '>=16'
-    dependencies:
-      '@iconify/types': 2.0.0
-      react: 18.2.0
     dev: true
 
   /@iconify/types@2.0.0:
@@ -4275,6 +4254,7 @@ packages:
     hasBin: true
     dependencies:
       js-tokens: 4.0.0
+    dev: false
 
   /lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
@@ -5385,6 +5365,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
+    dev: false
 
   /read-pkg-up@7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}

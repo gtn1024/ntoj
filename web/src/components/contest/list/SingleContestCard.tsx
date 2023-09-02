@@ -1,12 +1,6 @@
 import React from 'react'
 import c from 'classnames'
 import { Link } from 'react-router-dom'
-import { Icon } from '@iconify/react'
-import gavelIcon from '@iconify/icons-material-symbols/gavel'
-import accountMultiple from '@iconify/icons-mdi/account-multiple'
-import lockOpenOutline from '@iconify/icons-material-symbols/lock-open-outline'
-import clockOutline from '@iconify/icons-mdi/clock-outline'
-import calendarMultiselectOutline from '@iconify/icons-mdi/calendar-multiselect-outline'
 import { timeDiff, timeDiffString } from '../../../lib/misc.ts'
 
 interface Props {
@@ -41,23 +35,23 @@ export const SingleContestCard: React.FC<Props> = (props) => {
       </div>
       <div className={c('text-base flex flex-col gap-0.5')}>
         <div className={c('flex items-center gap-1')}>
-          <Icon icon={calendarMultiselectOutline} /> <span>{props.contest.startTime} ~ {props.contest.endTime}</span>
+          <div className="i-mdi:calendar-multiselect-outline"/> <span>{props.contest.startTime} ~ {props.contest.endTime}</span>
         </div>
         <div className={c('flex gap-2')}>
-          <div className={c('flex items-center gap-1')}>
-            <Icon icon={clockOutline} /> <span>{timeDiffString(timeDiff(props.contest.startTime, props.contest.endTime))}</span>
+          <div>
+            <div className="i-mdi:clock-outline"/> <span>{timeDiffString(timeDiff(props.contest.startTime, props.contest.endTime))}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
-          <div className={c('flex items-center gap-1')}>
-            <Icon icon={gavelIcon} /> <span>{props.contest.type}</span>
+          <div>
+            <div className="i-material-symbols:gavel-rounded"/> <span>{props.contest.type}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
-          <div className={c('flex items-center gap-1')}>
-            <Icon icon={accountMultiple} /> <span>{props.contest.userCount} 人</span>
+          <div>
+            <div className="i-mdi:account-multiple"/> <span>{props.contest.userCount} 人</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
-          <div className={c('flex items-center gap-1')}>
-            <Icon icon={lockOpenOutline} /> <span>{permissionToString(props.contest.permission)}</span>
+          <div>
+            <div className="i-material-symbols:lock-open-outline"/> <span>{permissionToString(props.contest.permission)}</span>
           </div>
         </div>
       </div>
