@@ -4,6 +4,7 @@ import { App } from './App.tsx'
 import './main.scss'
 import 'highlight.js/styles/github.css'
 import 'virtual:uno.css'
+import { NProgress } from './components/NProgress.tsx'
 
 const div = document.getElementById('root') as HTMLElement
 
@@ -17,7 +18,7 @@ document.onkeydown = (e) => {
 const root = ReactDOM.createRoot(div)
 root.render(
   <React.StrictMode>
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <React.Suspense fallback={<NProgress/>}>
       <App />
     </React.Suspense>
   </React.StrictMode>,
