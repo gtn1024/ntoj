@@ -35,7 +35,7 @@ export const SingleContestCard: React.FC<Props> = (props) => {
       </div>
       <div className={c('text-base flex flex-col gap-0.5')}>
         <div className={c('flex items-center gap-1')}>
-          <div className="i-mdi:calendar-multiselect-outline"/> <span>{props.contest.startTime} ~ {props.contest.endTime}</span>
+          <div className="i-mdi:calendar"/> <span>{props.contest.startTime} ~ {props.contest.endTime}</span>
         </div>
         <div className={c('flex gap-2')}>
           <div>

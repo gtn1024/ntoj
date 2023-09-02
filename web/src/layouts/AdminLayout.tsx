@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import {
-  AlertOutlined,
-  HomeOutlined,
-  MenuFoldOutlined, MenuOutlined,
-  MenuUnfoldOutlined, QuestionOutlined,
-} from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Button, Dropdown, Layout, Menu, theme } from 'antd'
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
@@ -30,27 +24,22 @@ export const AdminLayout: React.FC = () => {
   const items: MenuProps['items'] = [
     {
       key: '/admin',
-      icon: <HomeOutlined/>,
       label: '首页',
     },
     {
       key: '/admin/announcement',
-      icon: <AlertOutlined/>,
       label: '公告',
     },
     {
       key: '/admin/problem',
-      icon: <QuestionOutlined/>,
       label: '题目',
     },
     {
       key: '/admin/language',
-      icon: <QuestionOutlined/>,
       label: '语言',
     },
     {
       key: '/admin/judge_client_token',
-      icon: <QuestionOutlined/>,
       label: '评测机',
     },
   ]
@@ -105,7 +94,10 @@ export const AdminLayout: React.FC = () => {
               ? (
                 <Button
                   type="text"
-                  icon={collapsed ? <MenuUnfoldOutlined/> : <MenuFoldOutlined/>}
+                  icon={collapsed
+                    ? <div className="i-mdi:menu-close h-[20px] w-[20px]"/>
+                    : <div className="i-mdi:menu-open h-[20px] w-[20px]"/>
+                  }
                   onClick={() => setCollapsed(!collapsed)}
                   style={{
                     fontSize: '16px',
@@ -123,7 +115,7 @@ export const AdminLayout: React.FC = () => {
                 }} trigger={['click']}>
                   <Button
                     type="text"
-                    icon={<MenuOutlined/>}
+                    icon={<div className="i-material-symbols:menu h-[20px] w-[20px]"/>}
                     style={{
                       fontSize: '16px',
                       width: 64,

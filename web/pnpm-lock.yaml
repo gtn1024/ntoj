@@ -5,9 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@ant-design/icons':
-    specifier: 5.2.5
-    version: 5.2.5(react-dom@18.2.0)(react@18.2.0)
   '@uiw/codemirror-extensions-langs':
     specifier: 4.21.13
     version: 4.21.13(@codemirror/autocomplete@6.8.1)(@codemirror/language-data@6.3.1)(@codemirror/language@6.8.0)(@codemirror/legacy-modes@6.3.3)(@codemirror/state@6.2.1)(@codemirror/view@6.17.0)(@lezer/common@1.0.3)(@lezer/highlight@1.1.6)(@lezer/javascript@1.4.7)(@lezer/lr@1.3.9)
@@ -82,6 +79,9 @@ devDependencies:
   '@iconify-json/mdi':
     specifier: 1.1.54
     version: 1.1.54
+  '@iconify-json/mingcute':
+    specifier: 1.1.9
+    version: 1.1.9
   '@mdit/plugin-img-lazyload':
     specifier: 0.4.8
     version: 0.4.8
@@ -936,6 +936,12 @@ packages:
 
   /@iconify-json/mdi@1.1.54:
     resolution: {integrity: sha512-3QAsxte90EalbN2e8J30OqSSZz9qN2x+kmykQwsPahoW2dOtSvj+BR9YdiUd9A5XKk2nuU4UH5Gj/cq6WZ6CzQ==}
+    dependencies:
+      '@iconify/types': 2.0.0
+    dev: true
+
+  /@iconify-json/mingcute@1.1.9:
+    resolution: {integrity: sha512-bDU36w8G6vKJ2RcX3/lpuUtxmAoB8qLzdGFwioUgGaOw7o7YgviNCTA0h4mHYgh3qZQd/RBGoMf7rG+7nZMcRQ==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true

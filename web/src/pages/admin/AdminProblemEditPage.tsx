@@ -3,7 +3,6 @@ import { Button, Form, Input, InputNumber, Switch, Transfer, Upload, message } f
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
-import { MinusCircleOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons'
 import type { RcFile } from 'antd/es/upload'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
@@ -225,12 +224,12 @@ export const AdminProblemEditPage: React.FC = () => {
                     </Form.Item>
                   </div>
                   {
-                    fields.length > 1 && (<MinusCircleOutlined onClick={() => remove(name)}/>)
+                    fields.length > 1 && (<div className="i-mdi:minus-circle-outline" onClick={() => remove(name)}/>)
                   }
                 </div>
               ))}
               <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined/>}>
+                <Button type="dashed" onClick={() => add()} block icon={<div className="i-mdi:plus"/>}>
                   添加样例
                 </Button>
               </Form.Item>
@@ -261,7 +260,7 @@ export const AdminProblemEditPage: React.FC = () => {
 
           <Form.Item label="测试数据">
             <Upload {...props} fileList={fileList}>
-              <Button icon={<UploadOutlined />}>Upload</Button>
+              <Button icon={<div className="i-mdi:cloud-upload"/> }>Upload</Button>
             </Upload>
           </Form.Item>
 

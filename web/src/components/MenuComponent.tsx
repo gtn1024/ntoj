@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { HomeOutlined, MenuOutlined, QuestionOutlined, SettingOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Button, Dropdown, Menu } from 'antd'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -13,27 +12,22 @@ const items: MenuProps['items'] = [
   {
     label: '首页',
     key: '/',
-    icon: <HomeOutlined/>,
   },
   {
     label: '题库',
     key: '/p',
-    icon: <QuestionOutlined/>,
   },
   {
     label: '竞赛',
     key: '/c',
-    icon: <QuestionOutlined/>,
   },
   {
     label: '记录',
     key: '/r',
-    icon: <QuestionOutlined/>,
   },
   {
     label: '关于',
     key: '/about',
-    icon: <SettingOutlined/>,
   },
 ]
 
@@ -83,7 +77,7 @@ export const MenuComponent: React.FC<Props> = (props) => {
           }} trigger={['click']}>
           <Button
             type="text"
-            icon={<MenuOutlined/>}
+            icon={<div className="i-material-symbols:menu h-[20px] w-[20px]"/> }
             style={{
               fontSize: '16px',
               width: 64,

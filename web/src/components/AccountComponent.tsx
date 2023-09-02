@@ -1,8 +1,7 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import type { MenuProps } from 'antd'
-import { Dropdown, Space, message } from 'antd'
-import { DownOutlined } from '@ant-design/icons'
+import { Dropdown, message } from 'antd'
 import { useUserStore } from '../stores/useUserStore'
 import { clearToken } from '../lib/token.ts'
 
@@ -58,10 +57,8 @@ export const AccountComponent: React.FC<Props> = (props) => {
       {user.id
         ? <Dropdown menu={{ items }}>
           <a onClick={e => e.preventDefault()}>
-            <Space>
-              {user.username}
-              <DownOutlined/>
-            </Space>
+            {user.username}
+            <div className="i-material-symbols:keyboard-arrow-down" w="[16px]" h="[16px]"/>
           </a>
         </Dropdown>
         : <Link to={{

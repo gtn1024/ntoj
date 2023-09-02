@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
-import { CalendarOutlined, UserOutlined } from '@ant-design/icons'
 import { message } from 'antd'
 import type { AxiosError } from 'axios'
 import type { HttpResponse } from '../lib/Http.tsx'
@@ -32,10 +31,10 @@ export const AnnouncementPage: React.FC = () => {
         </h1>
         <div flex justify-between>
           <div>
-            <UserOutlined /> {data?.author}
+            <div className="i-mdi:account"/> {data?.author}
           </div>
           <div>
-            <CalendarOutlined/> {data?.createdAt}
+            <div className="i-mdi:calendar"/> {data?.createdAt}
           </div>
         </div>
         <div className={s.content} pt-4>
