@@ -68,7 +68,7 @@ export const ProblemListPage: React.FC = () => {
   ]
 
   return (
-    <div className="m-[15px]">
+    <div m="[15px]">
       <Table
         loading={loading}
         dataSource={data}

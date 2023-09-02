@@ -14,7 +14,7 @@ export const MainLayout: React.FC = () => {
   return (
     <Layout>
       <Header className="flex" style={{ background: colorBgContainer }}>
-        <div className="flex justify-center items-center text-xl mr-1">
+        <div className="mr-1 flex items-center justify-center text-xl">
           <span>NTOJ</span>
         </div>
         <MenuComponent className="flex grow"/>
@@ -23,7 +23,7 @@ export const MainLayout: React.FC = () => {
       <Content className="min-h-[calc(100vh-64px-80px)]">
         <Outlet/>
       </Content>
-      <Footer className="flex justify-center items-center flex-col text-center bg-white h-[80px]">
+      <Footer className="h-[80px] flex flex-col items-center justify-center bg-white text-center">
         <div>NTOJ ©2023</div>
         <div>
           {information.beian ? `备案号：${information.beian}` : null}

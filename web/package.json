@@ -45,16 +45,19 @@
     "@types/react-highlight": "0.12.5",
     "@typescript-eslint/eslint-plugin": "6.2.1",
     "@typescript-eslint/parser": "6.2.0",
+    "@unocss/eslint-config": "0.55.4",
+    "@unocss/preset-attributify": "0.55.4",
+    "@unocss/preset-icons": "0.55.4",
+    "@unocss/preset-uno": "0.55.4",
+    "@unocss/transformer-attributify-jsx": "0.55.4",
     "@vitejs/plugin-react-swc": "3.3.2",
-    "autoprefixer": "10.4.15",
     "eslint": "8.47.0",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.3",
-    "postcss": "8.4.28",
     "rollup-plugin-visualizer": "5.9.2",
     "sass": "1.65.1",
-    "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
+    "unocss": "0.55.4",
     "vite": "4.4.9"
   }
 }

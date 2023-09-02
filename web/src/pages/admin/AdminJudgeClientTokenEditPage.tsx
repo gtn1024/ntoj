@@ -57,7 +57,7 @@ export const AdminJudgeClientTokenEditPage: React.FC = () => {
   }
 
   return (
-        <div className='p-4'>
+        <div p-4>
             <Form
                 name="basic"
                 layout='vertical'

@@ -120,10 +120,10 @@ export const AdminProblemPage: React.FC = () => {
     },
   ]
   return (
-    <div className="flex flex-col p-4">
-      <h2 className='mb-2'>题目管理</h2>
+    <div flex flex-col p-4>
+      <h2 mb-2>题目管理</h2>
       <Space direction='vertical'>
-        <div className="flex justify-between">
+        <div flex justify-between>
           <div>
             <button onClick={() => nav('/admin/problem/new')}>新建</button>
           </div>

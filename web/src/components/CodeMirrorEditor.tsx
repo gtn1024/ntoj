@@ -5,7 +5,7 @@ import type { LanguageName } from '@uiw/codemirror-extensions-langs/src'
 
 interface EditorProps {
   language: string
-  height?: string
+  editorHeight?: number
   value: string
   setValue: (value: string) => void
   className?: string
@@ -17,7 +17,7 @@ export const CodeMirrorEditor: React.FC<EditorProps> = (props) => {
       <div className={props.className}>
         <CodeMirror
           value={props.value}
-          height={props.height}
+          height={`${props.editorHeight}px`}
           theme="dark"
           onChange={props.setValue}
           extensions={[loadLanguage(props.language as LanguageName)!]}

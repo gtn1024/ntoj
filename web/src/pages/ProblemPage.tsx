@@ -156,21 +156,30 @@ export const ProblemPage: React.FC = () => {
             />
           </div>
         </div>
-        <div className={c('grow')} ref={editorWrapperRef}>
+        <div grow ref={editorWrapperRef}>
           <CodeMirrorEditor
-            height={!isMobile ? `${height - 80 - 64 - 40 - 40 - (toolbarVisible ? 160 : 0)}px` : '300px'}
+            editorHeight={!isMobile ? (height - 80 - 64 - 40 - 40 - (toolbarVisible ? 160 : 0)) : 300}
             value={code}
             setValue={setCode}
             language={editorLanguage}
           />
         </div>
-        <div className={c('relative', 'bg-white')}>
-          <div className={c('h-[5px]', 'left-0', 'absolute', 'top-0', 'w-full')}>
+        <div relative bg-white>
+          <div h="[5px]" left-0 absolute top-0 w-full>
             <button
-              className={
-                c('h-[24px]', 'w-[24px]', 'bg-white', 'border-none', 'rounded-[12px]', 'text-[#666]', 'block',
-                  'cursor-pointer', 'left-1/2', 'ml-[-12px]', 'absolute', 'top-[-12px]', 'p-0')
-              }
+              h="[24px]"
+              w="[24px]"
+              bg-white
+              border-none
+              rounded="[12px]"
+              text="[#666]"
+              block
+              cursor-pointer
+              left="1/2"
+              ml="[-12px]"
+              absolute
+              top="[-12px]"
+              p-0
               onClick={() => {
                 setToolbarVisible(!toolbarVisible)
               }}
@@ -228,20 +237,20 @@ export const ProblemPage: React.FC = () => {
                     <div>
                       {
                         !judgeMessage
-                          ? (<div className={c('flex', 'justify-center', 'items-center', 'h-full', 'text-[#999]')}>
+                          ? (<div flex justify-center items-center h-full text="[#999]">
                               提交之后，这里将会显示运行结果
                             </div>)
                           : !isSubmissionOk
-                              ? (<div className={c('flex', 'justify-center', 'items-center', 'h-full', 'text-[#999]')}>
+                              ? (<div flex justify-center items-center h-full text="[#999]">
                                   <Icon icon={loadingAltLoop} height={24} width={24} /> 您的代码已提交，正在为您查询结果...
                                 </div>)
                               : (<div
-                                    className={c('rounded', 'flex', 'flex-col', 'h-full', 'w-full')}
+                                    rounded flex flex-col h-full w-full
                                     style={{
                                       color: statusToColor(judgeMessage as SubmissionStatus),
                                     }}
                                  >
-                                  <div className={c('rounded-t', 'bg-[#f0faf7]', 'flex', 'gap-2', 'px-6', 'py-4')}>
+                                  <div rounded-t bg="[#f0faf7]" flex gap-2 px-6 py-4>
                                     <div style={{
                                       color: statusToColor(judgeMessage as SubmissionStatus),
                                       fontWeight: 'bold',
@@ -250,17 +259,17 @@ export const ProblemPage: React.FC = () => {
                                     </div>
                                     {
                                       submissionResult?.status === 'ACCEPTED' && (<>
-                                        <div className={c('flex', 'items-center', 'gap-1')}>
+                                        <div flex items-center gap-1>
                                           <Icon icon={clockOutline} height={16} width={16} /> 运行时间 {submissionResult?.time}ms
                                         </div>
-                                        <div className={c('flex', 'items-center', 'gap-1')}>
+                                        <div flex items-center gap-1>
                                           <Icon icon={hardwareChipOutline} height={16} width={16} /> 占用内存 {submissionResult?.memory}KB
                                         </div>
                                       </>
                                       )
                                     }
                                   </div>
-                                  <div className={c('rounded-b', 'flex', 'flex-col', 'gap-1', 'px-6', 'py-4')}>
+                                  <div rounded-b flex flex-col gap-1 px-6 py-4>
                                     {
                                       submissionResult?.status === 'ACCEPTED' && (<>
                                         答案正确:恭喜！您提交的程序通过了所有的测试用例

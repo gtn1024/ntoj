@@ -151,9 +151,9 @@ export const AdminProblemEditPage: React.FC = () => {
     },
   }
   return (<>
-    <div className="flex justify-between w-full h-[calc(100vh-64px)]">
-      <div className="w-1/2 overflow-y-auto p-4">
-        <h2 className="text-xl">{mode}题目</h2>
+    <div h="[calc(100vh-64px)]" w-full flex justify-between>
+      <div w="1/2" overflow-y-auto p-4>
+        <h2 text-xl>{mode}题目</h2>
         <Form
           name="basic"
           layout='vertical'
@@ -162,7 +162,7 @@ export const AdminProblemEditPage: React.FC = () => {
           autoComplete="off"
           ref={formRef}
         >
-          <div className="flex">
+          <div flex>
             <Form.Item label="题号" rules={[{ required: true, message: '请输入标题！' }]} name="alias" className="mr-2">
               <Input/>
             </Form.Item>
@@ -172,7 +172,7 @@ export const AdminProblemEditPage: React.FC = () => {
             </Form.Item>
           </div>
 
-          <div className="flex">
+          <div flex>
             <Form.Item label="内存限制" rules={[{ required: true, message: '请输入内存限制！' }]}
                        name="memoryLimit" className="mr-2" initialValue={256}>
               <InputNumber addonAfter="MB" />
@@ -204,10 +204,10 @@ export const AdminProblemEditPage: React.FC = () => {
             {(fields, { add, remove }) => (<>
               {fields.map(({ key, name, ...restField }) => (
                 <div key={key} style={{ display: 'flex', marginBottom: 8, width: '100%' }}>
-                  <div className="flex w-full">
+                  <div w-full flex>
                     <Form.Item
                       {...restField}
-                      className="w-1/2 mr-2"
+                      className="mr-2 w-1/2"
                       label={`输入 ${name + 1}`}
                       name={[name, 'input']}
                       rules={[{ required: true, message: '请输入样例输入' }]}
@@ -216,7 +216,7 @@ export const AdminProblemEditPage: React.FC = () => {
                     </Form.Item>
                     <Form.Item
                       {...restField}
-                      className="w-1/2 mr-2"
+                      className="mr-2 w-1/2"
                       label={`输出 ${name + 1}`}
                       name={[name, 'output']}
                       rules={[{ required: true, message: '请输入样例输出' }]}
@@ -280,8 +280,8 @@ export const AdminProblemEditPage: React.FC = () => {
           </Form.Item>
         </Form>
       </div>
-      <div className="w-1/2 overflow-y-auto p-4">
-        <h2 className="text-xl">预览</h2>
+      <div w="1/2" overflow-y-auto p-4>
+        <h2 text-xl>预览</h2>
         <ProblemDetail data={data}/>
       </div>
     </div>

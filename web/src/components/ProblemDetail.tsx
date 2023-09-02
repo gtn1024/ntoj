@@ -16,7 +16,7 @@ const ProblemSection: React.FC<SectionProps> = (props) => {
     markdown
       ? (
         <div className="mb-[20px]">
-          <h4 className="font-bold mb-1">{title}</h4>
+          <h4 className="mb-1 font-bold">{title}</h4>
           <div dangerouslySetInnerHTML={{ __html: html }}/>
         </div>
         )
@@ -40,25 +40,25 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
   }
   const SampleField: React.FC<{ title: string; data: string }> = (props) => {
     return (
-      <div className="w-full mt-1">
-        <div className="flex flex-row justify-between items-center mb-1">
-          <span className="grow">{props.title}</span>
+      <div mt-1 w-full>
+        <div mb-1 flex flex-row items-center justify-between>
+          <span grow>{props.title}</span>
           <button onClick={() => copyToClipBoard(props.data)}>复制</button>
         </div>
-        <div className="bg-white p-2 border-0 border-l-2 border-solid border-green-300">
-          <pre className='m-0'>{props.data}</pre>
+        <div border-0 border-l-2 border-green-300 border-solid bg-white p-2>
+          <pre m-0>{props.data}</pre>
         </div>
       </div>
     )
   }
   return (
-    <div className="mb-[20px]">
+    <div mb="[20px]">
       {props.samples?.map((item, idx) => {
         return (
           <div key={idx}>
             <div key={item.input}>
-              <h4 className="font-bold mb-1">样例 {idx + 1}</h4>
-              <div className="flex flex-col">
+              <h4 mb-1 font-bold>样例 {idx + 1}</h4>
+              <div flex flex-col>
                 <SampleField title='输入' data={item.input}/>
                 <SampleField title='输出' data={item.output}/>
               </div>
@@ -76,14 +76,14 @@ export const ProblemDetail: React.FC<{ data?: Problem }> = (props) => {
 
   return (
     <div className={c(!isMobile && 'm-4')}>
-      <div className="p-4">
+      <div p-4>
         <div>
-          <h2 className="font-bold">{data?.alias} {data?.title}</h2>
+          <h2 font-bold>{data?.alias} {data?.title}</h2>
         </div>
-        <div className="pb-[20px] text-xs">
-          <span className="mr-1">时间限制：{data?.timeLimit} ms</span>
-          <span className="mr-1">内存限制：{data?.memoryLimit} MB</span>
-          <span className="mr-1">代码长度限制：{data?.codeLength} KB</span>
+        <div pb="[20px]" text-xs>
+          <span mr-1>时间限制：{data?.timeLimit} ms</span>
+          <span mr-1>内存限制：{data?.memoryLimit} MB</span>
+          <span mr-1>代码长度限制：{data?.codeLength} KB</span>
         </div>
         <div>
           <ProblemSection title='题目背景' markdown={data?.background}/>

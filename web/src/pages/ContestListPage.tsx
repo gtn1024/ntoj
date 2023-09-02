@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import c from 'classnames'
 import type { L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { SingleContestCard } from '../components/contest/list/SingleContestCard.tsx'
@@ -16,8 +15,8 @@ export const ContestListPage: React.FC = () => {
       })
   }, [])
   return (
-    <div className={c('max-w-[1200px]', 'mx-auto py-4')}>
-      <div className={c('flex flex-col gap-4')}>
+    <div max-w="[1200px]" mx-auto py-4>
+      <div flex flex-col gap-4>
         {
           list.map((contest, idx) => {
             return (
