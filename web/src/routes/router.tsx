@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { preload } from 'swr'
 import type { AxiosError } from 'axios'
+import { lazy } from 'react'
 import { MainLayout } from '../layouts/MainLayout.tsx'
 import { SignInPage } from '../pages/SignInPage.tsx'
 import { AdminLayout } from '../layouts/AdminLayout.tsx'
@@ -9,24 +10,6 @@ import { getToken } from '../lib/token.ts'
 import { http } from '../lib/Http.tsx'
 import { ErrorForbidden, ErrorUnauthorized } from '../errors.ts'
 import { ErrorPage } from '../pages/ErrorPage.tsx'
-import { AdminHomePage } from '../pages/admin/AdminHomePage.tsx'
-import { AdminAnnouncementPage } from '../pages/admin/AdminAnnouncementPage.tsx'
-import { AdminAnnouncementEditPage } from '../pages/admin/AdminAnnouncementEditPage.tsx'
-import { HomePage } from '../pages/HomePage.tsx'
-import { AnnouncementPage } from '../pages/AnnouncementPage.tsx'
-import { UserProfilePage } from '../pages/UserProfilePage.tsx'
-import { AdminProblemPage } from '../pages/admin/AdminProblemPage.tsx'
-import { ProblemListPage } from '../pages/ProblemListPage.tsx'
-import { ProblemPage } from '../pages/ProblemPage.tsx'
-import { NotFoundPage } from '../pages/404.tsx'
-import { AdminProblemEditPage } from '../pages/admin/AdminProblemEditPage.tsx'
-import { AdminLanguagePage } from '../pages/admin/AdminLanguagePage.tsx'
-import { AdminLanguageEditPage } from '../pages/admin/AdminLanguageEditPage.tsx'
-import { AdminJudgeClientTokenPage } from '../pages/admin/AdminJudgeClientTokenPage.tsx'
-import { AdminJudgeClientTokenEditPage } from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
-import { RecordListPage } from '../pages/RecordListPage.tsx'
-import { RecordPage } from '../pages/RecordPage.tsx'
-import { ContestListPage } from '../pages/ContestListPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -61,6 +44,25 @@ async function adminLoader() {
       }
     })
 }
+
+const AdminHomePage = lazy(() => import('../pages/admin/AdminHomePage'))
+const AdminAnnouncementPage = lazy(() => import('../pages/admin/AdminAnnouncementPage'))
+const RecordPage = lazy(() => import('../pages/RecordPage'))
+const ProblemPage = lazy(() => import('../pages/ProblemPage'))
+const RecordListPage = lazy(() => import('../pages/RecordListPage'))
+const AdminAnnouncementEditPage = lazy(() => import('../pages/admin/AdminAnnouncementEditPage'))
+const HomePage = lazy(() => import('../pages/HomePage'))
+const AnnouncementPage = lazy(() => import('../pages/AnnouncementPage'))
+const UserProfilePage = lazy(() => import('../pages/UserProfilePage'))
+const AdminProblemPage = lazy(() => import('../pages/admin/AdminProblemPage'))
+const ProblemListPage = lazy(() => import('../pages/ProblemListPage'))
+const NotFoundPage = lazy(() => import('../pages/404'))
+const AdminProblemEditPage = lazy(() => import('../pages/admin/AdminProblemEditPage'))
+const AdminLanguagePage = lazy(() => import('../pages/admin/AdminLanguagePage'))
+const AdminLanguageEditPage = lazy(() => import('../pages/admin/AdminLanguageEditPage'))
+const AdminJudgeClientTokenPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenPage'))
+const AdminJudgeClientTokenEditPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenEditPage'))
+const ContestListPage = lazy(() => import('../pages/ContestListPage'))
 
 export const router = createBrowserRouter(
   [

@@ -79,3 +79,5 @@ export const ProblemListPage: React.FC = () => {
     </div>
   )
 }
+
+export default ProblemListPage

@@ -153,3 +153,5 @@ export const RecordListPage: React.FC = () => {
     </div>
   )
 }
+
+export default RecordListPage

@@ -143,3 +143,5 @@ export const RecordPage: React.FC = () => {
     </div>
   )
 }
+
+export default RecordPage

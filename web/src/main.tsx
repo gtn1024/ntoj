@@ -17,6 +17,8 @@ document.onkeydown = (e) => {
 const root = ReactDOM.createRoot(div)
 root.render(
   <React.StrictMode>
-    <App />
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <App />
+    </React.Suspense>
   </React.StrictMode>,
 )

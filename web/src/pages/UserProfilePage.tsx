@@ -30,3 +30,5 @@ export const UserProfilePage: React.FC = () => {
     </div>
   )
 }
+
+export default UserProfilePage

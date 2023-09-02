@@ -127,3 +127,5 @@ export const AdminJudgeClientTokenPage: React.FC = () => {
     </div>
   )
 }
+
+export default AdminJudgeClientTokenPage

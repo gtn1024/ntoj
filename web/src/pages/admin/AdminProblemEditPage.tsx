@@ -287,3 +287,5 @@ export const AdminProblemEditPage: React.FC = () => {
     </div>
   </>)
 }
+
+export default AdminProblemEditPage

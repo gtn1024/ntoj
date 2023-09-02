@@ -45,3 +45,5 @@ export const AnnouncementPage: React.FC = () => {
     </div>
   )
 }
+
+export default AnnouncementPage

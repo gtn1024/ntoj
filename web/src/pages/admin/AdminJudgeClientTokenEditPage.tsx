@@ -86,3 +86,5 @@ export const AdminJudgeClientTokenEditPage: React.FC = () => {
         </div>
   )
 }
+
+export default AdminJudgeClientTokenEditPage

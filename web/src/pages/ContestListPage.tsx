@@ -28,3 +28,5 @@ export const ContestListPage: React.FC = () => {
     </div>
   )
 }
+
+export default ContestListPage

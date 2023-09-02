@@ -123,3 +123,5 @@ export const AdminLanguageEditPage: React.FC = () => {
         </div>
   )
 }
+
+export default AdminLanguageEditPage

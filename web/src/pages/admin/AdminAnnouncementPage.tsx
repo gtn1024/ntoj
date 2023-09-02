@@ -135,3 +135,5 @@ export const AdminAnnouncementPage: React.FC = () => {
     </div>
   )
 }
+
+export default AdminAnnouncementPage

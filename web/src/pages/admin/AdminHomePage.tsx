@@ -12,3 +12,5 @@ export const AdminHomePage: React.FC = () => {
     </div>
   )
 }
+
+export default AdminHomePage

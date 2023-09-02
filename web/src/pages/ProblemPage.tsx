@@ -301,3 +301,5 @@ export const ProblemPage: React.FC = () => {
     </div>
   )
 }
+
+export default ProblemPage
