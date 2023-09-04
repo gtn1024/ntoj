@@ -43,7 +43,7 @@
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "@types/react-highlight": "0.12.5",
-    "@typescript-eslint/eslint-plugin": "6.2.1",
+    "@typescript-eslint/eslint-plugin": "6.6.0",
     "@typescript-eslint/parser": "6.2.0",
     "@unocss/eslint-config": "0.55.4",
     "@unocss/preset-attributify": "0.55.4",
