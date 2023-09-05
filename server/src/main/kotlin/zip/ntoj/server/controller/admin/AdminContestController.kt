@@ -88,7 +88,7 @@ class AdminContestController(
                 allowAllLanguages = contest.allowAllLanguages,
                 visible = contest.visible,
                 showFinalBoard = contest.showFinalBoard,
-                author = contest.author.username!!
+                author = contest.author.username!!,
             )
         }
     }
