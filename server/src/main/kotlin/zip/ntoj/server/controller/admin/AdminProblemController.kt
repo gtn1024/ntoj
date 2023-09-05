@@ -163,7 +163,9 @@ class AdminProblemController(
             throw AppException("文件为空", 400)
         }
         // check whether zip file
-        if (multipartFile.originalFilename?.endsWith(".zip") != true || multipartFile.contentType != "application/zip") {
+        if (multipartFile.originalFilename?.endsWith(".zip") != true ||
+            (multipartFile.contentType != "application/zip" && multipartFile.contentType != "application/x-zip-compressed")
+        ) {
             throw AppException("文件格式错误", 400)
         }
         // get files from zip

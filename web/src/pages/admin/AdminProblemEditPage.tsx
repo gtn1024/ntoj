@@ -116,9 +116,9 @@ export const AdminProblemEditPage: React.FC = () => {
   const props: UploadProps = {
     onChange: handleChange,
     multiple: false,
-    accept: 'application/zip',
+    accept: 'application/zip, application/x-zip-compressed',
     beforeUpload: (file) => {
-      const isZIP = file.type === 'application/zip'
+      const isZIP = file.type === 'application/zip' || file.type === 'application/x-zip-compressed'
       if (!isZIP) {
         void message.error(`${file.name} is not a zip file`)
         return false
