@@ -62,6 +62,8 @@ const AdminLanguagePage = lazy(() => import('../pages/admin/AdminLanguagePage'))
 const AdminLanguageEditPage = lazy(() => import('../pages/admin/AdminLanguageEditPage'))
 const AdminJudgeClientTokenPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenPage'))
 const AdminJudgeClientTokenEditPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenEditPage'))
+const AdminContestPage = lazy(() => import('../pages/admin/AdminContestPage'))
+const AdminContestEditPage = lazy(() => import('../pages/admin/AdminContestEditPage'))
 const ContestListPage = lazy(() => import('../pages/ContestListPage'))
 
 export const router = createBrowserRouter(
@@ -91,6 +93,14 @@ export const router = createBrowserRouter(
             { index: true, element: <AdminProblemPage/> },
             { path: 'new', element: <AdminProblemEditPage/> },
             { path: ':id/edit', element: <AdminProblemEditPage/> },
+          ],
+        },
+        {
+          path: 'contest',
+          children: [
+            { index: true, element: <AdminContestPage/> },
+            { path: 'new', element: <AdminContestEditPage/> },
+            { path: ':id/edit', element: <AdminContestEditPage/> },
           ],
         },
         {
