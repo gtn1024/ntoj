@@ -144,3 +144,23 @@ type ContestPermission = |
   'PRIVATE' |
   'PASSWORD'
 
+namespace AdminDto {
+  interface Contest {
+    id: number
+    title: string
+    description?: string
+    startTime: string
+    endTime: string
+    freezeTime?: number
+    type: ContestType
+    permission: ContestPermission
+    password?: string
+    problems: number[]
+    users: number[]
+    languages: number[]
+    allowAllLanguages: boolean
+    visible: boolean
+    showFinalBoard: boolean
+    author: string
+  }
+}

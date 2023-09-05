@@ -7,7 +7,9 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToMany
+import jakarta.persistence.ManyToOne
 import java.time.Instant
 
 @Entity(name = "t_contests")
@@ -23,6 +25,9 @@ class Contest(
 
     @Column(nullable = false) @Enumerated(EnumType.STRING) var permission: ContestPermission = ContestPermission.PUBLIC,
     var password: String? = null,
+
+    @ManyToOne @JoinColumn(nullable = false)
+    var author: User,
 
     @ManyToMany var problems: List<Problem> = listOf(),
 
