@@ -15,6 +15,4 @@ RUN apt update && \
     golang \
     fpc \
     mono-complete \
-    ruby \
-    php \
     nodejs
