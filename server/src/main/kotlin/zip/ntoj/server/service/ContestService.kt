@@ -22,7 +22,8 @@ interface ContestService {
         onlyVisible: Boolean = false,
     ): Long
 
-    fun save(contest: Contest): Contest
+    fun add(contest: Contest): Contest
+    fun update(contest: Contest): Contest
     fun delete(id: Long)
     fun exists(id: Long): Boolean
 }
@@ -50,7 +51,13 @@ class ContestServiceImpl(
         return contestRepository.count(buildSpecification(onlyVisible))
     }
 
-    override fun save(contest: Contest): Contest {
+    override fun add(contest: Contest): Contest {
+        if (contest.contestId != null) throw AppException("竞赛ID不应该存在", 400)
+        return contestRepository.save(contest)
+    }
+
+    override fun update(contest: Contest): Contest {
+        if (contest.contestId == null) throw AppException("竞赛ID不应该不存在", 400)
         return contestRepository.save(contest)
     }
 
