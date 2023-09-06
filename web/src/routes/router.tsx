@@ -10,6 +10,7 @@ import { getToken } from '../lib/token.ts'
 import { http } from '../lib/Http.tsx'
 import { ErrorForbidden, ErrorUnauthorized } from '../errors.ts'
 import { ErrorPage } from '../pages/ErrorPage.tsx'
+import { ContestLayout } from '../layouts/ContestLayout.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -169,6 +170,12 @@ export const router = createBrowserRouter(
             { index: true, element: <ContestListPage/> },
           ],
         },
+      ],
+    },
+    {
+      path: '/c/:id',
+      element: <ContestLayout/>,
+      children: [
       ],
     },
     {
