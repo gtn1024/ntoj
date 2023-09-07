@@ -25,8 +25,6 @@ import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.UserService
 import zip.ntoj.shared.model.R
 import java.time.Instant
-import java.time.ZoneId
-import java.util.TimeZone
 
 @RestController
 @RequestMapping("/admin/contest")
