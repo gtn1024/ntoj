@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Outlet, useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
-import type { AxiosError } from 'axios/index'
+import type { AxiosError } from 'axios'
 import { message } from 'antd'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
