@@ -45,7 +45,7 @@ export const AdminContestEditPage: React.FC = () => {
       })
   }, [mode, id, formRef])
 
-  const onSubmit = (v) => {
+  const onSubmit = (v: any) => {
     const params = {
       ...v,
       languages: languages.map(l => Number.parseInt(l)),
