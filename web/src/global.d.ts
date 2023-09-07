@@ -134,6 +134,7 @@ interface Contest {
   type: ContestType
   permission: ContestPermission
   userCount: number
+  author: string
 }
 
 type ContestType = |

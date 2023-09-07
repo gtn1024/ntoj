@@ -25,5 +25,6 @@ declare module 'react' {
     top?: string
     relative?: boolean
     shadow?: boolean
+    leading?: string
   }
 }

@@ -66,6 +66,7 @@ const AdminJudgeClientTokenEditPage = lazy(() => import('../pages/admin/AdminJud
 const AdminContestPage = lazy(() => import('../pages/admin/AdminContestPage'))
 const AdminContestEditPage = lazy(() => import('../pages/admin/AdminContestEditPage'))
 const ContestListPage = lazy(() => import('../pages/ContestListPage'))
+const ContestHome = lazy(() => import('../pages/contest/ContestHome'))
 
 export const router = createBrowserRouter(
   [
@@ -176,6 +177,7 @@ export const router = createBrowserRouter(
       path: '/c/:id',
       element: <ContestLayout/>,
       children: [
+        { index: true, element: <ContestHome/> },
       ],
     },
     {
