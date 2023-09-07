@@ -61,7 +61,7 @@ export const ContestLayout: React.FC = () => {
       <div h="[48px]" border-b="1px #dddddd solid">
         <div h-full flex items-center justify-between leading="[48px]">
           <div flex>
-            <div bg="[#232c31]" text-white h-full px-4>
+            <div bg="[#232c31]" text-white h-full px-4 mr-1>
               {contest?.title}
             </div>
             <MenuComponent items={items} current={current} setCurrent={setCurrent} onClick={(item) => {
