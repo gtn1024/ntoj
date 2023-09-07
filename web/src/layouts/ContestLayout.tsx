@@ -5,6 +5,7 @@ import type { AxiosError } from 'axios'
 import { message } from 'antd'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
+import { AccountComponent } from '../components/AccountComponent.tsx'
 
 interface MenuProps {
   items: {
@@ -72,12 +73,12 @@ export const ContestLayout: React.FC = () => {
               onClick={() => nav('/c') }
             >退出</div>
           </div>
-          <div>
-            user
+          <div m-4>
+            <AccountComponent className="flex justify-end"/>
           </div>
         </div>
       </div>
-      <div grow>
+      <div grow overflow-y-auto>
         <Outlet/>
       </div>
     </div>

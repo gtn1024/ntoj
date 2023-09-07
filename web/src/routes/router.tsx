@@ -176,6 +176,7 @@ export const router = createBrowserRouter(
     {
       path: '/c/:id',
       element: <ContestLayout/>,
+      loader: rootLoader,
       children: [
         { index: true, element: <ContestHome/> },
       ],
