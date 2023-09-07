@@ -24,7 +24,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
   flyway:
     enabled: false
     baseline-version: 1.0
