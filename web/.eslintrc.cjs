@@ -13,7 +13,7 @@ module.exports = {
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   plugins: ['react-refresh'],
   rules: {
-    'react-refresh/only-export-components': 'warn',
+    'react-refresh/only-export-components': 'off',
     'curly': 'off',
     "@typescript-eslint/brace-style": "off",
     'max-statements-per-line': 'off',
