@@ -25,7 +25,14 @@ RUN apt update && \
     mono-complete \
     nodejs \
     npm \
-    wget
+    wget \
+    unzip
+
+RUN wget https://github.com/JetBrains/kotlin/releases/download/v1.9.10/kotlin-compiler-1.9.10.zip -O /tmp/kotlin.zip && \
+    unzip /tmp/kotlin.zip -d /usr/lib && \
+    rm /tmp/kotlin.zip && \
+    ln -s /usr/lib/kotlinc/bin/kotlinc /usr/bin/kotlinc && \
+    ln -s /usr/lib/kotlinc/bin/kotlin /usr/bin/kotlin
 
 RUN npm install -g pm2 && \
     wget https://github.com/criyle/go-judge/releases/download/v1.6.10/executorserver_1.6.10_linux_amd64 -O /usr/bin/sandbox && \
