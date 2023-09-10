@@ -201,8 +201,8 @@ class AdminProblemController(
 }
 
 data class ProblemRequest(
-    @field:NotEmpty(message = "题号不能为空") val alias: String?,
-    @field:NotEmpty(message = "标题不能为空") val title: String?,
+    @field:NotEmpty(message = "题号不能为空") val alias: String,
+    @field:NotEmpty(message = "标题不能为空") val title: String,
     val background: String?,
     val description: String?,
     val inputDescription: String?,

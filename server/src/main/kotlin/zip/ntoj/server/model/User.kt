@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 
 @Entity(name = "t_users")
 class User(
-    var username: String?,
+    @Column(nullable = false, unique = true) var username: String,
     var password: String?,
     var salt: String?,
     var email: String?,

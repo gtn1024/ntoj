@@ -79,7 +79,7 @@ class AuthController(
 }
 
 data class UserRequest(
-    @field:NotEmpty(message = "用户名不能为空") val username: String?,
+    @field:NotEmpty(message = "用户名不能为空") val username: String,
     @field:NotEmpty(message = "密码不能为空") val password: String?,
     @field:NotEmpty(message = "邮箱不能为空") val email: String?,
     @field:NotEmpty(message = "姓名不能为空") val realName: String?,

@@ -14,8 +14,8 @@ import org.hibernate.type.SqlTypes.JSON
 
 @Entity(name = "t_problems")
 class Problem(
-    var title: String?,
-    @Column(name = "p_alias") var alias: String?,
+    @Column(nullable = false) var title: String?,
+    @Column(name = "p_alias", unique = true, nullable = false) var alias: String,
     @Column(columnDefinition = "text") var background: String?,
     @Column(columnDefinition = "text") var description: String?,
     @Column(columnDefinition = "text") var inputDescription: String?,
