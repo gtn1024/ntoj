@@ -30,9 +30,9 @@ interface Announcement {
 }
 
 interface Problem {
-  id?: number
-  title?: string
-  alias?: string
+  id: number
+  title: string
+  alias: string
   background?: string
   description?: string
   inputDescription?: string
