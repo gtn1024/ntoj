@@ -89,7 +89,7 @@ export const ProblemPage: React.FC = () => {
     http.post<Submission>(`/problem/${alias ?? 0}/submit`, { code, language: Number.parseInt(language) })
       .then((res) => {
         setJudgeMessage(res.data.data.status)
-        const id = setInterval(() => {
+        const id = window.setInterval(() => {
           http.get<Submission>(`/submission/${res.data.data.id}`)
             .then((res) => {
               if (res.data.data.stage === 'FINISHED') {
