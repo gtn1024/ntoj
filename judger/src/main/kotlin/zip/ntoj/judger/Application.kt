@@ -46,6 +46,7 @@ suspend fun main() {
         try {
             if (!sandboxAvailable()) {
                 LOGGER.error("沙箱服务器连接失败，5秒后重试")
+                connected = false
                 sleep(5000)
                 continue
             }
@@ -114,7 +115,6 @@ suspend fun main() {
             throw e
         } catch (e: ConnectException) {
             connected = false
-            e.printStackTrace()
             LOGGER.error("服务器连接失败，5秒后重试")
             sleep(5000)
         } catch (e: Exception) {
