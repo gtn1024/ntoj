@@ -90,12 +90,12 @@ export const AdminLanguageEditPage: React.FC = () => {
                     <Input/>
                 </Form.Item>
 
-                <Form.Item label="时间倍率" name="timeLimitRate">
-                  <InputNumber defaultValue={1} min={1} max={10}/>
+                <Form.Item label="时间倍率" name="timeLimitRate" initialValue={1}>
+                  <InputNumber min={1} max={10}/>
                 </Form.Item>
 
-                <Form.Item label="空间倍率" name="memoryLimitRate">
-                  <InputNumber defaultValue={1} min={1} max={10}/>
+                <Form.Item label="空间倍率" name="memoryLimitRate" initialValue={1}>
+                  <InputNumber min={1} max={10}/>
                 </Form.Item>
 
                 <Form.Item label="源代码文件名" name="sourceFilename">

@@ -105,9 +105,8 @@ export const AdminContestEditPage: React.FC = () => {
             <InputNumber addonAfter="分钟" />
           </Form.Item>
 
-          <Form.Item label="类型" name="type">
+          <Form.Item label="类型" name="type" initialValue="ICPC">
             <Select
-              defaultValue="ICPC"
               options={[
                 { value: 'ICPC', label: 'ICPC' },
               ]}
@@ -136,9 +135,8 @@ export const AdminContestEditPage: React.FC = () => {
           </Form.Item>
 
           <Space>
-            <Form.Item label="权限" name="permission">
+            <Form.Item label="权限" name="permission" initialValue="PUBLIC">
               <Select
-                defaultValue="PUBLIC"
                 onChange={v => setContestPermission(v as ContestPermission)}
                 options={[
                   { value: 'PUBLIC', label: '公开比赛' },
