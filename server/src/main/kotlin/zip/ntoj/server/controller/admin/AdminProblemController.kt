@@ -219,9 +219,9 @@ data class ProblemRequest(
 )
 
 data class ProblemDto(
-    val id: Long?,
-    val title: String?,
-    val alias: String?,
+    val id: Long,
+    val title: String,
+    val alias: String,
     val background: String?,
     val description: String?,
     val inputDescription: String?,
@@ -241,7 +241,7 @@ data class ProblemDto(
 ) {
     companion object {
         fun from(problem: Problem): ProblemDto = ProblemDto(
-            id = problem.problemId,
+            id = problem.problemId!!,
             title = problem.title,
             alias = problem.alias,
             background = problem.background,

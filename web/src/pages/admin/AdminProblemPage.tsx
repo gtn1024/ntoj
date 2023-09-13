@@ -29,7 +29,7 @@ export const AdminProblemPage: React.FC = () => {
     error,
     mutate,
   } = useSWR(`/admin/problem?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
-    return http.get<L<Problem>>(path)
+    return http.get<L<AdminDto.Problem>>(path)
       .then((res) => {
         setPagination({
           ...pagination,
@@ -55,7 +55,7 @@ export const AdminProblemPage: React.FC = () => {
       })
   }
 
-  const columns: ColumnsType<Problem> = [
+  const columns: ColumnsType<AdminDto.Problem> = [
     {
       title: 'ID',
       dataIndex: 'id',

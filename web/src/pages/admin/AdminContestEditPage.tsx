@@ -34,7 +34,7 @@ export const AdminContestEditPage: React.FC = () => {
           throw err
         })
     }
-    http.get<L<Language>>('/admin/language')
+    http.get<L<AdminDto.Language>>('/admin/language')
       .then((res) => {
         const ls = res.data.data.list
         setAllLanguages(ls.map(l => ({ key: l.id.toString(), title: l.languageName })))

@@ -25,7 +25,7 @@ export const AdminLanguageEditPage: React.FC = () => {
   const formRef = useRef<FormInstance>(null)
   useEffect(() => {
     if (mode === '修改' && id) {
-      http.get<Language>(`/admin/language/${id}`)
+      http.get<AdminDto.Language>(`/admin/language/${id}`)
         .then((res) => {
           formRef?.current?.setFieldsValue({
             languageName: res.data.data.languageName ?? '',
@@ -47,7 +47,7 @@ export const AdminLanguageEditPage: React.FC = () => {
 
   const onSubmit = (v: Params) => {
     if (mode === '新建') {
-      http.post<Language>('/admin/language', { ...v })
+      http.post<AdminDto.Language>('/admin/language', { ...v })
         .then(() => {
           void message.success('发布成功')
           nav('/admin/language')

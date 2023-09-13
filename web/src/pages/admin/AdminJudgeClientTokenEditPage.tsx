@@ -18,7 +18,7 @@ export const AdminJudgeClientTokenEditPage: React.FC = () => {
   const formRef = useRef<FormInstance>(null)
   useEffect(() => {
     if (mode === '修改' && id) {
-      http.get<JudgeClientToken>(`/admin/judge_client_token/${id}`)
+      http.get<AdminDto.JudgeClientToken>(`/admin/judge_client_token/${id}`)
         .then((res) => {
           formRef?.current?.setFieldsValue({
             name: res.data.data.name ?? '',
@@ -34,7 +34,7 @@ export const AdminJudgeClientTokenEditPage: React.FC = () => {
 
   const onSubmit = (v: Params) => {
     if (mode === '新建') {
-      http.post<JudgeClientToken>('/admin/judge_client_token', { ...v })
+      http.post<AdminDto.JudgeClientToken>('/admin/judge_client_token', { ...v })
         .then(() => {
           void message.success('发布成功')
           nav('/admin/judge_client_token')

@@ -21,13 +21,13 @@ export const AdminProblemEditPage: React.FC = () => {
   const { id } = useParams()
   const nav = useNavigate()
   const formRef = useRef<FormInstance>(null)
-  const [data, setData] = useState<Problem>()
+  const [data, setData] = useState<AdminDto.Problem>()
   const [languages, setLanguages] = useState<string[]>([])
   const [allLanguages, setAllLanguages] = useState<{ key: string; title: string }[]>([])
   const [testcaseFileId, setTestcaseFileId] = useState<number>()
   useEffect(() => {
     if (mode === '修改' && id) {
-      http.get<Problem>(`/admin/problem/${id}`)
+      http.get<AdminDto.Problem>(`/admin/problem/${id}`)
         .then((res) => {
           setData(res.data.data)
           setLanguages(res.data.data.languages?.map(l => l.toString()) ?? [])
@@ -54,7 +54,7 @@ export const AdminProblemEditPage: React.FC = () => {
           throw err
         })
     }
-    http.get<L<Language>>('/admin/language')
+    http.get<L<AdminDto.Language>>('/admin/language')
       .then((res) => {
         const ls = res.data.data.list
         setAllLanguages(ls.map(l => ({ key: l.id.toString(), title: l.languageName })))
@@ -72,7 +72,7 @@ export const AdminProblemEditPage: React.FC = () => {
     }
     const data = { ...v, languages: languages.map(Number), testcase: testcaseFileId }
     if (mode === '新建') {
-      http.post<Problem>('/admin/problem', data)
+      http.post<AdminDto.Problem>('/admin/problem', data)
         .then(() => {
           void message.success('创建成功')
           nav('/admin/problem')
@@ -157,7 +157,7 @@ export const AdminProblemEditPage: React.FC = () => {
           name="basic"
           layout='vertical'
           onFinish={onSubmit}
-          onChange={() => setData(formRef.current?.getFieldsValue() as Problem)}
+          onChange={() => setData(formRef.current?.getFieldsValue() as AdminDto.Problem)}
           autoComplete="off"
           ref={formRef}
         >
@@ -281,7 +281,7 @@ export const AdminProblemEditPage: React.FC = () => {
       </div>
       <div w="1/2" overflow-y-auto p-4>
         <h2 text-xl>预览</h2>
-        <ProblemDetail data={data}/>
+        <ProblemDetail data={{ ...data } as Problem}/>
       </div>
     </div>
   </>)

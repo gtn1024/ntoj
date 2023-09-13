@@ -43,11 +43,8 @@ interface Problem {
   samples: ProblemSample[]
   note?: string
   author?: string
-  createdAt?: string
-  visible?: boolean
   languages?: number[]
-  testcase?: TestcaseDto
-  allowAllLanguages?: boolean
+  allowAllLanguages: boolean
   codeLength: number
 }
 
@@ -58,11 +55,6 @@ interface TestcaseDto {
 interface ProblemSample {
   input: string
   output: string
-}
-
-interface Pagination {
-  page: number
-  pageSize: number
 }
 
 type SubmissionStatus = |
@@ -106,25 +98,6 @@ interface Submission {
 
 type JudgeStage = 'PENDING' | 'COMPILING' | 'JUDGING' | 'FINISHED'
 
-interface Language {
-  id: number
-  languageName: string
-  compileCommand?: string
-  executeCommand?: string
-  enabled: boolean
-  memoryLimitRate?: number
-  timeLimitRate?: number
-  sourceFilename?: string
-  targetFilename?: string
-}
-
-interface JudgeClientToken {
-  id: number
-  name: string
-  token: string
-  enabled: boolean
-}
-
 interface Contest {
   id: number
   title: string
@@ -163,5 +136,46 @@ namespace AdminDto {
     visible: boolean
     showFinalBoard: boolean
     author: string
+  }
+
+  interface JudgeClientToken {
+    id: number
+    name: string
+    token: string
+    enabled: boolean
+  }
+
+  interface Language {
+    id: number
+    languageName: string
+    compileCommand?: string
+    executeCommand?: string
+    enabled: boolean
+    memoryLimitRate?: number
+    timeLimitRate?: number
+    sourceFilename?: string
+    targetFilename?: string
+  }
+
+  interface Problem {
+    id: number
+    title: string
+    alias: string
+    background?: string
+    description?: string
+    inputDescription?: string
+    outputDescription?: string
+    timeLimit?: number
+    memoryLimit?: number
+    judgeTimes?: number
+    samples: ProblemSample[]
+    note?: string
+    author?: string
+    visible?: boolean
+    languages?: number[]
+    allowAllLanguages: boolean
+    createdAt?: string
+    testcase: TestcaseDto
+    codeLength: number
   }
 }
