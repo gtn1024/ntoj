@@ -24,6 +24,7 @@ class Submission(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
+    var contestId: Long? = null,
     @OneToOne var language: Language? = null,
     @Column(columnDefinition = "text", length = 65_536) // 64KB
     var code: String? = null,
@@ -51,5 +52,6 @@ class Submission(
 ) : BaseEntity() {
     enum class SubmissionOrigin {
         PROBLEM, // 0
+        CONTEST, // 1
     }
 }

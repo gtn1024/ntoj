@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import { message } from 'antd'
@@ -43,6 +43,13 @@ export const ContestLayout: React.FC = () => {
   const { id } = useParams()
   const nav = useNavigate()
   const [current, setCurrent] = useState('')
+  const { pathname } = useLocation()
+  useEffect(() => {
+    if (pathname.includes('/p')) {
+      return setCurrent('/p')
+    }
+    setCurrent('')
+  }, [pathname])
   const { data: contest } = useSWR(`/contest/${id}`, async (path) => {
     return http.get<Contest>(path)
       .then((res) => {
@@ -55,7 +62,7 @@ export const ContestLayout: React.FC = () => {
   })
   const items: MenuProps['items'] = [
     { label: '首页', key: '' },
-    { label: '题目', key: '/problems' },
+    { label: '题目', key: '/p' },
   ]
   return (
     <div flex flex-col h-screen>

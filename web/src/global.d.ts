@@ -108,6 +108,8 @@ interface Contest {
   permission: ContestPermission
   userCount: number
   author: string
+  languages?: number[]
+  allowAllLanguages: boolean
 }
 
 type ContestType = |
@@ -129,13 +131,18 @@ namespace AdminDto {
     type: ContestType
     permission: ContestPermission
     password?: string
-    problems: number[]
+    problems: ContestProblem[]
     users: number[]
     languages: number[]
     allowAllLanguages: boolean
     visible: boolean
     showFinalBoard: boolean
     author: string
+  }
+
+  interface ContestProblem {
+    contestProblemIndex: number
+    problemId: number
   }
 
   interface JudgeClientToken {

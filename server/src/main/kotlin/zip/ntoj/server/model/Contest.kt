@@ -1,5 +1,7 @@
 package zip.ntoj.server.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -10,6 +12,8 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
+import org.hibernate.annotations.JdbcTypeCode
+import org.hibernate.type.SqlTypes.JSON
 import java.time.Instant
 
 @Entity(name = "t_contests")
@@ -29,7 +33,7 @@ class Contest(
     @ManyToOne @JoinColumn(nullable = false)
     var author: User,
 
-    @ManyToMany var problems: List<Problem> = listOf(),
+    @JdbcTypeCode(JSON) @Column(nullable = false) var problems: List<ContestProblem> = listOf(),
 
     @ManyToMany var users: List<User> = listOf(),
 
@@ -52,3 +56,8 @@ class Contest(
         PASSWORD,
     }
 }
+
+data class ContestProblem @JsonCreator constructor(
+    @JsonProperty("problemId") var problemId: Long,
+    @JsonProperty("contestProblemIndex") var contestProblemIndex: Int,
+)

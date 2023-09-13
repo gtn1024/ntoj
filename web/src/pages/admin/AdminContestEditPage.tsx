@@ -2,8 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { FormInstance } from 'antd'
-import { Button, DatePicker, Form, Input, InputNumber, Select, Space, Switch, Transfer, message } from 'antd'
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
+  Switch,
+  Table,
+  Transfer,
+  message,
+} from 'antd'
 import dayjs from 'dayjs'
+import type { ColumnsType } from 'antd/es/table'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 
@@ -15,12 +29,19 @@ export const AdminContestEditPage: React.FC = () => {
   const [languages, setLanguages] = useState<string[]>([])
   const [allLanguages, setAllLanguages] = useState<{ key: string; title: string }[]>([])
   const formRef = useRef<FormInstance>(null)
+  const modalFormRef = useRef<FormInstance>(null)
   const [contestPermission, setContestPermission] = useState<ContestPermission>('PUBLIC')
+  const [problems, setProblems] = useState<AdminDto.ContestProblem[]>([])
+  const [allProblems, setAllProblems] = useState<AdminDto.Problem[]>([])
+  const [showProblemModal, setShowProblemModal] = useState<boolean>(false)
+  const [modalTitle, setModalTitle] = useState<'添加题目' | '修改题目'>('添加题目')
+  const [editProblem, setEditProblem] = useState<number | null>(null)
   useEffect(() => {
     if (mode === '修改' && id) {
       http.get<AdminDto.Contest>(`/admin/contest/${id}`)
         .then((res) => {
           setLanguages(res.data.data.languages.map(l => l.toString()) ?? [])
+          setProblems(res.data.data.problems)
           formRef?.current?.setFieldsValue({
             ...res.data.data,
             time: [
@@ -43,12 +64,21 @@ export const AdminContestEditPage: React.FC = () => {
         void message.error(err.response?.data.message ?? '获取语言失败')
         throw err
       })
+    http.get<L<AdminDto.Problem>>('/admin/problem')
+      .then((res) => {
+        setAllProblems(res.data.data.list)
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '获取题目失败')
+        throw err
+      })
   }, [mode, id, formRef])
 
   const onSubmit = (v: any) => {
     const params = {
       ...v,
       languages: languages.map(l => Number.parseInt(l)),
+      problems: problems.sort((a, b) => a.contestProblemIndex - b.contestProblemIndex),
       startTime: v.time[0].unix(),
       endTime: v.time[1].unix(),
     }
@@ -73,6 +103,77 @@ export const AdminContestEditPage: React.FC = () => {
           throw err
         })
     }
+  }
+
+  const problemTableColumns: ColumnsType<AdminDto.ContestProblem> = [
+    {
+      title: '竞赛题目编号',
+      dataIndex: 'contestProblemIndex',
+      key: 'contestProblemIndex',
+    },
+    {
+      title: '题目ID',
+      dataIndex: 'problemId',
+      key: 'problemId',
+    },
+    {
+      title: '题目标题',
+      key: 'problemTitle',
+      render: (_, record) => {
+        const problem = allProblems.find(p => p.id === record.problemId)
+        return (
+          <>{problem?.title ?? '题目不存在'}</>
+        )
+      },
+    },
+    {
+      title: '操作',
+      key: '操作',
+      render: (_value, _record, idx) => (
+        <Space size="middle">
+          <a onClick={() => {
+            setModalTitle('修改题目')
+            setEditProblem(idx)
+            modalFormRef?.current?.setFieldsValue({
+              problemId: problems[idx].problemId.toString(),
+              contestProblemIndex: problems[idx].contestProblemIndex.toString(),
+            })
+            setShowProblemModal(true)
+          }}>编辑</a>
+          <a onClick={() => {
+            setProblems(problems.filter((_, i) => i !== idx))
+          }}>删除</a>
+        </Space>
+      ),
+    },
+  ]
+
+  const handleModalOk = () => {
+    const values = modalFormRef.current?.getFieldsValue(['problemId', 'contestProblemIndex'])
+    if (modalTitle === '修改题目' && editProblem != null) {
+      setProblems(problems.map((p, i) => {
+        if (i === editProblem) {
+          return {
+            problemId: Number.parseInt(values?.problemId),
+            contestProblemIndex: Number.parseInt(values?.contestProblemIndex),
+          }
+        }
+        return p
+      }))
+    } else {
+      setProblems([
+        ...problems,
+        {
+          problemId: Number.parseInt(values?.problemId),
+          contestProblemIndex: Number.parseInt(values?.contestProblemIndex),
+        },
+      ])
+    }
+    setShowProblemModal(false)
+  }
+
+  const handleCancel = () => {
+    setShowProblemModal(false)
   }
 
   return (<>
@@ -153,6 +254,35 @@ export const AdminContestEditPage: React.FC = () => {
               )
             }
           </Space>
+
+          <Form.Item label="题目">
+            <Space direction="vertical" style={{
+              width: '100%',
+            }}>
+              <Button type="primary" onClick={() => {
+                setModalTitle('添加题目')
+                setEditProblem(null)
+                setShowProblemModal(true)
+                modalFormRef?.current?.setFieldsValue({
+                  problemId: undefined,
+                  contestProblemIndex: undefined,
+                })
+              }}>添加题目</Button>
+              <Table rowKey="contestProblemIndex" columns={problemTableColumns} dataSource={problems} pagination={false} />
+              <Modal title={modalTitle} open={showProblemModal} onOk={handleModalOk} onCancel={handleCancel}>
+                <Form ref={modalFormRef}>
+                  <Form.Item label="题目" name="problemId">
+                    <Select
+                        options={allProblems.map(p => ({ value: p.id.toString(), label: `${p.id} - ${p.title}` }))}
+                    />
+                  </Form.Item>
+                  <Form.Item label="题目顺序" name="contestProblemIndex">
+                    <InputNumber min={1} max={problems.length + 1} />
+                  </Form.Item>
+                </Form>
+              </Modal>
+            </Space>
+          </Form.Item>
 
           <Form.Item
             label="是否可见"

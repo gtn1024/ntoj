@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.ext.fail
 import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.Contest
+import zip.ntoj.server.model.ContestProblem
 import zip.ntoj.server.model.L
 import zip.ntoj.server.service.ContestService
 import zip.ntoj.server.service.LanguageService
@@ -83,7 +84,7 @@ class AdminContestController(
             visible = request.visible,
             showFinalBoard = request.showFinalBoard,
             author = author,
-            problems = request.problems.map { problemService.get(it) },
+            problems = request.problems,
             users = request.users.map { userService.getUserById(it) },
             languages = request.languages.map { languageService.get(it) },
         )
@@ -102,7 +103,7 @@ class AdminContestController(
         contest.type = request.type
         contest.permission = request.permission
         contest.password = request.password
-        contest.problems = request.problems.map { problemService.get(it) }
+        contest.problems = request.problems
         contest.users = request.users.map { userService.getUserById(it) }
         contest.languages = request.languages.map { languageService.get(it) }
         contest.allowAllLanguages = request.allowAllLanguages
@@ -121,7 +122,7 @@ class AdminContestController(
         val type: Contest.ContestType = Contest.ContestType.ICPC,
         val permission: Contest.ContestPermission = Contest.ContestPermission.PUBLIC,
         val password: String?,
-        val problems: List<Long> = listOf(),
+        val problems: List<ContestProblem> = listOf(),
         val users: List<Long> = listOf(),
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean = false,
@@ -139,7 +140,7 @@ class AdminContestController(
         val type: Contest.ContestType,
         val permission: Contest.ContestPermission,
         val password: String?,
-        val problems: List<Long> = listOf(),
+        val problems: List<ContestProblem> = listOf(),
         val users: List<Long> = listOf(),
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
@@ -158,7 +159,7 @@ class AdminContestController(
                 type = contest.type,
                 permission = contest.permission,
                 password = contest.password,
-                problems = contest.problems.map { it.problemId!! },
+                problems = contest.problems,
                 users = contest.users.map { it.userId!! },
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,

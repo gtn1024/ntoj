@@ -67,6 +67,8 @@ const AdminContestPage = lazy(() => import('../pages/admin/AdminContestPage'))
 const AdminContestEditPage = lazy(() => import('../pages/admin/AdminContestEditPage'))
 const ContestListPage = lazy(() => import('../pages/ContestListPage'))
 const ContestHome = lazy(() => import('../pages/contest/ContestHome'))
+const ContestProblemList = lazy(() => import('../pages/contest/ContestProblemList'))
+const ContestProblem = lazy(() => import('../pages/contest/ContestProblem'))
 
 export const router = createBrowserRouter(
   [
@@ -179,6 +181,13 @@ export const router = createBrowserRouter(
       loader: rootLoader,
       children: [
         { index: true, element: <ContestHome/> },
+        {
+          path: 'p',
+          children: [
+            { index: true, element: <ContestProblemList/> },
+            { path: ':alias', element: <ContestProblem/> },
+          ],
+        },
       ],
     },
     {
