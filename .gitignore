@@ -16,6 +16,9 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Visual Studio Code ###
+.vscode/
+
 ### Mac OS ###
 .DS_Store
 

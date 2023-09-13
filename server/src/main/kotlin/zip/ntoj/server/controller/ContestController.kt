@@ -68,7 +68,7 @@ class ContestController(
                 type = contest.type,
                 permission = contest.permission,
                 userCount = contest.users.size,
-                author = contest.author.username!!,
+                author = contest.author.username,
             )
         }
     }
