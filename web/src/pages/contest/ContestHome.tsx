@@ -32,7 +32,7 @@ export const ContestHome: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-1/4')}>
+      <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-1/4 min-w-280px')}>
         <div pt-8 px-4>
           <h2 font-light>{contest?.title}</h2>
         </div>
@@ -42,11 +42,12 @@ export const ContestHome: React.FC = () => {
             <span text-gray-500>{contest?.author}</span>
           </div>
           <div flex justify-between>
-            <span text-gray-500>时间</span>
-            <span text-gray-500>
-              开始：{contest?.startTime}<br/>
-              结束：{contest?.endTime}
-            </span>
+            <span text-gray-500>开始时间</span>
+            <span text-gray-500>{contest?.startTime}</span>
+          </div>
+          <div flex justify-between>
+            <span text-gray-500>结束时间</span>
+            <span text-gray-500>{contest?.endTime}</span>
           </div>
           <div flex justify-between>
             <span text-gray-500>持续时间</span>
