@@ -17,6 +17,7 @@ import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.model.User
 import zip.ntoj.server.service.SubmissionService
+import zip.ntoj.server.service.SubmissionService.SubmissionScope.PROBLEM
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.R
 import zip.ntoj.shared.model.SubmissionStatus
@@ -34,8 +35,14 @@ class SubmissionController(
         @RequestParam(required = false, defaultValue = "50") pageSize: Int,
     ): ResponseEntity<R<L<SubmissionListDto>>> {
         val list =
-            submissionService.get(onlyVisibleProblem = true, page = current, pageSize = pageSize, desc = true)
-        val count = submissionService.count(true)
+            submissionService.get(
+                onlyVisibleProblem = true,
+                page = current,
+                pageSize = pageSize,
+                desc = true,
+                scope = PROBLEM,
+            )
+        val count = submissionService.count(true, PROBLEM)
         return R.success(200, "获取成功", L(count, current, list.map { SubmissionListDto.from(it) }))
     }
 

@@ -1,6 +1,7 @@
 package zip.ntoj.server.service
 
 import jakarta.persistence.criteria.Join
+import jakarta.persistence.criteria.Predicate
 import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -10,12 +11,20 @@ import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.repository.SubmissionRepository
+import zip.ntoj.server.service.SubmissionService.SubmissionScope
 import zip.ntoj.shared.model.JudgeStage
 import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
+    enum class SubmissionScope {
+        ALL,
+        PROBLEM,
+        CONTEST,
+    }
+
     fun get(
         onlyVisibleProblem: Boolean = false,
+        scope: SubmissionScope = SubmissionScope.ALL,
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
         desc: Boolean = false,
@@ -23,12 +32,14 @@ interface SubmissionService {
 
     fun count(
         onlyVisibleProblem: Boolean = false,
+        scope: SubmissionScope = SubmissionScope.ALL,
     ): Long
 
     fun get(
         id: Long,
         onlyVisibleProblem: Boolean = false,
     ): Submission
+
     fun getPendingSubmissionAndSetJudging(): Submission?
     fun new(submission: Submission): Submission
     fun update(submission: Submission): Submission
@@ -38,9 +49,15 @@ interface SubmissionService {
 class SubmissionServiceImpl(
     val submissionRepository: SubmissionRepository,
 ) : SubmissionService {
-    override fun get(onlyVisibleProblem: Boolean, page: Int, pageSize: Int, desc: Boolean): List<Submission> {
+    override fun get(
+        onlyVisibleProblem: Boolean,
+        scope: SubmissionScope,
+        page: Int,
+        pageSize: Int,
+        desc: Boolean,
+    ): List<Submission> {
         return submissionRepository.findAll(
-            buildSpecification(onlyVisibleProblem),
+            buildSpecification(onlyVisibleProblem, scope),
             PageRequest.of(
                 page - 1,
                 pageSize,
@@ -49,14 +66,30 @@ class SubmissionServiceImpl(
         ).toList()
     }
 
-    private fun buildSpecification(onlyVisibleProblem: Boolean): Specification<Submission> {
+    private fun buildSpecification(
+        onlyVisibleProblem: Boolean,
+        scope: SubmissionScope = SubmissionScope.ALL,
+    ): Specification<Submission> {
         return Specification { root, _, cb ->
             val problemJoin: Join<Submission, Problem> = root.join("problem")
-            return@Specification if (onlyVisibleProblem) {
-                cb.isTrue(problemJoin.get<Boolean>("visible"))
-            } else {
-                cb.isFalse(problemJoin.get<Boolean>("visible"))
+            val predicates: MutableList<Predicate> = mutableListOf()
+            predicates.add(
+                if (onlyVisibleProblem) {
+                    cb.isTrue(problemJoin.get("visible"))
+                } else {
+                    cb.isFalse(problemJoin.get("visible"))
+                },
+            )
+            if (scope != SubmissionScope.ALL) {
+                predicates.add(
+                    when (scope) {
+                        SubmissionScope.PROBLEM -> cb.equal(root.get<Enum<Submission.SubmissionOrigin>>("origin"), Submission.SubmissionOrigin.PROBLEM)
+                        SubmissionScope.CONTEST -> cb.equal(root.get<Enum<Submission.SubmissionOrigin>>("origin"), Submission.SubmissionOrigin.CONTEST)
+                        else -> throw AppException("未知的 scope", 500)
+                    },
+                )
             }
+            return@Specification cb.and(*predicates.toTypedArray())
         }
     }
 
@@ -68,8 +101,8 @@ class SubmissionServiceImpl(
         return submission
     }
 
-    override fun count(onlyVisibleProblem: Boolean): Long {
-        return submissionRepository.count(buildSpecification(onlyVisibleProblem))
+    override fun count(onlyVisibleProblem: Boolean, scope: SubmissionScope): Long {
+        return submissionRepository.count(buildSpecification(onlyVisibleProblem, scope))
     }
 
     @Transactional
