@@ -19,10 +19,10 @@ interface MenuProps {
 
 const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClick }) => {
   return (
-    <div h-full flex items-center gap-1>
+    <ul h-full flex items-center gap-1 list-none m-0 p-0>
       {
         items.map(item => (
-          <div
+          <li
             key={item.key}
             px-2 cursor-pointer hover:text-blue-400
             className={current === item.key ? 'text-blue-500' : 'text-gray-500'}
@@ -32,10 +32,10 @@ const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClic
             }}
           >
             {item.label}
-          </div>
+          </li>
         ))
       }
-    </div>
+    </ul>
   )
 }
 
