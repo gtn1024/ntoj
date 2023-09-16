@@ -14,8 +14,8 @@ VALUES ('C++17', 'g++ -DONLINE_JUDGE -fno-tree-ch -O2 -Wall -std=c++17 -pipe a.c
 
 INSERT INTO t_languages(language_name, compile_command, execute_command, time_limit_rate, memory_limit_rate,
                         source_filename, target_filename, enabled, created_at, updated_at)
-VALUES ('Java 17', 'javac -d /w -encoding utf8 ./Main.java && jar cvf Main.jar *.class >/dev/null',
-        '/usr/bin/java -cp Main.jar Main', 2, 2, 'Main.java', 'Main.jar', true, now(), now());
+VALUES ('Java 17', 'javac -d /w -encoding utf8 ./Main.java', '/usr/bin/java Main', 2, 2, 'Main.java', 'Main.class',
+        true, now(), now());
 
 INSERT INTO t_languages(language_name, compile_command, execute_command, time_limit_rate, memory_limit_rate,
                         source_filename, target_filename, enabled, created_at, updated_at)
