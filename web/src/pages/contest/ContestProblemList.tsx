@@ -3,10 +3,11 @@ import c from 'classnames'
 import { message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useLayout } from '../../hooks/useLayout.ts'
 import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
+import { LinkComponent } from '../../components/LinkComponent.tsx'
 
 interface ContestProblem {
   alias: string
@@ -42,7 +43,7 @@ export const ContestProblemList: React.FC = () => {
                 <div text-center>{problem.alias}</div>
               </td>
               <td width={'90%'} px-4 py-3>
-                <Link to={`/c/${id}/p/${problem.alias}`}>{problem.title}</Link>
+                <LinkComponent href={`/c/${id}/p/${problem.alias}`} className={'text-gray-500'}>{problem.title}</LinkComponent>
               </td>
             </tr>
           ))}
