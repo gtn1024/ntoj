@@ -61,7 +61,7 @@ dependencies:
     version: 2.2.2(react@18.2.0)
   zustand:
     specifier: 4.4.1
-    version: 4.4.1(@types/react@18.2.21)(react@18.2.0)
+    version: 4.4.1(@types/react@18.2.22)(react@18.2.0)
 
 devDependencies:
   '@antfu/eslint-config':
@@ -92,8 +92,8 @@ devDependencies:
     specifier: 0.2.0
     version: 0.2.0
   '@types/react':
-    specifier: 18.2.21
-    version: 18.2.21
+    specifier: 18.2.22
+    version: 18.2.22
   '@types/react-dom':
     specifier: 18.2.7
     version: 18.2.7
@@ -1553,17 +1553,17 @@ packages:
   /@types/react-dom@18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.2.22
     dev: true
 
   /@types/react-highlight@0.12.5:
     resolution: {integrity: sha512-P8+mTxltxDdQ+99l+pjn40clziSbNrZy5d5zmvG+j3jKzokAhCoCZlIRmmnFgETTYubuqwKjvXSlvesBZcTfvQ==}
     dependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.2.22
     dev: true
 
-  /@types/react@18.2.21:
-    resolution: {integrity: sha512-neFKG/sBAwGxHgXiIxnbm3/AAVQ/cMRS93hvBpg8xYRbeQSPVABp9U2bRnPf0iI4+Ucdv3plSxKK+3CW2ENJxA==}
+  /@types/react@18.2.22:
+    resolution: {integrity: sha512-60fLTOLqzarLED2O3UQImc/lsNRgG0jE/a1mPW9KjMemY0LMITWEsbS4VvZ4p6rorEHd5YKxxmMKSDK505GHpA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
@@ -3221,7 +3221,7 @@ packages:
       eslint: 8.49.0
       eslint-import-resolver-node: 0.3.7
       eslint-module-utils: 2.8.0(@typescript-eslint/parser@6.7.0)(eslint-import-resolver-node@0.3.7)(eslint@8.49.0)
-      get-tsconfig: 4.6.2
+      get-tsconfig: 4.7.0
       is-glob: 4.0.3
       minimatch: 3.1.2
       resolve: 1.22.3
@@ -3706,12 +3706,6 @@ packages:
   /get-stream@6.0.1:
     resolution: {integrity: sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==}
     engines: {node: '>=10'}
-    dev: true
-
-  /get-tsconfig@4.6.2:
-    resolution: {integrity: sha512-E5XrT4CbbXcXWy+1jChlZmrmCwd5KGx502kDCXJJ7y898TtWW9FwoG5HfOLVRKmlmDGkWN2HM9Ho+/Y8F0sJDg==}
-    dependencies:
-      resolve-pkg-maps: 1.0.0
     dev: true
 
   /get-tsconfig@4.7.0:
@@ -6102,7 +6096,7 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zustand@4.4.1(@types/react@18.2.21)(react@18.2.0):
+  /zustand@4.4.1(@types/react@18.2.22)(react@18.2.0):
     resolution: {integrity: sha512-QCPfstAS4EBiTQzlaGP1gmorkh/UL1Leaj2tdj+zZCZ/9bm0WS7sI2wnfD5lpOszFqWJ1DcPnGoY8RDL61uokw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -6117,7 +6111,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.2.21
+      '@types/react': 18.2.22
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
