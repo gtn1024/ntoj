@@ -69,6 +69,8 @@ const ContestListPage = lazy(() => import('../pages/ContestListPage'))
 const ContestHome = lazy(() => import('../pages/contest/ContestHome'))
 const ContestProblemList = lazy(() => import('../pages/contest/ContestProblemList'))
 const ContestProblem = lazy(() => import('../pages/contest/ContestProblem'))
+const ContestClarificationListPage = lazy(() => import('../pages/contest/ContestClarificationListPage'))
+const ContestNewClarificationPage = lazy(() => import('../pages/contest/ContestNewClarificationPage'))
 
 export const router = createBrowserRouter(
   [
@@ -178,6 +180,7 @@ export const router = createBrowserRouter(
     {
       path: '/c/:id',
       element: <ContestLayout/>,
+      errorElement: <ErrorPage/>,
       loader: rootLoader,
       children: [
         { index: true, element: <ContestHome/> },
@@ -186,6 +189,13 @@ export const router = createBrowserRouter(
           children: [
             { index: true, element: <ContestProblemList/> },
             { path: ':alias', element: <ContestProblem/> },
+          ],
+        },
+        {
+          path: 'clarification',
+          children: [
+            { index: true, element: <ContestClarificationListPage/> },
+            { path: 'new', element: <ContestNewClarificationPage/> },
           ],
         },
       ],

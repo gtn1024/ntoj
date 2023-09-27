@@ -9,7 +9,7 @@ import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
 
-interface ContestProblem {
+export interface ContestProblem {
   alias: string
   title: string
 }

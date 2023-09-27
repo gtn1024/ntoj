@@ -12,6 +12,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes.JSON
 import java.time.Instant
@@ -43,6 +44,8 @@ class Contest(
     @Column(nullable = false) var visible: Boolean = true,
 
     @Column(nullable = false) var showFinalBoard: Boolean = false,
+
+    @OneToMany var clarifications: List<ContestClarification> = mutableListOf(),
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "contest_id") var contestId: Long? = null,
 ) : BaseEntity() {

@@ -48,6 +48,9 @@ export const ContestLayout: React.FC = () => {
     if (pathname.includes('/p')) {
       return setCurrent('/p')
     }
+    if (pathname.includes('/clarification')) {
+      return setCurrent('/clarification')
+    }
     setCurrent('')
   }, [pathname])
   const { data: contest } = useSWR(`/contest/${id}`, async (path) => {
@@ -63,6 +66,7 @@ export const ContestLayout: React.FC = () => {
   const items: MenuProps['items'] = [
     { label: '首页', key: '' },
     { label: '题目', key: '/p' },
+    { label: '疑问', key: '/clarification' },
   ]
   return (
     <div flex flex-col h-screen>
