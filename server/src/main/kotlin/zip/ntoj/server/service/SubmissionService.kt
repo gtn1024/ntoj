@@ -40,6 +40,13 @@ interface SubmissionService {
         onlyVisibleProblem: Boolean = false,
     ): Submission
 
+    fun getByContestId(
+        contestId: Long,
+        page: Int = 1,
+        pageSize: Int = Int.MAX_VALUE,
+        desc: Boolean = false,
+    ): List<Submission>
+
     fun getPendingSubmissionAndSetJudging(): Submission?
     fun new(submission: Submission): Submission
     fun update(submission: Submission): Submission
@@ -83,8 +90,16 @@ class SubmissionServiceImpl(
             if (scope != SubmissionScope.ALL) {
                 predicates.add(
                     when (scope) {
-                        SubmissionScope.PROBLEM -> cb.equal(root.get<Enum<Submission.SubmissionOrigin>>("origin"), Submission.SubmissionOrigin.PROBLEM)
-                        SubmissionScope.CONTEST -> cb.equal(root.get<Enum<Submission.SubmissionOrigin>>("origin"), Submission.SubmissionOrigin.CONTEST)
+                        SubmissionScope.PROBLEM -> cb.equal(
+                            root.get<Enum<Submission.SubmissionOrigin>>("origin"),
+                            Submission.SubmissionOrigin.PROBLEM,
+                        )
+
+                        SubmissionScope.CONTEST -> cb.equal(
+                            root.get<Enum<Submission.SubmissionOrigin>>("origin"),
+                            Submission.SubmissionOrigin.CONTEST,
+                        )
+
                         else -> throw AppException("未知的 scope", 500)
                     },
                 )
@@ -103,6 +118,21 @@ class SubmissionServiceImpl(
 
     override fun count(onlyVisibleProblem: Boolean, scope: SubmissionScope): Long {
         return submissionRepository.count(buildSpecification(onlyVisibleProblem, scope))
+    }
+
+    override fun getByContestId(contestId: Long, page: Int, pageSize: Int, desc: Boolean): List<Submission> {
+        return submissionRepository.findAll(
+            Specification { root, _, cb ->
+                val predicates: MutableList<Predicate> = mutableListOf()
+                predicates.add(cb.equal(root.get<Long>("contestId"), contestId))
+                return@Specification cb.and(*predicates.toTypedArray())
+            },
+            PageRequest.of(
+                page - 1,
+                pageSize,
+                Sort.by(if (desc) Sort.Direction.DESC else Sort.Direction.ASC, "submissionId"),
+            ),
+        ).toList()
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package zip.ntoj.server.controller
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import zip.ntoj.server.exception.AppException
@@ -49,6 +50,41 @@ class ContestController(
             200,
             "获取成功",
             ContestDto.from(contest),
+        )
+    }
+
+    @GetMapping("{id}/problemsStatistics")
+    @Cacheable("contestStatistic", key = "#root.methodName +'_tk_'+ #id")
+    fun getProblemsStatistics(@PathVariable id: Long): ResponseEntity<R<Map<String, ContestProblemStatisticsDto>>> {
+        val contest = contestService.get(id)
+        val problems = contest.problems
+        val submissions = submissionService.getByContestId(id).filter {
+            it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
+        }.filter {
+            it.status != SubmissionStatus.COMPILE_ERROR
+        }
+        val mp: MutableMap<Pair<String, String>, Boolean> = mutableMapOf()
+        return R.success(
+            200,
+            "获取成功",
+            problems.associate { contestProblem ->
+                val problem = problemService.get(contestProblem.problemId)
+                var submitTimes: Long = 0
+                var acceptedTimes: Long = 0
+                submissions.filter { contestProblem.problemId == problem.problemId }.forEach {
+                    submitTimes++
+                    if ((it.status == SubmissionStatus.ACCEPTED) &&
+                        mp.contains(Pair(it.user?.username!!, problem.problemId.toString())).not()
+                    ) {
+                        acceptedTimes++
+                        mp[Pair(it.user?.username!!, problem.problemId.toString())] = true
+                    }
+                }
+                numberToAlphabet(contestProblem.contestProblemIndex) to ContestProblemStatisticsDto(
+                    submitTimes = submitTimes,
+                    acceptedTimes = acceptedTimes,
+                )
+            },
         )
     }
 
@@ -141,6 +177,11 @@ class ContestController(
         clarification = contestClarificationService.add(clarification)
         return R.success(200, "提交成功", ContestClarificationDto.from(clarification))
     }
+
+    data class ContestProblemStatisticsDto(
+        val submitTimes: Long,
+        val acceptedTimes: Long,
+    )
 
     data class ContestClarificationRequest(
         val title: String,

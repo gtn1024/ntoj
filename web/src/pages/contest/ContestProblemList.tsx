@@ -14,6 +14,12 @@ export interface ContestProblem {
   title: string
 }
 
+interface ContestProblemStatistics {
+  alias: string
+  acceptedTimes: number
+  submitTimes: number
+}
+
 export const ContestProblemList: React.FC = () => {
   const { isMobile } = useLayout()
   const { id } = useParams()
@@ -27,6 +33,18 @@ export const ContestProblemList: React.FC = () => {
         throw err
       })
   })
+  const { data: statistics } = useSWR(`/contest/${id}/problemsStatistics`, async (path) => {
+    return http.get<{
+      [key: string]: ContestProblemStatistics
+    }>(path)
+      .then((res) => {
+        return res.data.data
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '获取竞赛题目统计失败')
+        throw err
+      })
+  })
   return (
     <div p-2 flex items-start max-w="1200px" m-auto className={c(isMobile && 'flex-col')}>
       <table w-full>
@@ -34,6 +52,9 @@ export const ContestProblemList: React.FC = () => {
           <tr bg="#eeeeee" text="#888888">
             <th px-4 py-3 font-normal>题号</th>
             <th px-4 py-3 font-normal>题目</th>
+            <th px-4 py-3 font-normal>通过</th>
+            <th px-4 py-3 font-normal>提交</th>
+            <th px-4 py-3 font-normal>通过率</th>
           </tr>
         </thead>
         <tbody>
@@ -42,8 +63,23 @@ export const ContestProblemList: React.FC = () => {
               <td width={'10%'} px-4 py-3>
                 <div text-center>{problem.alias}</div>
               </td>
-              <td width={'90%'} px-4 py-3>
+              <td width={'60%'} px-4 py-3>
                 <LinkComponent href={`/c/${id}/p/${problem.alias}`} className={'text-gray-500'}>{problem.title}</LinkComponent>
+              </td>
+              <td width={'10%'} px-4 py-3>
+                <div text-center>{ statistics?.[problem.alias]?.acceptedTimes ?? 0 }</div>
+              </td>
+              <td width={'10%'} px-4 py-3>
+                <div text-center>{ statistics?.[problem.alias]?.submitTimes ?? 0 }</div>
+              </td>
+              <td width={'10%'} px-4 py-3>
+                <div text-center>{
+                  !statistics?.[problem.alias]
+                    ? '0.00%'
+                    : statistics?.[problem.alias]?.submitTimes === 0
+                      ? '0.00%'
+                      : `${(statistics?.[problem.alias]?.acceptedTimes / statistics?.[problem.alias]?.submitTimes * 100).toFixed(2)}%`
+                }</div>
               </td>
             </tr>
           ))}
