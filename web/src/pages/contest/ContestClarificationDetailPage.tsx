@@ -27,7 +27,7 @@ interface ContestClarificationDetailDto {
 export const ContestClarificationDetailPage: React.FC = () => {
   const [replyContent, setReplyContent] = useState('')
   const { id, clarificationId } = useParams()
-  const { data: clarification, _error, mutate } = useSWR(`/contest/${id}/clarification/${clarificationId}`, async (path: string) => {
+  const { data: clarification, mutate } = useSWR(`/contest/${id}/clarification/${clarificationId}`, async (path: string) => {
     return http.get<ContestClarificationDetailDto>(path)
       .then((res) => {
         return res.data.data
