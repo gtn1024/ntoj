@@ -178,6 +178,41 @@ class ContestController(
         return R.success(200, "提交成功", ContestClarificationDto.from(clarification))
     }
 
+    @GetMapping("{id}/clarification/{clarificationId}")
+    fun getClarification(
+        @PathVariable id: Long,
+        @PathVariable clarificationId: Long,
+    ): ResponseEntity<R<ContestClarificationDetailDto>> {
+        val contest = contestService.get(id)
+        val clarification = contestClarificationService.get(clarificationId)
+        if (clarification.contest.contestId != contest.contestId) {
+            throw AppException("该问题不属于该比赛", 400)
+        }
+        return R.success(200, "获取成功", ContestClarificationDetailDto.from(clarification))
+    }
+
+    @PostMapping("{id}/clarification/{clarificationId}/reply")
+    @SaCheckLogin
+    fun replyClarification(
+        @PathVariable id: Long,
+        @PathVariable clarificationId: Long,
+        @RequestBody contestClarificationRequest: ContestClarificationReplyRequest,
+    ): ResponseEntity<R<Void>> {
+        val contest = contestService.get(id)
+        val clarification = contestClarificationService.get(clarificationId)
+        if (clarification.contest.contestId != contest.contestId) {
+            throw AppException("该问题不属于该比赛", 400)
+        }
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        val response = ContestClarificationResponse(
+            content = contestClarificationRequest.content,
+            user = user,
+        )
+        clarification.responses.add(response)
+        contestClarificationService.update(clarification)
+        return R.success(200, "提交成功")
+    }
+
     data class ContestProblemStatisticsDto(
         val submitTimes: Long,
         val acceptedTimes: Long,
@@ -188,6 +223,48 @@ class ContestController(
         val content: String,
         val contestProblemId: String? = null,
     )
+
+    data class ContestClarificationReplyRequest(
+        val content: String,
+    )
+
+    data class ContestClarificationDetailDto(
+        val id: Long,
+        val title: String,
+        val user: String,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
+        val contestProblemAlias: String?,
+        val content: String,
+        val replies: List<ClarificationResponseDto>,
+    ) {
+        companion object {
+            fun from(clarification: ContestClarification) = ContestClarificationDetailDto(
+                id = clarification.clarificationId!!,
+                title = clarification.title,
+                user = clarification.user.username,
+                createdAt = clarification.createdAt!!,
+                contestProblemAlias = clarification.contestProblemId?.let { numberToAlphabet(it) },
+                content = clarification.content,
+                replies = clarification.responses.map { ClarificationResponseDto.from(it) },
+            )
+        }
+
+        data class ClarificationResponseDto(
+            val id: Long,
+            val content: String,
+            val user: String,
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
+        ) {
+            companion object {
+                fun from(clarificationResponse: ContestClarificationResponse) = ClarificationResponseDto(
+                    id = clarificationResponse.responseId!!,
+                    content = clarificationResponse.content,
+                    user = clarificationResponse.user.username,
+                    createdAt = clarificationResponse.createdAt!!,
+                )
+            }
+        }
+    }
 
     data class ContestClarificationDto(
         val id: Long,

@@ -1,6 +1,7 @@
 package zip.ntoj.server.service
 
 import org.springframework.stereotype.Service
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.ContestClarification
 import zip.ntoj.server.repository.ContestClarificationRepository
 
@@ -29,7 +30,7 @@ class ContestClarificationServiceImpl(
     private val contestClarificationRepository: ContestClarificationRepository,
 ) : ContestClarificationService {
     override fun get(id: Long): ContestClarification {
-        TODO("Not yet implemented")
+        return contestClarificationRepository.findById(id).orElseThrow { AppException("不存在", 404) }
     }
 
     override fun get(onlyVisible: Boolean, page: Int, pageSize: Int, desc: Boolean): List<ContestClarification> {
@@ -45,7 +46,10 @@ class ContestClarificationServiceImpl(
     }
 
     override fun update(clarification: ContestClarification): ContestClarification {
-        TODO("Not yet implemented")
+        if (!contestClarificationRepository.existsById(clarification.clarificationId!!)) {
+            throw AppException("不存在", 404)
+        }
+        return contestClarificationRepository.save(clarification)
     }
 
     override fun delete(id: Long) {

@@ -45,7 +45,7 @@ class ContestClarificationResponseServiceImpl(
     }
 
     override fun add(contest: ContestClarificationResponse): ContestClarificationResponse {
-        TODO("Not yet implemented")
+        return contestClarificationResponseRepository.save(contest)
     }
 
     override fun update(contest: ContestClarificationResponse): ContestClarificationResponse {

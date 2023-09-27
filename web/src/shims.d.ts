@@ -14,6 +14,7 @@ declare module 'react' {
     pt?: string
     w?: string
     h?: string
+    b?: string
     border?: string | boolean
     grow?: boolean
     rounded?: string | boolean
