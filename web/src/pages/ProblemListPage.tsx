@@ -80,6 +80,7 @@ export const ProblemListPage: React.FC = () => {
     {
       title: '通过率',
       render: (_: string, record: Problem) => {
+        if (record.submitTimes === 0) { return '0.00%' }
         return `${(record.acceptedTimes / record.submitTimes * 100).toFixed(2)}%`
       },
     },
