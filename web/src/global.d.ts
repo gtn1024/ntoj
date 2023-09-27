@@ -46,6 +46,8 @@ interface Problem {
   languages?: number[]
   allowAllLanguages: boolean
   codeLength: number
+  submitTimes: number,
+  acceptedTimes: number,
 }
 
 interface TestcaseDto {

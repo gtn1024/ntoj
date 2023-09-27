@@ -62,9 +62,10 @@ class ProblemController(
         if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
             throw AppException("代码长度超过限制", 400)
         }
+        problem.submitTimes++
+        problemService.update(problem)
         val language = languageService.get(problemSubmissionRequest.language)
-        val user = userService
-            .getUserById(StpUtil.getLoginIdAsLong())
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         var submission = Submission(
             user = user,
             problem = problem,
@@ -109,6 +110,8 @@ class ProblemController(
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
         val codeLength: Int,
+        val submitTimes: Long,
+        val acceptedTimes: Long,
     ) {
         companion object {
             fun from(problem: Problem): ProblemDto = ProblemDto(
@@ -128,20 +131,26 @@ class ProblemController(
                 languages = problem.languages.map { it.languageId!! },
                 allowAllLanguages = problem.allowAllLanguages,
                 codeLength = problem.codeLength,
+                submitTimes = problem.submitTimes,
+                acceptedTimes = problem.acceptedTimes,
             )
         }
     }
 
     data class ProblemListDto(
-        val id: Long?,
-        val title: String?,
-        val alias: String?,
+        val id: Long,
+        val title: String,
+        val alias: String,
+        val submitTimes: Long,
+        val acceptedTimes: Long,
     ) {
         companion object {
             fun from(problem: Problem): ProblemListDto = ProblemListDto(
-                id = problem.problemId,
+                id = problem.problemId!!,
                 title = problem.title,
                 alias = problem.alias,
+                submitTimes = problem.submitTimes,
+                acceptedTimes = problem.acceptedTimes,
             )
         }
     }

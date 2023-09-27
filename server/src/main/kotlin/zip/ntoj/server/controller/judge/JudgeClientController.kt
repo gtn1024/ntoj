@@ -14,10 +14,12 @@ import zip.ntoj.server.ext.from
 import zip.ntoj.server.ext.success
 import zip.ntoj.server.service.FileService
 import zip.ntoj.server.service.FileUploadService
+import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
 import zip.ntoj.shared.model.R
+import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseDto
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.time.Instant
@@ -28,6 +30,7 @@ class JudgeClientController(
     val submissionService: SubmissionService,
     val fileUploadService: FileUploadService,
     val fileService: FileService,
+    private val problemService: ProblemService,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {
@@ -36,7 +39,8 @@ class JudgeClientController(
 
     @GetMapping("/get_submission")
     fun getSubmission(): ResponseEntity<R<GetSubmissionResponse>> {
-        val submission = submissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功", null)
+        val submission =
+            submissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功", null)
         return R.success(
             200,
             "获取成功",
@@ -58,6 +62,7 @@ class JudgeClientController(
         @RequestBody submissionStatus: UpdateSubmissionRequest,
     ): ResponseEntity<R<Void>> {
         val submission = submissionService.get(submissionId)
+        val problem = problemService.get(submission.problem?.problemId!!)
         if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
             submission.status = submissionStatus.result
             submission.time = submissionStatus.time
@@ -65,6 +70,10 @@ class JudgeClientController(
             submission.judgerId = submissionStatus.judgerId
             submission.testcaseResult = submissionStatus.testcaseResult
             submission.compileLog = submissionStatus.compileLog
+            if (submissionStatus.result == SubmissionStatus.ACCEPTED) {
+                problem.acceptedTimes++
+                problemService.update(problem)
+            }
         }
         submission.judgeStage = submissionStatus.judgeStage
         submissionService.update(submission)

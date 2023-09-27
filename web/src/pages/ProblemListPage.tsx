@@ -8,9 +8,11 @@ import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 
 interface Problem {
-  id?: number
-  title?: string
-  alias?: string
+  id: number
+  title: string
+  alias: string
+  submitTimes: number
+  acceptedTimes: number
 }
 
 export const ProblemListPage: React.FC = () => {
@@ -63,6 +65,22 @@ export const ProblemListPage: React.FC = () => {
       key: 'title',
       render: (value: string, record: Problem) => {
         return <Link to={`/p/${record.alias ?? ''}`}>{value}</Link>
+      },
+    },
+    {
+      title: '通过',
+      dataIndex: 'acceptedTimes',
+      key: 'acceptedTimes',
+    },
+    {
+      title: '提交',
+      dataIndex: 'submitTimes',
+      key: 'submitTimes',
+    },
+    {
+      title: '通过率',
+      render: (_: string, record: Problem) => {
+        return `${(record.acceptedTimes / record.submitTimes * 100).toFixed(2)}%`
       },
     },
   ]

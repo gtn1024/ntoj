@@ -16,6 +16,7 @@ import zip.ntoj.server.model.L
 import zip.ntoj.server.model.Problem
 import zip.ntoj.server.model.Submission
 import zip.ntoj.server.model.User
+import zip.ntoj.server.service.ProblemService
 import zip.ntoj.server.service.SubmissionService
 import zip.ntoj.server.service.SubmissionService.SubmissionScope.PROBLEM
 import zip.ntoj.shared.model.JudgeStage
@@ -28,6 +29,7 @@ import java.time.Instant
 @RequestMapping("/submission")
 class SubmissionController(
     private val submissionService: SubmissionService,
+    private val problemService: ProblemService,
 ) {
     @GetMapping("/list")
     fun index(
@@ -109,6 +111,11 @@ class SubmissionController(
     @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
     fun rejudge(@PathVariable id: Long): ResponseEntity<R<Void>> {
         val submission = submissionService.get(id)
+        val problem = problemService.get(submission.problem?.problemId!!)
+        if (submission.status == SubmissionStatus.ACCEPTED) {
+            problem.acceptedTimes--
+            problemService.update(problem)
+        }
         submission.judgeStage = JudgeStage.PENDING
         submission.status = SubmissionStatus.PENDING
         submissionService.update(submission)

@@ -38,6 +38,9 @@ class Problem(
     var author: User?,
     var visible: Boolean? = null,
 
+    @Column(nullable = false) var submitTimes: Long = 0,
+    @Column(nullable = false) var acceptedTimes: Long = 0,
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "problem_id")
