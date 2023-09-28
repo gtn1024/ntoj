@@ -149,6 +149,62 @@ class ContestController(
         return R.success(200, "提交成功", ProblemController.SubmissionDto.from(submission))
     }
 
+    @GetMapping("{id}/submission")
+    @SaCheckLogin
+    fun getSubmissions(@PathVariable id: Long): ResponseEntity<R<L<ContestSubmissionDto>>> {
+        fun hasAdminPermission(role: UserRole): Boolean {
+            return role.ordinal >= 2
+        }
+
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        val contest = contestService.get(id)
+        val submissions = submissionService.getByContestId(id)
+            .filter {
+                if (Instant.now() >= contest.endTime) true
+                else if (hasAdminPermission(user.role)) true
+                else it.user?.userId == user.userId
+            }
+        return R.success(
+            200,
+            "获取成功",
+            L(
+                total = submissions.size.toLong(),
+                page = 1,
+                list = submissions.map {
+                    val alias = contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
+                        ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }
+                    ContestSubmissionDto.from(it, alias!!)
+                },
+            ),
+        )
+    }
+
+    data class ContestSubmissionDto(
+        val id: Long,
+        val user: String,
+        val alias: String,
+        val result: SubmissionStatus,
+        val time: Int?,
+        val memory: Int?,
+        val language: String,
+        val codeLength: Int,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
+    ) {
+        companion object {
+            fun from(submission: Submission, alias: String) = ContestSubmissionDto(
+                id = submission.submissionId!!,
+                user = submission.user?.username!!,
+                alias = alias,
+                result = submission.status,
+                time = submission.time,
+                memory = submission.memory,
+                language = submission.language?.languageName!!,
+                codeLength = submission.code?.length!!,
+                submitTime = submission.createdAt!!,
+            )
+        }
+    }
+
     @GetMapping("{id}/clarifications")
     fun getClarifications(@PathVariable id: Long): ResponseEntity<R<List<ContestClarificationDto>>> {
         val clarifications = contestClarificationService.getByContestId(id).reversed()

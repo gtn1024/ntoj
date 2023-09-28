@@ -48,6 +48,9 @@ export const ContestLayout: React.FC = () => {
     if (pathname.includes('/p')) {
       return setCurrent('/p')
     }
+    if (pathname.includes('/submission')) {
+      return setCurrent('/submission')
+    }
     if (pathname.includes('/clarification')) {
       return setCurrent('/clarification')
     }
@@ -66,6 +69,7 @@ export const ContestLayout: React.FC = () => {
   const items: MenuProps['items'] = [
     { label: '首页', key: '' },
     { label: '题目', key: '/p' },
+    { label: '提交', key: '/submission' },
     { label: '疑问', key: '/clarification' },
   ]
   return (

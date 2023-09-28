@@ -72,6 +72,7 @@ const ContestProblem = lazy(() => import('../pages/contest/ContestProblem'))
 const ContestClarificationListPage = lazy(() => import('../pages/contest/ContestClarificationListPage'))
 const ContestNewClarificationPage = lazy(() => import('../pages/contest/ContestNewClarificationPage'))
 const ContestClarificationDetailPage = lazy(() => import('../pages/contest/ContestClarificationDetailPage'))
+const ContestSubmissionListPage = lazy(() => import('../pages/contest/ContestSubmissionListPage'))
 
 export const router = createBrowserRouter(
   [
@@ -198,6 +199,12 @@ export const router = createBrowserRouter(
             { index: true, element: <ContestClarificationListPage/> },
             { path: 'new', element: <ContestNewClarificationPage/> },
             { path: ':clarificationId', element: <ContestClarificationDetailPage/> },
+          ],
+        },
+        {
+          path: 'submission',
+          children: [
+            { index: true, element: <ContestSubmissionListPage/> },
           ],
         },
       ],
