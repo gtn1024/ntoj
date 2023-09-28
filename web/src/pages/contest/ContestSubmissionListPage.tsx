@@ -10,7 +10,10 @@ import { LinkComponent } from '../../components/LinkComponent.tsx'
 
 interface ContestSubmission {
   id: number
-  user: string
+  user: {
+    username: string
+    realName?: string
+  }
   alias: string
   result: SubmissionStatus
   time?: number
@@ -55,7 +58,10 @@ export const ContestSubmissionListPage: React.FC = () => {
               <div text-center>{submission.id}</div>
             </td>
             <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.user}</div>
+              <div text-center>
+                {submission.user.realName && (<>{submission.user.realName} <br/></>) }
+                {submission.user.username}
+              </div>
             </td>
             <td width={'10%'} px-4 py-3>
               <div text-center>

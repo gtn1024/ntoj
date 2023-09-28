@@ -182,7 +182,7 @@ class ContestController(
 
     data class ContestSubmissionDto(
         val id: Long,
-        val user: String,
+        val user: UserDto,
         val alias: String,
         val result: SubmissionStatus,
         val time: Int?,
@@ -194,7 +194,7 @@ class ContestController(
         companion object {
             fun from(submission: Submission, alias: String) = ContestSubmissionDto(
                 id = submission.submissionId!!,
-                user = submission.user?.username!!,
+                user = UserDto.from(submission.user!!),
                 alias = alias,
                 result = submission.status,
                 time = submission.time,
@@ -203,6 +203,18 @@ class ContestController(
                 codeLength = submission.code?.length!!,
                 submitTime = submission.createdAt!!,
             )
+        }
+
+        data class UserDto(
+            val username: String,
+            val realName: String?,
+        ) {
+            companion object {
+                fun from(user: User) = UserDto(
+                    username = user.username,
+                    realName = user.realName,
+                )
+            }
         }
     }
 
