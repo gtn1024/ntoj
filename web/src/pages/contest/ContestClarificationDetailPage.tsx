@@ -73,7 +73,7 @@ export const ContestClarificationDetailPage: React.FC = () => {
           <span>{clarification?.createdAt}</span>
         </div>
       </div>
-      <div w-full>
+      <div w-full flex flex-col gap-1>
         {
           clarification?.replies.sort((a, b) => b.id - a.id).map(reply => (
             <div w-full rounded b="1px solid #666" px-4 py-2 flex flex-col>
