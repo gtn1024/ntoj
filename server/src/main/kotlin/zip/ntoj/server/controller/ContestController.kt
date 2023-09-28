@@ -71,7 +71,7 @@ class ContestController(
                 val problem = problemService.get(contestProblem.problemId)
                 var submitTimes: Long = 0
                 var acceptedTimes: Long = 0
-                submissions.filter { contestProblem.problemId == problem.problemId }.forEach {
+                submissions.filter { it.problem?.problemId == contestProblem.problemId }.forEach {
                     submitTimes++
                     if ((it.status == SubmissionStatus.ACCEPTED) &&
                         mp.contains(Pair(it.user?.username!!, problem.problemId.toString())).not()
