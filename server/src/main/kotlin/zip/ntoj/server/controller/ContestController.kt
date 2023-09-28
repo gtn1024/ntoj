@@ -159,6 +159,7 @@ class ContestController(
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
         val submissions = submissionService.getByContestId(id)
+            .reversed()
             .filter {
                 if (Instant.now() >= contest.endTime) true
                 else if (hasAdminPermission(user.role)) true
