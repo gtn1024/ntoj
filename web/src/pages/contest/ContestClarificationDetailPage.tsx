@@ -81,7 +81,7 @@ export const ContestClarificationDetailPage: React.FC = () => {
                 <span>{reply.user}</span>
                 <span>{reply.createdAt}</span>
               </div>
-              <article dangerouslySetInnerHTML={{ __html: mdit.render(reply.content.replace('\n', '\n\n')) }}></article>
+              <article break-words dangerouslySetInnerHTML={{ __html: mdit.render(reply.content.replace('\n', '\n\n')) }}></article>
             </div>
           ))
         }
