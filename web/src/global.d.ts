@@ -112,6 +112,7 @@ interface Contest {
   author: string
   languages?: number[]
   allowAllLanguages: boolean
+  hasPermission: boolean
 }
 
 type ContestType = |

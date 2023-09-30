@@ -85,7 +85,7 @@ class AdminContestController(
             showFinalBoard = request.showFinalBoard,
             author = author,
             problems = request.problems,
-            users = request.users.map { userService.getUserById(it) },
+            users = request.users.map { userService.getUserById(it) }.toMutableList(),
             languages = request.languages.map { languageService.get(it) },
         )
         contest = contestService.add(contest)
@@ -104,7 +104,7 @@ class AdminContestController(
         contest.permission = request.permission
         contest.password = request.password
         contest.problems = request.problems
-        contest.users = request.users.map { userService.getUserById(it) }
+        contest.users = request.users.map { userService.getUserById(it) }.toMutableList()
         contest.languages = request.languages.map { languageService.get(it) }
         contest.allowAllLanguages = request.allowAllLanguages
         contest.visible = request.visible

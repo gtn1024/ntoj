@@ -45,6 +45,16 @@ class ContestController(
 
     @GetMapping("{id}")
     fun get(@PathVariable id: Long): ResponseEntity<R<ContestDto>> {
+        if (StpUtil.isLogin()) {
+            val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+            val contest = contestService.get(id)
+            val hasPermission = contest.users.any { it.userId == user.userId }
+            return R.success(
+                200,
+                "获取成功",
+                ContestDto.from(contest, hasPermission),
+            )
+        }
         val contest = contestService.get(id)
         return R.success(
             200,
@@ -52,6 +62,34 @@ class ContestController(
             ContestDto.from(contest),
         )
     }
+
+    @PostMapping("{id}/register")
+    @SaCheckLogin
+    fun contestRegister(
+        @PathVariable id: Long,
+        @RequestBody contestRegisterRequest: ContestRegisterRequest
+    ): ResponseEntity<R<Void>> {
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        val contest = contestService.get(id)
+        if (contest.users.any { it.userId == user.userId }) {
+            throw AppException("您已经报名了该比赛", 400)
+        }
+        if (contest.permission === Contest.ContestPermission.PRIVATE) {
+            throw AppException("该比赛不允许报名", 400)
+        }
+        if (contest.permission === Contest.ContestPermission.PASSWORD &&
+            contestRegisterRequest.password != contest.password
+        ) {
+            throw AppException("密码错误", 400)
+        }
+        contest.users.add(user)
+        contestService.update(contest)
+        return R.success(200, "报名成功")
+    }
+
+    data class ContestRegisterRequest(
+        val password: String?
+    )
 
     @GetMapping("{id}/problemsStatistics")
     @Cacheable("contestStatistic", key = "#root.methodName +'_tk_'+ #id")
@@ -369,9 +407,10 @@ class ContestController(
         val author: String,
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
+        val hasPermission: Boolean,
     ) {
         companion object {
-            fun from(contest: Contest) = ContestDto(
+            fun from(contest: Contest, hasPermission: Boolean = false) = ContestDto(
                 id = contest.contestId!!,
                 title = contest.title,
                 description = contest.description,
@@ -383,6 +422,7 @@ class ContestController(
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,
+                hasPermission = hasPermission,
             )
         }
     }

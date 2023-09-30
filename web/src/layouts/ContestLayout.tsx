@@ -11,6 +11,7 @@ interface MenuProps {
   items: {
     key: string
     label: string
+    visible: boolean
   }[]
   current: string
   setCurrent: (key: string) => void
@@ -22,17 +23,17 @@ const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClic
     <ul h-full flex items-center gap-1 list-none m-0 p-0>
       {
         items.map(item => (
-          <li
-            key={item.key}
-            px-2 cursor-pointer hover:text-blue-400
-            className={current === item.key ? 'text-blue-500' : 'text-gray-500'}
-            onClick={() => {
-              setCurrent(item.key)
-              onClick?.(item)
-            }}
-          >
-            {item.label}
-          </li>
+          item.visible && (
+            <li
+              key={item.key}
+              px-2 cursor-pointer hover:text-blue-400
+              className={current === item.key ? 'text-blue-500' : 'text-gray-500'}
+              onClick={() => {
+                setCurrent(item.key)
+                onClick?.(item)
+              }}
+            >{item.label}</li>
+          )
         ))
       }
     </ul>
@@ -67,10 +68,10 @@ export const ContestLayout: React.FC = () => {
       })
   })
   const items: MenuProps['items'] = [
-    { label: '首页', key: '' },
-    { label: '题目', key: '/p' },
-    { label: '提交', key: '/submission' },
-    { label: '疑问', key: '/clarification' },
+    { label: '首页', key: '', visible: true },
+    { label: '题目', key: '/p', visible: contest?.hasPermission ?? false },
+    { label: '提交', key: '/submission', visible: contest?.hasPermission ?? false },
+    { label: '疑问', key: '/clarification', visible: contest?.hasPermission ?? false },
   ]
   return (
     <div flex flex-col h-screen>
