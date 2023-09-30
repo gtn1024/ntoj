@@ -18,7 +18,7 @@ class CacheConfig {
         val manager = SimpleCacheManager()
         manager.setCaches(
             listOf(
-                buildCache("judgertoken", ticker, 15, TimeUnit.SECONDS), // 评测机 token 缓存 10 秒
+                buildCache("judgertoken", ticker, 15, TimeUnit.SECONDS), // 评测机 token 缓存 15 秒
                 buildCache("contestStatistic", ticker, 5, TimeUnit.SECONDS), // 比赛统计缓存 5 秒
             ),
         )
