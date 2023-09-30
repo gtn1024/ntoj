@@ -281,7 +281,7 @@ export const AdminProblemEditPage: React.FC = () => {
       </div>
       <div w="1/2" overflow-y-auto p-4>
         <h2 text-xl>预览</h2>
-        <ProblemDetail data={{ ...data } as Problem}/>
+        <ProblemDetail data={{ ...data } as Problem} showProblemAlias={true}/>
       </div>
     </div>
   </>)

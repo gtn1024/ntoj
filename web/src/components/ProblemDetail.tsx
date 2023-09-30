@@ -70,15 +70,14 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
   )
 }
 
-export const ProblemDetail: React.FC<{ data?: Problem }> = (props) => {
-  const { data } = props
+export const ProblemDetail: React.FC<{ data?: Problem; showProblemAlias?: boolean }> = ({ data, showProblemAlias }) => {
   const { isMobile } = useLayout()
 
   return (
     <div className={c(!isMobile && 'm-4')}>
       <div p-4>
         <div>
-          <h2 font-bold>{data?.alias} {data?.title}</h2>
+          <h2 font-bold>{showProblemAlias && data?.alias } {data?.title}</h2>
         </div>
         <div pb="[20px]" text-xs>
           <span mr-1>时间限制：{data?.timeLimit} ms</span>
