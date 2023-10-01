@@ -126,6 +126,47 @@ class ContestController(
         )
     }
 
+    @GetMapping("{id}/standing")
+    @Cacheable("contestStanding", key = "#root.methodName +'_tk_'+ #id")
+    fun getStanding(@PathVariable id: Long): ResponseEntity<R<List<ContestStandingSubmissionDto>>> {
+        val contest = contestService.get(id)
+        val problems = contest.problems
+        val submissions = submissionService.getByContestId(id)
+            .reversed()
+            .filter {
+                it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
+            }
+        return R.success(
+            200,
+            "获取成功",
+            submissions.map {
+                ContestStandingSubmissionDto.from(
+                    it,
+                    problems.find { problem -> problem.problemId == it.problem?.problemId }
+                        ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }!!
+                )
+            },
+        )
+    }
+
+    data class ContestStandingSubmissionDto(
+        val id: Long,
+        val user: String,
+        val alias: String,
+        val result: SubmissionStatus,
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
+    ) {
+        companion object {
+            fun from(submission: Submission, alias: String) = ContestStandingSubmissionDto(
+                id = submission.submissionId!!,
+                user = submission.user?.username!!,
+                alias = alias,
+                result = submission.status,
+                submitTime = submission.createdAt!!,
+            )
+        }
+    }
+
     @GetMapping("{id}/problems")
     fun getProblems(@PathVariable id: Long): ResponseEntity<R<List<ContestProblemDto>>> {
         val contest = contestService.get(id)
@@ -404,10 +445,13 @@ class ContestController(
         val type: Contest.ContestType,
         val permission: Contest.ContestPermission,
         val userCount: Int,
+        val users: List<String>,
         val author: String,
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
         val hasPermission: Boolean,
+        val freezeTime: Int?,
+        val showFinalBoard: Boolean,
     ) {
         companion object {
             fun from(contest: Contest, hasPermission: Boolean = false) = ContestDto(
@@ -419,10 +463,13 @@ class ContestController(
                 type = contest.type,
                 permission = contest.permission,
                 userCount = contest.users.size,
+                users = contest.users.map { it.username },
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,
                 hasPermission = hasPermission,
+                freezeTime = contest.freezeTime,
+                showFinalBoard = contest.showFinalBoard,
             )
         }
     }

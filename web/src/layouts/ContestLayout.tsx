@@ -55,6 +55,9 @@ export const ContestLayout: React.FC = () => {
     if (pathname.includes('/clarification')) {
       return setCurrent('/clarification')
     }
+    if (pathname.includes('/standing')) {
+      return setCurrent('/standing')
+    }
     setCurrent('')
   }, [pathname])
   const { data: contest } = useSWR(`/contest/${id}`, async (path) => {
@@ -72,6 +75,7 @@ export const ContestLayout: React.FC = () => {
     { label: '题目', key: '/p', visible: contest?.hasPermission ?? false },
     { label: '提交', key: '/submission', visible: contest?.hasPermission ?? false },
     { label: '疑问', key: '/clarification', visible: contest?.hasPermission ?? false },
+    { label: '排名', key: '/standing', visible: contest?.hasPermission ?? false },
   ]
   return (
     <div flex flex-col h-screen>

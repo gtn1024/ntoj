@@ -22,6 +22,7 @@ declare module 'react' {
     text?: string
     block?: boolean
     left?: string
+    bottom?: string
     absolute?: boolean
     top?: string
     relative?: boolean

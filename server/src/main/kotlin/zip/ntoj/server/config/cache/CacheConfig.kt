@@ -20,6 +20,7 @@ class CacheConfig {
             listOf(
                 buildCache("judgertoken", ticker, 15, TimeUnit.SECONDS), // 评测机 token 缓存 15 秒
                 buildCache("contestStatistic", ticker, 5, TimeUnit.SECONDS), // 比赛统计缓存 5 秒
+                buildCache("contestStanding", ticker, 5, TimeUnit.SECONDS), // 比赛排名缓存 5 秒
             ),
         )
         return manager

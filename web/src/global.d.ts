@@ -109,10 +109,13 @@ interface Contest {
   type: ContestType
   permission: ContestPermission
   userCount: number
+  users: string[]
   author: string
   languages?: number[]
   allowAllLanguages: boolean
   hasPermission: boolean
+  freezeTime?: number
+  showFinalBoard: boolean
 }
 
 type ContestType = |
