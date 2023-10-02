@@ -67,7 +67,7 @@ class ContestController(
     @SaCheckLogin
     fun contestRegister(
         @PathVariable id: Long,
-        @RequestBody contestRegisterRequest: ContestRegisterRequest
+        @RequestBody contestRegisterRequest: ContestRegisterRequest,
     ): ResponseEntity<R<Void>> {
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
@@ -88,7 +88,7 @@ class ContestController(
     }
 
     data class ContestRegisterRequest(
-        val password: String?
+        val password: String?,
     )
 
     @GetMapping("{id}/problemsStatistics")
@@ -143,7 +143,7 @@ class ContestController(
                 ContestStandingSubmissionDto.from(
                     it,
                     problems.find { problem -> problem.problemId == it.problem?.problemId }
-                        ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }!!
+                        ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }!!,
                 )
             },
         )
@@ -240,9 +240,13 @@ class ContestController(
         val submissions = submissionService.getByContestId(id)
             .reversed()
             .filter {
-                if (Instant.now() >= contest.endTime) true
-                else if (hasAdminPermission(user.role)) true
-                else it.user?.userId == user.userId
+                if (Instant.now() >= contest.endTime) {
+                    true
+                } else if (hasAdminPermission(user.role)) {
+                    true
+                } else {
+                    it.user?.userId == user.userId
+                }
             }
         return R.success(
             200,
