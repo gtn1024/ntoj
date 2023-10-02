@@ -8,6 +8,9 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import org.apache.commons.io.FileUtils
+import org.springframework.core.io.InputStreamResource
+import org.springframework.core.io.Resource
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -179,6 +182,17 @@ class AdminProblemController(
         val fileUpload =
             fileService.uploadTestCase(file, "${Instant.now().toEpochMilli()}-${randomString()}.zip")
         return R.success(200, "上传成功", TestcaseDto.from(fileUpload))
+    }
+
+    @GetMapping("/download_testcase/{id}")
+    fun getTestcase(@PathVariable id: Long): ResponseEntity<Resource> {
+        val testcase = fileUploadService.get(id)
+        val file = fileService.get(testcase.path)
+        val resource = InputStreamResource(file.inputStream())
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename=${testcase.filename}")
+            .contentType(MediaType.parseMediaType("application/zip"))
+            .body(resource)
     }
 
     private fun checkTestcaseFile(fileList: List<String>): Boolean {

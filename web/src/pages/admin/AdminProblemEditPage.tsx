@@ -1,5 +1,5 @@
 import type { FormInstance, UploadFile, UploadProps } from 'antd'
-import { Button, Form, Input, InputNumber, Switch, Transfer, Upload, message } from 'antd'
+import {Button, Form, Input, InputNumber, Switch, Transfer, Upload, message, Space} from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -7,6 +7,7 @@ import type { RcFile } from 'antd/es/upload'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { ProblemDetail } from '../../components/ProblemDetail.tsx'
+import c from "classnames";
 
 interface Params {
   title: string
@@ -258,10 +259,21 @@ export const AdminProblemEditPage: React.FC = () => {
             />
           </Form.Item>
 
-          <Form.Item label="测试数据">
-            <Upload {...props} fileList={fileList}>
-              <Button icon={<div className="i-mdi:cloud-upload"/> }>Upload</Button>
-            </Upload>
+          <Form.Item label="测试数据" className={c('flex')}>
+            <Space>
+              <Upload {...props} fileList={fileList}>
+                <Button icon={<div className="i-mdi:cloud-upload"/> }>Upload</Button>
+              </Upload>
+              {
+                testcaseFileId && (
+                  <Button icon={<div className="i-mdi:cloud-download"/> } bg-green onClick={()=>{
+                    http.get(`/admin/problem/download_testcase/${testcaseFileId}`)
+                  }}>
+                    下载测试数据
+                  </Button>
+                )
+              }
+            </Space>
           </Form.Item>
 
           <Form.Item
