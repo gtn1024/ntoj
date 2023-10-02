@@ -30,7 +30,7 @@ class ContestController(
         @RequestParam(required = false, defaultValue = "1") current: Int,
         @RequestParam(required = false, defaultValue = "20") pageSize: Int,
     ): ResponseEntity<R<L<ContestDto>>> {
-        val list = contestService.get(page = current, pageSize = pageSize)
+        val list = contestService.get(desc = true, page = current, pageSize = pageSize)
         val count = contestService.count()
         return R.success(
             200,
