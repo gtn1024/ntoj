@@ -62,7 +62,7 @@ class ProblemController(
         if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
             throw AppException("代码长度超过限制", 400)
         }
-        problem.submitTimes++
+        problem.submitTimes = (problem.submitTimes + 1).coerceAtLeast(problem.acceptedTimes + 1)
         problemService.update(problem)
         val language = languageService.get(problemSubmissionRequest.language)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
