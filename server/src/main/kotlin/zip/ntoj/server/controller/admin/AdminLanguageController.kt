@@ -23,7 +23,6 @@ import zip.ntoj.shared.model.R
 @RestController
 @RequestMapping("/admin/language")
 @SaCheckLogin
-@SaCheckRole(value = ["SUPER_ADMIN"], mode = SaMode.OR)
 class AdminLanguageController(
     private val languageService: LanguageService,
 ) {
@@ -56,6 +55,7 @@ class AdminLanguageController(
     }
 
     @PostMapping
+    @SaCheckRole(value = ["SUPER_ADMIN"], mode = SaMode.OR)
     fun create(
         @RequestBody @Valid
         languageRequest: LanguageRequest,
@@ -79,6 +79,7 @@ class AdminLanguageController(
     }
 
     @PatchMapping("{id}")
+    @SaCheckRole(value = ["SUPER_ADMIN"], mode = SaMode.OR)
     fun update(
         @RequestBody @Valid
         languageRequest: LanguageRequest,
@@ -117,6 +118,7 @@ class AdminLanguageController(
     }
 
     @DeleteMapping("/{id}")
+    @SaCheckRole(value = ["SUPER_ADMIN"], mode = SaMode.OR)
     fun delete(@PathVariable id: Long): ResponseEntity<R<Unit>> {
         languageService.delete(id)
         return R.success(200, "删除成功")
