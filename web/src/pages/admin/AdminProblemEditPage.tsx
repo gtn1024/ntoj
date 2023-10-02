@@ -1,13 +1,13 @@
 import type { FormInstance, UploadFile, UploadProps } from 'antd'
-import {Button, Form, Input, InputNumber, Switch, Transfer, Upload, message, Space} from 'antd'
+import { Button, Form, Input, InputNumber, Space, Switch, Transfer, Upload, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { RcFile } from 'antd/es/upload'
+import c from 'classnames'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { ProblemDetail } from '../../components/ProblemDetail.tsx'
-import c from "classnames";
 
 interface Params {
   title: string
@@ -150,6 +150,15 @@ export const AdminProblemEditPage: React.FC = () => {
         })
     },
   }
+  const downloadTestcase = () => {
+    http.get(`/admin/problem/download_testcase/${testcaseFileId}`, undefined, {
+      responseType: 'blob',
+    })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '下载失败')
+        throw err
+      })
+  }
   return (<>
     <div h="[calc(100vh-64px)]" w-full flex justify-between>
       <div w="1/2" overflow-y-auto p-4>
@@ -266,9 +275,7 @@ export const AdminProblemEditPage: React.FC = () => {
               </Upload>
               {
                 testcaseFileId && (
-                  <Button icon={<div className="i-mdi:cloud-download"/> } bg-green onClick={()=>{
-                    http.get(`/admin/problem/download_testcase/${testcaseFileId}`)
-                  }}>
+                  <Button icon={<div className="i-mdi:cloud-download"/> } bg-green onClick={downloadTestcase}>
                     下载测试数据
                   </Button>
                 )
