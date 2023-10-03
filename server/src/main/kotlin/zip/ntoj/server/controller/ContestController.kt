@@ -151,7 +151,7 @@ class ContestController(
 
     data class ContestStandingSubmissionDto(
         val id: Long,
-        val user: String,
+        val user: UserDto,
         val alias: String,
         val result: SubmissionStatus,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
@@ -159,11 +159,23 @@ class ContestController(
         companion object {
             fun from(submission: Submission, alias: String) = ContestStandingSubmissionDto(
                 id = submission.submissionId!!,
-                user = submission.user?.username!!,
+                user = submission.user?.let { UserDto.from(it) }!!,
                 alias = alias,
                 result = submission.status,
                 submitTime = submission.createdAt!!,
             )
+        }
+
+        data class UserDto(
+            val username: String,
+            val realName: String?,
+        ) {
+            companion object {
+                fun from(user: User) = UserDto(
+                    username = user.username,
+                    realName = user.realName,
+                )
+            }
         }
     }
 
@@ -449,7 +461,7 @@ class ContestController(
         val type: Contest.ContestType,
         val permission: Contest.ContestPermission,
         val userCount: Int,
-        val users: List<String>,
+        val users: List<UserDto>,
         val author: String,
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
@@ -457,6 +469,18 @@ class ContestController(
         val freezeTime: Int?,
         val showFinalBoard: Boolean,
     ) {
+        data class UserDto(
+            val username: String,
+            val realName: String?,
+        ) {
+            companion object {
+                fun from(user: User) = UserDto(
+                    username = user.username,
+                    realName = user.realName,
+                )
+            }
+        }
+
         companion object {
             fun from(contest: Contest, hasPermission: Boolean = false) = ContestDto(
                 id = contest.contestId!!,
@@ -467,7 +491,7 @@ class ContestController(
                 type = contest.type,
                 permission = contest.permission,
                 userCount = contest.users.size,
-                users = contest.users.map { it.username },
+                users = contest.users.map { UserDto.from(it) },
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,

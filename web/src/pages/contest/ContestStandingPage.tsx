@@ -11,14 +11,20 @@ import type { ContestProblem } from './ContestProblemList.tsx'
 
 interface ContestStandingSubmission {
   id: number
-  user: string
+  user: {
+    username: string
+    realName?: string
+  }
   alias: string
   result: SubmissionStatus
   submitTime: string
 }
 
 interface Standing {
-  user: string
+  user: {
+    username: string
+    realName?: string
+  }
   solved: number
   penalty: number
   problems: {
@@ -89,17 +95,20 @@ export const ContestStandingPage: React.FC = () => {
     const standing: Standing[] = []
     const tempData: { [key: string]: Standing } = {}
     for (const user of contest.users) {
-      tempData[user] = {
-        user,
+      tempData[user.username] = {
+        user: {
+          username: user.username,
+          realName: user.realName,
+        },
         solved: 0,
         penalty: 0,
         problems: {},
         submissions: {},
       }
       for (const problem of problems) {
-        if (!tempData[user].submissions[problem.alias]) {
-          tempData[user].submissions[problem.alias] = []
-          tempData[user].problems[problem.alias] = {
+        if (!tempData[user.username].submissions[problem.alias]) {
+          tempData[user.username].submissions[problem.alias] = []
+          tempData[user.username].problems[problem.alias] = {
             success: false,
             tried: 0,
             tryAfterFreeze: 0,
@@ -109,35 +118,35 @@ export const ContestStandingPage: React.FC = () => {
     }
     submissions.sort((a, b) => a.id - b.id)
     for (const submission of submissions) {
-      if (!contest.users.includes(submission.user)) { continue }
+      if (!contest.users.map(it => it.username).includes(submission.user.username)) { continue }
       const { submitTime, user } = submission
       const time = dayjs(submitTime).unix()
       const relativeTime = Math.floor((time - startTime) / 60)
-      tempData[user].submissions[submission.alias].push({
+      tempData[user.username].submissions[submission.alias].push({
         id: submission.id,
         result: submission.result,
         time: relativeTime,
       })
-      if (!tempData[user].problems[submission.alias].success) {
+      if (!tempData[user.username].problems[submission.alias].success) {
         if (!finalStanding && time >= freezeUnixTime) {
           // 封榜后
-          tempData[user].problems[submission.alias].tryAfterFreeze++
-          tempData[user].problems[submission.alias].tried++
+          tempData[user.username].problems[submission.alias].tryAfterFreeze++
+          tempData[user.username].problems[submission.alias].tried++
         } else {
           switch (submission.result) {
             case 'COMPILE_ERROR':
             case 'SYSTEM_ERROR':
               continue
             case 'ACCEPTED':
-              tempData[user].solved++
-              tempData[user].penalty += relativeTime
-              tempData[user].problems[submission.alias].success = true
-              tempData[user].problems[submission.alias].successTime = relativeTime
-              tempData[user].problems[submission.alias].tried++
+              tempData[user.username].solved++
+              tempData[user.username].penalty += relativeTime
+              tempData[user.username].problems[submission.alias].success = true
+              tempData[user.username].problems[submission.alias].successTime = relativeTime
+              tempData[user.username].problems[submission.alias].tried++
               break
             default:
-              tempData[user].problems[submission.alias].tried++
-              tempData[user].penalty += 20
+              tempData[user.username].problems[submission.alias].tried++
+              tempData[user.username].penalty += 20
           }
         }
       }
@@ -181,9 +190,14 @@ export const ContestStandingPage: React.FC = () => {
           </thead>
           <tbody>
             {standing.map((user, index) => (
-              <tr key={user.user} bg={index % 2 === 0 ? '#ffffff' : '#eeeeee'}>
+              <tr key={user.user.username} bg={index % 2 === 0 ? '#ffffff' : '#eeeeee'}>
                 <td px-4 py-3 text-center>{index + 1}</td>
-                <td px-4 py-3 text-center>{user.user}</td>
+                <td px-4 py-3 text-center>
+                  <div>
+                    {user.user.realName && user.user.realName}<br/>
+                    {user.user.username}
+                  </div>
+                </td>
                 <td px-4 py-3 text-center>{user.solved}</td>
                 <td px-4 py-3 text-center>{user.penalty}</td>
                 {problems?.map(problem => (

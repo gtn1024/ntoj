@@ -109,7 +109,10 @@ interface Contest {
   type: ContestType
   permission: ContestPermission
   userCount: number
-  users: string[]
+  users: {
+    username: string
+    realName?: string
+  }[]
   author: string
   languages?: number[]
   allowAllLanguages: boolean
