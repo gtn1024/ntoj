@@ -112,6 +112,7 @@ interface Contest {
   users: {
     username: string
     realName?: string
+    joinAt: string
   }[]
   author: string
   languages?: number[]

@@ -80,6 +80,7 @@ export const ContestStandingPage: React.FC = () => {
   const [standing, setStanding] = useState<Standing[]>([])
   const [finalStanding, setFinalStanding] = useState(false)
   const [freezeUnixTime, setFreezeUnixTime] = useState(dayjs(Date.now()).unix())
+  const [endTime, setEndTime] = useState(dayjs(Date.now()).unix())
   const [startTime, setStartTime] = useState<number>()
   useEffect(() => {
     if (!contest) {
@@ -91,11 +92,14 @@ export const ContestStandingPage: React.FC = () => {
     }
     setFreezeUnixTime(dayjs(contest.endTime).unix() - (contest.freezeTime ?? 0) * 60)
     setStartTime(dayjs(contest.startTime).unix())
+    setEndTime(dayjs(contest.endTime).unix())
 
     if (!contest || !problems || !submissions || !startTime) { return }
     const standing: Standing[] = []
     const tempData: { [key: string]: Standing } = {}
     for (const user of contest.users) {
+      const joinAt = dayjs(user.joinAt).unix()
+      if (joinAt > endTime) { continue }
       tempData[user.username] = {
         user: {
           username: user.username,
@@ -121,6 +125,7 @@ export const ContestStandingPage: React.FC = () => {
     for (const submission of submissions) {
       if (!contest.users.map(it => it.username).includes(submission.user.username)) { continue }
       const { submitTime, user } = submission
+      if (!tempData[user.username]) { continue }
       const time = dayjs(submitTime).unix()
       const relativeTime = time - startTime
       tempData[user.username].submissions[submission.alias].push({
@@ -160,7 +165,8 @@ export const ContestStandingPage: React.FC = () => {
       return b.solved - a.solved
     })
     setStanding(standing)
-  }, [startTime, contest, problems, submissions, finalStanding, freezeUnixTime])
+  }, [startTime, contest, problems, submissions, finalStanding, freezeUnixTime, endTime])
+
   return (
     <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2>
       <div w-full flex justify-between>

@@ -483,11 +483,13 @@ class ContestController(
         data class UserDto(
             val username: String,
             val realName: String?,
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val joinAt: Instant,
         ) {
             companion object {
-                fun from(user: User) = UserDto(
+                fun from(user: User, joinAt: Instant) = UserDto(
                     username = user.username,
                     realName = user.realName,
+                    joinAt = joinAt,
                 )
             }
         }
@@ -503,7 +505,7 @@ class ContestController(
                 permission = contest.permission,
                 userCount = contest.users.size,
                 users = contest.users.map {
-                    UserDto.from(userService.getUserById(it.userId))
+                    UserDto.from(userService.getUserById(it.userId), Instant.ofEpochMilli(it.joinAt))
                 },
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
