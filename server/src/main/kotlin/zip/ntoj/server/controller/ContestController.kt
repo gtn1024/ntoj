@@ -38,7 +38,7 @@ class ContestController(
             L(
                 total = count,
                 page = current,
-                list = list.map { ContestDto.from(it) },
+                list = list.map { ContestDto.from(it, userService = userService) },
             ),
         )
     }
@@ -52,14 +52,14 @@ class ContestController(
             return R.success(
                 200,
                 "获取成功",
-                ContestDto.from(contest, hasPermission),
+                ContestDto.from(contest, hasPermission, userService),
             )
         }
         val contest = contestService.get(id)
         return R.success(
             200,
             "获取成功",
-            ContestDto.from(contest),
+            ContestDto.from(contest, userService = userService),
         )
     }
 
@@ -82,7 +82,7 @@ class ContestController(
         ) {
             throw AppException("密码错误", 400)
         }
-        contest.users.add(user)
+        contest.users.add(ContestUser(userId = user.userId!!, joinAt = Instant.now().toEpochMilli()))
         contestService.update(contest)
         return R.success(200, "报名成功")
     }
@@ -493,7 +493,7 @@ class ContestController(
         }
 
         companion object {
-            fun from(contest: Contest, hasPermission: Boolean = false) = ContestDto(
+            fun from(contest: Contest, hasPermission: Boolean = false, userService: UserService) = ContestDto(
                 id = contest.contestId!!,
                 title = contest.title,
                 description = contest.description,
@@ -502,7 +502,9 @@ class ContestController(
                 type = contest.type,
                 permission = contest.permission,
                 userCount = contest.users.size,
-                users = contest.users.map { UserDto.from(it) },
+                users = contest.users.map {
+                    UserDto.from(userService.getUserById(it.userId))
+                },
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,

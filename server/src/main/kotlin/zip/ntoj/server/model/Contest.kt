@@ -2,7 +2,6 @@ package zip.ntoj.server.model
 
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -37,7 +36,7 @@ class Contest(
 
     @JdbcTypeCode(JSON) @Column(nullable = false) var problems: List<ContestProblem> = listOf(),
 
-    @ManyToMany(cascade = [CascadeType.ALL]) var users: MutableList<User> = mutableListOf(),
+    @JdbcTypeCode(JSON) @Column(nullable = false) var users: MutableList<ContestUser> = mutableListOf(),
 
     @ManyToMany var languages: List<Language> = mutableListOf(),
     @Column(nullable = false) var allowAllLanguages: Boolean,
@@ -64,4 +63,9 @@ class Contest(
 data class ContestProblem @JsonCreator constructor(
     @JsonProperty("problemId") var problemId: Long,
     @JsonProperty("contestProblemIndex") var contestProblemIndex: Int,
+)
+
+data class ContestUser @JsonCreator constructor(
+    @JsonProperty("userId") var userId: Long,
+    @JsonProperty("joinAt") var joinAt: Long,
 )
