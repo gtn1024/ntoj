@@ -315,7 +315,18 @@ class ContestController(
 
     @GetMapping("{id}/clarifications")
     fun getClarifications(@PathVariable id: Long): ResponseEntity<R<List<ContestClarificationDto>>> {
+        var user: User? = null
+        if (StpUtil.isLogin()) {
+            user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        }
         val clarifications = contestClarificationService.getByContestId(id).reversed()
+            .filter {
+                if (it.sticky) {
+                    true
+                } else {
+                    user?.let { user -> it.user.userId == user.userId } ?: false
+                }
+            }
         return R.success(
             200,
             "获取成功",
