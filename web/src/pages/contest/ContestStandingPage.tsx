@@ -212,7 +212,7 @@ export const ContestStandingPage: React.FC = () => {
                   }}>
                     {user.problems[problem.alias].tried
                       && (<div relative mx-4 my-3>
-                          {user.problems[problem.alias].success ? penaltyToTimeString(user.problems[problem.alias].successTime) : '+'}
+                          {user.problems[problem.alias].success ? penaltyToTimeString(user.problems[problem.alias].successTime!) : '+'}
                           ({user.problems[problem.alias].tried - user.problems[problem.alias].tryAfterFreeze})
                           {!user.problems[problem.alias].success && user.problems[problem.alias].tryAfterFreeze > 0
                               && (
