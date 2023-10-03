@@ -30,3 +30,19 @@ export function timeDiffString(diff: number) {
   }
   return s
 }
+
+export function penaltyToTimeString(penalty: number): string {
+  const hours = Math.floor(penalty / 3600)
+  penalty -= hours * 3600
+  const minutes = Math.floor(penalty / 60)
+  penalty -= minutes * 60
+  const seconds = Math.floor(penalty)
+  let res = ''
+  if (hours < 10) { res += '0' }
+  res += `${hours}:`
+  if (minutes < 10) { res += '0' }
+  res += `${minutes}:`
+  if (seconds < 10) { res += '0' }
+  res += `${seconds}`
+  return res
+}

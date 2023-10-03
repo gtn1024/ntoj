@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
+import { penaltyToTimeString } from '../../lib/misc.ts'
 import type { ContestProblem } from './ContestProblemList.tsx'
 
 interface ContestStandingSubmission {
@@ -121,7 +122,7 @@ export const ContestStandingPage: React.FC = () => {
       if (!contest.users.map(it => it.username).includes(submission.user.username)) { continue }
       const { submitTime, user } = submission
       const time = dayjs(submitTime).unix()
-      const relativeTime = Math.floor((time - startTime) / 60)
+      const relativeTime = time - startTime
       tempData[user.username].submissions[submission.alias].push({
         id: submission.id,
         result: submission.result,
@@ -146,7 +147,7 @@ export const ContestStandingPage: React.FC = () => {
               break
             default:
               tempData[user.username].problems[submission.alias].tried++
-              tempData[user.username].penalty += 20
+              tempData[user.username].penalty += 20 * 60 // +20min
           }
         }
       }
@@ -199,7 +200,7 @@ export const ContestStandingPage: React.FC = () => {
                   </div>
                 </td>
                 <td px-4 py-3 text-center>{user.solved}</td>
-                <td px-4 py-3 text-center>{user.penalty}</td>
+                <td px-4 py-3 text-center>{penaltyToTimeString(user.penalty)}</td>
                 {problems?.map(problem => (
                   <td key={problem.alias} text-center style={{
                     backgroundColor: user.problems[problem.alias].success
@@ -211,7 +212,7 @@ export const ContestStandingPage: React.FC = () => {
                   }}>
                     {user.problems[problem.alias].tried
                       && (<div relative mx-4 my-3>
-                          {user.problems[problem.alias].success ? user.problems[problem.alias].successTime : '+'}
+                          {user.problems[problem.alias].success ? penaltyToTimeString(user.problems[problem.alias].successTime) : '+'}
                           ({user.problems[problem.alias].tried - user.problems[problem.alias].tryAfterFreeze})
                           {!user.problems[problem.alias].success && user.problems[problem.alias].tryAfterFreeze > 0
                               && (
