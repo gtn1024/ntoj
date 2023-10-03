@@ -1,5 +1,5 @@
 [versions]
-sa-token = "1.34.0"
+sa-token = "1.36.0"
 commons-codec = "1.16.0"
 commons-io = "2.14.0"
 
