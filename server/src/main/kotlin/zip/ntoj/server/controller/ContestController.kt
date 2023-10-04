@@ -242,30 +242,33 @@ class ContestController(
 
     @GetMapping("{id}/submission")
     @SaCheckLogin
-    fun getSubmissions(@PathVariable id: Long): ResponseEntity<R<L<ContestSubmissionDto>>> {
+    fun getSubmissions(
+        @PathVariable id: Long,
+        @RequestParam(required = false, defaultValue = "1") current: Int,
+        @RequestParam(required = false, defaultValue = "20") pageSize: Int,
+        @RequestParam(required = false) username: String?,
+    ): ResponseEntity<R<L<ContestSubmissionDto>>> {
         fun hasAdminPermission(role: UserRole): Boolean {
             return role.ordinal >= 2
         }
 
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
-        val submissions = submissionService.getByContestId(id)
-            .reversed()
-            .filter {
-                if (Instant.now() >= contest.endTime) {
-                    true
-                } else if (hasAdminPermission(user.role)) {
-                    true
-                } else {
-                    it.user?.userId == user.userId
-                }
-            }
+        val filteredUsername = if (Instant.now() >= contest.endTime) {
+            username
+        } else if (hasAdminPermission(user.role)) {
+            username
+        } else {
+            user.username
+        }
+        val submissions = submissionService.getByContestId(id, current, pageSize, true, filteredUsername)
+        val count = submissionService.countByContestId(id, filteredUsername)
         return R.success(
             200,
             "获取成功",
             L(
-                total = submissions.size.toLong(),
-                page = 1,
+                total = count,
+                page = current,
                 list = submissions.map {
                     val alias = contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
                         ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }

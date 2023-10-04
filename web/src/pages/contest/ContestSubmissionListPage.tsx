@@ -2,7 +2,7 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
-import { message } from 'antd'
+import { Pagination, message } from 'antd'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../../lib/SubmissionUtils.ts'
@@ -25,10 +25,11 @@ interface ContestSubmission {
 
 export const ContestSubmissionListPage: React.FC = () => {
   const { id } = useParams()
-  const { data } = useSWR(`/contest/${id}/submission`, async (path) => {
+  const [current, setCurrent] = React.useState(1)
+  const { data } = useSWR(`/contest/${id}/submission?current=${current}&pageSize=20`, async (path) => {
     return http.get<L<ContestSubmission>>(path)
       .then((res) => {
-        return res.data.data.list
+        return res.data.data
       })
       .catch((err: AxiosError<HttpResponse>) => {
         void message.error(err.response?.data.message ?? '获取竞赛提交列表失败')
@@ -52,7 +53,7 @@ export const ContestSubmissionListPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-        {data?.map((submission, index) => (
+        {data?.list.map((submission, index) => (
           <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
             <td width={'10%'} px-4 py-3>
               <div text-center>{submission.id}</div>
@@ -92,6 +93,7 @@ export const ContestSubmissionListPage: React.FC = () => {
         ))}
         </tbody>
       </table>
+      <Pagination current={current} onChange={setCurrent} total={data?.total} pageSize={20} showSizeChanger={false} />
     </div>
   )
 }

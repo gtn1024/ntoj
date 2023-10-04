@@ -45,7 +45,13 @@ interface SubmissionService {
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
         desc: Boolean = false,
+        username: String? = null,
     ): List<Submission>
+
+    fun countByContestId(
+        contestId: Long,
+        username: String? = null,
+    ): Long
 
     fun getPendingSubmissionAndSetJudging(): Submission?
     fun new(submission: Submission): Submission
@@ -120,11 +126,20 @@ class SubmissionServiceImpl(
         return submissionRepository.count(buildSpecification(onlyVisibleProblem, scope))
     }
 
-    override fun getByContestId(contestId: Long, page: Int, pageSize: Int, desc: Boolean): List<Submission> {
+    override fun getByContestId(
+        contestId: Long,
+        page: Int,
+        pageSize: Int,
+        desc: Boolean,
+        username: String?,
+    ): List<Submission> {
         return submissionRepository.findAll(
             Specification { root, _, cb ->
                 val predicates: MutableList<Predicate> = mutableListOf()
                 predicates.add(cb.equal(root.get<Long>("contestId"), contestId))
+                if (username != null) {
+                    predicates.add(cb.equal(root.get<Submission>("user").get<String>("username"), username))
+                }
                 return@Specification cb.and(*predicates.toTypedArray())
             },
             PageRequest.of(
@@ -133,6 +148,19 @@ class SubmissionServiceImpl(
                 Sort.by(if (desc) Sort.Direction.DESC else Sort.Direction.ASC, "submissionId"),
             ),
         ).toList()
+    }
+
+    override fun countByContestId(contestId: Long, username: String?): Long {
+        return submissionRepository.count(
+            Specification { root, _, cb ->
+                val predicates: MutableList<Predicate> = mutableListOf()
+                predicates.add(cb.equal(root.get<Long>("contestId"), contestId))
+                if (username != null) {
+                    predicates.add(cb.equal(root.get<Submission>("user").get<String>("username"), username))
+                }
+                return@Specification cb.and(*predicates.toTypedArray())
+            },
+        )
     }
 
     @Transactional
