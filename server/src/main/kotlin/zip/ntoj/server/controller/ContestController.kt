@@ -101,21 +101,16 @@ class ContestController(
         }.filter {
             it.status != SubmissionStatus.COMPILE_ERROR
         }
-        val mp: MutableMap<Pair<String, String>, Boolean> = mutableMapOf()
         return R.success(
             200,
             "获取成功",
             problems.associate { contestProblem ->
-                val problem = problemService.get(contestProblem.problemId)
                 var submitTimes: Long = 0
                 var acceptedTimes: Long = 0
                 submissions.filter { it.problem?.problemId == contestProblem.problemId }.forEach {
                     submitTimes++
-                    if ((it.status == SubmissionStatus.ACCEPTED) &&
-                        mp.contains(Pair(it.user?.username!!, problem.problemId.toString())).not()
-                    ) {
+                    if (it.status == SubmissionStatus.ACCEPTED) {
                         acceptedTimes++
-                        mp[Pair(it.user?.username!!, problem.problemId.toString())] = true
                     }
                 }
                 numberToAlphabet(contestProblem.contestProblemIndex) to ContestProblemStatisticsDto(
