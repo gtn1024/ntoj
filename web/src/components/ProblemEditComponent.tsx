@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react'
 import type { AxiosError } from 'axios'
-import { Button, Select, message } from 'antd'
+import { Button, Drawer, Select, message } from 'antd'
 import c from 'classnames'
 import { useWindowSize } from 'react-use'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { useLayout } from '../hooks/useLayout.ts'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
+import { useCodemirrorConfig } from '../hooks/useCodemirrorConfig.ts'
 import { CodeMirrorEditor } from './CodeMirrorEditor.tsx'
 
 interface Props {
@@ -28,6 +29,8 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   const [isSubmissionOk, setIsSubmissionOk] = useState(false)
 
   const [submissionResult, setSubmissionResult] = useState<Submission>()
+  const [editorConfigDrawerOpen, setEditorConfigDrawerOpen] = useState(false)
+  const { codemirrorConfig, setCodemirrorConfig } = useCodemirrorConfig()
 
   const onSubmitCode = () => {
     if (!language) {
@@ -91,7 +94,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
 
   return (
     <>
-      <div className={c('h-[40px]', 'flex', 'items-center')}>
+      <div h="40px" flex items-center justify-between mx-2>
         <div className={'flex'}>
           <Select
             className={c('w-[150px]')}
@@ -103,6 +106,49 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
             options={languageOptions}
           />
         </div>
+        <div flex gap-1>
+          <button bg="inherit hover:#f3f3f6" rounded border-none cursor-pointer onClick={() => setEditorConfigDrawerOpen(true)}>
+            <div className="i-material-symbols:settings"/>
+          </button>
+        </div>
+        <Drawer title="编辑器设置" placement="right" onClose={() => setEditorConfigDrawerOpen(false)} open={editorConfigDrawerOpen}>
+          <div flex flex-col>
+            <h2>通用</h2>
+            <div flex flex-col gap-4>
+              <div flex flex-col>
+                <h3>主题</h3>
+                <div w-full>
+                  <Select
+                      w-full
+                      value={codemirrorConfig?.theme}
+                      onChange={e => setCodemirrorConfig({ ...codemirrorConfig, theme: e })}
+                      options={[
+                        { value: 'light', label: '浅色' },
+                        { value: 'dark', label: '深色' },
+                      ]}
+                  />
+                </div>
+              </div>
+              <div flex flex-col>
+                <h3>字体大小</h3>
+                <div w-full>
+                  <Select
+                      w-full
+                      value={codemirrorConfig?.fontSize}
+                      onChange={e => setCodemirrorConfig({ ...codemirrorConfig, fontSize: e })}
+                      options={[
+                        { value: 14, label: '默认' },
+                        { value: 12, label: '小' },
+                        { value: 16, label: '大' },
+                        { value: 18, label: '更大' },
+                        { value: 20, label: '加大' },
+                      ]}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </Drawer>
       </div>
       <div grow ref={editorWrapperRef}>
         <CodeMirrorEditor
@@ -110,6 +156,8 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           value={code}
           setValue={setCode}
           language={editorLanguage}
+          theme={codemirrorConfig?.theme}
+          fontSize={codemirrorConfig?.fontSize}
         />
       </div>
       <div relative bg-white>
