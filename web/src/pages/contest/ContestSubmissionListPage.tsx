@@ -93,7 +93,9 @@ export const ContestSubmissionListPage: React.FC = () => {
         ))}
         </tbody>
       </table>
-      <Pagination current={current} onChange={setCurrent} total={data?.total} pageSize={20} showSizeChanger={false} />
+      <div flex justify-center w-full>
+        <Pagination current={current} onChange={setCurrent} total={data?.total} pageSize={20} showSizeChanger={false} />
+      </div>
     </div>
   )
 }
