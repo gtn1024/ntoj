@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
-import { message } from 'antd'
+import { Progress, message } from 'antd'
 import { useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
 import type { HttpResponse } from '../../lib/Http.tsx'
@@ -82,6 +82,8 @@ export const ContestStandingPage: React.FC = () => {
   const [freezeUnixTime, setFreezeUnixTime] = useState(dayjs(Date.now()).unix())
   const [endTime, setEndTime] = useState(dayjs(Date.now()).unix())
   const [startTime, setStartTime] = useState<number>()
+  const [contestProgress, setContestProgress] = useState(0)
+  const [contestProgressInterval, setContestProgressInterval] = useState<number>()
   useEffect(() => {
     if (!contest) {
       setFinalStanding(false)
@@ -93,6 +95,24 @@ export const ContestStandingPage: React.FC = () => {
     setFreezeUnixTime(dayjs(contest.endTime).unix() - (contest.freezeTime ?? 0) * 60)
     setStartTime(dayjs(contest.startTime).unix())
     setEndTime(dayjs(contest.endTime).unix())
+    if (!contestProgressInterval && startTime && endTime) {
+      const now = dayjs(Date.now()).unix()
+      if (startTime <= now && now <= endTime) {
+        setContestProgressInterval(setInterval(() => {
+          if (dayjs(Date.now()).unix() >= endTime) {
+            clearInterval(contestProgressInterval)
+            setContestProgress(100)
+            setContestProgressInterval(undefined)
+            return
+          }
+          setContestProgress((dayjs(Date.now()).unix() - startTime) / (endTime - startTime) * 100)
+        }, 1000))
+      } else if (now > endTime) {
+        setContestProgress(100)
+      } else {
+        setContestProgress(0)
+      }
+    }
 
     if (!contest || !problems || !submissions || !startTime) { return }
     const standing: Standing[] = []
@@ -165,7 +185,7 @@ export const ContestStandingPage: React.FC = () => {
       return b.solved - a.solved
     })
     setStanding(standing)
-  }, [startTime, contest, problems, submissions, finalStanding, freezeUnixTime, endTime])
+  }, [startTime, contest, problems, submissions, finalStanding, freezeUnixTime, endTime, contestProgressInterval])
 
   return (
     <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2>
@@ -176,7 +196,7 @@ export const ContestStandingPage: React.FC = () => {
         </div>
       </div>
       <div w-full>
-        {/* 进度条 */}
+        <Progress percent={contestProgress} showInfo={false} />
       </div>
       <div w-full>
         <table w-full>
