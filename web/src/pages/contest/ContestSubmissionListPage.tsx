@@ -26,7 +26,7 @@ interface ContestSubmission {
 export const ContestSubmissionListPage: React.FC = () => {
   const { id } = useParams()
   const [current, setCurrent] = React.useState(1)
-  const { data } = useSWR(`/contest/${id}/submission?current=${current}&pageSize=20`, async (path) => {
+  const { data } = useSWR(`/contest/${id}/submission?current=${current}&pageSize=20`, async (path: string) => {
     return http.get<L<ContestSubmission>>(path)
       .then((res) => {
         return res.data.data
