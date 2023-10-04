@@ -17,6 +17,7 @@ class ContestClarification(
     @ManyToOne @JoinColumn(nullable = false) var user: User,
     @ManyToOne @JoinColumn(nullable = false) var contest: Contest,
     @Column(nullable = false) var sticky: Boolean = false,
+    @Column(nullable = false) var closed: Boolean = false,
     @Column(nullable = false) var visible: Boolean = true,
     @OneToMany(cascade = [CascadeType.ALL]) var responses: MutableList<ContestClarificationResponse> = mutableListOf(),
     var contestProblemId: Int? = null,

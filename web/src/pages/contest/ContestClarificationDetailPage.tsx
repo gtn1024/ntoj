@@ -7,6 +7,7 @@ import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
 import { mdit } from '../../lib/mdit.ts'
+import { useUserStore } from '../../stores/useUserStore.tsx'
 
 interface ClarificationReplyDto {
   id: number
@@ -23,8 +24,10 @@ interface ContestClarificationDetailDto {
   contestProblemAlias?: string
   content: string
   replies: ClarificationReplyDto[]
+  closed: boolean
 }
 export const ContestClarificationDetailPage: React.FC = () => {
+  const userStore = useUserStore()
   const [replyContent, setReplyContent] = useState('')
   const { id, clarificationId } = useParams()
   const { data: clarification, mutate } = useSWR(`/contest/${id}/clarification/${clarificationId}`, async (path: string) => {
@@ -52,6 +55,16 @@ export const ContestClarificationDetailPage: React.FC = () => {
       })
       .catch((err: AxiosError<HttpResponse>) => {
         void message.error(err.response?.data.message ?? '回复失败')
+      })
+  }
+  const onCloseClarification = () => {
+    http.patch<void>(`/contest/${id}/clarification/${clarificationId}/close`)
+      .then(() => {
+        void message.success('操作成功')
+        void mutate()
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '操作失败')
       })
   }
   return (
@@ -87,8 +100,19 @@ export const ContestClarificationDetailPage: React.FC = () => {
         }
       </div>
       <div w-full>
-        <textarea w-full h="200px" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)}/>
-        <button onClick={onReplySubmit}>提交</button>
+        {
+          !clarification?.closed && (
+            <>
+              <textarea w-full h="200px" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)}/>
+              <button onClick={onReplySubmit}>发布</button>
+            </>
+          )
+        }
+        {
+          userStore.user.role && (['ADMIN', 'SUPER_ADMIN', 'COACH'] as UserRole[]).includes(userStore.user.role) && (
+            <button onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
+          )
+        }
       </div>
     </div>
   )
