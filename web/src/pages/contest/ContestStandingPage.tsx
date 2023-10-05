@@ -215,8 +215,18 @@ export const ContestStandingPage: React.FC = () => {
           {/* 操作 */}
         </div>
       </div>
-      <div w-full>
-        <Progress percent={contestProgress} showInfo={false} />
+      <div w-full flex flex-col>
+        <div w-full><Progress percent={contestProgress} showInfo={false} /></div>
+        <div w-full justify-between flex text-sm>
+          <div>{/* 进行时间 */}</div>
+          <div flex gap-1>
+            <div style={{ backgroundColor: colorMap.FIRST_SOLVE }}>First to solve problem</div>
+            <div style={{ backgroundColor: colorMap.SOLVED }}>Solved problem</div>
+            <div style={{ backgroundColor: colorMap.ATTEMPTED }}>Attempted problem</div>
+            <div style={{ backgroundColor: colorMap.PENDING }}>Pending judgement</div>
+          </div>
+          <div>{/* 剩余时间 */}</div>
+        </div>
       </div>
       <div w-full>
         <table w-full>
