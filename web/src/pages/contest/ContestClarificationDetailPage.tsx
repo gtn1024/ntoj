@@ -25,6 +25,7 @@ interface ContestClarificationDetailDto {
   content: string
   replies: ClarificationReplyDto[]
   closed: boolean
+  sticky: boolean
 }
 export const ContestClarificationDetailPage: React.FC = () => {
   const userStore = useUserStore()
@@ -59,6 +60,16 @@ export const ContestClarificationDetailPage: React.FC = () => {
   }
   const onCloseClarification = () => {
     http.patch<void>(`/contest/${id}/clarification/${clarificationId}/close`)
+      .then(() => {
+        void message.success('操作成功')
+        void mutate()
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '操作失败')
+      })
+  }
+  const onStickyClarification = () => {
+    http.patch<void>(`/contest/${id}/clarification/${clarificationId}/sticky`)
       .then(() => {
         void message.success('操作成功')
         void mutate()
@@ -110,7 +121,10 @@ export const ContestClarificationDetailPage: React.FC = () => {
         }
         {
           userStore.user.role && (['ADMIN', 'SUPER_ADMIN', 'COACH'] as UserRole[]).includes(userStore.user.role) && (
-            <button onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
+            <>
+              <button onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
+              <button onClick={onStickyClarification}>{clarification?.sticky ? '取消置顶' : '置顶'}</button>
+            </>
           )
         }
       </div>

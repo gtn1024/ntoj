@@ -372,6 +372,23 @@ class ContestController(
         return R.success(200, "提交成功")
     }
 
+    @PatchMapping("{id}/clarification/{clarificationId}/sticky")
+    @SaCheckLogin
+    @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
+    fun stickyClarification(
+        @PathVariable id: Long,
+        @PathVariable clarificationId: Long,
+    ): ResponseEntity<R<Void>> {
+        val contest = contestService.get(id)
+        val clarification = contestClarificationService.get(clarificationId)
+        if (clarification.contest.contestId != contest.contestId) {
+            throw AppException("该问题不属于该比赛", 400)
+        }
+        clarification.sticky = !clarification.sticky
+        contestClarificationService.update(clarification)
+        return R.success(200, "提交成功")
+    }
+
     @GetMapping("{id}/clarification/{clarificationId}")
     fun getClarification(
         @PathVariable id: Long,
@@ -431,6 +448,7 @@ class ContestController(
         val content: String,
         val replies: List<ClarificationResponseDto>,
         val closed: Boolean,
+        val sticky: Boolean,
     ) {
         companion object {
             fun from(clarification: ContestClarification) = ContestClarificationDetailDto(
@@ -442,6 +460,7 @@ class ContestController(
                 content = clarification.content,
                 replies = clarification.responses.map { ClarificationResponseDto.from(it) },
                 closed = clarification.closed,
+                sticky = clarification.sticky,
             )
         }
 
