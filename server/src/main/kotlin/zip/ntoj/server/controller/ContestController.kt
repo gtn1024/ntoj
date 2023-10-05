@@ -323,6 +323,8 @@ class ContestController(
             .filter {
                 if (it.sticky) {
                     true
+                } else if (user != null && user.role.ordinal > 1) {
+                    true
                 } else {
                     user?.let { user -> it.user.userId == user.userId } ?: false
                 }
