@@ -27,6 +27,7 @@ interface StandingProblem {
   tryAfterFreeze: number
   successTime?: number
   firstSolved?: boolean
+  penalty?: number
 }
 
 interface Standing {
@@ -58,6 +59,19 @@ function getCellColor(problem: StandingProblem) {
   if (problem.success) { return problem.firstSolved ? colorMap.FIRST_SOLVE : colorMap.SOLVED }
   if (problem.tried > 0) { return colorMap.ATTEMPTED }
   return 'inherit'
+}
+
+function getCellContent(problem: StandingProblem) {
+  return problem.tried > 0 && (
+    <div relative mx-1 my-1>
+      {problem.success
+        ? '+'
+        : (problem.tryAfterFreeze > 0 ? '?' : '-')
+      }
+      <br/>
+      {problem.tried}/{Math.floor(problem.penalty! / 60)}
+    </div>
+  )
 }
 
 export const ContestStandingPage: React.FC = () => {
@@ -170,6 +184,7 @@ export const ContestStandingPage: React.FC = () => {
         time: relativeTime,
       })
       if (!tempData[user.username].problems[submission.alias].success) {
+        tempData[user.username].problems[submission.alias].penalty = relativeTime
         if (!finalStanding && time >= freezeUnixTime) {
           // 封榜后
           tempData[user.username].problems[submission.alias].tryAfterFreeze++
@@ -229,7 +244,7 @@ export const ContestStandingPage: React.FC = () => {
         </div>
       </div>
       <div w-full>
-        <table w-full>
+        <table w-full text-sm>
           <thead>
             <tr bg="#eeeeee" text="#888888">
               <th px-4 py-3 font-normal w-60px></th>
@@ -237,7 +252,7 @@ export const ContestStandingPage: React.FC = () => {
               <th px-4 py-3 font-normal w-100px>解题数量</th>
               <th px-4 py-3 font-normal w-80px>罚时</th>
               {problems?.map(problem => (
-                <th key={problem.alias} px-4 py-3 font-normal w-100px>
+                <th key={problem.alias} px-4 py-3 font-normal w-14>
                   <LinkComponent href={`/c/${contestId}/p/${problem.alias}`}>
                     {problem.alias}
                   </LinkComponent>
@@ -248,32 +263,19 @@ export const ContestStandingPage: React.FC = () => {
           <tbody>
             {standing.map((user, index) => (
               <tr key={user.user.username} bg={index % 2 === 0 ? '#ffffff' : '#eeeeee'}>
-                <td px-4 py-3 text-center>{index + 1}</td>
-                <td px-4 py-3 text-center>
+                <td px-1 py-1 text-center>{index + 1}</td>
+                <td px-1 py-1 text-center>
                   <div>
                     {user.user.realName && user.user.realName}<br/>
                     {user.user.username}
                   </div>
                 </td>
-                <td px-4 py-3 text-center>{user.solved}</td>
-                <td px-4 py-3 text-center>{penaltyToTimeString(user.penalty)}</td>
+                <td px-1 py-1 text-center>{user.solved}</td>
+                <td px-1 py-1 text-center>{penaltyToTimeString(user.penalty)}</td>
                 {problems?.map(problem => (
                   <td key={problem.alias} text-center style={{
                     backgroundColor: getCellColor(user.problems[problem.alias]),
-                  }}>
-                    {user.problems[problem.alias].tried
-                      && (<div relative mx-4 my-3>
-                          {user.problems[problem.alias].success ? penaltyToTimeString(user.problems[problem.alias].successTime!) : '+'}
-                          ({user.problems[problem.alias].tried - user.problems[problem.alias].tryAfterFreeze})
-                          {!user.problems[problem.alias].success && user.problems[problem.alias].tryAfterFreeze > 0
-                              && (
-                                  <span absolute text-sm left="-4" bottom="-3">
-                                    {user.problems[problem.alias].tryAfterFreeze}
-                                  </span>
-                              )}
-                        </div>)
-                    }
-                  </td>
+                  }}> {getCellContent(user.problems[problem.alias])} </td>
                 ))}
               </tr>
             ))}
