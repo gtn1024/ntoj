@@ -21,6 +21,14 @@ interface ContestStandingSubmission {
   submitTime: string
 }
 
+interface StandingProblem {
+  success: boolean
+  tried: number
+  tryAfterFreeze: number
+  successTime?: number
+  firstSolved?: boolean
+}
+
 interface Standing {
   user: {
     username: string
@@ -29,12 +37,7 @@ interface Standing {
   solved: number
   penalty: number
   problems: {
-    [key: string]: {
-      success: boolean
-      tried: number
-      tryAfterFreeze: number
-      successTime?: number
-    }
+    [key: string]: StandingProblem
   }
   submissions: {
     [key: string]: {
@@ -43,6 +46,18 @@ interface Standing {
       time: number
     }[]
   }
+}
+const colorMap = {
+  FIRST_SOLVE: '#54af46',
+  SOLVED: '#e5feb9',
+  ATTEMPTED: '#fbd0d0',
+  PENDING: '#c9d7f9',
+}
+function getCellColor(problem: StandingProblem) {
+  if (problem.tryAfterFreeze > 0) { return colorMap.PENDING }
+  if (problem.success) { return problem.firstSolved ? colorMap.FIRST_SOLVE : colorMap.SOLVED }
+  if (problem.tried > 0) { return colorMap.ATTEMPTED }
+  return 'inherit'
 }
 
 export const ContestStandingPage: React.FC = () => {
@@ -117,6 +132,7 @@ export const ContestStandingPage: React.FC = () => {
     if (!contest || !problems || !submissions || !startTime) { return }
     const standing: Standing[] = []
     const tempData: { [key: string]: Standing } = {}
+    const firstSolved: { [key: string]: boolean } = {}
     for (const user of contest.users) {
       const joinAt = dayjs(user.joinAt).unix()
       if (joinAt > endTime) { continue }
@@ -169,6 +185,10 @@ export const ContestStandingPage: React.FC = () => {
               tempData[user.username].problems[submission.alias].success = true
               tempData[user.username].problems[submission.alias].successTime = relativeTime
               tempData[user.username].problems[submission.alias].tried++
+              if (!firstSolved[submission.alias]) {
+                tempData[user.username].problems[submission.alias].firstSolved = true
+                firstSolved[submission.alias] = true
+              }
               break
             default:
               tempData[user.username].problems[submission.alias].tried++
@@ -229,12 +249,7 @@ export const ContestStandingPage: React.FC = () => {
                 <td px-4 py-3 text-center>{penaltyToTimeString(user.penalty)}</td>
                 {problems?.map(problem => (
                   <td key={problem.alias} text-center style={{
-                    backgroundColor: user.problems[problem.alias].success
-                      ? '#b7eb8f'
-                      : (user.problems[problem.alias].tryAfterFreeze > 0
-                          ? '#f3f077'
-                          : (user.problems[problem.alias].tried > 0 ? '#ff0049' : 'inherit')
-                        ),
+                    backgroundColor: getCellColor(user.problems[problem.alias]),
                   }}>
                     {user.problems[problem.alias].tried
                       && (<div relative mx-4 my-3>
