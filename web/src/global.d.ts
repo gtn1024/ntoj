@@ -98,6 +98,18 @@ interface Submission {
   }[]
 }
 
+interface SelfTestSubmission {
+  id: number
+  status: SubmissionStatus
+  stage: JudgeStage
+  memory?: number
+  time?: number
+  compileLog?: string
+  input: string
+  output?: string
+  expectedOutput?: string
+}
+
 type JudgeStage = 'PENDING' | 'COMPILING' | 'JUDGING' | 'FINISHED'
 
 interface Contest {

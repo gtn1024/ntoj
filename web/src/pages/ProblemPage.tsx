@@ -69,6 +69,9 @@ export const ProblemPage: React.FC = () => {
             submitUrl={`/problem/${alias ?? 0}/submit`}
             languageOptions={languageOptions}
             codeLengthLimit={data?.codeLength ?? 16}
+            samples={data?.samples ?? []}
+            timeLimit={data?.timeLimit ?? 1000}
+            memoryLimit={data?.memoryLimit ?? 256}
         />
       </div>
     </div>

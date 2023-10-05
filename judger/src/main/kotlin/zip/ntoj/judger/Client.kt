@@ -21,8 +21,10 @@ import io.ktor.utils.io.core.isEmpty
 import io.ktor.utils.io.core.readBytes
 import zip.ntoj.judger.Configuration.SANDBOX_SERVER
 import zip.ntoj.judger.Configuration.SERVER_HOST
+import zip.ntoj.shared.model.GetSelfTestSubmissionResponse
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.R
+import zip.ntoj.shared.model.UpdateSelfTestSubmissionRequest
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.io.File
 
@@ -50,8 +52,30 @@ object Client {
             return response.body<R<GetSubmissionResponse>>().data
         }
 
+        suspend fun getSelfTestSubmission(): GetSelfTestSubmissionResponse? {
+            val response = client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
+                contentType(ContentType.Application.Json)
+                header("X-Judger-Token", Configuration.TOKEN)
+            }
+            if (response.status == Forbidden) {
+                throw IllegalStateException("Token 无效")
+            }
+            if (response.status == NoContent) {
+                return null
+            }
+            return response.body<R<GetSelfTestSubmissionResponse>>().data
+        }
+
         suspend fun updateSubmission(submissionId: Long, submissionStatus: UpdateSubmissionRequest) {
             client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
+                contentType(ContentType.Application.Json)
+                header("X-Judger-Token", Configuration.TOKEN)
+                setBody(submissionStatus)
+            }
+        }
+
+        suspend fun updateSelfTestSubmission(submissionId: Long, submissionStatus: UpdateSelfTestSubmissionRequest) {
+            client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
                 setBody(submissionStatus)

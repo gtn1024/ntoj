@@ -3,10 +3,13 @@ package zip.ntoj.judger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
+import zip.ntoj.shared.model.GetSelfTestSubmissionResponse
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
+import zip.ntoj.shared.model.LanguageDto
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseJudgeResult
+import zip.ntoj.shared.model.UpdateSelfTestSubmissionRequest
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import zip.ntoj.shared.util.fileMd5
 import java.io.File
@@ -42,7 +45,6 @@ suspend fun main() {
     showMessage()
     var connected = false
     while (true) {
-        var fileId: String?
         try {
             if (!sandboxAvailable()) {
                 LOGGER.error("沙箱服务器连接失败，5秒后重试")
@@ -55,62 +57,18 @@ suspend fun main() {
                 LOGGER.info("连接成功，正在监听提交")
             }
             connected = true
-            if (submission == null) {
-                // no content sleep 1 s
-                sleep(1000)
+            if (submission != null) {
+                runSubmission(submission)
                 continue
             }
-            LOGGER.info("收到提交 ${submission.submissionId}")
-            setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
-            LOGGER.info("开始编译 ${submission.submissionId}")
-            val sourceName: String = submission.language.sourceFilename ?: "src"
-            val targetName: String = submission.language.targetFilename ?: "main"
-            val compileBody = getCompileBody(submission, sourceName, targetName)
-            val result = Client.Sandbox.run(compileBody)
-            if (result.size != 1) {
-                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+            val selfTestSubmission = Client.Backend.getSelfTestSubmission()
+            if (selfTestSubmission != null) {
+                runSelfTestSubmission(selfTestSubmission)
                 continue
             }
-            if (result[0].status != SandboxStatus.Accepted) {
-                val res = when (result[0].status) {
-                    SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-                    else -> SubmissionStatus.COMPILE_ERROR
-                }
-                setSubmissionResult(
-                    submission.submissionId,
-                    res,
-                    compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null,
-                )
-                continue
-            }
-            if (result[0].fileIds.size != 1) {
-                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
-                continue
-            }
-            fileId = result[0].fileIds[targetName]
-            if (fileId == null) {
-                setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
-                continue
-            }
-            setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
-            LOGGER.info("开始评测 ${submission.submissionId}")
-            if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
-                downloadTestcase(submission.testcase.fileId)
-                unzipTestcase(submission.testcase.fileId)
-            }
-
-            val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
-            LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
-
-            setSubmissionResult(
-                submission.submissionId,
-                judgeResult.status,
-                judgeResult.maxTime.toInt(),
-                judgeResult.maxMemory.toInt(),
-                judgeResult.testcases,
-            )
-
-            Client.Sandbox.deleteFile(fileId)
+            // no content sleep 1 s
+            sleep(1000)
+            continue
         } catch (e: IllegalStateException) {
             throw e
         } catch (e: ConnectException) {
@@ -124,6 +82,112 @@ suspend fun main() {
             sleep(1000)
         }
     }
+}
+
+private suspend fun runSelfTestSubmission(submission: GetSelfTestSubmissionResponse) {
+    LOGGER.info("收到自测提交 ${submission.submissionId}")
+    setSelfTestSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
+    LOGGER.info("开始编译 ${submission.submissionId}")
+    val sourceName: String = submission.language.sourceFilename ?: "src"
+    val targetName: String = submission.language.targetFilename ?: "main"
+    val compileBody = getCompileBody(submission.language, submission.code, sourceName, targetName)
+    val result = Client.Sandbox.run(compileBody)
+    if (result.size != 1) {
+        setSelfTestSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    if (result[0].status != SandboxStatus.Accepted) {
+        val res = when (result[0].status) {
+            SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+            else -> SubmissionStatus.COMPILE_ERROR
+        }
+        setSelfTestSubmissionResult(
+            submission.submissionId,
+            res,
+            compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null,
+        )
+        return
+    }
+    if (result[0].fileIds.size != 1) {
+        setSelfTestSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    val fileId = result[0].fileIds[targetName]
+    if (fileId == null) {
+        setSelfTestSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    setSelfTestSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
+    LOGGER.info("开始评测 ${submission.submissionId}")
+
+    val judgeResult =
+        TestcaseRunner.runSelfTest(targetName, submission, fileId, submission.input, submission.expectedOutput)
+    LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
+
+    setSelfTestSubmissionResult(
+        submission.submissionId,
+        judgeResult.status,
+        judgeResult.time.toInt(),
+        judgeResult.memory.toInt(),
+        output = judgeResult.output,
+    )
+
+    Client.Sandbox.deleteFile(fileId)
+}
+
+private suspend fun runSubmission(submission: GetSubmissionResponse) {
+    val fileId: String?
+    LOGGER.info("收到提交 ${submission.submissionId}")
+    setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
+    LOGGER.info("开始编译 ${submission.submissionId}")
+    val sourceName: String = submission.language.sourceFilename ?: "src"
+    val targetName: String = submission.language.targetFilename ?: "main"
+    val compileBody = getCompileBody(submission.language, submission.code, sourceName, targetName)
+    val result = Client.Sandbox.run(compileBody)
+    if (result.size != 1) {
+        setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    if (result[0].status != SandboxStatus.Accepted) {
+        val res = when (result[0].status) {
+            SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+            else -> SubmissionStatus.COMPILE_ERROR
+        }
+        setSubmissionResult(
+            submission.submissionId,
+            res,
+            compileLog = if (res == SubmissionStatus.COMPILE_ERROR) result[0].files["stderr"] else null,
+        )
+        return
+    }
+    if (result[0].fileIds.size != 1) {
+        setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    fileId = result[0].fileIds[targetName]
+    if (fileId == null) {
+        setSubmissionResult(submission.submissionId, SubmissionStatus.SYSTEM_ERROR)
+        return
+    }
+    setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
+    LOGGER.info("开始评测 ${submission.submissionId}")
+    if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
+        downloadTestcase(submission.testcase.fileId)
+        unzipTestcase(submission.testcase.fileId)
+    }
+
+    val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
+    LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
+
+    setSubmissionResult(
+        submission.submissionId,
+        judgeResult.status,
+        judgeResult.maxTime.toInt(),
+        judgeResult.maxMemory.toInt(),
+        judgeResult.testcases,
+    )
+
+    Client.Sandbox.deleteFile(fileId)
 }
 
 private suspend fun unzipTestcase(testcase: Long) {
@@ -153,6 +217,17 @@ private suspend fun unzipTestcase(testcase: Long) {
     }
 }
 
+private suspend fun setSelfTestSubmissionJudgeStage(submissionId: Long, judgeStage: JudgeStage) {
+    val body = UpdateSelfTestSubmissionRequest(
+        submissionId = submissionId,
+        time = 0,
+        memory = 0,
+        judgeStage = judgeStage,
+        result = SubmissionStatus.JUDGING,
+    )
+    Client.Backend.updateSelfTestSubmission(submissionId, body)
+}
+
 private suspend fun setSubmissionJudgeStage(submissionId: Long, judgeStage: JudgeStage) {
     val body = UpdateSubmissionRequest(
         submissionId = submissionId,
@@ -163,6 +238,26 @@ private suspend fun setSubmissionJudgeStage(submissionId: Long, judgeStage: Judg
         result = SubmissionStatus.JUDGING,
     )
     Client.Backend.updateSubmission(submissionId, body)
+}
+
+private suspend fun setSelfTestSubmissionResult(
+    submissionId: Long,
+    result: SubmissionStatus,
+    time: Int = 0,
+    memory: Int = 0,
+    compileLog: String? = null,
+    output: String? = null,
+) {
+    val body = UpdateSelfTestSubmissionRequest(
+        submissionId = submissionId,
+        time = time,
+        memory = memory,
+        judgeStage = JudgeStage.FINISHED,
+        result = result,
+        compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
+        output = output,
+    )
+    Client.Backend.updateSelfTestSubmission(submissionId, body)
 }
 
 private suspend fun setSubmissionResult(
@@ -233,14 +328,15 @@ private suspend fun sleep(ms: Long) {
 }
 
 private fun getCompileBody(
-    submission: GetSubmissionResponse,
+    language: LanguageDto,
+    code: String,
     sourceName: String,
     targetName: String,
 ): SandboxRequest {
-    if (submission.language.compileCommand == null) {
+    if (language.compileCommand == null) {
         throw IllegalStateException("compile command is null")
     }
-    val compileCommand = submission.language.compileCommand!!
+    val compileCommand = language.compileCommand!!
         .replace("{src}", sourceName)
         .replace("{target}", targetName)
     return SandboxRequest(
@@ -257,7 +353,7 @@ private fun getCompileBody(
                 memoryLimit = 536_870_912L,
                 procLimit = 50,
                 copyIn = mapOf(
-                    sourceName to MemoryFile(content = submission.code),
+                    sourceName to MemoryFile(content = code),
                 ),
                 copyOut = listOf("stdout", "stderr"),
                 copyOutCached = listOf(targetName),

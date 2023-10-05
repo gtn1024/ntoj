@@ -15,12 +15,16 @@ import zip.ntoj.server.ext.success
 import zip.ntoj.server.service.FileService
 import zip.ntoj.server.service.FileUploadService
 import zip.ntoj.server.service.ProblemService
+import zip.ntoj.server.service.SelfTestSubmissionService
 import zip.ntoj.server.service.SubmissionService
+import zip.ntoj.shared.model.GetSelfTestSubmissionResponse
 import zip.ntoj.shared.model.GetSubmissionResponse
 import zip.ntoj.shared.model.JudgeStage
+import zip.ntoj.shared.model.LanguageDto
 import zip.ntoj.shared.model.R
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseDto
+import zip.ntoj.shared.model.UpdateSelfTestSubmissionRequest
 import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.time.Instant
 
@@ -28,6 +32,7 @@ import java.time.Instant
 @RequestMapping("/judge_client")
 class JudgeClientController(
     val submissionService: SubmissionService,
+    val selfTestSubmissionService: SelfTestSubmissionService,
     val fileUploadService: FileUploadService,
     val fileService: FileService,
     private val problemService: ProblemService,
@@ -48,10 +53,29 @@ class JudgeClientController(
                 submissionId = submission.submissionId!!,
                 problemId = submission.problem?.problemId!!,
                 code = submission.code!!,
-                language = GetSubmissionResponse.LanguageDto.from(submission.language!!),
+                language = LanguageDto.from(submission.language!!),
                 testcase = TestcaseDto.from(submission.problem!!.testCases!!),
                 timeLimit = submission.problem!!.timeLimit!!,
                 memoryLimit = submission.problem!!.memoryLimit!!,
+            ),
+        )
+    }
+
+    @GetMapping("/get_self_test_submission")
+    fun getSelfTestSubmission(): ResponseEntity<R<GetSelfTestSubmissionResponse>> {
+        val submission =
+            selfTestSubmissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功")
+        return R.success(
+            200,
+            "获取成功",
+            GetSelfTestSubmissionResponse(
+                submissionId = submission.selfTestSubmissionId!!,
+                code = submission.code,
+                language = LanguageDto.from(submission.language),
+                timeLimit = submission.timeLimit,
+                memoryLimit = submission.memoryLimit,
+                input = submission.input,
+                expectedOutput = submission.expectedOutput,
             ),
         )
     }
@@ -77,6 +101,24 @@ class JudgeClientController(
         }
         submission.judgeStage = submissionStatus.judgeStage
         submissionService.update(submission)
+        return R.success(200, "更新成功")
+    }
+
+    @PatchMapping("/update_self_test_submission/{submissionId}")
+    fun updateSelfTestSubmission(
+        @PathVariable submissionId: Long,
+        @RequestBody submissionStatus: UpdateSelfTestSubmissionRequest,
+    ): ResponseEntity<R<Void>> {
+        val submission = selfTestSubmissionService.get(submissionId)
+        if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
+            submission.status = submissionStatus.result
+            submission.time = submissionStatus.time
+            submission.memory = submissionStatus.memory
+            submission.compileLog = submissionStatus.compileLog
+            submission.output = submissionStatus.output
+        }
+        submission.judgeStage = submissionStatus.judgeStage
+        selfTestSubmissionService.update(submission)
         return R.success(200, "更新成功")
     }
 

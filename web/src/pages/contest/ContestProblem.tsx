@@ -81,6 +81,9 @@ export const ContestProblem: React.FC = () => {
             languageOptions={languageOptions}
             submitUrl={`/contest/${contestId}/problem/${alias}/submit`}
             codeLengthLimit={16}
+            samples={data?.samples ?? []}
+            timeLimit={data?.timeLimit ?? 1000}
+            memoryLimit={data?.memoryLimit ?? 256}
         />
       </div>
     </div>

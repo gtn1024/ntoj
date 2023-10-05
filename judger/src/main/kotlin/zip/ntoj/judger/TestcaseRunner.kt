@@ -1,6 +1,8 @@
 package zip.ntoj.judger
 
+import zip.ntoj.shared.model.GetSelfTestSubmissionResponse
 import zip.ntoj.shared.model.GetSubmissionResponse
+import zip.ntoj.shared.model.LanguageDto
 import zip.ntoj.shared.model.SubmissionStatus
 import zip.ntoj.shared.model.TestcaseJudgeResult
 import zip.ntoj.shared.util.ZipUtils
@@ -32,6 +34,41 @@ object TestcaseRunner {
         return JudgeResult(testcaseJudgeResults, judgeResult, maxTime, maxMemory)
     }
 
+    suspend fun runSelfTest(
+        targetName: String,
+        submission: GetSelfTestSubmissionResponse,
+        fileId: String,
+        inData: String,
+        expectedOutput: String?,
+    ): SelfTestJudgeResult {
+        val body =
+            getRunBody(submission.language, submission.timeLimit, submission.memoryLimit, targetName, inData, fileId)
+        val result = Client.Sandbox.run(body)
+        if (result.size != 1) {
+            return SelfTestJudgeResult(SubmissionStatus.SYSTEM_ERROR, 0, 0, null)
+        }
+        val res = result[0]
+        if (res.status != SandboxStatus.Accepted) {
+            val st = when (res.status) {
+                SandboxStatus.MemoryLimitExceeded -> SubmissionStatus.MEMORY_LIMIT_EXCEEDED
+                SandboxStatus.TimeLimitExceeded -> SubmissionStatus.TIME_LIMIT_EXCEEDED
+                SandboxStatus.OutputLimitExceeded -> SubmissionStatus.OUTPUT_LIMIT_EXCEEDED
+                SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                else -> SubmissionStatus.RUNTIME_ERROR
+            }
+            return SelfTestJudgeResult(st, res.time / 1000 / 1000, res.memory / 1024, null)
+        }
+        val expectedStdout = expectedOutput?.trimByLine()?.removeLastEmptyLine()
+        val stdout = res.files["stdout"]?.trimByLine()?.removeLastEmptyLine()
+        if (expectedStdout == null) {
+            return SelfTestJudgeResult(SubmissionStatus.ACCEPTED, res.time / 1000 / 1000, res.memory / 1024, stdout)
+        }
+        if (stdout != expectedStdout) {
+            return SelfTestJudgeResult(SubmissionStatus.WRONG_ANSWER, res.time / 1000 / 1000, res.memory / 1024, stdout)
+        }
+        return SelfTestJudgeResult(SubmissionStatus.ACCEPTED, res.time / 1000 / 1000, res.memory / 1024, stdout)
+    }
+
     private fun getTestcaseNumber(testcase: Long): Int {
         return ZipUtils.getFilenamesFromZip(File("testcase/$testcase.zip")).size / 2
     }
@@ -43,7 +80,8 @@ object TestcaseRunner {
         idx: Int,
     ): TestcaseJudgeResult {
         val inData = File("testcase/${submission.testcase.fileId}/$idx.in").readText()
-        val body = getRunBody(submission, targetName, inData, fileId)
+        val body =
+            getRunBody(submission.language, submission.timeLimit, submission.memoryLimit, targetName, inData, fileId)
         val result = Client.Sandbox.run(body)
         if (result.size != 1) {
             return TestcaseJudgeResult(SubmissionStatus.SYSTEM_ERROR, 0, 0)
@@ -70,15 +108,17 @@ object TestcaseRunner {
     }
 
     private fun getRunBody(
-        submission: GetSubmissionResponse,
+        language: LanguageDto,
+        timeLimit: Int,
+        memoryLimit: Int,
         targetName: String,
         inData: String,
         fileId: String,
     ): SandboxRequest {
-        val executeCommand = submission.language.executeCommand!!
+        val executeCommand = language.executeCommand!!
             .replace("{target}", targetName)
-        val memoryLimitRate = submission.language.memoryLimitRate ?: 1
-        val timeLimitRate = submission.language.timeLimitRate ?: 1
+        val memoryLimitRate = language.memoryLimitRate ?: 1
+        val timeLimitRate = language.timeLimitRate ?: 1
         return SandboxRequest(
             cmd = listOf(
                 Cmd(
@@ -89,10 +129,10 @@ object TestcaseRunner {
                         Collector(name = "stdout", max = 51_200), // 50 KB
                         Collector(name = "stderr", max = 51_200), // 50 KB
                     ),
-                    cpuLimit = 1L * submission.timeLimit * 1000 * 1000 * timeLimitRate,
-                    clockLimit = 1L * submission.timeLimit * 1000 * 1000 * 2 * timeLimitRate,
-                    memoryLimit = 1L * submission.memoryLimit * 1024 * 1024 * memoryLimitRate,
-                    stackLimit = 1L * submission.memoryLimit * 1024 * 1024 * memoryLimitRate,
+                    cpuLimit = 1L * timeLimit * 1000 * 1000 * timeLimitRate,
+                    clockLimit = 1L * timeLimit * 1000 * 1000 * 2 * timeLimitRate,
+                    memoryLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
+                    stackLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
                     procLimit = 50,
                     copyIn = mapOf(
                         targetName to PreparedFile(fileId),

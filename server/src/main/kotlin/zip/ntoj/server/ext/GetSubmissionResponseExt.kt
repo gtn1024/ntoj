@@ -2,7 +2,7 @@ package zip.ntoj.server.ext
 
 import zip.ntoj.server.model.FileUpload
 import zip.ntoj.server.model.Language
-import zip.ntoj.shared.model.GetSubmissionResponse
+import zip.ntoj.shared.model.LanguageDto
 import zip.ntoj.shared.model.TestcaseDto
 
 fun TestcaseDto.Companion.from(fileUpload: FileUpload) = TestcaseDto(
@@ -10,7 +10,7 @@ fun TestcaseDto.Companion.from(fileUpload: FileUpload) = TestcaseDto(
     hash = fileUpload.hash,
 )
 
-fun GetSubmissionResponse.LanguageDto.Companion.from(language: Language) = GetSubmissionResponse.LanguageDto(
+fun LanguageDto.Companion.from(language: Language) = LanguageDto(
     languageId = language.languageId!!,
     name = language.languageName,
     compileCommand = language.compileCommand,
