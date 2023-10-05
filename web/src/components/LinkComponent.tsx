@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import c from 'classnames'
 
 interface Props {
   href: string
@@ -12,7 +13,7 @@ export const LinkComponent: React.FC<Props> = ({ href, children, className }) =>
 
   return (
     isExternal
-      ? <a href={href} target="_blank" rel="noreferrer" className={className}>{children}</a>
-      : <Link to={href} className={className}>{children}</Link>
+      ? <a href={href} target="_blank" rel="noreferrer" className={c(className, 'color-inherit')}>{children}</a>
+      : <Link to={href} className={c(className, 'color-inherit')}>{children}</Link>
   )
 }
