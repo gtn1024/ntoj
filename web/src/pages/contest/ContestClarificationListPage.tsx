@@ -1,40 +1,16 @@
 import React from 'react'
 import c from 'classnames'
 import { useNavigate, useParams } from 'react-router-dom'
-import useSWR from 'swr'
-import type { AxiosError } from 'axios'
-import { message } from 'antd'
 import { useLayout } from '../../hooks/useLayout.ts'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
-import type { HttpResponse } from '../../lib/Http.tsx'
-import { http } from '../../lib/Http.tsx'
-
-interface ContestClarificationDto {
-  id: number
-  title: string
-  user: string
-  createdAt: string
-  sticky: boolean
-  replyCount: number
-  contestProblemAlias?: string
-}
+import { useContestClarification } from '../../hooks/useContestClarification.ts'
 
 export const ContestClarificationListPage: React.FC = () => {
   const { isMobile } = useLayout()
   const { id } = useParams()
   const nav = useNavigate()
-  const { data: clarifications } = useSWR(`/contest/${id}/clarifications`, async (path) => {
-    return http.get<ContestClarificationDto[]>(path)
-      .then((res) => {
-        const sticky = res.data.data.filter(clarification => clarification.sticky)
-        const notSticky = res.data.data.filter(clarification => !clarification.sticky)
-        return sticky.concat(notSticky)
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '获取疑问列表失败')
-        throw err
-      })
-  })
+
+  const { clarifications } = useContestClarification(id)
 
   return (
     <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2 className={c(isMobile && 'flex-col')}>

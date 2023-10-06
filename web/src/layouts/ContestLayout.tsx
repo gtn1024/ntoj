@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
-import { message } from 'antd'
+import { message, notification } from 'antd'
+import { useLocalStorage } from 'react-use'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { AccountComponent } from '../components/AccountComponent.tsx'
+import { useContestClarification } from '../hooks/useContestClarification.ts'
 
 interface MenuProps {
   items: {
@@ -70,6 +72,36 @@ export const ContestLayout: React.FC = () => {
         throw err
       })
   })
+  const { clarifications } = useContestClarification(id)
+  const [contestClarificationStorage, setContestClarificationStorage] = useLocalStorage<{ [key: string]: boolean }>('contestClarifications', {})
+  useEffect(() => {
+    if (!clarifications || !contestClarificationStorage) { return }
+    const stickyClarifications = clarifications?.filter(clarification => clarification.sticky)
+    if (stickyClarifications && stickyClarifications.length > 0) {
+      for (const clarification of stickyClarifications) {
+        if (!contestClarificationStorage[clarification.id]) {
+          void notification.info({
+            key: clarification.id,
+            message: '公告',
+            description: (
+              <>
+                <p>{clarification.title}</p>
+                <p>请进入疑问板块查看</p>
+              </>
+            ),
+            duration: 0,
+            onClose: () => {
+              setContestClarificationStorage({
+                ...contestClarificationStorage,
+                [clarification.id]: true,
+              })
+            },
+          })
+        }
+      }
+    }
+  }, [clarifications, contestClarificationStorage, setContestClarificationStorage])
+
   const items: MenuProps['items'] = [
     { label: '首页', key: '', visible: true },
     { label: '题目', key: '/p', visible: contest?.hasPermission ?? false },
