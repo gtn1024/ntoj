@@ -74,12 +74,14 @@ export const ContestLayout: React.FC = () => {
   })
   const { clarifications } = useContestClarification(id)
   const [contestClarificationStorage, setContestClarificationStorage] = useLocalStorage<{ [key: string]: boolean }>('contestClarifications', {})
+  const [clarificationHasShown, setClarificationHasShown] = useState<{ [key: string]: boolean }>({})
   useEffect(() => {
     if (!clarifications || !contestClarificationStorage) { return }
     const stickyClarifications = clarifications?.filter(clarification => clarification.sticky)
     if (stickyClarifications && stickyClarifications.length > 0) {
       for (const clarification of stickyClarifications) {
-        if (!contestClarificationStorage[clarification.id]) {
+        if (!contestClarificationStorage[clarification.id] && !clarificationHasShown[clarification.id]) {
+          setClarificationHasShown({ ...clarificationHasShown, [clarification.id]: true })
           void notification.info({
             key: clarification.id,
             message: '公告',
@@ -90,17 +92,12 @@ export const ContestLayout: React.FC = () => {
               </>
             ),
             duration: 0,
-            onClose: () => {
-              setContestClarificationStorage({
-                ...contestClarificationStorage,
-                [clarification.id]: true,
-              })
-            },
+            onClose: () => setContestClarificationStorage({ ...contestClarificationStorage, [clarification.id]: true }),
           })
         }
       }
     }
-  }, [clarifications, contestClarificationStorage, setContestClarificationStorage])
+  }, [clarificationHasShown, clarifications, contestClarificationStorage, setContestClarificationStorage])
 
   const items: MenuProps['items'] = [
     { label: '首页', key: '', visible: true },
