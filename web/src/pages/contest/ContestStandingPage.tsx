@@ -148,8 +148,8 @@ export const ContestStandingPage: React.FC = () => {
     const tempData: { [key: string]: Standing } = {}
     const firstSolved: { [key: string]: boolean } = {}
     for (const user of contest.users) {
-      const joinAt = dayjs(user.joinAt).unix()
-      if (joinAt > endTime) { continue }
+      // const joinAt = dayjs(user.joinAt).unix()
+      // if (joinAt > endTime) { continue }
       tempData[user.username] = {
         user: {
           username: user.username,
