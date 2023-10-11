@@ -36,12 +36,14 @@ export const AdminContestEditPage: React.FC = () => {
   const [showProblemModal, setShowProblemModal] = useState<boolean>(false)
   const [modalTitle, setModalTitle] = useState<'添加题目' | '修改题目'>('添加题目')
   const [editProblem, setEditProblem] = useState<number | null>(null)
+  const [users, setUsers] = useState<number[]>([])
   useEffect(() => {
     if (mode === '修改' && id) {
       http.get<AdminDto.Contest>(`/admin/contest/${id}`)
         .then((res) => {
           setLanguages(res.data.data.languages.map(l => l.toString()) ?? [])
           setProblems(res.data.data.problems)
+          setUsers(res.data.data.users)
           formRef?.current?.setFieldsValue({
             ...res.data.data,
             time: [
@@ -77,6 +79,7 @@ export const AdminContestEditPage: React.FC = () => {
   const onSubmit = (v: any) => {
     const params = {
       ...v,
+      users,
       languages: languages.map(l => Number.parseInt(l)),
       problems: problems.sort((a, b) => a.contestProblemIndex - b.contestProblemIndex),
       startTime: v.time[0].unix(),

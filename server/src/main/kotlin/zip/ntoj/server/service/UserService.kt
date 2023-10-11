@@ -10,10 +10,12 @@ interface UserService {
     fun isUsernameValid(username: String): Boolean {
         return username.length in 3..20 && username.all { it.isLetterOrDigit() }
     }
+
     fun newUser(user: User): User
     fun existsByUsername(username: String): Boolean
+    fun existsById(id: Long): Boolean
     fun getUserByUsername(username: String): User
-    fun getUserById(loginIdAsLong: Long): User
+    fun getUserById(id: Long): User
     fun count(): Long
     fun updateUser(user: User): User
 }
@@ -32,16 +34,21 @@ class UserServiceImpl(
         }
         return userRepository.save(user)
     }
+
     override fun existsByUsername(username: String): Boolean {
         return userRepository.existsByUsername(username)
+    }
+
+    override fun existsById(id: Long): Boolean {
+        return userRepository.existsById(id)
     }
 
     override fun getUserByUsername(username: String): User {
         return userRepository.findByUsername(username).orElseThrow { AppException("用户不存在", 404) }
     }
 
-    override fun getUserById(loginIdAsLong: Long): User {
-        return userRepository.findById(loginIdAsLong).orElseThrow { AppException("用户不存在", 404) }
+    override fun getUserById(id: Long): User {
+        return userRepository.findById(id).orElseThrow { AppException("用户不存在", 404) }
     }
 
     override fun count(): Long {

@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.ext.fail
 import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.Contest
 import zip.ntoj.server.model.ContestProblem
+import zip.ntoj.server.model.ContestUser
 import zip.ntoj.server.model.L
 import zip.ntoj.server.service.ContestService
 import zip.ntoj.server.service.LanguageService
@@ -85,7 +87,10 @@ class AdminContestController(
             showFinalBoard = request.showFinalBoard,
             author = author,
             problems = request.problems,
-            users = mutableListOf(),
+            users = request.users.map {
+                if (!userService.existsById(it)) throw AppException("用户不存在", 404)
+                ContestUser(userId = it, Instant.now().toEpochMilli())
+            }.toMutableList(),
             languages = request.languages.map { languageService.get(it) },
         )
         contest = contestService.add(contest)
@@ -104,7 +109,10 @@ class AdminContestController(
         contest.permission = request.permission
         contest.password = request.password
         contest.problems = request.problems
-        contest.users = mutableListOf()
+        contest.users = request.users.map {
+            if (!userService.existsById(it)) throw AppException("用户不存在", 404)
+            ContestUser(userId = it, Instant.now().toEpochMilli())
+        }.toMutableList()
         contest.languages = request.languages.map { languageService.get(it) }
         contest.allowAllLanguages = request.allowAllLanguages
         contest.visible = request.visible
