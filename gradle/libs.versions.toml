@@ -3,7 +3,7 @@ sa-token = "1.36.0"
 commons-codec = "1.16.0"
 commons-io = "2.14.0"
 
-ktlint = "0.50.0"
+ktlint = "0.51.0-FINAL"
 
 junit5 = "5.10.0"
 spock = "2.3-groovy-4.0"
