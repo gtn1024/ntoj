@@ -137,6 +137,7 @@ object TestcaseRunner {
                     copyIn = mapOf(
                         targetName to PreparedFile(fileId),
                     ),
+                    copyOutMax = 1L * 2 * 1024 * 1024, // 2 MB
                 ),
             ),
         )
