@@ -57,6 +57,9 @@ class ProblemServiceImpl(
     }
 
     override fun new(problem: Problem): Problem {
+        if (!problemRepository.findByAlias(problem.alias).isEmpty) {
+            throw AppException("alias已存在", 400)
+        }
         return problemRepository.save(problem)
     }
 
