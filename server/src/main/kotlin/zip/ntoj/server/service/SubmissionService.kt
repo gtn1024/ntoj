@@ -116,7 +116,7 @@ class SubmissionServiceImpl(
 
     override fun get(id: Long, onlyVisibleProblem: Boolean): Submission {
         val submission = submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
-        if (submission.problem?.visible != true) {
+        if (submission.problem?.visible != true && submission.contestId == null) {
             throw AppException("提交不存在", 404)
         }
         return submission
