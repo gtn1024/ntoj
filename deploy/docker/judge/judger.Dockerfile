@@ -28,7 +28,7 @@ RUN apt update && \
     wget \
     unzip
 
-RUN wget https://github.com/JetBrains/kotlin/releases/download/v1.9.10/kotlin-compiler-1.9.10.zip -O /tmp/kotlin.zip && \
+RUN wget https://github.com/JetBrains/kotlin/releases/download/v1.9.20/kotlin-compiler-1.9.20.zip -O /tmp/kotlin.zip && \
     unzip /tmp/kotlin.zip -d /usr/lib && \
     rm /tmp/kotlin.zip && \
     ln -s /usr/lib/kotlinc/bin/kotlinc /usr/bin/kotlinc && \
