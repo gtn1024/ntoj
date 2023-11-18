@@ -18,6 +18,12 @@ docker run -d \
    postgres:15
 ```
 
+## 构建指南
+
+```shell
+$ ./gradlew :server:bootJar  # 将服务端打包为 jar 包
+```
+
 ## 数据库迁移
 
 后端使用了 [Flyway](https://flywaydb.org/) 进行数据库迁移，迁移脚本位于 `server/src/main/resources/db/migration` 目录下。

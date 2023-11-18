@@ -17,3 +17,9 @@
 
 同时，评测机程序运行需要配置环境变量。具体可见
 [`judger/src/main/kotlin/zip/ntoj/judger/Configuration.kt`](src/main/kotlin/zip/ntoj/judger/Configuration.kt)。
+
+## 构建指南
+
+```shell
+$ ./gradlew :judger:shadowJar
+```
