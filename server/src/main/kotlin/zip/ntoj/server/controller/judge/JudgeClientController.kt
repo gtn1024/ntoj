@@ -94,7 +94,7 @@ class JudgeClientController(
             submission.judgerId = submissionStatus.judgerId
             submission.testcaseResult = submissionStatus.testcaseResult
             submission.compileLog = submissionStatus.compileLog
-            if (submissionStatus.result == SubmissionStatus.ACCEPTED && submission.contestId != null) {
+            if (submissionStatus.result == SubmissionStatus.ACCEPTED && submission.contestId == null) {
                 problem.acceptedTimes++
                 problemService.update(problem)
             }
