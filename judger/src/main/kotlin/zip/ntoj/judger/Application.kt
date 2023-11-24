@@ -50,14 +50,14 @@ suspend fun run(id: Int) {
     while (true) {
         try {
             if (!sandboxAvailable()) {
-                LOGGER.error("#$id 沙箱服务器连接失败，5秒后重试")
+                LOGGER.error("(#$id) Sandbox server connect failed. Retry in 5s.")
                 connected = false
                 delay(5000)
                 continue
             }
             val submission = Client.Backend.getSubmission()
             if (!connected) {
-                LOGGER.info("#$id 连接成功，正在监听提交")
+                LOGGER.info("(#$id) Connected! Waiting for submission.")
             }
             connected = true
             if (submission != null) {
@@ -76,11 +76,11 @@ suspend fun run(id: Int) {
             throw e
         } catch (e: ConnectException) {
             connected = false
-            LOGGER.error("#$id 服务器连接失败，5秒后重试")
+            LOGGER.error("(#$id) Sandbox server connect failed. Retry in 5s.")
             delay(5000)
         } catch (e: Exception) {
             connected = false
-            LOGGER.error("#$id 未知错误", e)
+            LOGGER.error("(#$id) Unknown error!", e)
         } finally {
             delay(1000)
         }
@@ -99,9 +99,9 @@ fun main() {
 }
 
 private suspend fun runSelfTestSubmission(submission: GetSelfTestSubmissionResponse) {
-    LOGGER.info("收到自测提交 ${submission.submissionId}")
+    LOGGER.info("Received self test #${submission.submissionId}")
     setSelfTestSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
-    LOGGER.info("开始编译 ${submission.submissionId}")
+    LOGGER.info("Now compiling #${submission.submissionId}")
     val sourceName: String = submission.language.sourceFilename ?: "src"
     val targetName: String = submission.language.targetFilename ?: "main"
     val compileBody = getCompileBody(submission.language, submission.code, sourceName, targetName)
@@ -132,11 +132,11 @@ private suspend fun runSelfTestSubmission(submission: GetSelfTestSubmissionRespo
         return
     }
     setSelfTestSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
-    LOGGER.info("开始评测 ${submission.submissionId}")
+    LOGGER.info("Now judging #${submission.submissionId}")
 
     val judgeResult =
         TestcaseRunner.runSelfTest(targetName, submission, fileId, submission.input, submission.expectedOutput)
-    LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
+    LOGGER.info("Self test #${submission.submissionId} ok, result: ${judgeResult.status}")
 
     setSelfTestSubmissionResult(
         submission.submissionId,
@@ -151,9 +151,9 @@ private suspend fun runSelfTestSubmission(submission: GetSelfTestSubmissionRespo
 
 private suspend fun runSubmission(submission: GetSubmissionResponse) {
     val fileId: String?
-    LOGGER.info("收到提交 ${submission.submissionId}")
+    LOGGER.info("Received submission #${submission.submissionId}")
     setSubmissionJudgeStage(submission.submissionId, JudgeStage.COMPILING)
-    LOGGER.info("开始编译 ${submission.submissionId}")
+    LOGGER.info("Now compiling #${submission.submissionId}")
     val sourceName: String = submission.language.sourceFilename ?: "src"
     val targetName: String = submission.language.targetFilename ?: "main"
     val compileBody = getCompileBody(submission.language, submission.code, sourceName, targetName)
@@ -184,14 +184,14 @@ private suspend fun runSubmission(submission: GetSubmissionResponse) {
         return
     }
     setSubmissionJudgeStage(submission.submissionId, JudgeStage.JUDGING)
-    LOGGER.info("开始评测 ${submission.submissionId}")
+    LOGGER.info("Now judging #${submission.submissionId}")
     if (isDownloadNeeded(submission.testcase.fileId, submission.testcase.hash)) {
         downloadTestcase(submission.testcase.fileId)
         unzipTestcase(submission.testcase.fileId)
     }
 
     val judgeResult = TestcaseRunner.runTestcase(targetName, submission, fileId)
-    LOGGER.info("评测完成 ${submission.submissionId}，结果：${judgeResult.status}")
+    LOGGER.info("Submission #${submission.submissionId} ok, result: ${judgeResult.status}")
 
     setSubmissionResult(
         submission.submissionId,
