@@ -1,6 +1,9 @@
 package zip.ntoj.judger
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import zip.ntoj.shared.model.GetSelfTestSubmissionResponse
@@ -30,6 +33,7 @@ fun showMessage() {
     LOGGER.info("Sandbox Server: ${Configuration.SANDBOX_SERVER}")
     LOGGER.info("Judger ID: ${Configuration.JUDGER_ID}")
     LOGGER.info("Token: ${Configuration.TOKEN}")
+    LOGGER.info("Thread Count: ${Configuration.THREAD_COUNT}")
 }
 
 suspend fun sandboxAvailable(): Boolean {
@@ -41,20 +45,19 @@ suspend fun sandboxAvailable(): Boolean {
     }
 }
 
-suspend fun main() {
-    showMessage()
+suspend fun run(id: Int) {
     var connected = false
     while (true) {
         try {
             if (!sandboxAvailable()) {
-                LOGGER.error("沙箱服务器连接失败，5秒后重试")
+                LOGGER.error("#$id 沙箱服务器连接失败，5秒后重试")
                 connected = false
-                sleep(5000)
+                delay(5000)
                 continue
             }
             val submission = Client.Backend.getSubmission()
             if (!connected) {
-                LOGGER.info("连接成功，正在监听提交")
+                LOGGER.info("#$id 连接成功，正在监听提交")
             }
             connected = true
             if (submission != null) {
@@ -67,19 +70,30 @@ suspend fun main() {
                 continue
             }
             // no content sleep 1 s
-            sleep(1000)
+            delay(1000)
             continue
         } catch (e: IllegalStateException) {
             throw e
         } catch (e: ConnectException) {
             connected = false
-            LOGGER.error("服务器连接失败，5秒后重试")
-            sleep(5000)
+            LOGGER.error("#$id 服务器连接失败，5秒后重试")
+            delay(5000)
         } catch (e: Exception) {
             connected = false
-            LOGGER.error("未知错误", e)
+            LOGGER.error("#$id 未知错误", e)
         } finally {
-            sleep(1000)
+            delay(1000)
+        }
+    }
+}
+
+fun main() {
+    showMessage()
+    runBlocking {
+        repeat(Configuration.THREAD_COUNT) { id ->
+            launch {
+                run(id)
+            }
         }
     }
 }
@@ -319,12 +333,6 @@ private fun isDownloadNeeded(testcase: Long, hash: String): Boolean {
     }
     val md5 = getTestcaseArchiveMD5(testcase)
     return md5.lowercase() != hash.lowercase()
-}
-
-private suspend fun sleep(ms: Long) {
-    withContext(Dispatchers.IO) {
-        Thread.sleep(ms)
-    }
 }
 
 private fun getCompileBody(

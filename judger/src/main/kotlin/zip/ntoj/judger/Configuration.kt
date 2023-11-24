@@ -14,4 +14,7 @@ object Configuration {
 
     /** 评测机 ID，默认为随机字符串 */
     val JUDGER_ID = System.getenv("JUDGER_ID") ?: randomString()
+
+    /** 评测线程数 */
+    val THREAD_COUNT = System.getenv("THREAD_COUNT")?.toInt() ?: 5
 }
