@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.JudgeClientToken
 import zip.ntoj.server.repository.JudgeClientTokenRepository
+import java.time.Instant
 
 interface JudgeClientTokenService {
     fun get(id: Long): JudgeClientToken
@@ -20,6 +21,8 @@ interface JudgeClientTokenService {
     fun update(judgeClientToken: JudgeClientToken): JudgeClientToken
     fun count(): Long
     fun delete(id: Long)
+
+    fun updateSystemInfo(token: String, os: String, kernel: String, memoryUsed: Long, memoryTotal: Long)
 }
 
 @Service
@@ -57,5 +60,15 @@ class JudgeClientTokenServiceImpl(
 
     override fun delete(id: Long) {
         judgeClientTokenRepository.deleteById(id)
+    }
+
+    override fun updateSystemInfo(token: String, os: String, kernel: String, memoryUsed: Long, memoryTotal: Long) {
+        val judgeClientToken = get(token)
+        judgeClientToken.os = os
+        judgeClientToken.kernel = kernel
+        judgeClientToken.memoryUsed = memoryUsed
+        judgeClientToken.memoryTotal = memoryTotal
+        judgeClientToken.infoLastUpdatedAt = Instant.now()
+        update(judgeClientToken)
     }
 }

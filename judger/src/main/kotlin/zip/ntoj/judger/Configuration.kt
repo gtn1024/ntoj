@@ -17,4 +17,15 @@ object Configuration {
 
     /** 评测线程数 */
     val THREAD_COUNT = System.getenv("THREAD_COUNT")?.toInt() ?: 5
+
+    val OS: String = System.getProperty("os.name")
+    val KERNEL: String = System.getProperty("os.version")
+
+    fun memoryUsed(): Long {
+        return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()
+    }
+
+    fun memoryTotal(): Long {
+        return Runtime.getRuntime().totalMemory()
+    }
 }

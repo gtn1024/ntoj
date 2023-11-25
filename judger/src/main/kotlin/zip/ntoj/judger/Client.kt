@@ -42,6 +42,10 @@ object Client {
             val response = client.get("$SERVER_HOST/judge_client/get_submission") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-OS", Configuration.OS)
+                header("X-Judger-Kernel", Configuration.KERNEL)
+                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
             }
             if (response.status == Forbidden) {
                 throw IllegalStateException("Token 无效")
@@ -56,6 +60,10 @@ object Client {
             val response = client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-OS", Configuration.OS)
+                header("X-Judger-Kernel", Configuration.KERNEL)
+                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
             }
             if (response.status == Forbidden) {
                 throw IllegalStateException("Token 无效")
@@ -70,6 +78,10 @@ object Client {
             client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-OS", Configuration.OS)
+                header("X-Judger-Kernel", Configuration.KERNEL)
+                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
                 setBody(submissionStatus)
             }
         }
@@ -78,6 +90,10 @@ object Client {
             client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-OS", Configuration.OS)
+                header("X-Judger-Kernel", Configuration.KERNEL)
+                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
                 setBody(submissionStatus)
             }
         }
@@ -87,6 +103,10 @@ object Client {
             val channel = client.get(url) {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-OS", Configuration.OS)
+                header("X-Judger-Kernel", Configuration.KERNEL)
+                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
             }.bodyAsChannel()
             while (!channel.isClosedForRead) {
                 val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
