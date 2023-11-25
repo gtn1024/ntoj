@@ -9,7 +9,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.4"
     kotlin("plugin.spring") version "1.9.20"
     kotlin("plugin.jpa") version "1.9.20"
-    id("org.flywaydb.flyway") version "9.22.0"
+    id("org.flywaydb.flyway") version "9.22.3"
 }
 
 dependencies {
@@ -22,6 +22,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.flywaydb:flyway-database-postgresql:10.0.0")
     implementation(lib("saToken-spring"))
     implementation(lib("saToken-jwt"))
     implementation(lib("commons-io"))
