@@ -8,7 +8,7 @@ plugins {
 
 allprojects {
     group = "zip.ntoj"
-    version = "1.0-SNAPSHOT"
+    version = "0.0.1"
 
     repositories {
         mavenCentral()
@@ -16,6 +16,33 @@ allprojects {
 
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+    }
+}
+
+subprojects {
+    task("generateVersionResource") {
+        doLast {
+            val version = project.version.toString()
+            file("build/generated-resources").mkdirs()
+            val propertiesFile = file("build/generated-resources/version.properties")
+            propertiesFile.writeText("version=$version")
+        }
+    }
+
+    afterEvaluate {
+        sourceSets {
+            main {
+                resources {
+                    srcDir("build/generated-resources")
+                }
+            }
+        }
+    }
+
+    tasks {
+        withType<JavaCompile> {
+            dependsOn("generateVersionResource")
+        }
     }
 }
 

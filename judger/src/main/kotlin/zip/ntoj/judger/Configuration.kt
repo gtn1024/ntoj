@@ -2,8 +2,12 @@ package zip.ntoj.judger
 
 import zip.ntoj.shared.util.randomString
 import java.io.File
+import java.util.ResourceBundle
 
 object Configuration {
+    /** 评测程序版本 */
+    val VERSION: String = ResourceBundle.getBundle("version").getString("version").trim()
+
     /** 服务端地址 */
     val SERVER_HOST = System.getenv("SERVER_HOST") ?: "http://127.0.0.1:18080"
 
