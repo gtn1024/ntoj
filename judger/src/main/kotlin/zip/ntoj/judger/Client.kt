@@ -42,6 +42,7 @@ object Client {
             val response = client.get("$SERVER_HOST/judge_client/get_submission") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
                 header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
@@ -60,6 +61,7 @@ object Client {
             val response = client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
                 header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
@@ -78,6 +80,7 @@ object Client {
             client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
                 header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
@@ -90,6 +93,7 @@ object Client {
             client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
                 header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
@@ -103,6 +107,7 @@ object Client {
             val channel = client.get(url) {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
+                header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
                 header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())

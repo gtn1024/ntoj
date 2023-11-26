@@ -1,6 +1,7 @@
 package zip.ntoj.judger
 
 import zip.ntoj.shared.util.randomString
+import java.io.File
 
 object Configuration {
     /** 服务端地址 */
@@ -12,8 +13,8 @@ object Configuration {
     /** 评测机与服务端通信的 Token */
     val TOKEN = System.getenv("TOKEN") ?: throw IllegalStateException("TOKEN is not set")
 
-    /** 评测机 ID，默认为随机字符串 */
-    val JUDGER_ID = System.getenv("JUDGER_ID") ?: randomString()
+    /** 评测机 ID */
+    val JUDGER_ID = getJudgerId()
 
     /** 评测线程数 */
     val THREAD_COUNT = System.getenv("THREAD_COUNT")?.toInt() ?: 5
@@ -27,5 +28,15 @@ object Configuration {
 
     fun memoryTotal(): Long {
         return Runtime.getRuntime().totalMemory()
+    }
+
+    private fun getJudgerId(): String {
+        val file = File(".judger_id")
+        if (file.exists()) {
+            return file.readText()
+        }
+        val judgerId = randomString()
+        file.writeText(judgerId)
+        return judgerId
     }
 }
