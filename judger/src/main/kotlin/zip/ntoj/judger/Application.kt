@@ -29,11 +29,16 @@ private val LOGGER = LoggerFactory.getLogger("zip.ntoj.judger.Application")
 
 fun showMessage() {
     LOGGER.info("NTOJ Judger")
-    LOGGER.info("Server Host: ${Configuration.SERVER_HOST}")
+    LOGGER.info("Server Host:    ${Configuration.SERVER_HOST}")
     LOGGER.info("Sandbox Server: ${Configuration.SANDBOX_SERVER}")
-    LOGGER.info("Judger ID: ${Configuration.JUDGER_ID}")
-    LOGGER.info("Token: ${Configuration.TOKEN}")
-    LOGGER.info("Thread Count: ${Configuration.THREAD_COUNT}")
+    LOGGER.info("Judger ID:      ${Configuration.JUDGER_ID}")
+    LOGGER.info("Token:          ${Configuration.TOKEN}")
+    LOGGER.info("Thread Count:   ${Configuration.THREAD_COUNT}")
+    LOGGER.info("System info:")
+    LOGGER.info("  OS:           ${Configuration.OS}")
+    LOGGER.info("  Kernel:       ${Configuration.KERNEL}")
+    LOGGER.info("  Memory Used:  ${Configuration.memoryUsed()}")
+    LOGGER.info("  Memory Total: ${Configuration.memoryTotal()}")
 }
 
 suspend fun sandboxAvailable(): Boolean {
