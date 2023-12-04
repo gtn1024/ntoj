@@ -46,7 +46,7 @@
     "@typescript-eslint/eslint-plugin": "6.7.3",
     "@typescript-eslint/parser": "6.7.3",
     "@unocss/eslint-config": "0.55.7",
-    "@unocss/preset-attributify": "0.55.7",
+    "@unocss/preset-attributify": "0.58.0",
     "@unocss/preset-icons": "0.55.7",
     "@unocss/preset-uno": "0.55.7",
     "@unocss/transformer-attributify-jsx": "0.55.7",
