@@ -45,7 +45,7 @@
     "@types/react-highlight": "0.12.8",
     "@typescript-eslint/eslint-plugin": "6.7.3",
     "@typescript-eslint/parser": "6.7.3",
-    "@unocss/eslint-config": "0.55.7",
+    "@unocss/eslint-config": "0.58.4",
     "@unocss/preset-attributify": "0.55.7",
     "@unocss/preset-icons": "0.55.7",
     "@unocss/preset-uno": "0.55.7",
