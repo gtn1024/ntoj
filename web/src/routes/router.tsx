@@ -48,6 +48,7 @@ async function adminLoader() {
 
 const AdminHomePage = lazy(() => import('../pages/admin/AdminHomePage'))
 const AdminAnnouncementPage = lazy(() => import('../pages/admin/AdminAnnouncementPage'))
+const AdminUserPage = lazy(() => import('../pages/admin/AdminUserPage'))
 const RecordPage = lazy(() => import('../pages/RecordPage'))
 const ProblemPage = lazy(() => import('../pages/ProblemPage'))
 const RecordListPage = lazy(() => import('../pages/RecordListPage'))
@@ -88,6 +89,14 @@ export const router = createBrowserRouter(
       loader: adminLoader,
       children: [
         { index: true, element: <AdminHomePage/> },
+        {
+          path: 'user',
+          children: [
+            { index: true, element: <AdminUserPage/> },
+            // { path: 'new', element: <AdminUserEditPage/> },
+            // { path: ':id/edit', element: <AdminUserEditPage/> },
+          ],
+        },
         {
           path: 'announcement',
           children: [

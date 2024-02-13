@@ -46,3 +46,22 @@ export function penaltyToTimeString(penalty: number): string {
   res += `${seconds}`
   return res
 }
+
+export function userRoleToCNString(role: UserRole) {
+  let res: string
+  switch (role) {
+    case 'BANNED':
+      res = '封禁用户'
+      break
+    case 'USER':
+      res = '普通用户'
+      break
+    case 'ADMIN':
+      res = '管理员'
+      break
+    case 'SUPER_ADMIN':
+      res = '超级管理员'
+      break
+  }
+  return res
+}

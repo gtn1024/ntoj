@@ -1,5 +1,6 @@
 package zip.ntoj.server.service
 
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.model.User
@@ -10,6 +11,11 @@ interface UserService {
     fun isUsernameValid(username: String): Boolean {
         return username.length in 3..20 && username.all { it.isLetterOrDigit() }
     }
+
+    fun get(
+        page: Int = 1,
+        pageSize: Int = Int.MAX_VALUE,
+    ): List<User>
 
     fun newUser(user: User): User
     fun existsByUsername(username: String): Boolean
@@ -24,6 +30,15 @@ interface UserService {
 class UserServiceImpl(
     val userRepository: UserRepository,
 ) : UserService {
+    override fun get(page: Int, pageSize: Int): List<User> {
+        return userRepository.findAll(
+            PageRequest.of(
+                page - 1,
+                pageSize,
+            ),
+        ).toList()
+    }
+
     override fun newUser(user: User): User {
         if (!isUsernameValid(user.username)) {
             throw AppException("用户名不合法", 400)

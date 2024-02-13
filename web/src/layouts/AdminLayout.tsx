@@ -27,6 +27,10 @@ export const AdminLayout: React.FC = () => {
       label: '首页',
     },
     {
+      key: '/admin/user',
+      label: '用户',
+    },
+    {
       key: '/admin/announcement',
       label: '公告',
     },

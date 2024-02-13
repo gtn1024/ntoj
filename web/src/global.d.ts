@@ -143,6 +143,15 @@ type ContestPermission = |
   'PASSWORD'
 
 namespace AdminDto {
+  interface User {
+    id: number
+    username: string
+    realName?: string
+    role: UserRole
+    email?: string
+    createdAt: string
+  }
+
   interface Contest {
     id: number
     title: string
