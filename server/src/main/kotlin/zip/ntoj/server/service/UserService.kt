@@ -24,6 +24,7 @@ interface UserService {
     fun getUserById(id: Long): User
     fun count(): Long
     fun updateUser(user: User): User
+    fun deleteUserById(id: Long)
 }
 
 @Service
@@ -76,5 +77,9 @@ class UserServiceImpl(
             throw AppException("用户名已存在", 400)
         }
         return userRepository.save(user)
+    }
+
+    override fun deleteUserById(id: Long) {
+        userRepository.deleteById(id)
     }
 }

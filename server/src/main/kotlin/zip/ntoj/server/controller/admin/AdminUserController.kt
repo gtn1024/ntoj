@@ -5,10 +5,13 @@ import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import zip.ntoj.server.ext.fail
 import zip.ntoj.server.ext.success
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.User
@@ -56,5 +59,18 @@ class AdminUserController(
             "获取成功",
             L(total = count, page = current, list = list.map { AdminUserDto.from(it) }),
         )
+    }
+
+    @GetMapping("{id}")
+    fun get(@PathVariable id: Long): ResponseEntity<R<AdminUserDto>> {
+        val user = userService.getUserById(id)
+        return R.success(200, "获取成功", AdminUserDto.from(user))
+    }
+
+    @DeleteMapping("{id}")
+    fun delete(@PathVariable id: Long): ResponseEntity<R<Void>> {
+        if (!userService.existsById(id)) return R.fail(404, "用户不存在")
+        userService.deleteUserById(id)
+        return R.success(200, "删除成功")
     }
 }
