@@ -27,10 +27,6 @@ export const AdminLayout: React.FC = () => {
       label: '首页',
     },
     {
-      key: '/admin/user',
-      label: '用户',
-    },
-    {
       key: '/admin/announcement',
       label: '公告',
     },
@@ -41,6 +37,10 @@ export const AdminLayout: React.FC = () => {
     {
       key: '/admin/contest',
       label: '竞赛',
+    },
+    {
+      key: '/admin/user',
+      label: '用户',
     },
     {
       key: '/admin/language',
@@ -55,6 +55,7 @@ export const AdminLayout: React.FC = () => {
   if (user.role !== 'SUPER_ADMIN') {
     items.pop()
     items.pop()
+    items.pop()
   }
 
   useEffect(() => {
@@ -66,6 +67,9 @@ export const AdminLayout: React.FC = () => {
     }
     if (pathname.includes('/admin/contest')) {
       return setCurrent('/admin/contest')
+    }
+    if (pathname.includes('/admin/user')) {
+      return setCurrent('/admin/user')
     }
     if (pathname.includes('/admin/language')) {
       return setCurrent('/admin/language')
