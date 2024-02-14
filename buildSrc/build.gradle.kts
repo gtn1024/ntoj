@@ -10,6 +10,6 @@ repositories {
 
 dependencies {
     implementation(gradleApi())
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22")
 }
 
