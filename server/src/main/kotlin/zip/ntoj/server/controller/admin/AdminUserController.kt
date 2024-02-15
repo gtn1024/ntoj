@@ -3,7 +3,6 @@ package zip.ntoj.server.controller.admin
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
-import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -18,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController
 import zip.ntoj.server.exception.AppException
 import zip.ntoj.server.ext.fail
 import zip.ntoj.server.ext.success
-import zip.ntoj.server.model.Contest
-import zip.ntoj.server.model.ContestUser
 import zip.ntoj.server.model.L
 import zip.ntoj.server.model.User
 import zip.ntoj.server.model.UserRole
@@ -130,6 +127,64 @@ class AdminUserController(
         userService.updateUser(user)
         return R.success(200, "更新成功", AdminUserDto.from(user))
     }
+
+    @PostMapping("user_import_preview")
+    fun userImportPreview(@RequestBody request: UserImportRequest): ResponseEntity<R<List<UserPreviewDto>>> {
+        val users = getImportUsers(request.users)
+        val userPreview = users.map {
+            UserPreviewDto(
+                it.username,
+                it.password!!,
+                it.realName!!,
+                it.email!!,
+                it.role,
+                userService.existsByUsername(it.username),
+            )
+        }
+        return R.success(200, "获取成功", userPreview)
+    }
+
+    @PostMapping("user_import")
+    fun userImport(@RequestBody request: UserImportRequest): ResponseEntity<R<Void>> {
+        val users = getImportUsers(request.users)
+        users.forEach { user ->
+            user.salt = getSalt()
+            user.password = hashPassword(user.password!!, user.salt!!)
+            if (!userService.existsByUsername(user.username)) {
+                userService.newUser(user)
+            }
+        }
+        return R.success(200, "导入成功")
+    }
+
+    data class UserImportRequest(
+        val users: String,
+    )
+
+    private fun getImportUsers(s: String): List<User> {
+        return s.trim().split("\n").map {
+            val split = it.split("\t")
+            if (split.size != 5) throw AppException("格式错误", 400)
+            User(
+                username = split[0],
+                password = split[1],
+                email = split[2],
+                realName = split[3],
+                role = UserRole.valueOf(split[4]),
+                bio = null,
+                salt = null,
+            )
+        }
+    }
+
+    data class UserPreviewDto(
+        val username: String,
+        val password: String,
+        val realName: String,
+        val email: String,
+        val role: UserRole,
+        val exists: Boolean,
+    )
 
     data class UserRequest(
         val username: String?,

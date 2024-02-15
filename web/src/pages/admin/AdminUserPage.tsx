@@ -36,7 +36,6 @@ export const AdminUserPage: React.FC = () => {
           ...pagination,
           total: res.data.data.total,
         })
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return res.data.data.list
       })
       .catch((err: AxiosError<HttpResponse>) => {
@@ -123,6 +122,9 @@ export const AdminUserPage: React.FC = () => {
         <div flex justify-between>
           <div>
             <button onClick={() => nav('/admin/user/new')}>新建</button>
+          </div>
+          <div>
+            <button onClick={() => nav('/admin/user/import')}>导入用户</button>
           </div>
         </div>
         <div>

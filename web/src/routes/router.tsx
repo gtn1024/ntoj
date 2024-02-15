@@ -50,6 +50,7 @@ const AdminHomePage = lazy(() => import('../pages/admin/AdminHomePage'))
 const AdminAnnouncementPage = lazy(() => import('../pages/admin/AdminAnnouncementPage'))
 const AdminUserPage = lazy(() => import('../pages/admin/AdminUserPage'))
 const AdminUserEditPage = lazy(() => import('../pages/admin/AdminUserEditPage'))
+const AdminUserImportPage = lazy(() => import('../pages/admin/AdminUserImportPage'))
 const RecordPage = lazy(() => import('../pages/RecordPage'))
 const ProblemPage = lazy(() => import('../pages/ProblemPage'))
 const RecordListPage = lazy(() => import('../pages/RecordListPage'))
@@ -94,6 +95,7 @@ export const router = createBrowserRouter(
           path: 'user',
           children: [
             { index: true, element: <AdminUserPage/> },
+            { path: 'import', element: <AdminUserImportPage/> },
             { path: 'new', element: <AdminUserEditPage/> },
             { path: ':id/edit', element: <AdminUserEditPage/> },
           ],
