@@ -85,7 +85,8 @@ export const ContestClarificationDetailPage: React.FC = () => {
           <span flex gap-2>
             {clarification?.contestProblemAlias && (
               <LinkComponent href={`/c/${id}/p/${clarification.contestProblemAlias}`} className="h-full text-#888">
-                #{clarification.contestProblemAlias}
+                #
+                {clarification.contestProblemAlias}
               </LinkComponent>
             )}
             {clarification?.title}
@@ -99,8 +100,8 @@ export const ContestClarificationDetailPage: React.FC = () => {
       </div>
       <div w-full flex flex-col gap-1>
         {
-          clarification?.replies.sort((a, b) => b.id - a.id).map(reply => (
-            <div w-full rounded b="1px solid #666" px-4 py-2 flex flex-col>
+          clarification?.replies.sort((a, b) => b.id - a.id).map((reply, idx) => (
+            <div key={idx} w-full rounded b="1px solid #666" px-4 py-2 flex flex-col>
               <div flex gap-2 pb-4 text="#999">
                 <span>{reply.user}</span>
                 <span>{reply.createdAt}</span>
@@ -114,7 +115,7 @@ export const ContestClarificationDetailPage: React.FC = () => {
         {
           !clarification?.closed && (
             <>
-              <textarea w-full h="200px" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)}/>
+              <textarea w-full h="200px" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)} />
               <button onClick={onReplySubmit}>发布</button>
             </>
           )

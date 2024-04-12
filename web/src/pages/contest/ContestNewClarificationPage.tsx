@@ -59,12 +59,12 @@ export const ContestNewClarificationPage: React.FC = () => {
       <div flex flex-col w-full gap-2>
         <div flex gap-2 leading-8>
           <select value={selectedBoard} onChange={handleBoardChange} w="20%">
-            <option value={'all'}>不选择题目</option>
+            <option value="all">不选择题目</option>
             {boards.map((board, i) => (
               <option key={i} value={board.alias}>{`${board.alias} - ${board.title}`}</option>
             ))}
           </select>
-          <input type="text" value={title} onChange={handleTitleChange} w="80%"/>
+          <input type="text" value={title} onChange={handleTitleChange} w="80%" />
         </div>
         <div w-full>
           <textarea w-full rows={20} value={content} onChange={e => handleEditorChange(e.target.value)} />

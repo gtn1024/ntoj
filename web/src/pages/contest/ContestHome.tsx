@@ -64,7 +64,7 @@ export const ContestHome: React.FC = () => {
       <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
         <div flex flex-col px-4 gap-4>
           <div pt-8>
-            <MarkdownArticle data={contest?.description ?? ''}/>
+            <MarkdownArticle data={contest?.description ?? ''} />
           </div>
         </div>
       </div>
@@ -107,18 +107,18 @@ export const ContestHome: React.FC = () => {
                 {userStore.user.id ? '加入比赛' : '请先登录'}
               </button>
               <Modal
-                  title="注册比赛"
-                  open={registerModalOpen}
-                  onOk={handleRegister}
-                  confirmLoading={confirmLoading}
-                  onCancel={() => setRegisterModalOpen(false)}
+                title="注册比赛"
+                open={registerModalOpen}
+                onOk={handleRegister}
+                confirmLoading={confirmLoading}
+                onCancel={() => setRegisterModalOpen(false)}
               >
                 <p>是否确认加入比赛？</p>
                 {
                   contest?.permission === 'PASSWORD' && (
                     <>
                       <p>本场比赛存在密码，请输入密码</p>
-                      <input type="password" value={password} onChange={event => setPassword(event.target.value) }/>
+                      <input type="password" value={password} onChange={event => setPassword(event.target.value)} />
                     </>
                   )
                 }

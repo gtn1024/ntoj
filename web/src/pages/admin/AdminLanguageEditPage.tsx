@@ -70,57 +70,57 @@ export const AdminLanguageEditPage: React.FC = () => {
   }
 
   return (
-        <div p-4>
-            <Form
-                name="basic"
-                layout='vertical'
-                onFinish={onSubmit}
-                autoComplete="off"
-                ref={formRef}
-            >
-                <Form.Item label="显示名称" rules={[{ required: true, message: '请输入名称！' }]} name="languageName">
-                    <Input/>
-                </Form.Item>
+    <div p-4>
+      <Form
+        name="basic"
+        layout="vertical"
+        onFinish={onSubmit}
+        autoComplete="off"
+        ref={formRef}
+      >
+        <Form.Item label="显示名称" rules={[{ required: true, message: '请输入名称！' }]} name="languageName">
+          <Input />
+        </Form.Item>
 
-                <Form.Item label="编译命令" name="compileCommand">
-                    <Input/>
-                </Form.Item>
+        <Form.Item label="编译命令" name="compileCommand">
+          <Input />
+        </Form.Item>
 
-                <Form.Item label="运行命令" name="executeCommand">
-                    <Input/>
-                </Form.Item>
+        <Form.Item label="运行命令" name="executeCommand">
+          <Input />
+        </Form.Item>
 
-                <Form.Item label="时间倍率" name="timeLimitRate" initialValue={1}>
-                  <InputNumber min={1} max={10}/>
-                </Form.Item>
+        <Form.Item label="时间倍率" name="timeLimitRate" initialValue={1}>
+          <InputNumber min={1} max={10} />
+        </Form.Item>
 
-                <Form.Item label="空间倍率" name="memoryLimitRate" initialValue={1}>
-                  <InputNumber min={1} max={10}/>
-                </Form.Item>
+        <Form.Item label="空间倍率" name="memoryLimitRate" initialValue={1}>
+          <InputNumber min={1} max={10} />
+        </Form.Item>
 
-                <Form.Item label="源代码文件名" name="sourceFilename">
-                  <Input/>
-                </Form.Item>
+        <Form.Item label="源代码文件名" name="sourceFilename">
+          <Input />
+        </Form.Item>
 
-                <Form.Item label="产物文件名" name="targetFilename">
-                  <Input/>
-                </Form.Item>
+        <Form.Item label="产物文件名" name="targetFilename">
+          <Input />
+        </Form.Item>
 
-                <Form.Item
-                    label="是否启用"
-                    name="enabled"
-                    valuePropName="checked"
-                >
-                    <Switch/>
-                </Form.Item>
+        <Form.Item
+          label="是否启用"
+          name="enabled"
+          valuePropName="checked"
+        >
+          <Switch />
+        </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        {mode === '新建' ? '发布' : '修改'}
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            {mode === '新建' ? '发布' : '修改'}
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
 

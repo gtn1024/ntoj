@@ -110,9 +110,8 @@ export const AdminLayout: React.FC = () => {
                 <Button
                   type="text"
                   icon={collapsed
-                    ? <div className="i-mdi:menu-close h-[20px] w-[20px]"/>
-                    : <div className="i-mdi:menu-open h-[20px] w-[20px]"/>
-                  }
+                    ? <div className="i-mdi:menu-close h-[20px] w-[20px]" />
+                    : <div className="i-mdi:menu-open h-[20px] w-[20px]" />}
                   onClick={() => setCollapsed(!collapsed)}
                   style={{
                     fontSize: '16px',
@@ -122,15 +121,18 @@ export const AdminLayout: React.FC = () => {
                 />
                 )
               : (
-                <Dropdown menu={{
-                  items,
-                  onClick: onClickMenu,
-                  selectable: true,
-                  selectedKeys: [current],
-                }} trigger={['click']}>
+                <Dropdown
+                  menu={{
+                    items,
+                    onClick: onClickMenu,
+                    selectable: true,
+                    selectedKeys: [current],
+                  }}
+                  trigger={['click']}
+                >
                   <Button
                     type="text"
-                    icon={<div className="i-material-symbols:menu h-[20px] w-[20px]"/>}
+                    icon={<div className="i-material-symbols:menu h-[20px] w-[20px]" />}
                     style={{
                       fontSize: '16px',
                       width: 64,
@@ -142,7 +144,7 @@ export const AdminLayout: React.FC = () => {
           }
           <div className="mr-4">
             <span className="mr-2">{user.username}</span>
-            <Link to='/'>
+            <Link to="/">
               返回主站
             </Link>
           </div>
@@ -154,7 +156,7 @@ export const AdminLayout: React.FC = () => {
             overflowY: 'auto',
           }}
         >
-          <Outlet/>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

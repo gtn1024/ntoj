@@ -14,8 +14,8 @@ interface Props {
   hBorder: number
   submitUrl: string
   codeLengthLimit: number
-  languageOptions: { value: string; label: string }[]
-  samples: { input: string; output: string }[]
+  languageOptions: { value: string, label: string }[]
+  samples: { input: string, output: string }[]
   timeLimit: number
   memoryLimit: number
 }
@@ -55,7 +55,9 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
             : !isSubmissionOk
                 ? (
                   <div flex justify-center items-center h-full gap-2 text="[#999]">
-                    <div className="i-eos-icons:bubble-loading"/> 您的代码已提交，正在为您查询结果...
+                    <div className="i-eos-icons:bubble-loading" />
+                    {' '}
+                    您的代码已提交，正在为您查询结果...
                   </div>
                   )
                 : (
@@ -73,10 +75,18 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                           submissionResult?.status === 'ACCEPTED' && (
                             <>
                               <div flex items-center gap-1>
-                                <div className="i-mdi:clock-outline"/> 运行时间 {submissionResult?.time}ms
+                                <div className="i-mdi:clock-outline" />
+                                {' '}
+                                运行时间
+                                {submissionResult?.time}
+                                ms
                               </div>
                               <div flex items-center gap-1>
-                                <div className="i-ion:hardware-chip-outline"/> 占用内存 {submissionResult?.memory}KB
+                                <div className="i-ion:hardware-chip-outline" />
+                                {' '}
+                                占用内存
+                                {submissionResult?.memory}
+                                KB
                               </div>
                             </>
                           )
@@ -132,21 +142,35 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
     return (
       <div flex flex-col gap-1 h-full>
         <textarea
-            border rounded p-2 w-full h-full outline-none
-            placeholder="输入自测用例"
-            value={selfInputData}
-            onChange={e => setSelfInputData(e.target.value)}
+          border
+          rounded
+          p-2
+          w-full
+          h-full
+          outline-none
+          placeholder="输入自测用例"
+          value={selfInputData}
+          onChange={e => setSelfInputData(e.target.value)}
         />
         {samples.length > 0 && (
           <div flex gap-1>
             {samples.map((sample, index) => (
               <button
                 key={index}
-                border rounded px-2 py-1 hover:bg-gray-200 cursor-pointer outline-none
+                border
+                rounded
+                px-2
+                py-1
+                hover:bg-gray-200
+                cursor-pointer
+                outline-none
                 onClick={() => {
                   setSelfInputData(sample.input)
                 }}
-              >载入示例 {index + 1}</button>
+              >
+                载入示例
+                {index + 1}
+              </button>
             ))}
           </div>
         )}
@@ -269,22 +293,40 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
 
   function languageLabelToEditorLanguage(id: string) {
     const label = languageOptions.find(language => language.value === id)?.label.toLowerCase()
-    if (!label) { return 'cpp' }
-    if (label.includes('c++') || label.toLowerCase().includes('cpp')) { return 'cpp' }
-    if (label.includes('c#') || label.toLowerCase().includes('csharp')) { return 'csharp' }
-    if (label.includes('java')) { return 'java' }
-    if (label.includes('py')) { return 'python' }
-    if (label.includes('go')) { return 'go' }
-    if (label.includes('rust')) { return 'rust' }
-    if (label.includes('pascal')) { return 'pascal' }
-    if (label.includes('c')) { return 'c' }
+    if (!label) {
+      return 'cpp'
+    }
+    if (label.includes('c++') || label.toLowerCase().includes('cpp')) {
+      return 'cpp'
+    }
+    if (label.includes('c#') || label.toLowerCase().includes('csharp')) {
+      return 'csharp'
+    }
+    if (label.includes('java')) {
+      return 'java'
+    }
+    if (label.includes('py')) {
+      return 'python'
+    }
+    if (label.includes('go')) {
+      return 'go'
+    }
+    if (label.includes('rust')) {
+      return 'rust'
+    }
+    if (label.includes('pascal')) {
+      return 'pascal'
+    }
+    if (label.includes('c')) {
+      return 'c'
+    }
     return 'cpp'
   }
 
   return (
     <>
       <div h="40px" flex items-center justify-between mx-2>
-        <div className={'flex'}>
+        <div className="flex">
           <Select
             className={c('w-[150px]')}
             value={language}
@@ -297,7 +339,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
         </div>
         <div flex gap-1>
           <button bg="inherit hover:#f3f3f6" rounded border-none cursor-pointer onClick={() => setEditorConfigDrawerOpen(true)}>
-            <div className="i-material-symbols:settings"/>
+            <div className="i-material-symbols:settings" />
           </button>
         </div>
         <Drawer title="编辑器设置" placement="right" onClose={() => setEditorConfigDrawerOpen(false)} open={editorConfigDrawerOpen}>
@@ -308,13 +350,13 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                 <h3>主题</h3>
                 <div w-full>
                   <Select
-                      w-full
-                      value={codemirrorConfig?.theme}
-                      onChange={e => setCodemirrorConfig({ ...codemirrorConfig, theme: e })}
-                      options={[
-                        { value: 'light', label: '浅色' },
-                        { value: 'dark', label: '深色' },
-                      ]}
+                    w-full
+                    value={codemirrorConfig?.theme}
+                    onChange={e => setCodemirrorConfig({ ...codemirrorConfig, theme: e })}
+                    options={[
+                      { value: 'light', label: '浅色' },
+                      { value: 'dark', label: '深色' },
+                    ]}
                   />
                 </div>
               </div>
@@ -322,16 +364,16 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                 <h3>字体大小</h3>
                 <div w-full>
                   <Select
-                      w-full
-                      value={codemirrorConfig?.fontSize}
-                      onChange={e => setCodemirrorConfig({ ...codemirrorConfig, fontSize: e })}
-                      options={[
-                        { value: 14, label: '默认' },
-                        { value: 12, label: '小' },
-                        { value: 16, label: '大' },
-                        { value: 18, label: '更大' },
-                        { value: 20, label: '加大' },
-                      ]}
+                    w-full
+                    value={codemirrorConfig?.fontSize}
+                    onChange={e => setCodemirrorConfig({ ...codemirrorConfig, fontSize: e })}
+                    options={[
+                      { value: 14, label: '默认' },
+                      { value: 12, label: '小' },
+                      { value: 16, label: '大' },
+                      { value: 18, label: '更大' },
+                      { value: 20, label: '加大' },
+                    ]}
                   />
                 </div>
               </div>
@@ -371,16 +413,15 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           >
             {
               toolbarVisible
-                ? <div className={isMobile ? 'i-material-symbols:keyboard-arrow-up' : 'i-material-symbols:keyboard-arrow-down'} h="[24px]" w="[24px]"/>
-                : <div className={isMobile ? 'i-material-symbols:keyboard-arrow-down' : 'i-material-symbols:keyboard-arrow-up'} h="[24px]" w="[24px]"/>
+                ? <div className={isMobile ? 'i-material-symbols:keyboard-arrow-up' : 'i-material-symbols:keyboard-arrow-down'} h="[24px]" w="[24px]" />
+                : <div className={isMobile ? 'i-material-symbols:keyboard-arrow-down' : 'i-material-symbols:keyboard-arrow-up'} h="[24px]" w="[24px]" />
             }
           </button>
         </div>
         <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
           <div className={c('flex', 'gap-1')}>
             <button
-              className={c('px-2', 'border-none', 'cursor-pointer', 'rounded', 'hover:bg-gray-200',
-                (toolbarVisible && toolbarSection === 'result') ? 'bg-gray-200' : 'bg-white')}
+              className={c('px-2', 'border-none', 'cursor-pointer', 'rounded', 'hover:bg-gray-200', (toolbarVisible && toolbarSection === 'result') ? 'bg-gray-200' : 'bg-white')}
               onClick={() => {
                 setToolbarVisible(true)
                 setToolbarSection('result')
@@ -389,8 +430,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
               运行结果
             </button>
             <button
-              className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200',
-                (toolbarVisible && toolbarSection === 'input') ? 'bg-gray-200' : 'bg-white')}
+              className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200', (toolbarVisible && toolbarSection === 'input') ? 'bg-gray-200' : 'bg-white')}
               onClick={() => {
                 setToolbarVisible(true)
                 setToolbarSection('input')
@@ -399,25 +439,36 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
               自测输入
             </button>
             <button
-              px-2 cursor-pointer bg-white rounded hover:bg-gray-200 flex items-center border="#32ca99" text="#32ca99" outline-none
+              px-2
+              cursor-pointer
+              bg-white
+              rounded
+              hover:bg-gray-200
+              flex
+              items-center
+              border="#32ca99"
+              text="#32ca99"
+              outline-none
               onClick={onSelfTest}
             >
               自测运行
             </button>
           </div>
-          <div className={''}>
+          <div className="">
             <Button type="primary" onClick={onSubmitCode} disabled={!code || !language}>提交</Button>
           </div>
         </div>
-        {toolbarVisible && <div className={c(toolbarVisible ? [!isMobile ? 'h-[160px]' : 'h-full'] : ['invisible', 'h-0'])}>
-          <div className={c('p-2', 'h-full', !isMobile && 'overflow-y-auto')}>
-            {
+        {toolbarVisible && (
+          <div className={c(toolbarVisible ? [!isMobile ? 'h-[160px]' : 'h-full'] : ['invisible', 'h-0'])}>
+            <div className={c('p-2', 'h-full', !isMobile && 'overflow-y-auto')}>
+              {
               toolbarSection === 'result'
-                ? <ToolbarResult/>
-                : <ToolbarInput/>
+                ? <ToolbarResult />
+                : <ToolbarInput />
             }
+            </div>
           </div>
-        </div>}
+        )}
       </div>
     </>
   )

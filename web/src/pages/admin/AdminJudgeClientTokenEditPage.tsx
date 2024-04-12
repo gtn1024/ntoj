@@ -57,33 +57,33 @@ export const AdminJudgeClientTokenEditPage: React.FC = () => {
   }
 
   return (
-        <div p-4>
-            <Form
-                name="basic"
-                layout='vertical'
-                onFinish={onSubmit}
-                autoComplete="off"
-                ref={formRef}
-            >
-                <Form.Item label="名称" rules={[{ required: true, message: '请输入名称！' }]} name="name">
-                    <Input/>
-                </Form.Item>
+    <div p-4>
+      <Form
+        name="basic"
+        layout="vertical"
+        onFinish={onSubmit}
+        autoComplete="off"
+        ref={formRef}
+      >
+        <Form.Item label="名称" rules={[{ required: true, message: '请输入名称！' }]} name="name">
+          <Input />
+        </Form.Item>
 
-                <Form.Item
-                    label="是否启用"
-                    name="enabled"
-                    valuePropName="checked"
-                >
-                    <Switch/>
-                </Form.Item>
+        <Form.Item
+          label="是否启用"
+          name="enabled"
+          valuePropName="checked"
+        >
+          <Switch />
+        </Form.Item>
 
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        {mode === '新建' ? '发布' : '修改'}
-                    </Button>
-                </Form.Item>
-            </Form>
-        </div>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            {mode === '新建' ? '发布' : '修改'}
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
 

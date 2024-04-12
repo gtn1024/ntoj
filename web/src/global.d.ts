@@ -1,4 +1,4 @@
-var isDev: boolean
+let isDev: boolean
 
 type UserRole = 'BANNED' | 'USER' | 'ADMIN' | 'SUPER_ADMIN'
 
@@ -46,8 +46,8 @@ interface Problem {
   languages?: number[]
   allowAllLanguages: boolean
   codeLength: number
-  submitTimes: number,
-  acceptedTimes: number,
+  submitTimes: number
+  acceptedTimes: number
 }
 
 interface TestcaseDto {

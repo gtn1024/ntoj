@@ -53,44 +53,59 @@ export const ContestSubmissionListPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-        {data?.list.map((submission, index) => (
-          <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.id}</div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>
-                {submission.user.realName && (<>{submission.user.realName} <br/></>) }
-                {submission.user.username}
-              </div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>
-                <LinkComponent href={`/c/${id}/p/${submission.alias}`}>
-                  {submission.alias}
-                </LinkComponent>
-              </div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center style={{ color: statusToColor(submission.result) }}>{statusToMessage(submission.result)}</div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.time}ms</div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.memory}KB</div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.codeLength}B</div>
-            </td>
-            <td width={'10%'} px-4 py-3>
-              <div text-center>{submission.language}</div>
-            </td>
-            <td width={'20%'} px-4 py-3>
-              <div text-center>{submission.submitTime}</div>
-            </td>
-          </tr>
-        ))}
+          {data?.list.map((submission, index) => (
+            <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
+              <td width="10%" px-4 py-3>
+                <div text-center>{submission.id}</div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  {submission.user.realName && (
+                    <>
+                      {submission.user.realName}
+                      {' '}
+                      <br />
+                    </>
+                  ) }
+                  {submission.user.username}
+                </div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  <LinkComponent href={`/c/${id}/p/${submission.alias}`}>
+                    {submission.alias}
+                  </LinkComponent>
+                </div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center style={{ color: statusToColor(submission.result) }}>{statusToMessage(submission.result)}</div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  {submission.time}
+                  ms
+                </div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  {submission.memory}
+                  KB
+                </div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  {submission.codeLength}
+                  B
+                </div>
+              </td>
+              <td width="10%" px-4 py-3>
+                <div text-center>{submission.language}</div>
+              </td>
+              <td width="20%" px-4 py-3>
+                <div text-center>{submission.submitTime}</div>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <div flex justify-center w-full>

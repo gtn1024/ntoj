@@ -38,11 +38,17 @@ export function penaltyToTimeString(penalty: number): string {
   penalty -= minutes * 60
   const seconds = Math.floor(penalty)
   let res = ''
-  if (hours < 10) { res += '0' }
+  if (hours < 10) {
+    res += '0'
+  }
   res += `${hours}:`
-  if (minutes < 10) { res += '0' }
+  if (minutes < 10) {
+    res += '0'
+  }
   res += `${minutes}:`
-  if (seconds < 10) { res += '0' }
+  if (seconds < 10) {
+    res += '0'
+  }
   res += `${seconds}`
   return res
 }

@@ -24,7 +24,7 @@ export const AdminProblemEditPage: React.FC = () => {
   const formRef = useRef<FormInstance>(null)
   const [data, setData] = useState<AdminDto.Problem>()
   const [languages, setLanguages] = useState<string[]>([])
-  const [allLanguages, setAllLanguages] = useState<{ key: string; title: string }[]>([])
+  const [allLanguages, setAllLanguages] = useState<{ key: string, title: string }[]>([])
   const [testcaseFileId, setTestcaseFileId] = useState<number>()
   useEffect(() => {
     if (mode === '修改' && id) {
@@ -159,151 +159,172 @@ export const AdminProblemEditPage: React.FC = () => {
         throw err
       })
   }
-  return (<>
-    <div h="[calc(100vh-64px)]" w-full flex justify-between>
-      <div w="1/2" overflow-y-auto p-4>
-        <h2 text-xl>{mode}题目</h2>
-        <Form
-          name="basic"
-          layout='vertical'
-          onFinish={onSubmit}
-          onChange={() => setData(formRef.current?.getFieldsValue() as AdminDto.Problem)}
-          autoComplete="off"
-          ref={formRef}
-        >
-          <div flex>
-            <Form.Item label="题号" rules={[{ required: true, message: '请输入标题！' }]} name="alias" className="mr-2">
-              <Input/>
-            </Form.Item>
-
-            <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
-              <Input/>
-            </Form.Item>
-          </div>
-
-          <div flex>
-            <Form.Item label="内存限制" rules={[{ required: true, message: '请输入内存限制！' }]}
-                       name="memoryLimit" className="mr-2" initialValue={256}>
-              <InputNumber addonAfter="MB" />
-            </Form.Item>
-
-            <Form.Item label="时间限制" rules={[{ required: true, message: '请输入时间限制！' }]}
-                       name="timeLimit" className="grow" initialValue={1000} >
-              <InputNumber addonAfter="ms" />
-            </Form.Item>
-          </div>
-
-          <Form.Item label="题目背景" name="background">
-            <Input.TextArea rows={6}/>
-          </Form.Item>
-
-          <Form.Item label="题目描述" name="description">
-            <Input.TextArea rows={6}/>
-          </Form.Item>
-
-          <Form.Item label="输入描述" name="inputDescription">
-            <Input.TextArea rows={4}/>
-          </Form.Item>
-
-          <Form.Item label="输出描述" name="outputDescription">
-            <Input.TextArea rows={4}/>
-          </Form.Item>
-
-          <Form.List name="samples">
-            {(fields, { add, remove }) => (<>
-              {fields.map(({ key, name, ...restField }) => (
-                <div key={key} style={{ display: 'flex', marginBottom: 8, width: '100%' }}>
-                  <div w-full flex>
-                    <Form.Item
-                      {...restField}
-                      className="mr-2 w-1/2"
-                      label={`输入 ${name + 1}`}
-                      name={[name, 'input']}
-                      rules={[{ required: true, message: '请输入样例输入' }]}
-                    >
-                      <Input.TextArea rows={4} placeholder='样例输入'/>
-                    </Form.Item>
-                    <Form.Item
-                      {...restField}
-                      className="mr-2 w-1/2"
-                      label={`输出 ${name + 1}`}
-                      name={[name, 'output']}
-                      rules={[{ required: true, message: '请输入样例输出' }]}
-                    >
-                      <Input.TextArea rows={4} placeholder='样例输出'/>
-                    </Form.Item>
-                  </div>
-                  {
-                    fields.length > 1 && (<div className="i-mdi:minus-circle-outline" onClick={() => remove(name)}/>)
-                  }
-                </div>
-              ))}
-              <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<div className="i-mdi:plus"/>}>
-                  添加样例
-                </Button>
+  return (
+    <>
+      <div h="[calc(100vh-64px)]" w-full flex justify-between>
+        <div w="1/2" overflow-y-auto p-4>
+          <h2 text-xl>
+            {mode}
+            题目
+          </h2>
+          <Form
+            name="basic"
+            layout="vertical"
+            onFinish={onSubmit}
+            onChange={() => setData(formRef.current?.getFieldsValue() as AdminDto.Problem)}
+            autoComplete="off"
+            ref={formRef}
+          >
+            <div flex>
+              <Form.Item label="题号" rules={[{ required: true, message: '请输入标题！' }]} name="alias" className="mr-2">
+                <Input />
               </Form.Item>
-            </>)}
-          </Form.List>
 
-          <Form.Item label="提示" name="note">
-            <Input.TextArea rows={4}/>
-          </Form.Item>
+              <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
+                <Input />
+              </Form.Item>
+            </div>
 
-          <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
-            <Switch/>
-          </Form.Item>
+            <div flex>
+              <Form.Item
+                label="内存限制"
+                rules={[{ required: true, message: '请输入内存限制！' }]}
+                name="memoryLimit"
+                className="mr-2"
+                initialValue={256}
+              >
+                <InputNumber addonAfter="MB" />
+              </Form.Item>
 
-          <Form.Item label="代码长度限制" rules={[{ required: true, message: '请输入代码长度限制！' }]}
-                     name="codeLength" initialValue={16}>
-            <InputNumber addonAfter="KB" />
-          </Form.Item>
+              <Form.Item
+                label="时间限制"
+                rules={[{ required: true, message: '请输入时间限制！' }]}
+                name="timeLimit"
+                className="grow"
+                initialValue={1000}
+              >
+                <InputNumber addonAfter="ms" />
+              </Form.Item>
+            </div>
 
-          <Form.Item label="语言" name="languages">
-            <Transfer
-              dataSource={allLanguages}
-              targetKeys={languages}
-              onChange={setLanguages}
-              render={item => item.title}
-            />
-          </Form.Item>
+            <Form.Item label="题目背景" name="background">
+              <Input.TextArea rows={6} />
+            </Form.Item>
 
-          <Form.Item label="测试数据" className={c('flex')}>
-            <Space>
-              <Upload {...props} fileList={fileList}>
-                <Button icon={<div className="i-mdi:cloud-upload"/> }>Upload</Button>
-              </Upload>
-              {
+            <Form.Item label="题目描述" name="description">
+              <Input.TextArea rows={6} />
+            </Form.Item>
+
+            <Form.Item label="输入描述" name="inputDescription">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+
+            <Form.Item label="输出描述" name="outputDescription">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+
+            <Form.List name="samples">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <div key={key} style={{ display: 'flex', marginBottom: 8, width: '100%' }}>
+                      <div w-full flex>
+                        <Form.Item
+                          {...restField}
+                          className="mr-2 w-1/2"
+                          label={`输入 ${name + 1}`}
+                          name={[name, 'input']}
+                          rules={[{ required: true, message: '请输入样例输入' }]}
+                        >
+                          <Input.TextArea rows={4} placeholder="样例输入" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          className="mr-2 w-1/2"
+                          label={`输出 ${name + 1}`}
+                          name={[name, 'output']}
+                          rules={[{ required: true, message: '请输入样例输出' }]}
+                        >
+                          <Input.TextArea rows={4} placeholder="样例输出" />
+                        </Form.Item>
+                      </div>
+                      {
+                    fields.length > 1 && (<div className="i-mdi:minus-circle-outline" onClick={() => remove(name)} />)
+                  }
+                    </div>
+                  ))}
+                  <Form.Item>
+                    <Button type="dashed" onClick={() => add()} block icon={<div className="i-mdi:plus" />}>
+                      添加样例
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+
+            <Form.Item label="提示" name="note">
+              <Input.TextArea rows={4} />
+            </Form.Item>
+
+            <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+
+            <Form.Item
+              label="代码长度限制"
+              rules={[{ required: true, message: '请输入代码长度限制！' }]}
+              name="codeLength"
+              initialValue={16}
+            >
+              <InputNumber addonAfter="KB" />
+            </Form.Item>
+
+            <Form.Item label="语言" name="languages">
+              <Transfer
+                dataSource={allLanguages}
+                targetKeys={languages}
+                onChange={setLanguages}
+                render={item => item.title}
+              />
+            </Form.Item>
+
+            <Form.Item label="测试数据" className={c('flex')}>
+              <Space>
+                <Upload {...props} fileList={fileList}>
+                  <Button icon={<div className="i-mdi:cloud-upload" />}>Upload</Button>
+                </Upload>
+                {
                 testcaseFileId && (
-                  <Button icon={<div className="i-mdi:cloud-download"/> } bg-green onClick={downloadTestcase}>
+                  <Button icon={<div className="i-mdi:cloud-download" />} bg-green onClick={downloadTestcase}>
                     下载测试数据
                   </Button>
                 )
               }
-            </Space>
-          </Form.Item>
+              </Space>
+            </Form.Item>
 
-          <Form.Item
-            label="是否可见"
-            name="visible"
-            valuePropName="checked"
-          >
-            <Switch/>
-          </Form.Item>
+            <Form.Item
+              label="是否可见"
+              name="visible"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {mode === '新建' ? '发布' : '修改'}
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {mode === '新建' ? '发布' : '修改'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+        <div w="1/2" overflow-y-auto p-4>
+          <h2 text-xl>预览</h2>
+          <ProblemDetail data={{ ...data } as Problem} showProblemAlias={true} />
+        </div>
       </div>
-      <div w="1/2" overflow-y-auto p-4>
-        <h2 text-xl>预览</h2>
-        <ProblemDetail data={{ ...data } as Problem} showProblemAlias={true}/>
-      </div>
-    </div>
-  </>)
+    </>
+  )
 }
 
 export default AdminProblemEditPage

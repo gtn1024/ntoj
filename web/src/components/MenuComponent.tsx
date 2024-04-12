@@ -66,25 +66,35 @@ export const MenuComponent: React.FC<Props> = (props) => {
     <div className={props.className}>
       {!isMobile
         ? (
-          <Menu className={props.className} onClick={onClick} selectedKeys={[current]} mode="horizontal"
-                items={items}/>
-          )
-        : (<Dropdown menu={{
-            items,
-            onClick,
-            selectable: true,
-            selectedKeys: [current],
-          }} trigger={['click']}>
-          <Button
-            type="text"
-            icon={<div className="i-material-symbols:menu h-[20px] w-[20px]"/> }
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
+          <Menu
+            className={props.className}
+            onClick={onClick}
+            selectedKeys={[current]}
+            mode="horizontal"
+            items={items}
           />
-        </Dropdown>)
-      }
-    </div>)
+          )
+        : (
+          <Dropdown
+            menu={{
+              items,
+              onClick,
+              selectable: true,
+              selectedKeys: [current],
+            }}
+            trigger={['click']}
+          >
+            <Button
+              type="text"
+              icon={<div className="i-material-symbols:menu h-[20px] w-[20px]" />}
+              style={{
+                fontSize: '16px',
+                width: 64,
+                height: 64,
+              }}
+            />
+          </Dropdown>
+          )}
+    </div>
+  )
 }

@@ -78,7 +78,6 @@ http.instance.interceptors.response.use(
       const link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       link.setAttribute('download', (response.headers['content-disposition']).split(';')[1].split('=')[1])
       document.body.appendChild(link)
       link.click()

@@ -30,18 +30,22 @@ export const ContestClarificationListPage: React.FC = () => {
           <tbody>
             {clarifications?.map((clarification, index) => (
               <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
-                <td width={'60%'} px-4 py-3>
-                  <LinkComponent href={`/c/${id}/clarification/${clarification.id}`} className={'text-gray-500'}>
-                    <div text-center>{clarification.sticky && <span className={'text-red-500'}>[置顶]</span>} {clarification.contestProblemAlias ? `[${clarification.contestProblemAlias}] ${clarification.title}` : clarification.title}</div>
+                <td width="60%" px-4 py-3>
+                  <LinkComponent href={`/c/${id}/clarification/${clarification.id}`} className="text-gray-500">
+                    <div text-center>
+                      {clarification.sticky && <span className="text-red-500">[置顶]</span>}
+                      {' '}
+                      {clarification.contestProblemAlias ? `[${clarification.contestProblemAlias}] ${clarification.title}` : clarification.title}
+                    </div>
                   </LinkComponent>
                 </td>
-                <td width={'10%'} px-4 py-3>
+                <td width="10%" px-4 py-3>
                   <div text-center>{clarification.user}</div>
                 </td>
-                <td width={'20%'} px-4 py-3>
+                <td width="20%" px-4 py-3>
                   <div text-center>{clarification.createdAt}</div>
                 </td>
-                <td width={'10%'} px-4 py-3>
+                <td width="10%" px-4 py-3>
                   <div text-center>{clarification.replyCount}</div>
                 </td>
               </tr>

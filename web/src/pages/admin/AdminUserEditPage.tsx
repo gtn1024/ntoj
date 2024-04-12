@@ -60,55 +60,63 @@ export const AdminUserEditPage: React.FC = () => {
     }
   }
 
-  return (<>
-    <div h="[calc(100vh-64px)]" w-full flex justify-between>
-      <div w-full overflow-y-auto p-4>
-        <h2 text-xl>{mode}用户</h2>
-        <Form
-          name="basic"
-          layout='vertical'
-          onFinish={onSubmit}
-          autoComplete="off"
-          ref={formRef}
-        >
-          <Form.Item label="用户名" rules={[{ required: true, message: '请输入用户名！' }]} name="username" className="grow">
-            <Input/>
-          </Form.Item>
+  return (
+    <>
+      <div h="[calc(100vh-64px)]" w-full flex justify-between>
+        <div w-full overflow-y-auto p-4>
+          <h2 text-xl>
+            {mode}
+            用户
+          </h2>
+          <Form
+            name="basic"
+            layout="vertical"
+            onFinish={onSubmit}
+            autoComplete="off"
+            ref={formRef}
+          >
+            <Form.Item label="用户名" rules={[{ required: true, message: '请输入用户名！' }]} name="username" className="grow">
+              <Input />
+            </Form.Item>
 
-          <Form.Item label={mode === '新建' ? '密码' : '修改密码'}
-                     rules={mode === '新建' ? [{ required: true, message: '请输入密码！' }] : undefined}
-                     name="password" className="grow">
-            <Input.Password />
-          </Form.Item>
+            <Form.Item
+              label={mode === '新建' ? '密码' : '修改密码'}
+              rules={mode === '新建' ? [{ required: true, message: '请输入密码！' }] : undefined}
+              name="password"
+              className="grow"
+            >
+              <Input.Password />
+            </Form.Item>
 
-          <Form.Item label="真实姓名" rules={[{ required: true, message: '请输入真实姓名！' }]} name="realName" className="grow">
-            <Input/>
-          </Form.Item>
+            <Form.Item label="真实姓名" rules={[{ required: true, message: '请输入真实姓名！' }]} name="realName" className="grow">
+              <Input />
+            </Form.Item>
 
-          <Form.Item label="电子邮箱" rules={[{ required: true, message: '请输入电子邮箱！' }]} name="email" className="grow">
-            <Input/>
-          </Form.Item>
+            <Form.Item label="电子邮箱" rules={[{ required: true, message: '请输入电子邮箱！' }]} name="email" className="grow">
+              <Input />
+            </Form.Item>
 
-          <Form.Item label="用户权限" name="role" initialValue="USER">
-            <Select
-              options={[
-                { value: 'BANNED', label: '已封禁' },
-                { value: 'USER', label: '普通用户' },
-                { value: 'ADMIN', label: '管理员' },
-                { value: 'SUPER_ADMIN', label: '超级管理员' },
-              ]}
-            />
-          </Form.Item>
+            <Form.Item label="用户权限" name="role" initialValue="USER">
+              <Select
+                options={[
+                  { value: 'BANNED', label: '已封禁' },
+                  { value: 'USER', label: '普通用户' },
+                  { value: 'ADMIN', label: '管理员' },
+                  { value: 'SUPER_ADMIN', label: '超级管理员' },
+                ]}
+              />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {mode === '新建' ? '新建' : '修改'}
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {mode === '新建' ? '新建' : '修改'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
-    </div>
-  </>)
+    </>
+  )
 }
 
 export default AdminUserEditPage

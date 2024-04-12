@@ -65,20 +65,20 @@ export const AdminAnnouncementEditPage: React.FC = () => {
     <div p-4>
       <Form
         name="basic"
-        layout='vertical'
+        layout="vertical"
         onFinish={onSubmit}
         autoComplete="off"
         ref={formRef}
       >
         <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title">
-          <Input/>
+          <Input />
         </Form.Item>
 
         <Form.Item
           label="内容"
           name="content"
         >
-          <RichEditor height='49vh' data={content} setData={setContent}/>
+          <RichEditor height="49vh" data={content} setData={setContent} />
         </Form.Item>
 
         <Form.Item
@@ -86,7 +86,7 @@ export const AdminAnnouncementEditPage: React.FC = () => {
           name="visible"
           valuePropName="checked"
         >
-          <Switch/>
+          <Switch />
         </Form.Item>
 
         <Form.Item>

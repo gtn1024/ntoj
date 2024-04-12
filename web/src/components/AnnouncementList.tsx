@@ -29,7 +29,13 @@ export const AnnouncementList: React.FC = () => {
             extra={<div>{item.createdAt}</div>}
           >
             <List.Item.Meta
-              title={<Link to={`/a/${item.id ?? 0}`} style={{ fontWeight: 'bold' }}> {item.title} </Link>}
+              title={(
+                <Link to={`/a/${item.id ?? 0}`} style={{ fontWeight: 'bold' }}>
+                  {' '}
+                  {item.title}
+                  {' '}
+                </Link>
+              )}
             />
           </List.Item>
         )}

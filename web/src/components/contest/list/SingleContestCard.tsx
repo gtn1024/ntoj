@@ -35,23 +35,43 @@ export const SingleContestCard: React.FC<Props> = (props) => {
       </div>
       <div className={c('text-base flex flex-col gap-0.5')}>
         <div className={c('flex items-center gap-1')}>
-          <div className="i-mdi:calendar"/> <span>{props.contest.startTime} ~ {props.contest.endTime}</span>
+          <div className="i-mdi:calendar" />
+          {' '}
+          <span>
+            {props.contest.startTime}
+            {' '}
+            ~
+            {' '}
+            {props.contest.endTime}
+          </span>
         </div>
         <div className={c('flex gap-2')}>
           <div>
-            <div className="i-mdi:clock-outline"/> <span>{timeDiffString(timeDiff(props.contest.startTime, props.contest.endTime))}</span>
+            <div className="i-mdi:clock-outline" />
+            {' '}
+            <span>{timeDiffString(timeDiff(props.contest.startTime, props.contest.endTime))}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
           <div>
-            <div className="i-material-symbols:gavel-rounded"/> <span>{props.contest.type}</span>
+            <div className="i-material-symbols:gavel-rounded" />
+            {' '}
+            <span>{props.contest.type}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
           <div>
-            <div className="i-mdi:account-multiple"/> <span>{props.contest.userCount} 人</span>
+            <div className="i-mdi:account-multiple" />
+            {' '}
+            <span>
+              {props.contest.userCount}
+              {' '}
+              人
+            </span>
           </div>
           <span className={c('text-gray-400')}>|</span>
           <div>
-            <div className="i-material-symbols:lock-open-outline"/> <span>{permissionToString(props.contest.permission)}</span>
+            <div className="i-material-symbols:lock-open-outline" />
+            {' '}
+            <span>{permissionToString(props.contest.permission)}</span>
           </div>
         </div>
       </div>

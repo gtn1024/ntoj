@@ -20,7 +20,7 @@ export const ContestListPage: React.FC = () => {
         {
           list.map((contest, idx) => {
             return (
-              <SingleContestCard contest={contest} key={idx}/>
+              <SingleContestCard contest={contest} key={idx} />
             )
           })
         }

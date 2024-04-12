@@ -60,26 +60,28 @@ export const ContestProblemList: React.FC = () => {
         <tbody>
           {problems?.map((problem, index) => (
             <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
-              <td width={'10%'} px-4 py-3>
+              <td width="10%" px-4 py-3>
                 <div text-center>{problem.alias}</div>
               </td>
-              <td width={'60%'} px-4 py-3>
-                <LinkComponent href={`/c/${id}/p/${problem.alias}`} className={'text-gray-500'}>{problem.title}</LinkComponent>
+              <td width="60%" px-4 py-3>
+                <LinkComponent href={`/c/${id}/p/${problem.alias}`} className="text-gray-500">{problem.title}</LinkComponent>
               </td>
-              <td width={'10%'} px-4 py-3>
+              <td width="10%" px-4 py-3>
                 <div text-center>{ statistics?.[problem.alias]?.acceptedTimes ?? 0 }</div>
               </td>
-              <td width={'10%'} px-4 py-3>
+              <td width="10%" px-4 py-3>
                 <div text-center>{ statistics?.[problem.alias]?.submitTimes ?? 0 }</div>
               </td>
-              <td width={'10%'} px-4 py-3>
-                <div text-center>{
+              <td width="10%" px-4 py-3>
+                <div text-center>
+                  {
                   !statistics?.[problem.alias]
                     ? '0.00%'
                     : statistics?.[problem.alias]?.submitTimes === 0
                       ? '0.00%'
                       : `${(statistics?.[problem.alias]?.acceptedTimes / statistics?.[problem.alias]?.submitTimes * 100).toFixed(2)}%`
-                }</div>
+                }
+                </div>
               </td>
             </tr>
           ))}

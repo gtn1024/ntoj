@@ -46,7 +46,7 @@ export const AdminUserImportPage: React.FC = () => {
   }
   return (
     <div flex flex-col p-4>
-      <Space direction='vertical'>
+      <Space direction="vertical">
         <h2 mb-2>用户导入</h2>
         <div>
           <p>用户</p>
@@ -63,18 +63,23 @@ export const AdminUserImportPage: React.FC = () => {
         </div>
         {previewData.length > 0 && (
           <div>
-            <h3>共识别到 {previewData.length} 个用户</h3>
+            <h3>
+              共识别到
+              {previewData.length}
+              {' '}
+              个用户
+            </h3>
             <table text-4>
               <thead>
-              <tr>
-                <th>序号</th>
-                <th>用户名</th>
-                <th>密码</th>
-                <th>真实姓名</th>
-                <th>电子邮箱</th>
-                <th>用户权限</th>
-                <th>用户已存在</th>
-              </tr>
+                <tr>
+                  <th>序号</th>
+                  <th>用户名</th>
+                  <th>密码</th>
+                  <th>真实姓名</th>
+                  <th>电子邮箱</th>
+                  <th>用户权限</th>
+                  <th>用户已存在</th>
+                </tr>
               </thead>
               <tbody text-center>
                 {previewData.map((user, index) => (

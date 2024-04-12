@@ -48,11 +48,11 @@ export const RecordPage: React.FC = () => {
           <div>
             <div flex flex-col px-4 gap-1>
               {data?.compileLog && (
-                  <div>
-                    <pre>
-                      {data?.compileLog}
-                    </pre>
-                  </div>
+                <div>
+                  <pre>
+                    {data?.compileLog}
+                  </pre>
+                </div>
               )}
               <div>
                 <Highlight>
@@ -63,30 +63,39 @@ export const RecordPage: React.FC = () => {
                 {!!data?.testcaseResult?.length && (
                   <table w-full border={1}>
                     <thead>
-                    <tr leading-8 text-gray-500>
-                      <th text-left px-2>#</th>
-                      <th text-left px-2>状态</th>
-                      <th text-left px-2>分数</th>
-                      <th text-left px-2>时间</th>
-                      <th text-left px-2>内存</th>
-                    </tr>
+                      <tr leading-8 text-gray-500>
+                        <th text-left px-2>#</th>
+                        <th text-left px-2>状态</th>
+                        <th text-left px-2>分数</th>
+                        <th text-left px-2>时间</th>
+                        <th text-left px-2>内存</th>
+                      </tr>
                     </thead>
                     <tbody>
-                    {data?.testcaseResult?.map((item, index) => {
-                      return (
+                      {data?.testcaseResult?.map((item, index) => {
+                        return (
                           <tr key={index} leading-6>
-                            <td text-left px-2>#{index + 1}</td>
                             <td text-left px-2>
-                          <span style={{ color: statusToColor(item.status) }}>
-                            {statusToMessage(item.status)}
-                          </span>
+                              #
+                              {index + 1}
+                            </td>
+                            <td text-left px-2>
+                              <span style={{ color: statusToColor(item.status) }}>
+                                {statusToMessage(item.status)}
+                              </span>
                             </td>
                             <td text-left px-2>{item.status === 'ACCEPTED' ? toFixedNumber(100 / (data?.testcaseResult?.length ?? 100)) : 0}</td>
-                            <td text-left px-2>{item.time}ms</td>
-                            <td text-left px-2>{item.memory}Kib</td>
+                            <td text-left px-2>
+                              {item.time}
+                              ms
+                            </td>
+                            <td text-left px-2>
+                              {item.memory}
+                              Kib
+                            </td>
                           </tr>
-                      )
-                    })}
+                        )
+                      })}
                     </tbody>
                   </table>
                 )}
@@ -126,15 +135,21 @@ export const RecordPage: React.FC = () => {
             <div flex flex-col gap-2>
               <div flex justify-between>
                 <span text-gray-500>最大内存</span>
-                <span text-gray-500>{data?.memory}Kib</span>
+                <span text-gray-500>
+                  {data?.memory}
+                  Kib
+                </span>
               </div>
               <div flex justify-between>
                 <span text-gray-500>最大时间</span>
-                <span text-gray-500>{data?.time}ms</span>
+                <span text-gray-500>
+                  {data?.time}
+                  ms
+                </span>
               </div>
               <div flex justify-between>
-                  <span text-gray-500>分数</span>
-                  <span text-gray-500>{toFixedNumber(score)}</span>
+                <span text-gray-500>分数</span>
+                <span text-gray-500>{toFixedNumber(score)}</span>
               </div>
             </div>
           </div>

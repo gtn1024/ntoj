@@ -32,7 +32,7 @@ export const App: React.FC = () => {
   })
   return (
     <ConfigProvider locale={zhCN}>
-      <RouterProvider router={router}/>
+      <RouterProvider router={router} />
     </ConfigProvider>
   )
 }

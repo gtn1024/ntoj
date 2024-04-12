@@ -6,10 +6,12 @@ export const HomePage: React.FC = () => {
     <div flex justify-between m="[15px]">
       <div w-full>
         <div text-xl font-bold pb-4>
-          <div className="i-mingcute:announcement-line"/> 公告
+          <div className="i-mingcute:announcement-line" />
+          {' '}
+          公告
         </div>
         <div>
-          <AnnouncementList/>
+          <AnnouncementList />
         </div>
       </div>
     </div>

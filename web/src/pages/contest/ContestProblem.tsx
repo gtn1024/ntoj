@@ -13,7 +13,7 @@ import { ProblemDetail } from '../../components/ProblemDetail.tsx'
 export const ContestProblem: React.FC = () => {
   const { isMobile } = useLayout()
   const { id: contestId, alias } = useParams()
-  const [languageOptions, setLanguageOptions] = useState<{ value: string; label: string }[]>([])
+  const [languageOptions, setLanguageOptions] = useState<{ value: string, label: string }[]>([])
   const [data, setData] = useState<Problem>()
   const { data: contest } = useSWR(`/contest/${contestId}`, async (path) => {
     return http.get<Contest>(path)
@@ -73,17 +73,17 @@ export const ContestProblem: React.FC = () => {
   return (
     <div className={c('flex', isMobile ? ['flex-col'] : [])}>
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto', 'h-[calc(100vh-48px)]'])}>
-         <ProblemDetail data={data}/>
+        <ProblemDetail data={data} />
       </div>
       <div className={c('flex', 'flex-col', !isMobile ? ['w-1/2'] : ['p-2'])}>
         <ProblemEditComponent
-            hBorder={48}
-            languageOptions={languageOptions}
-            submitUrl={`/contest/${contestId}/problem/${alias}/submit`}
-            codeLengthLimit={16}
-            samples={data?.samples ?? []}
-            timeLimit={data?.timeLimit ?? 1000}
-            memoryLimit={data?.memoryLimit ?? 256}
+          hBorder={48}
+          languageOptions={languageOptions}
+          submitUrl={`/contest/${contestId}/problem/${alias}/submit`}
+          codeLengthLimit={16}
+          samples={data?.samples ?? []}
+          timeLimit={data?.timeLimit ?? 1000}
+          memoryLimit={data?.memoryLimit ?? 256}
         />
       </div>
     </div>

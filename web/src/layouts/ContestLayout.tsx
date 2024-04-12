@@ -17,7 +17,7 @@ interface MenuProps {
   }[]
   current: string
   setCurrent: (key: string) => void
-  onClick?: (item: { key: string; label: string }) => void
+  onClick?: (item: { key: string, label: string }) => void
 }
 
 const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClick }) => {
@@ -28,13 +28,17 @@ const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClic
           item.visible && (
             <li
               key={item.key}
-              px-2 cursor-pointer hover:text-blue-400
+              px-2
+              cursor-pointer
+              hover:text-blue-400
               className={current === item.key ? 'text-blue-500' : 'text-gray-500'}
               onClick={() => {
                 setCurrent(item.key)
                 onClick?.(item)
               }}
-            >{item.label}</li>
+            >
+              {item.label}
+            </li>
           )
         ))
       }
@@ -76,7 +80,9 @@ export const ContestLayout: React.FC = () => {
   const [contestClarificationStorage, setContestClarificationStorage] = useLocalStorage<{ [key: string]: boolean }>('contestClarifications', {})
   const [clarificationHasShown, setClarificationHasShown] = useState<{ [key: string]: boolean }>({})
   useEffect(() => {
-    if (!clarifications || !contestClarificationStorage) { return }
+    if (!clarifications || !contestClarificationStorage) {
+      return
+    }
     const stickyClarifications = clarifications?.filter(clarification => clarification.sticky)
     if (stickyClarifications && stickyClarifications.length > 0) {
       for (const clarification of stickyClarifications) {
@@ -114,21 +120,30 @@ export const ContestLayout: React.FC = () => {
             <div bg="[#232c31]" text-white h-full px-4 mr-1>
               {contest?.title}
             </div>
-            <MenuComponent items={items} current={current} setCurrent={setCurrent} onClick={(item) => {
-              nav(`/c/${id}${item.key}`)
-            }}/>
+            <MenuComponent
+              items={items}
+              current={current}
+              setCurrent={setCurrent}
+              onClick={(item) => {
+                nav(`/c/${id}${item.key}`)
+              }}
+            />
             <div
-              px-2 cursor-pointer text-gray-600
-              onClick={() => nav('/c') }
-            >退出</div>
+              px-2
+              cursor-pointer
+              text-gray-600
+              onClick={() => nav('/c')}
+            >
+              退出
+            </div>
           </div>
           <div m-4>
-            <AccountComponent className="flex justify-end"/>
+            <AccountComponent className="flex justify-end" />
           </div>
         </div>
       </div>
       <div grow overflow-y-auto>
-        <Outlet/>
+        <Outlet />
       </div>
     </div>
   )

@@ -32,7 +32,7 @@ export const AccountComponent: React.FC<Props> = (props) => {
     {
       key: 'admin',
       label: (
-        <Link to='/admin'>
+        <Link to="/admin">
           后台管理
         </Link>
       ),
@@ -55,17 +55,23 @@ export const AccountComponent: React.FC<Props> = (props) => {
   return (
     <div className={props.className}>
       {user.id
-        ? <Dropdown menu={{ items }}>
-          <a onClick={e => e.preventDefault()}>
-            {user.username}
-            <div className="i-material-symbols:keyboard-arrow-down" w="[16px]" h="[16px]"/>
-          </a>
-        </Dropdown>
-        : <Link to={{
-          pathname: '/sign_in',
-          search: `redirect=${location.pathname}`,
-        }}>登录 | 注册</Link>
-      }
+        ? (
+          <Dropdown menu={{ items }}>
+            <a onClick={e => e.preventDefault()}>
+              {user.username}
+              <div className="i-material-symbols:keyboard-arrow-down" w="[16px]" h="[16px]" />
+            </a>
+          </Dropdown>
+          )
+        : (
+          <Link to={{
+            pathname: '/sign_in',
+            search: `redirect=${location.pathname}`,
+          }}
+          >
+            登录 | 注册
+          </Link>
+          )}
     </div>
   )
 }

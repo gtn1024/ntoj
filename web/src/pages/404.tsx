@@ -7,7 +7,7 @@ export const NotFoundPage: React.FC = () => {
         404 Not Found
       </h2>
       <div mt-2>
-        <Link to={'/'} border px-2 py-1>返回首页</Link>
+        <Link to="/" border px-2 py-1>返回首页</Link>
       </div>
     </div>
   )

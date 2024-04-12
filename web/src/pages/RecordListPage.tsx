@@ -94,7 +94,13 @@ export const RecordListPage: React.FC = () => {
     {
       title: '题目',
       render: (_value: string, record: SubmissionDto) => {
-        return <Link to={`/p/${record.problem.alias ?? ''}`}>{record.problem.alias} {record.problem.title}</Link>
+        return (
+          <Link to={`/p/${record.problem.alias ?? ''}`}>
+            {record.problem.alias}
+            {' '}
+            {record.problem.title}
+          </Link>
+        )
       },
     },
     {

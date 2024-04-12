@@ -55,9 +55,15 @@ const colorMap = {
   PENDING: '#c9d7f9',
 }
 function getCellColor(problem: StandingProblem) {
-  if (problem.tryAfterFreeze > 0) { return colorMap.PENDING }
-  if (problem.success) { return problem.firstSolved ? colorMap.FIRST_SOLVE : colorMap.SOLVED }
-  if (problem.tried > 0) { return colorMap.ATTEMPTED }
+  if (problem.tryAfterFreeze > 0) {
+    return colorMap.PENDING
+  }
+  if (problem.success) {
+    return problem.firstSolved ? colorMap.FIRST_SOLVE : colorMap.SOLVED
+  }
+  if (problem.tried > 0) {
+    return colorMap.ATTEMPTED
+  }
   return 'inherit'
 }
 
@@ -66,10 +72,11 @@ function getCellContent(problem: StandingProblem) {
     <div relative mx-1 my-1>
       {problem.success
         ? '+'
-        : (problem.tryAfterFreeze > 0 ? '?' : '-')
-      }
-      <br/>
-      {problem.tried}/{Math.floor(problem.penalty! / 60)}
+        : (problem.tryAfterFreeze > 0 ? '?' : '-')}
+      <br />
+      {problem.tried}
+      /
+      {Math.floor(problem.penalty! / 60)}
     </div>
   )
 }
@@ -143,7 +150,9 @@ export const ContestStandingPage: React.FC = () => {
       }
     }
 
-    if (!contest || !problems || !submissions || !startTime) { return }
+    if (!contest || !problems || !submissions || !startTime) {
+      return
+    }
     const standing: Standing[] = []
     const tempData: { [key: string]: Standing } = {}
     const firstSolved: { [key: string]: boolean } = {}
@@ -173,9 +182,13 @@ export const ContestStandingPage: React.FC = () => {
     }
     submissions.sort((a, b) => a.id - b.id)
     for (const submission of submissions) {
-      if (!contest.users.map(it => it.username).includes(submission.user.username)) { continue }
+      if (!contest.users.map(it => it.username).includes(submission.user.username)) {
+        continue
+      }
       const { submitTime, user } = submission
-      if (!tempData[user.username]) { continue }
+      if (!tempData[user.username]) {
+        continue
+      }
       const time = dayjs(submitTime).unix()
       const relativeTime = time - startTime
       tempData[user.username].submissions[submission.alias].push({
@@ -216,7 +229,9 @@ export const ContestStandingPage: React.FC = () => {
       standing.push(tempData[user])
     })
     standing.sort((a, b) => {
-      if (a.solved === b.solved) { return a.penalty - b.penalty }
+      if (a.solved === b.solved) {
+        return a.penalty - b.penalty
+      }
       return b.solved - a.solved
     })
     setStanding(standing)
@@ -266,16 +281,26 @@ export const ContestStandingPage: React.FC = () => {
                 <td px-1 py-1 text-center>{index + 1}</td>
                 <td px-1 py-1 text-center>
                   <div>
-                    {user.user.realName && user.user.realName}<br/>
+                    {user.user.realName && user.user.realName}
+                    <br />
                     {user.user.username}
                   </div>
                 </td>
                 <td px-1 py-1 text-center>{user.solved}</td>
                 <td px-1 py-1 text-center>{penaltyToTimeString(user.penalty)}</td>
                 {problems?.map(problem => (
-                  <td key={problem.alias} text-center style={{
-                    backgroundColor: getCellColor(user.problems[problem.alias]),
-                  }}> {getCellContent(user.problems[problem.alias])} </td>
+                  <td
+                    key={problem.alias}
+                    text-center
+                    style={{
+                      backgroundColor: getCellColor(user.problems[problem.alias]),
+                    }}
+                  >
+                    {' '}
+                    {getCellContent(user.problems[problem.alias])}
+                    {' '}
+
+                  </td>
                 ))}
               </tr>
             ))}

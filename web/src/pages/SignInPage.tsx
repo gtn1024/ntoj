@@ -106,9 +106,9 @@ export const SignInPage: React.FC = () => {
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 10, span: 16 }}>
-             <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit">
               登录
-             </Button>
+            </Button>
           </Form.Item>
         </Form>
       ),
@@ -203,7 +203,7 @@ export const SignInPage: React.FC = () => {
   ]
   return (
     <div className={c('h-screen', 'flex', 'justify-center', 'items-center', !isMobile && 'bg-[#f5f5f5]')}>
-       <div className={c('flex bg-white', !isMobile && 'rounded shadow')}>
+      <div className={c('flex bg-white', !isMobile && 'rounded shadow')}>
         <div className={c('p-4', !isMobile && 'min-w-[480px]', !isMobile && 'min-h-[500px]')}>
           <div text-2xl font-bold text-center py-4>
             NTOJ
@@ -212,7 +212,7 @@ export const SignInPage: React.FC = () => {
             <Tabs defaultActiveKey="1" centered items={items} />
           </div>
         </div>
-       </div>
+      </div>
     </div>
   )
 }

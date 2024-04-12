@@ -20,9 +20,12 @@ export const UserProfilePage: React.FC = () => {
     <div h="[calc(100vh-64px-80px)]" flex items-center justify-center>
       <div h="[500px]" w="[700px]" border="1 [#e0e0e0]" rounded-2xl border-solid bg-white shadow>
         <div className="m-[20px] flex items-center justify-between">
-          <div >
+          <div>
             <div text-xl font-bold>{data?.realName}</div>
-            <div>@{data?.username}</div>
+            <div>
+              @
+              {data?.username}
+            </div>
             <div>{data?.registerAt}</div>
           </div>
         </div>

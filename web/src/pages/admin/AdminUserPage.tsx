@@ -96,11 +96,13 @@ export const AdminUserPage: React.FC = () => {
           <Space>
             <Button
               type="link"
-              size='small'
+              size="small"
               onClick={() => {
                 nav(`/admin/user/${value ?? 0}/edit`)
               }}
-            >编辑</Button>
+            >
+              编辑
+            </Button>
             <Popconfirm
               title="删除"
               description="确认删除这一项吗？"
@@ -118,7 +120,7 @@ export const AdminUserPage: React.FC = () => {
   return (
     <div flex flex-col p-4>
       <h2 mb-2>用户管理</h2>
-      <Space direction='vertical'>
+      <Space direction="vertical">
         <div flex justify-between>
           <div>
             <button onClick={() => nav('/admin/user/new')}>新建</button>
@@ -133,7 +135,8 @@ export const AdminUserPage: React.FC = () => {
             columns={columns}
             rowKey="id"
             loading={loading}
-            pagination={pagination}/>
+            pagination={pagination}
+          />
         </div>
       </Space>
     </div>

@@ -17,7 +17,7 @@ const ProblemSection: React.FC<SectionProps> = (props) => {
       ? (
         <div className="mb-[20px]">
           <h4 className="mb-1 font-bold">{title}</h4>
-          <div dangerouslySetInnerHTML={{ __html: html }}/>
+          <div dangerouslySetInnerHTML={{ __html: html }} />
         </div>
         )
       : null
@@ -38,7 +38,7 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
         void message.error('复制失败')
       })
   }
-  const SampleField: React.FC<{ title: string; data: string }> = (props) => {
+  const SampleField: React.FC<{ title: string, data: string }> = (props) => {
     return (
       <div mt-1 w-full>
         <div mb-1 flex flex-row items-center justify-between>
@@ -57,10 +57,13 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
         return (
           <div key={idx}>
             <div key={item.input}>
-              <h4 mb-1 font-bold>样例 {idx + 1}</h4>
+              <h4 mb-1 font-bold>
+                样例
+                {idx + 1}
+              </h4>
               <div flex flex-col>
-                <SampleField title='输入' data={item.input}/>
-                <SampleField title='输出' data={item.output}/>
+                <SampleField title="输入" data={item.input} />
+                <SampleField title="输出" data={item.output} />
               </div>
             </div>
           </div>
@@ -70,27 +73,46 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
   )
 }
 
-export const ProblemDetail: React.FC<{ data?: Problem; showProblemAlias?: boolean }> = ({ data, showProblemAlias }) => {
+export const ProblemDetail: React.FC<{ data?: Problem, showProblemAlias?: boolean }> = ({ data, showProblemAlias }) => {
   const { isMobile } = useLayout()
 
   return (
     <div className={c(!isMobile && 'm-4')}>
       <div p-4>
         <div>
-          <h2 font-bold>{showProblemAlias && data?.alias } {data?.title}</h2>
+          <h2 font-bold>
+            {showProblemAlias && data?.alias }
+            {' '}
+            {data?.title}
+          </h2>
         </div>
         <div pb="[20px]" text-xs>
-          <span mr-1>时间限制：{data?.timeLimit} ms</span>
-          <span mr-1>内存限制：{data?.memoryLimit} MB</span>
-          <span mr-1>代码长度限制：{data?.codeLength} KB</span>
+          <span mr-1>
+            时间限制：
+            {data?.timeLimit}
+            {' '}
+            ms
+          </span>
+          <span mr-1>
+            内存限制：
+            {data?.memoryLimit}
+            {' '}
+            MB
+          </span>
+          <span mr-1>
+            代码长度限制：
+            {data?.codeLength}
+            {' '}
+            KB
+          </span>
         </div>
         <div>
-          <ProblemSection title='题目背景' markdown={data?.background}/>
-          <ProblemSection title='题目描述' markdown={data?.description}/>
-          <ProblemSection title='输入描述' markdown={data?.inputDescription}/>
-          <ProblemSection title='输出描述' markdown={data?.outputDescription}/>
-          <ProblemSampleSection samples={data?.samples ?? []}/>
-          <ProblemSection title='提示' markdown={data?.note}/>
+          <ProblemSection title="题目背景" markdown={data?.background} />
+          <ProblemSection title="题目描述" markdown={data?.description} />
+          <ProblemSection title="输入描述" markdown={data?.inputDescription} />
+          <ProblemSection title="输出描述" markdown={data?.outputDescription} />
+          <ProblemSampleSection samples={data?.samples ?? []} />
+          <ProblemSection title="提示" markdown={data?.note} />
         </div>
       </div>
     </div>

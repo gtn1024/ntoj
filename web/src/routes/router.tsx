@@ -1,7 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { preload } from 'swr'
 import type { AxiosError } from 'axios'
-import { lazy } from 'react'
 import { MainLayout } from '../layouts/MainLayout.tsx'
 import { SignInPage } from '../pages/SignInPage.tsx'
 import { AdminLayout } from '../layouts/AdminLayout.tsx'
@@ -11,6 +10,37 @@ import { http } from '../lib/Http.tsx'
 import { ErrorForbidden, ErrorUnauthorized } from '../errors.ts'
 import { ErrorPage } from '../pages/ErrorPage.tsx'
 import { ContestLayout } from '../layouts/ContestLayout.tsx'
+import NotFoundPage from '../pages/404.tsx'
+import AnnouncementPage from '../pages/AnnouncementPage.tsx'
+import ContestListPage from '../pages/ContestListPage.tsx'
+import HomePage from '../pages/HomePage.tsx'
+import ProblemListPage from '../pages/ProblemListPage.tsx'
+import ProblemPage from '../pages/ProblemPage.tsx'
+import RecordListPage from '../pages/RecordListPage.tsx'
+import RecordPage from '../pages/RecordPage.tsx'
+import UserProfilePage from '../pages/UserProfilePage.tsx'
+import AdminAnnouncementEditPage from '../pages/admin/AdminAnnouncementEditPage.tsx'
+import AdminAnnouncementPage from '../pages/admin/AdminAnnouncementPage.tsx'
+import AdminContestEditPage from '../pages/admin/AdminContestEditPage.tsx'
+import AdminContestPage from '../pages/admin/AdminContestPage.tsx'
+import AdminHomePage from '../pages/admin/AdminHomePage.tsx'
+import AdminJudgeClientTokenEditPage from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
+import AdminJudgeClientTokenPage from '../pages/admin/AdminJudgeClientTokenPage.tsx'
+import AdminLanguageEditPage from '../pages/admin/AdminLanguageEditPage.tsx'
+import AdminLanguagePage from '../pages/admin/AdminLanguagePage.tsx'
+import AdminProblemEditPage from '../pages/admin/AdminProblemEditPage.tsx'
+import AdminProblemPage from '../pages/admin/AdminProblemPage.tsx'
+import AdminUserEditPage from '../pages/admin/AdminUserEditPage.tsx'
+import AdminUserImportPage from '../pages/admin/AdminUserImportPage.tsx'
+import AdminUserPage from '../pages/admin/AdminUserPage.tsx'
+import ContestClarificationDetailPage from '../pages/contest/ContestClarificationDetailPage.tsx'
+import ContestClarificationListPage from '../pages/contest/ContestClarificationListPage.tsx'
+import ContestHome from '../pages/contest/ContestHome.tsx'
+import ContestNewClarificationPage from '../pages/contest/ContestNewClarificationPage.tsx'
+import ContestProblem from '../pages/contest/ContestProblem.tsx'
+import ContestProblemList from '../pages/contest/ContestProblemList.tsx'
+import ContestStandingPage from '../pages/contest/ContestStandingPage.tsx'
+import ContestSubmissionListPage from '../pages/contest/ContestSubmissionListPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -46,82 +76,50 @@ async function adminLoader() {
     })
 }
 
-const AdminHomePage = lazy(() => import('../pages/admin/AdminHomePage'))
-const AdminAnnouncementPage = lazy(() => import('../pages/admin/AdminAnnouncementPage'))
-const AdminUserPage = lazy(() => import('../pages/admin/AdminUserPage'))
-const AdminUserEditPage = lazy(() => import('../pages/admin/AdminUserEditPage'))
-const AdminUserImportPage = lazy(() => import('../pages/admin/AdminUserImportPage'))
-const RecordPage = lazy(() => import('../pages/RecordPage'))
-const ProblemPage = lazy(() => import('../pages/ProblemPage'))
-const RecordListPage = lazy(() => import('../pages/RecordListPage'))
-const AdminAnnouncementEditPage = lazy(() => import('../pages/admin/AdminAnnouncementEditPage'))
-const HomePage = lazy(() => import('../pages/HomePage'))
-const AnnouncementPage = lazy(() => import('../pages/AnnouncementPage'))
-const UserProfilePage = lazy(() => import('../pages/UserProfilePage'))
-const AdminProblemPage = lazy(() => import('../pages/admin/AdminProblemPage'))
-const ProblemListPage = lazy(() => import('../pages/ProblemListPage'))
-const NotFoundPage = lazy(() => import('../pages/404'))
-const AdminProblemEditPage = lazy(() => import('../pages/admin/AdminProblemEditPage'))
-const AdminLanguagePage = lazy(() => import('../pages/admin/AdminLanguagePage'))
-const AdminLanguageEditPage = lazy(() => import('../pages/admin/AdminLanguageEditPage'))
-const AdminJudgeClientTokenPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenPage'))
-const AdminJudgeClientTokenEditPage = lazy(() => import('../pages/admin/AdminJudgeClientTokenEditPage'))
-const AdminContestPage = lazy(() => import('../pages/admin/AdminContestPage'))
-const AdminContestEditPage = lazy(() => import('../pages/admin/AdminContestEditPage'))
-const ContestListPage = lazy(() => import('../pages/ContestListPage'))
-const ContestHome = lazy(() => import('../pages/contest/ContestHome'))
-const ContestProblemList = lazy(() => import('../pages/contest/ContestProblemList'))
-const ContestProblem = lazy(() => import('../pages/contest/ContestProblem'))
-const ContestClarificationListPage = lazy(() => import('../pages/contest/ContestClarificationListPage'))
-const ContestNewClarificationPage = lazy(() => import('../pages/contest/ContestNewClarificationPage'))
-const ContestClarificationDetailPage = lazy(() => import('../pages/contest/ContestClarificationDetailPage'))
-const ContestSubmissionListPage = lazy(() => import('../pages/contest/ContestSubmissionListPage'))
-const ContestStandingPage = lazy(() => import('../pages/contest/ContestStandingPage'))
-
 export const router = createBrowserRouter(
   [
     {
       path: '/sign_in',
-      element: <SignInPage/>,
+      element: <SignInPage />,
     },
     {
       path: '/admin',
-      element: <AdminLayout/>,
-      errorElement: <ErrorPage/>,
+      element: <AdminLayout />,
+      errorElement: <ErrorPage />,
       loader: adminLoader,
       children: [
-        { index: true, element: <AdminHomePage/> },
+        { index: true, element: <AdminHomePage /> },
         {
           path: 'user',
           children: [
-            { index: true, element: <AdminUserPage/> },
-            { path: 'import', element: <AdminUserImportPage/> },
-            { path: 'new', element: <AdminUserEditPage/> },
-            { path: ':id/edit', element: <AdminUserEditPage/> },
+            { index: true, element: <AdminUserPage /> },
+            { path: 'import', element: <AdminUserImportPage /> },
+            { path: 'new', element: <AdminUserEditPage /> },
+            { path: ':id/edit', element: <AdminUserEditPage /> },
           ],
         },
         {
           path: 'announcement',
           children: [
-            { index: true, element: <AdminAnnouncementPage/> },
-            { path: 'new', element: <AdminAnnouncementEditPage/> },
-            { path: ':id/edit', element: <AdminAnnouncementEditPage/> },
+            { index: true, element: <AdminAnnouncementPage /> },
+            { path: 'new', element: <AdminAnnouncementEditPage /> },
+            { path: ':id/edit', element: <AdminAnnouncementEditPage /> },
           ],
         },
         {
           path: 'problem',
           children: [
-            { index: true, element: <AdminProblemPage/> },
-            { path: 'new', element: <AdminProblemEditPage/> },
-            { path: ':id/edit', element: <AdminProblemEditPage/> },
+            { index: true, element: <AdminProblemPage /> },
+            { path: 'new', element: <AdminProblemEditPage /> },
+            { path: ':id/edit', element: <AdminProblemEditPage /> },
           ],
         },
         {
           path: 'contest',
           children: [
-            { index: true, element: <AdminContestPage/> },
-            { path: 'new', element: <AdminContestEditPage/> },
-            { path: ':id/edit', element: <AdminContestEditPage/> },
+            { index: true, element: <AdminContestPage /> },
+            { path: 'new', element: <AdminContestEditPage /> },
+            { path: ':id/edit', element: <AdminContestEditPage /> },
           ],
         },
         {
@@ -136,9 +134,9 @@ export const router = createBrowserRouter(
             }
           },
           children: [
-            { index: true, element: <AdminLanguagePage/> },
-            { path: 'new', element: <AdminLanguageEditPage/> },
-            { path: ':id/edit', element: <AdminLanguageEditPage/> },
+            { index: true, element: <AdminLanguagePage /> },
+            { path: 'new', element: <AdminLanguageEditPage /> },
+            { path: ':id/edit', element: <AdminLanguageEditPage /> },
           ],
         },
         {
@@ -153,82 +151,82 @@ export const router = createBrowserRouter(
             }
           },
           children: [
-            { index: true, element: <AdminJudgeClientTokenPage/> },
-            { path: 'new', element: <AdminJudgeClientTokenEditPage/> },
-            { path: ':id/edit', element: <AdminJudgeClientTokenEditPage/> },
+            { index: true, element: <AdminJudgeClientTokenPage /> },
+            { path: 'new', element: <AdminJudgeClientTokenEditPage /> },
+            { path: ':id/edit', element: <AdminJudgeClientTokenEditPage /> },
           ],
         },
       ],
     },
     {
       path: '/',
-      element: <MainLayout/>,
-      errorElement: <ErrorPage/>,
+      element: <MainLayout />,
+      errorElement: <ErrorPage />,
       loader: rootLoader,
       children: [
-        { index: true, element: <HomePage/> },
+        { index: true, element: <HomePage /> },
         { path: 'about', element: <div>About</div> },
         {
           path: 'p',
           children: [
-            { index: true, element: <ProblemListPage/> },
-            { path: ':alias', element: <ProblemPage/> },
+            { index: true, element: <ProblemListPage /> },
+            { path: ':alias', element: <ProblemPage /> },
           ],
         },
-        { path: 'a/:id', element: <AnnouncementPage/> },
-        { path: 'u/:username', element: <UserProfilePage/> },
+        { path: 'a/:id', element: <AnnouncementPage /> },
+        { path: 'u/:username', element: <UserProfilePage /> },
         {
           path: 'r',
           children: [
-            { index: true, element: <RecordListPage/> },
-            { path: ':id', element: <RecordPage/> },
+            { index: true, element: <RecordListPage /> },
+            { path: ':id', element: <RecordPage /> },
           ],
         },
         {
           path: 'c',
           children: [
-            { index: true, element: <ContestListPage/> },
+            { index: true, element: <ContestListPage /> },
           ],
         },
       ],
     },
     {
       path: '/c/:id',
-      element: <ContestLayout/>,
-      errorElement: <ErrorPage/>,
+      element: <ContestLayout />,
+      errorElement: <ErrorPage />,
       loader: rootLoader,
       children: [
-        { index: true, element: <ContestHome/> },
+        { index: true, element: <ContestHome /> },
         {
           path: 'p',
           children: [
-            { index: true, element: <ContestProblemList/> },
-            { path: ':alias', element: <ContestProblem/> },
+            { index: true, element: <ContestProblemList /> },
+            { path: ':alias', element: <ContestProblem /> },
           ],
         },
         {
           path: 'clarification',
           children: [
-            { index: true, element: <ContestClarificationListPage/> },
-            { path: 'new', element: <ContestNewClarificationPage/> },
-            { path: ':clarificationId', element: <ContestClarificationDetailPage/> },
+            { index: true, element: <ContestClarificationListPage /> },
+            { path: 'new', element: <ContestNewClarificationPage /> },
+            { path: ':clarificationId', element: <ContestClarificationDetailPage /> },
           ],
         },
         {
           path: 'submission',
           children: [
-            { index: true, element: <ContestSubmissionListPage/> },
+            { index: true, element: <ContestSubmissionListPage /> },
           ],
         },
         {
           path: 'standing',
-          element: <ContestStandingPage/>,
+          element: <ContestStandingPage />,
         },
       ],
     },
     {
       path: '*',
-      element: <NotFoundPage/>,
+      element: <NotFoundPage />,
     },
   ],
 )

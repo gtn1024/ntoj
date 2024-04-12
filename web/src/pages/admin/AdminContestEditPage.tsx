@@ -27,7 +27,7 @@ export const AdminContestEditPage: React.FC = () => {
   const mode = pathname.split('/').pop() === 'new' ? '新建' : '修改'
   const { id } = useParams()
   const [languages, setLanguages] = useState<string[]>([])
-  const [allLanguages, setAllLanguages] = useState<{ key: string; title: string }[]>([])
+  const [allLanguages, setAllLanguages] = useState<{ key: string, title: string }[]>([])
   const formRef = useRef<FormInstance>(null)
   const modalFormRef = useRef<FormInstance>(null)
   const [contestPermission, setContestPermission] = useState<ContestPermission>('PUBLIC')
@@ -142,10 +142,16 @@ export const AdminContestEditPage: React.FC = () => {
               contestProblemIndex: problems[idx].contestProblemIndex.toString(),
             })
             setShowProblemModal(true)
-          }}>编辑</a>
+          }}
+          >
+            编辑
+          </a>
           <a onClick={() => {
             setProblems(problems.filter((_, i) => i !== idx))
-          }}>删除</a>
+          }}
+          >
+            删除
+          </a>
         </Space>
       ),
     },
@@ -179,131 +185,144 @@ export const AdminContestEditPage: React.FC = () => {
     setShowProblemModal(false)
   }
 
-  return (<>
-    <div h="[calc(100vh-64px)]" w-full flex justify-between>
-      <div w-full overflow-y-auto p-4>
-        <h2 text-xl>{mode}竞赛</h2>
-        <Form
-          name="basic"
-          layout='vertical'
-          onFinish={onSubmit}
-          autoComplete="off"
-          ref={formRef}
-        >
-          <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
-            <Input/>
-          </Form.Item>
-
-          <Form.Item label="竞赛描述" name="description">
-            <Input.TextArea rows={6}/>
-          </Form.Item>
-
-          <Form.Item label="开始结束时间" name="time">
-            <DatePicker.RangePicker
-              showTime={{ format: 'HH:mm:ss' }}
-              format="YYYY-MM-DD HH:mm:ss"
-            />
-          </Form.Item>
-
-          <Form.Item label="封榜时间" name="freezeTime">
-            <InputNumber addonAfter="分钟" />
-          </Form.Item>
-
-          <Form.Item label="类型" name="type" initialValue="ICPC">
-            <Select
-              options={[
-                { value: 'ICPC', label: 'ICPC' },
-              ]}
-            />
-          </Form.Item>
-
-          <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
-            <Switch/>
-          </Form.Item>
-
-          <Form.Item label="语言" name="languages">
-            <Transfer
-              dataSource={allLanguages}
-              targetKeys={languages}
-              onChange={setLanguages}
-              render={item => item.title}
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="显示最终榜单"
-            name="showFinalBoard"
-            valuePropName="checked"
+  return (
+    <>
+      <div h="[calc(100vh-64px)]" w-full flex justify-between>
+        <div w-full overflow-y-auto p-4>
+          <h2 text-xl>
+            {mode}
+            竞赛
+          </h2>
+          <Form
+            name="basic"
+            layout="vertical"
+            onFinish={onSubmit}
+            autoComplete="off"
+            ref={formRef}
           >
-            <Switch/>
-          </Form.Item>
+            <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
+              <Input />
+            </Form.Item>
 
-          <Space>
-            <Form.Item label="权限" name="permission" initialValue="PUBLIC">
+            <Form.Item label="竞赛描述" name="description">
+              <Input.TextArea rows={6} />
+            </Form.Item>
+
+            <Form.Item label="开始结束时间" name="time">
+              <DatePicker.RangePicker
+                showTime={{ format: 'HH:mm:ss' }}
+                format="YYYY-MM-DD HH:mm:ss"
+              />
+            </Form.Item>
+
+            <Form.Item label="封榜时间" name="freezeTime">
+              <InputNumber addonAfter="分钟" />
+            </Form.Item>
+
+            <Form.Item label="类型" name="type" initialValue="ICPC">
               <Select
-                onChange={v => setContestPermission(v as ContestPermission)}
                 options={[
-                  { value: 'PUBLIC', label: '公开比赛' },
-                  { value: 'PRIVATE', label: '私有比赛' },
-                  { value: 'PASSWORD', label: '需要密码' },
+                  { value: 'ICPC', label: 'ICPC' },
                 ]}
               />
             </Form.Item>
-            {
+
+            <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
+              <Switch />
+            </Form.Item>
+
+            <Form.Item label="语言" name="languages">
+              <Transfer
+                dataSource={allLanguages}
+                targetKeys={languages}
+                onChange={setLanguages}
+                render={item => item.title}
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="显示最终榜单"
+              name="showFinalBoard"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+
+            <Space>
+              <Form.Item label="权限" name="permission" initialValue="PUBLIC">
+                <Select
+                  onChange={v => setContestPermission(v as ContestPermission)}
+                  options={[
+                    { value: 'PUBLIC', label: '公开比赛' },
+                    { value: 'PRIVATE', label: '私有比赛' },
+                    { value: 'PASSWORD', label: '需要密码' },
+                  ]}
+                />
+              </Form.Item>
+              {
               contestPermission === 'PASSWORD' && (
                 <Form.Item label="密码" name="password">
-                  <Input/>
+                  <Input />
                 </Form.Item>
               )
             }
-          </Space>
-
-          <Form.Item label="题目">
-            <Space direction="vertical" style={{
-              width: '100%',
-            }}>
-              <Button type="primary" onClick={() => {
-                setModalTitle('添加题目')
-                setEditProblem(null)
-                setShowProblemModal(true)
-                modalFormRef?.current?.setFieldsValue({
-                  problemId: undefined,
-                  contestProblemIndex: undefined,
-                })
-              }}>添加题目</Button>
-              <Table rowKey="contestProblemIndex" columns={problemTableColumns} dataSource={problems} pagination={false} />
-              <Modal title={modalTitle} open={showProblemModal} onOk={handleModalOk} onCancel={handleCancel}>
-                <Form ref={modalFormRef}>
-                  <Form.Item label="题目" name="problemId">
-                    <Select
-                        options={allProblems.map(p => ({ value: p.id.toString(), label: `${p.id} - ${p.title}` }))}
-                    />
-                  </Form.Item>
-                  <Form.Item label="题目顺序" name="contestProblemIndex">
-                    <InputNumber min={1} max={problems.length + 1} />
-                  </Form.Item>
-                </Form>
-              </Modal>
             </Space>
-          </Form.Item>
 
-          <Form.Item
-            label="是否可见"
-            name="visible"
-            valuePropName="checked"
-          >
-            <Switch/>
-          </Form.Item>
+            <Form.Item label="题目">
+              <Space
+                direction="vertical"
+                style={{
+                  width: '100%',
+                }}
+              >
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    setModalTitle('添加题目')
+                    setEditProblem(null)
+                    setShowProblemModal(true)
+                    modalFormRef?.current?.setFieldsValue({
+                      problemId: undefined,
+                      contestProblemIndex: undefined,
+                    })
+                  }}
+                >
+                  添加题目
+                </Button>
+                <Table rowKey="contestProblemIndex" columns={problemTableColumns} dataSource={problems} pagination={false} />
+                <Modal title={modalTitle} open={showProblemModal} onOk={handleModalOk} onCancel={handleCancel}>
+                  <Form ref={modalFormRef}>
+                    <Form.Item label="题目" name="problemId">
+                      <Select
+                        options={allProblems.map(p => ({ value: p.id.toString(), label: `${p.id} - ${p.title}` }))}
+                      />
+                    </Form.Item>
+                    <Form.Item label="题目顺序" name="contestProblemIndex">
+                      <InputNumber min={1} max={problems.length + 1} />
+                    </Form.Item>
+                  </Form>
+                </Modal>
+              </Space>
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {mode === '新建' ? '新建' : '修改'}
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label="是否可见"
+              name="visible"
+              valuePropName="checked"
+            >
+              <Switch />
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                {mode === '新建' ? '新建' : '修改'}
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
-    </div>
-  </>)
+    </>
+  )
 }
 
 export default AdminContestEditPage

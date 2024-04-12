@@ -31,10 +31,14 @@ export const AnnouncementPage: React.FC = () => {
         </h1>
         <div flex justify-between>
           <div>
-            <div className="i-mdi:account"/> {data?.author}
+            <div className="i-mdi:account" />
+            {' '}
+            {data?.author}
           </div>
           <div>
-            <div className="i-mdi:calendar"/> {data?.createdAt}
+            <div className="i-mdi:calendar" />
+            {' '}
+            {data?.createdAt}
           </div>
         </div>
         <div className={s.content} pt-4>
