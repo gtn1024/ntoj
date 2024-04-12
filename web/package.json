@@ -10,13 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@uiw/codemirror-extensions-langs": "4.21.20",
-    "@uiw/react-codemirror": "4.21.20",
+    "@uiw/codemirror-extensions-langs": "4.21.25",
+    "@uiw/react-codemirror": "4.21.25",
     "@wangeditor/editor": "5.1.23",
     "@wangeditor/editor-for-react": "1.0.6",
     "antd": "5.9.4",
-    "axios": "1.6.2",
-    "classnames": "2.3.2",
+    "axios": "1.6.8",
+    "classnames": "2.5.1",
     "dayjs": "1.11.10",
     "highlight.js": "11.9.0",
     "markdown-it": "13.0.2",
@@ -25,10 +25,10 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-highlight": "0.15.0",
-    "react-router-dom": "6.19.0",
-    "react-use": "17.4.0",
-    "swr": "2.2.4",
-    "zustand": "4.4.6"
+    "react-router-dom": "6.22.3",
+    "react-use": "17.5.0",
+    "swr": "2.2.5",
+    "zustand": "4.5.2"
   },
   "devDependencies": {
     "@antfu/eslint-config": "0.41.3",
