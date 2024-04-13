@@ -52,7 +52,7 @@
     "@unocss/preset-icons": "0.59.2",
     "@unocss/preset-uno": "0.59.2",
     "@unocss/transformer-attributify-jsx": "0.59.2",
-    "@vitejs/plugin-react-swc": "3.4.0",
+    "@vitejs/plugin-react-swc": "3.6.0",
     "eslint": "8.57.0",
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
@@ -61,6 +61,6 @@
     "sass": "1.69.5",
     "typescript": "5.2.2",
     "unocss": "0.59.2",
-    "vite": "4.4.10"
+    "vite": "5.2.8"
   }
 }
