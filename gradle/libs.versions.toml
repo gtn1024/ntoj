@@ -1,4 +1,10 @@
 [versions]
+kotlin = "1.9.22"
+
+spring-boot = "3.2.2"
+
+flyway = "9.22.3"
+
 sa-token = "1.37.0"
 commons-codec = "1.16.0"
 commons-io = "2.15.0"
@@ -42,3 +48,12 @@ spock = ["spock-core", "spock-spring"]
 jackson = ["jackson-module-kotlin", "jackson-databind", "jackson-core"]
 
 [plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version = "1.1.4" }
+flyway = { id = "org.flywaydb.flyway", version.ref = "flyway" }
+
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
+
+shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
+

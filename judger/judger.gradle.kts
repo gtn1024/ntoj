@@ -2,7 +2,7 @@ plugins {
     application
     id("configure-kotlin")
     id("configure-ktlint")
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
