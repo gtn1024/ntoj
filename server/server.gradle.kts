@@ -1,5 +1,3 @@
-import zip.ntoj.buildsupport.bundle
-
 plugins {
     id("configure-kotlin")
     id("configure-ktlint")
@@ -26,7 +24,7 @@ dependencies {
     implementation(libs.saToken.spring)
     implementation(libs.saToken.jwt)
     implementation(libs.commons.io)
-    testImplementation(bundle("spock"))
+    testImplementation(libs.bundles.spock)
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")

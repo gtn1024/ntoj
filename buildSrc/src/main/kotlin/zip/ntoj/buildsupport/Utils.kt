@@ -21,8 +21,3 @@ fun Project.lib(id: String): Provider<MinimalExternalModuleDependency> {
     val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
     return versionCatalog.findLibrary(id).get()
 }
-
-fun Project.bundle(id: String): Provider<ExternalModuleDependencyBundle> {
-    val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
-    return versionCatalog.findBundle(id).get()
-}
