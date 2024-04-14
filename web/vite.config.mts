@@ -30,4 +30,9 @@ export default defineConfig(({ command }) => ({
       },
     },
   },
+  esbuild: {
+    supported: {
+      'top-level-await': true
+    },
+  },
 }))

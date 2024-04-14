@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import c from 'classnames'
 import type { AxiosError } from 'axios'
-import Highlight from 'react-highlight'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
 import { toFixedNumber } from '../lib/misc.ts'
+import {mdit} from "../lib/mdit.ts";
 
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
@@ -55,9 +55,8 @@ export const RecordPage: React.FC = () => {
                 </div>
               )}
               <div>
-                <Highlight>
-                  {data?.code}
-                </Highlight>
+                {/*TODO: 重构为组件*/}
+                <div dangerouslySetInnerHTML={{ __html: mdit.render(`\`\`\`\n${data?.code}\n\`\`\``) }}></div>
               </div>
               <div>
                 {!!data?.testcaseResult?.length && (
