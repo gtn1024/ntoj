@@ -54,7 +54,9 @@ class AdminProblemController(
     val fileUploadService: FileUploadService,
 ) {
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<ProblemDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(id)
         return R.success(
             200,
@@ -154,14 +156,18 @@ class AdminProblemController(
     }
 
     @DeleteMapping("{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<R<Void>> {
+    fun delete(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Void>> {
         if (!problemService.exists(id)) return R.fail(404, "题目不存在")
         problemService.delete(id)
         return R.success(200, "删除成功")
     }
 
     @PostMapping("uploadTestcase")
-    fun updateTestcase(@RequestParam("file") multipartFile: MultipartFile): ResponseEntity<R<TestcaseDto>> {
+    fun updateTestcase(
+        @RequestParam("file") multipartFile: MultipartFile,
+    ): ResponseEntity<R<TestcaseDto>> {
         if (multipartFile.isEmpty) {
             throw AppException("文件为空", 400)
         }
@@ -185,7 +191,9 @@ class AdminProblemController(
     }
 
     @GetMapping("/download_testcase/{id}")
-    fun getTestcase(@PathVariable id: Long): ResponseEntity<Resource> {
+    fun getTestcase(
+        @PathVariable id: Long,
+    ): ResponseEntity<Resource> {
         val testcase = fileUploadService.get(id)
         val file = fileService.get(testcase.path)
         val resource = InputStreamResource(file.inputStream())
@@ -254,26 +262,27 @@ data class ProblemDto(
     val codeLength: Int,
 ) {
     companion object {
-        fun from(problem: Problem): ProblemDto = ProblemDto(
-            id = problem.problemId!!,
-            title = problem.title,
-            alias = problem.alias,
-            background = problem.background,
-            description = problem.description,
-            inputDescription = problem.inputDescription,
-            outputDescription = problem.outputDescription,
-            timeLimit = problem.timeLimit,
-            memoryLimit = problem.memoryLimit,
-            judgeTimes = problem.judgeTimes,
-            samples = problem.samples ?: listOf(),
-            note = problem.note,
-            author = problem.author?.username,
-            createdAt = problem.createdAt,
-            visible = problem.visible,
-            languages = problem.languages.map { it.languageId!! },
-            allowAllLanguages = problem.allowAllLanguages,
-            testcase = TestcaseDto.from(problem.testCases!!),
-            codeLength = problem.codeLength,
-        )
+        fun from(problem: Problem): ProblemDto =
+            ProblemDto(
+                id = problem.problemId!!,
+                title = problem.title,
+                alias = problem.alias,
+                background = problem.background,
+                description = problem.description,
+                inputDescription = problem.inputDescription,
+                outputDescription = problem.outputDescription,
+                timeLimit = problem.timeLimit,
+                memoryLimit = problem.memoryLimit,
+                judgeTimes = problem.judgeTimes,
+                samples = problem.samples ?: listOf(),
+                note = problem.note,
+                author = problem.author?.username,
+                createdAt = problem.createdAt,
+                visible = problem.visible,
+                languages = problem.languages.map { it.languageId!! },
+                allowAllLanguages = problem.allowAllLanguages,
+                testcase = TestcaseDto.from(problem.testCases!!),
+                codeLength = problem.codeLength,
+            )
     }
 }

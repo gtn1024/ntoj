@@ -7,5 +7,6 @@ import java.util.Optional
 
 interface UserRepository : JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     fun existsByUsername(username: String): Boolean
+
     fun findByUsername(username: String): Optional<User>
 }

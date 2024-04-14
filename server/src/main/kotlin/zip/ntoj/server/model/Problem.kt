@@ -23,24 +23,17 @@ class Problem(
     var timeLimit: Int?,
     var memoryLimit: Int?,
     var judgeTimes: Int?,
-
     var codeLength: Int = 16,
-
     @ManyToMany var languages: List<Language> = mutableListOf(),
     var allowAllLanguages: Boolean,
-
     @OneToOne var testCases: FileUpload?,
-
     @JdbcTypeCode(JSON) var samples: List<ProblemSample>? = mutableListOf(),
-
     @Column(columnDefinition = "text") var note: String?,
     @ManyToOne
     var author: User?,
     var visible: Boolean? = null,
-
     @Column(nullable = false) var submitTimes: Long = 0,
     @Column(nullable = false) var acceptedTimes: Long = 0,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "problem_id")

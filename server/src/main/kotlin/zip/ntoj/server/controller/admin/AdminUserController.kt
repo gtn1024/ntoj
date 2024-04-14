@@ -42,14 +42,15 @@ class AdminUserController(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
     ) {
         companion object {
-            fun from(user: User) = AdminUserDto(
-                user.userId!!,
-                user.username,
-                user.email,
-                user.realName,
-                user.role,
-                user.createdAt!!,
-            )
+            fun from(user: User) =
+                AdminUserDto(
+                    user.userId!!,
+                    user.username,
+                    user.email,
+                    user.realName,
+                    user.role,
+                    user.createdAt!!,
+                )
         }
     }
 
@@ -68,35 +69,42 @@ class AdminUserController(
     }
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<AdminUserDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<AdminUserDto>> {
         val user = userService.getUserById(id)
         return R.success(200, "获取成功", AdminUserDto.from(user))
     }
 
     @DeleteMapping("{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<R<Void>> {
+    fun delete(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Void>> {
         if (!userService.existsById(id)) return R.fail(404, "用户不存在")
         userService.deleteUserById(id)
         return R.success(200, "删除成功")
     }
 
     @PostMapping
-    fun add(@RequestBody request: UserRequest): ResponseEntity<R<AdminUserDto>> {
+    fun add(
+        @RequestBody request: UserRequest,
+    ): ResponseEntity<R<AdminUserDto>> {
         requireNotNull(request.username) { "用户名不能为空" }
         requireNotNull(request.password) { "密码不能为空" }
         requireNotNull(request.realName) { "真实姓名不能为空" }
         requireNotNull(request.email) { "邮箱不能为空" }
         requireNotNull(request.role) { "角色不能为空" }
         val salt = getSalt()
-        val user = User(
-            username = request.username,
-            password = hashPassword(request.password, salt),
-            salt = salt,
-            email = request.email,
-            realName = request.realName,
-            role = request.role,
-            bio = null,
-        )
+        val user =
+            User(
+                username = request.username,
+                password = hashPassword(request.password, salt),
+                salt = salt,
+                email = request.email,
+                realName = request.realName,
+                role = request.role,
+                bio = null,
+            )
         userService.newUser(user)
         return R.success(200, "添加成功", AdminUserDto.from(user))
     }
@@ -104,7 +112,7 @@ class AdminUserController(
     @PatchMapping("{id}")
     fun update(
         @RequestBody request: UserRequest,
-        @PathVariable id: Long
+        @PathVariable id: Long,
     ): ResponseEntity<R<AdminUserDto>> {
         val user = userService.getUserById(id)
         if (request.username != null) {
@@ -129,23 +137,28 @@ class AdminUserController(
     }
 
     @PostMapping("user_import_preview")
-    fun userImportPreview(@RequestBody request: UserImportRequest): ResponseEntity<R<List<UserPreviewDto>>> {
+    fun userImportPreview(
+        @RequestBody request: UserImportRequest,
+    ): ResponseEntity<R<List<UserPreviewDto>>> {
         val users = getImportUsers(request.users)
-        val userPreview = users.map {
-            UserPreviewDto(
-                it.username,
-                it.password!!,
-                it.realName!!,
-                it.email!!,
-                it.role,
-                userService.existsByUsername(it.username),
-            )
-        }
+        val userPreview =
+            users.map {
+                UserPreviewDto(
+                    it.username,
+                    it.password!!,
+                    it.realName!!,
+                    it.email!!,
+                    it.role,
+                    userService.existsByUsername(it.username),
+                )
+            }
         return R.success(200, "获取成功", userPreview)
     }
 
     @PostMapping("user_import")
-    fun userImport(@RequestBody request: UserImportRequest): ResponseEntity<R<Void>> {
+    fun userImport(
+        @RequestBody request: UserImportRequest,
+    ): ResponseEntity<R<Void>> {
         val users = getImportUsers(request.users)
         users.forEach { user ->
             user.salt = getSalt()

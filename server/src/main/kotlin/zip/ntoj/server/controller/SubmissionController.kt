@@ -101,7 +101,9 @@ class SubmissionController(
     }
 
     @GetMapping("/{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<SubmissionDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<SubmissionDto>> {
         val submission = submissionService.get(id)
         return R.success(200, "获取成功", SubmissionDto.from(submission))
     }
@@ -109,7 +111,9 @@ class SubmissionController(
     @PostMapping("/{id}/rejudge")
     @SaCheckLogin
     @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
-    fun rejudge(@PathVariable id: Long): ResponseEntity<R<Void>> {
+    fun rejudge(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Void>> {
         val submission = submissionService.get(id)
         val problem = problemService.get(submission.problem?.problemId!!)
         if (submission.status == SubmissionStatus.ACCEPTED) {
@@ -137,20 +141,21 @@ class SubmissionController(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
-            fun from(submission: Submission) = SubmissionDto(
-                id = submission.submissionId!!,
-                status = submission.status,
-                user = UserDto.from(submission.user!!),
-                stage = submission.judgeStage,
-                code = submission.code!!,
-                compileLog = submission.compileLog,
-                testcaseResult = submission.testcaseResult,
-                memory = submission.memory,
-                time = submission.time,
-                language = LanguageDto.from(submission.language!!),
-                submitTime = submission.createdAt!!,
-                problem = ProblemDto.from(submission.problem!!),
-            )
+            fun from(submission: Submission) =
+                SubmissionDto(
+                    id = submission.submissionId!!,
+                    status = submission.status,
+                    user = UserDto.from(submission.user!!),
+                    stage = submission.judgeStage,
+                    code = submission.code!!,
+                    compileLog = submission.compileLog,
+                    testcaseResult = submission.testcaseResult,
+                    memory = submission.memory,
+                    time = submission.time,
+                    language = LanguageDto.from(submission.language!!),
+                    submitTime = submission.createdAt!!,
+                    problem = ProblemDto.from(submission.problem!!),
+                )
         }
 
         data class ProblemDto(
@@ -158,10 +163,11 @@ class SubmissionController(
             val alias: String?,
         ) {
             companion object {
-                fun from(problem: Problem): ProblemDto = ProblemDto(
-                    title = problem.title,
-                    alias = problem.alias,
-                )
+                fun from(problem: Problem): ProblemDto =
+                    ProblemDto(
+                        title = problem.title,
+                        alias = problem.alias,
+                    )
             }
         }
 

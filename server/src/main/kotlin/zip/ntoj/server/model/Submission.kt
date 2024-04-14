@@ -26,27 +26,22 @@ class Submission(
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     var contestId: Long? = null,
     @OneToOne var language: Language? = null,
-    @Column(columnDefinition = "text", length = 65_536) // 64KB
+    // 64KB
+    @Column(columnDefinition = "text", length = 65_536)
     var code: String? = null,
     @Enumerated(EnumType.STRING)
     var status: SubmissionStatus = SubmissionStatus.PENDING,
-
     var time: Int? = null,
     var memory: Int? = null,
-
     var judgerId: String? = null,
-
     @Enumerated(EnumType.STRING)
     var judgeStage: JudgeStage = JudgeStage.PENDING,
-
     @Column(columnDefinition = "text", length = 65535)
     var compileLog: String? = null,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "submission_id")
     var submissionId: Long? = null,
-
     @JdbcTypeCode(JSON)
     var testcaseResult: List<TestcaseJudgeResult>? = mutableListOf(),
 ) : BaseEntity() {

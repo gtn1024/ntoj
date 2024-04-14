@@ -14,20 +14,42 @@ import java.io.InputStream
 import java.nio.file.Paths
 
 interface FileService {
-    fun uploadFile(stream: InputStream, filename: String, vararg path: String): FileUpload
-    fun uploadFile(fromFile: File, filename: String, vararg path: String): FileUpload
+    fun uploadFile(
+        stream: InputStream,
+        filename: String,
+        vararg path: String,
+    ): FileUpload
+
+    fun uploadFile(
+        fromFile: File,
+        filename: String,
+        vararg path: String,
+    ): FileUpload
+
     fun getFile(filename: String): FileUpload
+
     fun get(path: String): File
+
     fun deleteFile(filename: String): Boolean
 
-    fun uploadTestCase(stream: InputStream, filename: String): FileUpload {
+    fun uploadTestCase(
+        stream: InputStream,
+        filename: String,
+    ): FileUpload {
         return uploadFile(stream, filename, "test_cases")
     }
-    fun uploadTestCase(file: File, filename: String): FileUpload {
+
+    fun uploadTestCase(
+        file: File,
+        filename: String,
+    ): FileUpload {
         return uploadFile(file, filename, "test_cases")
     }
 
-    fun uploadAsset(stream: InputStream, filename: String): FileUpload {
+    fun uploadAsset(
+        stream: InputStream,
+        filename: String,
+    ): FileUpload {
         return uploadFile(stream, filename, "upload")
     }
 }
@@ -37,7 +59,11 @@ class FileSystemFileService(
     val fileConfig: FileConfig,
     val fileUploadService: FileUploadService,
 ) : FileService {
-    override fun uploadFile(stream: InputStream, filename: String, vararg path: String): FileUpload {
+    override fun uploadFile(
+        stream: InputStream,
+        filename: String,
+        vararg path: String,
+    ): FileUpload {
         val filePath = Paths.get(fileConfig.fileSystem.baseDir, *path)
         if (!PathUtil.exists(filePath, false)) {
             PathUtil.mkdir(filePath)
@@ -47,16 +73,21 @@ class FileSystemFileService(
         fileWriter.writeFromStream(stream)
         // get file md5
         val fileMd5 = fileMd5(file.inputStream())
-        val fileUpload = FileUpload(
-            filename = FilenameUtils.getBaseName(file.toString()),
-            path = file.toString(),
-            hash = fileMd5,
-            url = "/" + path.joinToString("/") + "/" + filename,
-        )
+        val fileUpload =
+            FileUpload(
+                filename = FilenameUtils.getBaseName(file.toString()),
+                path = file.toString(),
+                hash = fileMd5,
+                url = "/" + path.joinToString("/") + "/" + filename,
+            )
         return fileUploadService.add(fileUpload)
     }
 
-    override fun uploadFile(fromFile: File, filename: String, vararg path: String): FileUpload {
+    override fun uploadFile(
+        fromFile: File,
+        filename: String,
+        vararg path: String,
+    ): FileUpload {
         val filePath = Paths.get(fileConfig.fileSystem.baseDir, *path)
         if (!PathUtil.exists(filePath, false)) {
             PathUtil.mkdir(filePath)
@@ -64,12 +95,13 @@ class FileSystemFileService(
         val file = FileUtil.copy(fromFile, filePath.resolve(filename).toFile(), false)
         // get file md5
         val fileMd5 = fileMd5(file.inputStream())
-        val fileUpload = FileUpload(
-            filename = FilenameUtils.getBaseName(file.toString()),
-            path = file.toString(),
-            hash = fileMd5,
-            url = "/" + path.joinToString("/") + "/" + filename,
-        )
+        val fileUpload =
+            FileUpload(
+                filename = FilenameUtils.getBaseName(file.toString()),
+                path = file.toString(),
+                hash = fileMd5,
+                url = "/" + path.joinToString("/") + "/" + filename,
+            )
         return fileUploadService.add(fileUpload)
     }
 

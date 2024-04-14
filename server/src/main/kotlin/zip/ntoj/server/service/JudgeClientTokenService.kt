@@ -9,16 +9,22 @@ import zip.ntoj.server.repository.JudgeClientTokenRepository
 
 interface JudgeClientTokenService {
     fun get(id: Long): JudgeClientToken
+
     fun get(token: String): JudgeClientToken
+
     fun exists(token: String): Boolean
+
     fun get(
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
     ): List<JudgeClientToken>
 
     fun new(judgeClientToken: JudgeClientToken): JudgeClientToken
+
     fun update(judgeClientToken: JudgeClientToken): JudgeClientToken
+
     fun count(): Long
+
     fun delete(id: Long)
 }
 
@@ -34,7 +40,10 @@ class JudgeClientTokenServiceImpl(
         return judgeClientTokenRepository.findByToken(token).orElseThrow { AppException("Token 不存在", 404) }
     }
 
-    override fun get(page: Int, pageSize: Int): List<JudgeClientToken> {
+    override fun get(
+        page: Int,
+        pageSize: Int,
+    ): List<JudgeClientToken> {
         return judgeClientTokenRepository.findAll(PageRequest.of(page - 1, pageSize)).toList()
     }
 

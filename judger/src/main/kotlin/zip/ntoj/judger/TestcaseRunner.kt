@@ -49,13 +49,14 @@ object TestcaseRunner {
         }
         val res = result[0]
         if (res.status != SandboxStatus.Accepted) {
-            val st = when (res.status) {
-                SandboxStatus.MemoryLimitExceeded -> SubmissionStatus.MEMORY_LIMIT_EXCEEDED
-                SandboxStatus.TimeLimitExceeded -> SubmissionStatus.TIME_LIMIT_EXCEEDED
-                SandboxStatus.OutputLimitExceeded -> SubmissionStatus.OUTPUT_LIMIT_EXCEEDED
-                SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-                else -> SubmissionStatus.RUNTIME_ERROR
-            }
+            val st =
+                when (res.status) {
+                    SandboxStatus.MemoryLimitExceeded -> SubmissionStatus.MEMORY_LIMIT_EXCEEDED
+                    SandboxStatus.TimeLimitExceeded -> SubmissionStatus.TIME_LIMIT_EXCEEDED
+                    SandboxStatus.OutputLimitExceeded -> SubmissionStatus.OUTPUT_LIMIT_EXCEEDED
+                    SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                    else -> SubmissionStatus.RUNTIME_ERROR
+                }
             return SelfTestJudgeResult(st, res.time / 1000 / 1000, res.memory / 1024, null)
         }
         val expectedStdout = expectedOutput?.trimByLine()?.removeLastEmptyLine()
@@ -88,18 +89,20 @@ object TestcaseRunner {
         }
         val res = result[0]
         if (res.status != SandboxStatus.Accepted) {
-            val st = when (res.status) {
-                SandboxStatus.MemoryLimitExceeded -> SubmissionStatus.MEMORY_LIMIT_EXCEEDED
-                SandboxStatus.TimeLimitExceeded -> SubmissionStatus.TIME_LIMIT_EXCEEDED
-                SandboxStatus.OutputLimitExceeded -> SubmissionStatus.OUTPUT_LIMIT_EXCEEDED
-                SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-                else -> SubmissionStatus.RUNTIME_ERROR
-            }
+            val st =
+                when (res.status) {
+                    SandboxStatus.MemoryLimitExceeded -> SubmissionStatus.MEMORY_LIMIT_EXCEEDED
+                    SandboxStatus.TimeLimitExceeded -> SubmissionStatus.TIME_LIMIT_EXCEEDED
+                    SandboxStatus.OutputLimitExceeded -> SubmissionStatus.OUTPUT_LIMIT_EXCEEDED
+                    SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                    else -> SubmissionStatus.RUNTIME_ERROR
+                }
             return TestcaseJudgeResult(st, res.time / 1000 / 1000, res.memory / 1024)
         }
-        val stdout = File("testcase/${submission.testcase.fileId}/$idx.out").readText()
-            .trimByLine()
-            .removeLastEmptyLine()
+        val stdout =
+            File("testcase/${submission.testcase.fileId}/$idx.out").readText()
+                .trimByLine()
+                .removeLastEmptyLine()
 
         if (res.files["stdout"]?.trimByLine()?.removeLastEmptyLine() != stdout) {
             return TestcaseJudgeResult(SubmissionStatus.WRONG_ANSWER, res.time / 1000 / 1000, res.memory / 1024)
@@ -115,31 +118,38 @@ object TestcaseRunner {
         inData: String,
         fileId: String,
     ): SandboxRequest {
-        val executeCommand = language.executeCommand!!
-            .replace("{target}", targetName)
+        val executeCommand =
+            language.executeCommand!!
+                .replace("{target}", targetName)
         val memoryLimitRate = language.memoryLimitRate ?: 1
         val timeLimitRate = language.timeLimitRate ?: 1
         return SandboxRequest(
-            cmd = listOf(
-                Cmd(
-                    args = listOf("/usr/bin/bash", "-c", executeCommand),
-                    env = listOf("PATH=/usr/bin:/bin"),
-                    files = listOf(
-                        MemoryFile(inData),
-                        Collector(name = "stdout", max = 51_200), // 50 KB
-                        Collector(name = "stderr", max = 51_200), // 50 KB
+            cmd =
+                listOf(
+                    Cmd(
+                        args = listOf("/usr/bin/bash", "-c", executeCommand),
+                        env = listOf("PATH=/usr/bin:/bin"),
+                        files =
+                            listOf(
+                                MemoryFile(inData),
+                                // 50 KB
+                                Collector(name = "stdout", max = 51_200),
+                                // 50 KB
+                                Collector(name = "stderr", max = 51_200),
+                            ),
+                        cpuLimit = 1L * timeLimit * 1000 * 1000 * timeLimitRate,
+                        clockLimit = 1L * timeLimit * 1000 * 1000 * 2 * timeLimitRate,
+                        memoryLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
+                        stackLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
+                        procLimit = 50,
+                        copyIn =
+                            mapOf(
+                                targetName to PreparedFile(fileId),
+                            ),
+                        // 2 MB
+                        copyOutMax = 1L * 2 * 1024 * 1024,
                     ),
-                    cpuLimit = 1L * timeLimit * 1000 * 1000 * timeLimitRate,
-                    clockLimit = 1L * timeLimit * 1000 * 1000 * 2 * timeLimitRate,
-                    memoryLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
-                    stackLimit = 1L * memoryLimit * 1024 * 1024 * memoryLimitRate,
-                    procLimit = 50,
-                    copyIn = mapOf(
-                        targetName to PreparedFile(fileId),
-                    ),
-                    copyOutMax = 1L * 2 * 1024 * 1024, // 2 MB
                 ),
-            ),
         )
     }
 }

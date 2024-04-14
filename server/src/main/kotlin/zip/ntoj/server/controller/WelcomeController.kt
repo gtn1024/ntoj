@@ -21,9 +21,10 @@ class WelcomeController(
     fun welcome(): Map<String, String> {
         return mapOf(
             "message" to "Welcome to NTOJ Server!",
-            "serverTime" to LocalDateTime.now(ZoneId.of("Asia/Shanghai")).format(
-                DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"),
-            ),
+            "serverTime" to
+                LocalDateTime.now(ZoneId.of("Asia/Shanghai")).format(
+                    DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"),
+                ),
             "version" to Constant.VERSION,
         )
     }

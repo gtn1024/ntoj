@@ -16,34 +16,26 @@ import zip.ntoj.shared.model.SubmissionStatus
 class SelfTestSubmission(
     @ManyToOne
     var user: User,
-
     @OneToOne var language: Language,
-    @Column(columnDefinition = "text", length = 65_536, nullable = false) // 64KB
+    // 64KB
+    @Column(columnDefinition = "text", length = 65_536, nullable = false)
     var code: String,
     @Enumerated(EnumType.STRING)
     var status: SubmissionStatus = SubmissionStatus.PENDING,
-
     @Column(nullable = false) var timeLimit: Int,
     @Column(nullable = false) var memoryLimit: Int,
-
     var time: Int? = null,
     var memory: Int? = null,
-
     @Enumerated(EnumType.STRING)
     var judgeStage: JudgeStage = JudgeStage.PENDING,
-
     @Column(columnDefinition = "text", length = 65535)
     var compileLog: String? = null,
-
     @Column(columnDefinition = "text", length = 65535, nullable = false)
     var input: String,
-
     @Column(columnDefinition = "text", length = 65535)
     var output: String? = null,
-
     @Column(columnDefinition = "text", length = 65535)
     var expectedOutput: String? = null,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "self_test_submission_id")

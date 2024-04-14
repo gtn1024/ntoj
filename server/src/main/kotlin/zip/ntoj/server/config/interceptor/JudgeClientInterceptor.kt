@@ -14,7 +14,11 @@ class JudgeClientInterceptor(
     val judgeClientTokenService: JudgeClientTokenService,
     val judgerSystemStatusService: JudgerSystemStatusService,
 ) : HandlerInterceptor {
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any,
+    ): Boolean {
         val token = request.getHeader("X-Judger-Token") ?: return false
         if (!judgeClientTokenService.exists(token)) {
             // 403

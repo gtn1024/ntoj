@@ -33,7 +33,10 @@ class AuthController(
     val securityConfig: SecurityConfig,
 ) {
     @GetMapping("/login")
-    fun login(@RequestParam username: String, @RequestParam password: String): ResponseEntity<R<LoginResponse>> {
+    fun login(
+        @RequestParam username: String,
+        @RequestParam password: String,
+    ): ResponseEntity<R<LoginResponse>> {
         val user = userService.getUserByUsername(username)
         return R.success(
             200,
@@ -42,7 +45,11 @@ class AuthController(
         )
     }
 
-    private fun userLogin(username: String, password: String, user: User): String {
+    private fun userLogin(
+        username: String,
+        password: String,
+        user: User,
+    ): String {
         if (!checkPassword(password, user.salt!!, user.password!!)) {
             throw AppException("密码错误", 401)
         }

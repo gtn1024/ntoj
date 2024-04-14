@@ -31,7 +31,9 @@ class AnnouncementController(
     }
 
     @GetMapping("/{id}")
-    fun getAnnouncement(@PathVariable id: Long): ResponseEntity<R<AnnouncementDto>> {
+    fun getAnnouncement(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<AnnouncementDto>> {
         return R.success(200, "获取成功", AnnouncementDto.from(announcementService.getAnnouncementsById(id)))
     }
 }
@@ -44,12 +46,13 @@ data class AnnouncementDto(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
 ) {
     companion object {
-        fun from(announcement: Announcement) = AnnouncementDto(
-            id = announcement.announcementId,
-            title = announcement.title,
-            content = announcement.content,
-            author = announcement.author!!.username,
-            createdAt = announcement.createdAt,
-        )
+        fun from(announcement: Announcement) =
+            AnnouncementDto(
+                id = announcement.announcementId,
+                title = announcement.title,
+                content = announcement.content,
+                author = announcement.author!!.username,
+                createdAt = announcement.createdAt,
+            )
     }
 }

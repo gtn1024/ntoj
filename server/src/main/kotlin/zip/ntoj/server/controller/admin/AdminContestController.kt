@@ -58,47 +58,58 @@ class AdminContestController(
     }
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<AdminContestDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<AdminContestDto>> {
         val contest = contestService.get(id)
         return R.success(200, "获取成功", AdminContestDto.from(contest))
     }
 
     @DeleteMapping("{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<R<Void>> {
+    fun delete(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Void>> {
         if (!contestService.exists(id)) return R.fail(404, "竞赛不存在")
         contestService.delete(id)
         return R.success(200, "删除成功")
     }
 
     @PostMapping
-    fun add(@RequestBody request: ContestRequest): ResponseEntity<R<AdminContestDto>> {
+    fun add(
+        @RequestBody request: ContestRequest,
+    ): ResponseEntity<R<AdminContestDto>> {
         val author = userService.getUserById(StpUtil.getLoginIdAsLong())
-        var contest = Contest(
-            title = request.title,
-            description = request.description,
-            startTime = Instant.ofEpochSecond(request.startTime),
-            endTime = Instant.ofEpochSecond(request.endTime),
-            freezeTime = request.freezeTime,
-            type = request.type,
-            permission = request.permission,
-            password = request.password,
-            allowAllLanguages = request.allowAllLanguages,
-            visible = request.visible,
-            showFinalBoard = request.showFinalBoard,
-            author = author,
-            problems = request.problems,
-            users = request.users.map {
-                if (!userService.existsById(it)) throw AppException("用户不存在", 404)
-                ContestUser(userId = it, Instant.now().toEpochMilli())
-            }.toMutableList(),
-            languages = request.languages.map { languageService.get(it) },
-        )
+        var contest =
+            Contest(
+                title = request.title,
+                description = request.description,
+                startTime = Instant.ofEpochSecond(request.startTime),
+                endTime = Instant.ofEpochSecond(request.endTime),
+                freezeTime = request.freezeTime,
+                type = request.type,
+                permission = request.permission,
+                password = request.password,
+                allowAllLanguages = request.allowAllLanguages,
+                visible = request.visible,
+                showFinalBoard = request.showFinalBoard,
+                author = author,
+                problems = request.problems,
+                users =
+                    request.users.map {
+                        if (!userService.existsById(it)) throw AppException("用户不存在", 404)
+                        ContestUser(userId = it, Instant.now().toEpochMilli())
+                    }.toMutableList(),
+                languages = request.languages.map { languageService.get(it) },
+            )
         contest = contestService.add(contest)
         return R.success(200, "添加成功", AdminContestDto.from(contest))
     }
 
     @PatchMapping("{id}")
-    fun update(@RequestBody request: ContestRequest, @PathVariable id: Long): ResponseEntity<R<AdminContestDto>> {
+    fun update(
+        @RequestBody request: ContestRequest,
+        @PathVariable id: Long,
+    ): ResponseEntity<R<AdminContestDto>> {
         var contest = contestService.get(id)
         contest.title = request.title
         contest.description = request.description
@@ -109,10 +120,11 @@ class AdminContestController(
         contest.permission = request.permission
         contest.password = request.password
         contest.problems = request.problems
-        contest.users = request.users.map {
-            if (!userService.existsById(it)) throw AppException("用户不存在", 404)
-            ContestUser(userId = it, Instant.now().toEpochMilli())
-        }.toMutableList()
+        contest.users =
+            request.users.map {
+                if (!userService.existsById(it)) throw AppException("用户不存在", 404)
+                ContestUser(userId = it, Instant.now().toEpochMilli())
+            }.toMutableList()
         contest.languages = request.languages.map { languageService.get(it) }
         contest.allowAllLanguages = request.allowAllLanguages
         contest.visible = request.visible
@@ -157,24 +169,25 @@ class AdminContestController(
         val author: String,
     ) {
         companion object {
-            fun from(contest: Contest) = AdminContestDto(
-                id = contest.contestId!!,
-                title = contest.title,
-                description = contest.description,
-                startTime = contest.startTime,
-                endTime = contest.endTime,
-                freezeTime = contest.freezeTime,
-                type = contest.type,
-                permission = contest.permission,
-                password = contest.password,
-                problems = contest.problems,
-                users = contest.users.map { it.userId },
-                languages = contest.languages.map { it.languageId!! },
-                allowAllLanguages = contest.allowAllLanguages,
-                visible = contest.visible,
-                showFinalBoard = contest.showFinalBoard,
-                author = contest.author.username,
-            )
+            fun from(contest: Contest) =
+                AdminContestDto(
+                    id = contest.contestId!!,
+                    title = contest.title,
+                    description = contest.description,
+                    startTime = contest.startTime,
+                    endTime = contest.endTime,
+                    freezeTime = contest.freezeTime,
+                    type = contest.type,
+                    permission = contest.permission,
+                    password = contest.password,
+                    problems = contest.problems,
+                    users = contest.users.map { it.userId },
+                    languages = contest.languages.map { it.languageId!! },
+                    allowAllLanguages = contest.allowAllLanguages,
+                    visible = contest.visible,
+                    showFinalBoard = contest.showFinalBoard,
+                    author = contest.author.username,
+                )
         }
     }
 }

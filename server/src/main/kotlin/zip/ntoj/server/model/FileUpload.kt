@@ -12,7 +12,6 @@ class FileUpload(
     var path: String,
     var hash: String,
     @Column(columnDefinition = "TEXT") var url: String,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "file_id")

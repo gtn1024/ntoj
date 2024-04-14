@@ -24,7 +24,9 @@ class UserController(
     val userService: UserService,
 ) {
     @GetMapping("/{username}")
-    fun getUser(@PathVariable username: String): ResponseEntity<R<UserDto>> {
+    fun getUser(
+        @PathVariable username: String,
+    ): ResponseEntity<R<UserDto>> {
         val user = userService.getUserByUsername(username)
         return R.success(200, "获取成功", UserDto.from(user))
     }

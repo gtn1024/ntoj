@@ -39,7 +39,7 @@ jobs:
       - name: Ktlint
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: ktlint -DagreePublicBuildScanTermOfService=yes
+          arguments: ktlintCheck -DagreePublicBuildScanTermOfService=yes
       - name: Migrate Database
         uses: gradle/gradle-build-action@v2
         with:

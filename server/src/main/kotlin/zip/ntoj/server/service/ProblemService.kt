@@ -11,7 +11,9 @@ import zip.ntoj.server.repository.ProblemRepository
 
 interface ProblemService {
     fun get(id: Long): Problem
+
     fun get(alias: String): Problem
+
     fun get(
         onlyVisible: Boolean = false,
         page: Int = 1,
@@ -19,13 +21,14 @@ interface ProblemService {
         desc: Boolean = false,
     ): List<Problem>
 
-    fun count(
-        onlyVisible: Boolean = false,
-    ): Long
+    fun count(onlyVisible: Boolean = false): Long
 
     fun new(problem: Problem): Problem
+
     fun update(problem: Problem): Problem
+
     fun delete(id: Long)
+
     fun exists(id: Long): Boolean
 }
 
@@ -41,7 +44,12 @@ class ProblemServiceImpl(
         return problemRepository.findByAlias(alias).orElseThrow { AppException("题目不存在", 404) }
     }
 
-    override fun get(onlyVisible: Boolean, page: Int, pageSize: Int, desc: Boolean): List<Problem> {
+    override fun get(
+        onlyVisible: Boolean,
+        page: Int,
+        pageSize: Int,
+        desc: Boolean,
+    ): List<Problem> {
         return problemRepository.findAll(
             buildSpecification(onlyVisible),
             PageRequest.of(

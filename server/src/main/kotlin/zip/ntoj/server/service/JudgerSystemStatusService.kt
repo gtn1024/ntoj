@@ -6,7 +6,9 @@ import zip.ntoj.server.repository.JudgerSystemStatusRepository
 
 interface JudgerSystemStatusService {
     fun findByJudgerId(id: String): JudgerSystemStatus?
+
     fun new(judgerSystemStatus: JudgerSystemStatus)
+
     fun update(judgerSystemStatus: JudgerSystemStatus)
 }
 

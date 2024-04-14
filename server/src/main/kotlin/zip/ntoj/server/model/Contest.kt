@@ -21,32 +21,21 @@ import java.time.Instant
 class Contest(
     @Column(nullable = false) var title: String,
     @Column(columnDefinition = "TEXT") var description: String? = null,
-
     @Column(nullable = false) var startTime: Instant,
     @Column(nullable = false) var endTime: Instant,
-
     var freezeTime: Int? = null,
     @Column(nullable = false) @Enumerated(EnumType.STRING) var type: ContestType = ContestType.ICPC,
-
     @Column(nullable = false) @Enumerated(EnumType.STRING) var permission: ContestPermission = ContestPermission.PUBLIC,
     var password: String? = null,
-
     @ManyToOne @JoinColumn(nullable = false)
     var author: User,
-
     @JdbcTypeCode(JSON) @Column(nullable = false) var problems: List<ContestProblem> = listOf(),
-
     @JdbcTypeCode(JSON) @Column(nullable = false) var users: MutableList<ContestUser> = mutableListOf(),
-
     @ManyToMany var languages: List<Language> = mutableListOf(),
     @Column(nullable = false) var allowAllLanguages: Boolean,
-
     @Column(nullable = false) var visible: Boolean = true,
-
     @Column(nullable = false) var showFinalBoard: Boolean = false,
-
     @OneToMany var clarifications: List<ContestClarification> = mutableListOf(),
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "contest_id") var contestId: Long? = null,
 ) : BaseEntity() {
     enum class ContestType {
@@ -60,12 +49,16 @@ class Contest(
     }
 }
 
-data class ContestProblem @JsonCreator constructor(
-    @JsonProperty("problemId") var problemId: Long,
-    @JsonProperty("contestProblemIndex") var contestProblemIndex: Int,
-)
+data class ContestProblem
+    @JsonCreator
+    constructor(
+        @JsonProperty("problemId") var problemId: Long,
+        @JsonProperty("contestProblemIndex") var contestProblemIndex: Int,
+    )
 
-data class ContestUser @JsonCreator constructor(
-    @JsonProperty("userId") var userId: Long,
-    @JsonProperty("joinAt") var joinAt: Long,
-)
+data class ContestUser
+    @JsonCreator
+    constructor(
+        @JsonProperty("userId") var userId: Long,
+        @JsonProperty("joinAt") var joinAt: Long,
+    )

@@ -10,8 +10,11 @@ import kotlin.jvm.optionals.getOrNull
 
 interface SelfTestSubmissionService {
     fun get(id: Long): SelfTestSubmission
+
     fun add(selfTestSubmission: SelfTestSubmission)
+
     fun getPendingSubmissionAndSetJudging(): SelfTestSubmission?
+
     fun update(submission: SelfTestSubmission)
 }
 

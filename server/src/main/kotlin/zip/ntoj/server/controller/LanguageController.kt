@@ -17,8 +17,9 @@ class LanguageController(
 ) {
     @GetMapping
     fun index(): ResponseEntity<R<L<LanguageDto>>> {
-        val languages = languageService.get()
-            .filter { it.enabled }
+        val languages =
+            languageService.get()
+                .filter { it.enabled }
         return R.success(
             200,
             "获取成功",
@@ -31,10 +32,11 @@ class LanguageController(
         val name: String,
     ) {
         companion object {
-            fun from(language: Language): LanguageDto = LanguageDto(
-                id = language.languageId!!,
-                name = language.languageName,
-            )
+            fun from(language: Language): LanguageDto =
+                LanguageDto(
+                    id = language.languageId!!,
+                    name = language.languageName,
+                )
         }
     }
 }

@@ -7,6 +7,7 @@ import zip.ntoj.server.repository.ContestClarificationRepository
 
 interface ContestClarificationService {
     fun get(id: Long): ContestClarification
+
     fun get(
         onlyVisible: Boolean = false,
         page: Int = 1,
@@ -14,14 +15,16 @@ interface ContestClarificationService {
         desc: Boolean = false,
     ): List<ContestClarification>
 
-    fun count(
-        onlyVisible: Boolean = false,
-    ): Long
+    fun count(onlyVisible: Boolean = false): Long
 
     fun add(clarification: ContestClarification): ContestClarification
+
     fun update(clarification: ContestClarification): ContestClarification
+
     fun delete(id: Long)
+
     fun exists(id: Long): Boolean
+
     fun getByContestId(contestId: Long): List<ContestClarification>
 }
 
@@ -33,7 +36,12 @@ class ContestClarificationServiceImpl(
         return contestClarificationRepository.findById(id).orElseThrow { AppException("不存在", 404) }
     }
 
-    override fun get(onlyVisible: Boolean, page: Int, pageSize: Int, desc: Boolean): List<ContestClarification> {
+    override fun get(
+        onlyVisible: Boolean,
+        page: Int,
+        pageSize: Int,
+        desc: Boolean,
+    ): List<ContestClarification> {
         TODO("Not yet implemented")
     }
 

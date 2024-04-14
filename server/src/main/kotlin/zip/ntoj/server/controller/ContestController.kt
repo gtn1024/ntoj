@@ -46,7 +46,9 @@ class ContestController(
     }
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<ContestDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<ContestDto>> {
         if (StpUtil.isLogin()) {
             val user = userService.getUserById(StpUtil.getLoginIdAsLong())
             val contest = contestService.get(id)
@@ -95,14 +97,17 @@ class ContestController(
 
     @GetMapping("{id}/problemsStatistics")
     @Cacheable("contestStatistic", key = "#root.methodName +'_tk_'+ #id")
-    fun getProblemsStatistics(@PathVariable id: Long): ResponseEntity<R<Map<String, ContestProblemStatisticsDto>>> {
+    fun getProblemsStatistics(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Map<String, ContestProblemStatisticsDto>>> {
         val contest = contestService.get(id)
         val problems = contest.problems
-        val submissions = submissionService.getByContestId(id).filter {
-            it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
-        }.filter {
-            it.status != SubmissionStatus.COMPILE_ERROR
-        }
+        val submissions =
+            submissionService.getByContestId(id).filter {
+                it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
+            }.filter {
+                it.status != SubmissionStatus.COMPILE_ERROR
+            }
         return R.success(
             200,
             "获取成功",
@@ -115,24 +120,28 @@ class ContestController(
                         acceptedTimes++
                     }
                 }
-                numberToAlphabet(contestProblem.contestProblemIndex) to ContestProblemStatisticsDto(
-                    submitTimes = submitTimes,
-                    acceptedTimes = acceptedTimes,
-                )
+                numberToAlphabet(contestProblem.contestProblemIndex) to
+                    ContestProblemStatisticsDto(
+                        submitTimes = submitTimes,
+                        acceptedTimes = acceptedTimes,
+                    )
             },
         )
     }
 
     @GetMapping("{id}/standing")
     @Cacheable("contestStanding", key = "#root.methodName +'_tk_'+ #id")
-    fun getStanding(@PathVariable id: Long): ResponseEntity<R<List<ContestStandingSubmissionDto>>> {
+    fun getStanding(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<List<ContestStandingSubmissionDto>>> {
         val contest = contestService.get(id)
         val problems = contest.problems
-        val submissions = submissionService.getByContestId(id)
-            .reversed()
-            .filter {
-                it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
-            }
+        val submissions =
+            submissionService.getByContestId(id)
+                .reversed()
+                .filter {
+                    it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
+                }
         return R.success(
             200,
             "获取成功",
@@ -154,7 +163,10 @@ class ContestController(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
-            fun from(submission: Submission, alias: String) = ContestStandingSubmissionDto(
+            fun from(
+                submission: Submission,
+                alias: String,
+            ) = ContestStandingSubmissionDto(
                 id = submission.submissionId!!,
                 user = submission.user?.let { UserDto.from(it) }!!,
                 alias = alias,
@@ -168,16 +180,19 @@ class ContestController(
             val realName: String?,
         ) {
             companion object {
-                fun from(user: User) = UserDto(
-                    username = user.username,
-                    realName = user.realName,
-                )
+                fun from(user: User) =
+                    UserDto(
+                        username = user.username,
+                        realName = user.realName,
+                    )
             }
         }
     }
 
     @GetMapping("{id}/problems")
-    fun getProblems(@PathVariable id: Long): ResponseEntity<R<List<ContestProblemDto>>> {
+    fun getProblems(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<List<ContestProblemDto>>> {
         val contest = contestService.get(id)
         val problems = contest.problems
         return R.success(
@@ -191,11 +206,15 @@ class ContestController(
     }
 
     @GetMapping("{id}/problem/{alias}")
-    fun getProblem(@PathVariable id: Long, @PathVariable alias: String): ResponseEntity<R<Problem>> {
+    fun getProblem(
+        @PathVariable id: Long,
+        @PathVariable alias: String,
+    ): ResponseEntity<R<Problem>> {
         val contest = contestService.get(id)
-        val problem = contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
-            problemService.get(it.problemId)
-        }
+        val problem =
+            contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
+                problemService.get(it.problemId)
+            }
         return R.success(
             200,
             "获取成功",
@@ -214,26 +233,29 @@ class ContestController(
         if (!contest.allowAllLanguages && contest.languages.none { it.languageId == problemSubmissionRequest.language }) {
             throw AppException("不支持的语言", 400)
         }
-        val problem = contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
-            problemService.get(it.problemId)
-        } ?: throw AppException("题目不存在", 404)
+        val problem =
+            contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
+                problemService.get(it.problemId)
+            } ?: throw AppException("题目不存在", 404)
         if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
             throw AppException("代码长度超过限制", 400)
         }
         val language = languageService.get(problemSubmissionRequest.language)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        var submission = Submission(
-            user = user,
-            problem = problem,
-            origin = Submission.SubmissionOrigin.CONTEST,
-            contestId = id,
-            language = language,
-            code = problemSubmissionRequest.code,
-            status = SubmissionStatus.PENDING,
-            judgeStage = JudgeStage.PENDING,
-        )
-        submission = submissionService
-            .new(submission)
+        var submission =
+            Submission(
+                user = user,
+                problem = problem,
+                origin = Submission.SubmissionOrigin.CONTEST,
+                contestId = id,
+                language = language,
+                code = problemSubmissionRequest.code,
+                status = SubmissionStatus.PENDING,
+                judgeStage = JudgeStage.PENDING,
+            )
+        submission =
+            submissionService
+                .new(submission)
         return R.success(200, "提交成功", ProblemController.SubmissionDto.from(submission))
     }
 
@@ -251,13 +273,14 @@ class ContestController(
 
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
-        val filteredUsername = if (Instant.now() >= contest.endTime) {
-            username
-        } else if (hasAdminPermission(user.role)) {
-            username
-        } else {
-            user.username
-        }
+        val filteredUsername =
+            if (Instant.now() >= contest.endTime) {
+                username
+            } else if (hasAdminPermission(user.role)) {
+                username
+            } else {
+                user.username
+            }
         val submissions = submissionService.getByContestId(id, current, pageSize, true, filteredUsername)
         val count = submissionService.countByContestId(id, filteredUsername)
         return R.success(
@@ -266,11 +289,13 @@ class ContestController(
             L(
                 total = count,
                 page = current,
-                list = submissions.map {
-                    val alias = contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
-                        ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }
-                    ContestSubmissionDto.from(it, alias!!)
-                },
+                list =
+                    submissions.map {
+                        val alias =
+                            contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
+                                ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }
+                        ContestSubmissionDto.from(it, alias!!)
+                    },
             ),
         )
     }
@@ -287,7 +312,10 @@ class ContestController(
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
-            fun from(submission: Submission, alias: String) = ContestSubmissionDto(
+            fun from(
+                submission: Submission,
+                alias: String,
+            ) = ContestSubmissionDto(
                 id = submission.submissionId!!,
                 user = UserDto.from(submission.user!!),
                 alias = alias,
@@ -305,30 +333,34 @@ class ContestController(
             val realName: String?,
         ) {
             companion object {
-                fun from(user: User) = UserDto(
-                    username = user.username,
-                    realName = user.realName,
-                )
+                fun from(user: User) =
+                    UserDto(
+                        username = user.username,
+                        realName = user.realName,
+                    )
             }
         }
     }
 
     @GetMapping("{id}/clarifications")
-    fun getClarifications(@PathVariable id: Long): ResponseEntity<R<List<ContestClarificationDto>>> {
+    fun getClarifications(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<List<ContestClarificationDto>>> {
         var user: User? = null
         if (StpUtil.isLogin()) {
             user = userService.getUserById(StpUtil.getLoginIdAsLong())
         }
-        val clarifications = contestClarificationService.getByContestId(id).reversed()
-            .filter {
-                if (it.sticky) {
-                    true
-                } else if (user != null && user.role.ordinal > 1) {
-                    true
-                } else {
-                    user?.let { user -> it.user.userId == user.userId } ?: false
+        val clarifications =
+            contestClarificationService.getByContestId(id).reversed()
+                .filter {
+                    if (it.sticky) {
+                        true
+                    } else if (user != null && user.role.ordinal > 1) {
+                        true
+                    } else {
+                        user?.let { user -> it.user.userId == user.userId } ?: false
+                    }
                 }
-            }
         return R.success(
             200,
             "获取成功",
@@ -344,13 +376,14 @@ class ContestController(
     ): ResponseEntity<R<ContestClarificationDto>> {
         val contest = contestService.get(id)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        var clarification = ContestClarification(
-            title = contestClarificationRequest.title,
-            content = contestClarificationRequest.content,
-            contestProblemId = contestClarificationRequest.contestProblemId?.let { alphabetToNumber(it) },
-            user = user,
-            contest = contest,
-        )
+        var clarification =
+            ContestClarification(
+                title = contestClarificationRequest.title,
+                content = contestClarificationRequest.content,
+                contestProblemId = contestClarificationRequest.contestProblemId?.let { alphabetToNumber(it) },
+                user = user,
+                contest = contest,
+            )
         clarification = contestClarificationService.add(clarification)
         return R.success(200, "提交成功", ContestClarificationDto.from(clarification))
     }
@@ -415,10 +448,11 @@ class ContestController(
             throw AppException("该问题不属于该比赛", 400)
         }
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        val response = ContestClarificationResponse(
-            content = contestClarificationRequest.content,
-            user = user,
-        )
+        val response =
+            ContestClarificationResponse(
+                content = contestClarificationRequest.content,
+                user = user,
+            )
         clarification.responses.add(response)
         contestClarificationService.update(clarification)
         return R.success(200, "提交成功")
@@ -451,17 +485,18 @@ class ContestController(
         val sticky: Boolean,
     ) {
         companion object {
-            fun from(clarification: ContestClarification) = ContestClarificationDetailDto(
-                id = clarification.clarificationId!!,
-                title = clarification.title,
-                user = clarification.user.username,
-                createdAt = clarification.createdAt!!,
-                contestProblemAlias = clarification.contestProblemId?.let { numberToAlphabet(it) },
-                content = clarification.content,
-                replies = clarification.responses.map { ClarificationResponseDto.from(it) },
-                closed = clarification.closed,
-                sticky = clarification.sticky,
-            )
+            fun from(clarification: ContestClarification) =
+                ContestClarificationDetailDto(
+                    id = clarification.clarificationId!!,
+                    title = clarification.title,
+                    user = clarification.user.username,
+                    createdAt = clarification.createdAt!!,
+                    contestProblemAlias = clarification.contestProblemId?.let { numberToAlphabet(it) },
+                    content = clarification.content,
+                    replies = clarification.responses.map { ClarificationResponseDto.from(it) },
+                    closed = clarification.closed,
+                    sticky = clarification.sticky,
+                )
         }
 
         data class ClarificationResponseDto(
@@ -471,12 +506,13 @@ class ContestController(
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
         ) {
             companion object {
-                fun from(clarificationResponse: ContestClarificationResponse) = ClarificationResponseDto(
-                    id = clarificationResponse.responseId!!,
-                    content = clarificationResponse.content,
-                    user = clarificationResponse.user.username,
-                    createdAt = clarificationResponse.createdAt!!,
-                )
+                fun from(clarificationResponse: ContestClarificationResponse) =
+                    ClarificationResponseDto(
+                        id = clarificationResponse.responseId!!,
+                        content = clarificationResponse.content,
+                        user = clarificationResponse.user.username,
+                        createdAt = clarificationResponse.createdAt!!,
+                    )
             }
         }
     }
@@ -491,15 +527,16 @@ class ContestController(
         val contestProblemAlias: String?,
     ) {
         companion object {
-            fun from(contestClarification: ContestClarification) = ContestClarificationDto(
-                id = contestClarification.clarificationId!!,
-                title = contestClarification.title,
-                user = contestClarification.user.username,
-                createdAt = contestClarification.createdAt!!,
-                sticky = contestClarification.sticky,
-                replyCount = contestClarification.responses.size,
-                contestProblemAlias = contestClarification.contestProblemId?.let { numberToAlphabet(it) },
-            )
+            fun from(contestClarification: ContestClarification) =
+                ContestClarificationDto(
+                    id = contestClarification.clarificationId!!,
+                    title = contestClarification.title,
+                    user = contestClarification.user.username,
+                    createdAt = contestClarification.createdAt!!,
+                    sticky = contestClarification.sticky,
+                    replyCount = contestClarification.responses.size,
+                    contestProblemAlias = contestClarification.contestProblemId?.let { numberToAlphabet(it) },
+                )
         }
     }
 
@@ -526,7 +563,10 @@ class ContestController(
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val joinAt: Instant,
         ) {
             companion object {
-                fun from(user: User, joinAt: Instant) = UserDto(
+                fun from(
+                    user: User,
+                    joinAt: Instant,
+                ) = UserDto(
                     username = user.username,
                     realName = user.realName,
                     joinAt = joinAt,
@@ -535,7 +575,11 @@ class ContestController(
         }
 
         companion object {
-            fun from(contest: Contest, hasPermission: Boolean = false, userService: UserService) = ContestDto(
+            fun from(
+                contest: Contest,
+                hasPermission: Boolean = false,
+                userService: UserService,
+            ) = ContestDto(
                 id = contest.contestId!!,
                 title = contest.title,
                 description = contest.description,
@@ -544,9 +588,10 @@ class ContestController(
                 type = contest.type,
                 permission = contest.permission,
                 userCount = contest.users.size,
-                users = contest.users.map {
-                    UserDto.from(userService.getUserById(it.userId), Instant.ofEpochMilli(it.joinAt))
-                },
+                users =
+                    contest.users.map {
+                        UserDto.from(userService.getUserById(it.userId), Instant.ofEpochMilli(it.joinAt))
+                    },
                 author = contest.author.username,
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,
@@ -584,7 +629,10 @@ class ContestController(
         val title: String,
     ) {
         companion object {
-            fun from(contestProblem: ContestProblem, problem: Problem) = ContestProblemDto(
+            fun from(
+                contestProblem: ContestProblem,
+                problem: Problem,
+            ) = ContestProblemDto(
                 title = problem.title,
                 alias = numberToAlphabet(contestProblem.contestProblemIndex),
             )

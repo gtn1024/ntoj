@@ -44,7 +44,9 @@ class ProblemController(
     }
 
     @GetMapping("/{alias}")
-    fun get(@PathVariable alias: String): ResponseEntity<R<ProblemDto>> {
+    fun get(
+        @PathVariable alias: String,
+    ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(alias)
         return R.success(200, "获取成功", ProblemDto.from(problem))
     }
@@ -66,15 +68,16 @@ class ProblemController(
         problemService.update(problem)
         val language = languageService.get(problemSubmissionRequest.language)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        var submission = Submission(
-            user = user,
-            problem = problem,
-            origin = Submission.SubmissionOrigin.PROBLEM,
-            language = language,
-            code = problemSubmissionRequest.code,
-            status = SubmissionStatus.PENDING,
-            judgeStage = JudgeStage.PENDING,
-        )
+        var submission =
+            Submission(
+                user = user,
+                problem = problem,
+                origin = Submission.SubmissionOrigin.PROBLEM,
+                language = language,
+                code = problemSubmissionRequest.code,
+                status = SubmissionStatus.PENDING,
+                judgeStage = JudgeStage.PENDING,
+            )
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))
     }
@@ -85,11 +88,12 @@ class ProblemController(
         val stage: JudgeStage,
     ) {
         companion object {
-            fun from(submission: Submission) = SubmissionDto(
-                id = submission.submissionId!!,
-                status = submission.status,
-                stage = submission.judgeStage,
-            )
+            fun from(submission: Submission) =
+                SubmissionDto(
+                    id = submission.submissionId!!,
+                    status = submission.status,
+                    stage = submission.judgeStage,
+                )
         }
     }
 
@@ -114,26 +118,27 @@ class ProblemController(
         val acceptedTimes: Long,
     ) {
         companion object {
-            fun from(problem: Problem): ProblemDto = ProblemDto(
-                id = problem.problemId!!,
-                title = problem.title,
-                alias = problem.alias,
-                background = problem.background,
-                description = problem.description,
-                inputDescription = problem.inputDescription,
-                outputDescription = problem.outputDescription,
-                timeLimit = problem.timeLimit,
-                memoryLimit = problem.memoryLimit,
-                judgeTimes = problem.judgeTimes,
-                samples = problem.samples ?: listOf(),
-                note = problem.note,
-                author = problem.author?.username,
-                languages = problem.languages.map { it.languageId!! },
-                allowAllLanguages = problem.allowAllLanguages,
-                codeLength = problem.codeLength,
-                submitTimes = problem.submitTimes,
-                acceptedTimes = problem.acceptedTimes,
-            )
+            fun from(problem: Problem): ProblemDto =
+                ProblemDto(
+                    id = problem.problemId!!,
+                    title = problem.title,
+                    alias = problem.alias,
+                    background = problem.background,
+                    description = problem.description,
+                    inputDescription = problem.inputDescription,
+                    outputDescription = problem.outputDescription,
+                    timeLimit = problem.timeLimit,
+                    memoryLimit = problem.memoryLimit,
+                    judgeTimes = problem.judgeTimes,
+                    samples = problem.samples ?: listOf(),
+                    note = problem.note,
+                    author = problem.author?.username,
+                    languages = problem.languages.map { it.languageId!! },
+                    allowAllLanguages = problem.allowAllLanguages,
+                    codeLength = problem.codeLength,
+                    submitTimes = problem.submitTimes,
+                    acceptedTimes = problem.acceptedTimes,
+                )
         }
     }
 
@@ -145,13 +150,14 @@ class ProblemController(
         val acceptedTimes: Long,
     ) {
         companion object {
-            fun from(problem: Problem): ProblemListDto = ProblemListDto(
-                id = problem.problemId!!,
-                title = problem.title,
-                alias = problem.alias,
-                submitTimes = problem.submitTimes,
-                acceptedTimes = problem.acceptedTimes,
-            )
+            fun from(problem: Problem): ProblemListDto =
+                ProblemListDto(
+                    id = problem.problemId!!,
+                    title = problem.title,
+                    alias = problem.alias,
+                    submitTimes = problem.submitTimes,
+                    acceptedTimes = problem.acceptedTimes,
+                )
         }
     }
 }

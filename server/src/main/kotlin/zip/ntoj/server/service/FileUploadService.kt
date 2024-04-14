@@ -7,9 +7,13 @@ import zip.ntoj.server.repository.FileUploadRepository
 
 interface FileUploadService {
     fun add(file: FileUpload): FileUpload
+
     fun delete(id: Long)
+
     fun update(file: FileUpload): FileUpload
+
     fun get(id: Long): FileUpload
+
     fun get(filename: String): FileUpload
 }
 

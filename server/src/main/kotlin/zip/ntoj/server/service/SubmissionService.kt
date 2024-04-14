@@ -54,7 +54,9 @@ interface SubmissionService {
     ): Long
 
     fun getPendingSubmissionAndSetJudging(): Submission?
+
     fun new(submission: Submission): Submission
+
     fun update(submission: Submission): Submission
 }
 
@@ -96,15 +98,17 @@ class SubmissionServiceImpl(
             if (scope != SubmissionScope.ALL) {
                 predicates.add(
                     when (scope) {
-                        SubmissionScope.PROBLEM -> cb.equal(
-                            root.get<Enum<Submission.SubmissionOrigin>>("origin"),
-                            Submission.SubmissionOrigin.PROBLEM,
-                        )
+                        SubmissionScope.PROBLEM ->
+                            cb.equal(
+                                root.get<Enum<Submission.SubmissionOrigin>>("origin"),
+                                Submission.SubmissionOrigin.PROBLEM,
+                            )
 
-                        SubmissionScope.CONTEST -> cb.equal(
-                            root.get<Enum<Submission.SubmissionOrigin>>("origin"),
-                            Submission.SubmissionOrigin.CONTEST,
-                        )
+                        SubmissionScope.CONTEST ->
+                            cb.equal(
+                                root.get<Enum<Submission.SubmissionOrigin>>("origin"),
+                                Submission.SubmissionOrigin.CONTEST,
+                            )
 
                         else -> throw AppException("未知的 scope", 500)
                     },
@@ -114,7 +118,10 @@ class SubmissionServiceImpl(
         }
     }
 
-    override fun get(id: Long, onlyVisibleProblem: Boolean): Submission {
+    override fun get(
+        id: Long,
+        onlyVisibleProblem: Boolean,
+    ): Submission {
         val submission = submissionRepository.findById(id).orElseThrow { AppException("提交不存在", 404) }
         if (submission.problem?.visible != true && submission.contestId == null) {
             throw AppException("提交不存在", 404)
@@ -122,7 +129,10 @@ class SubmissionServiceImpl(
         return submission
     }
 
-    override fun count(onlyVisibleProblem: Boolean, scope: SubmissionScope): Long {
+    override fun count(
+        onlyVisibleProblem: Boolean,
+        scope: SubmissionScope,
+    ): Long {
         return submissionRepository.count(buildSpecification(onlyVisibleProblem, scope))
     }
 
@@ -150,7 +160,10 @@ class SubmissionServiceImpl(
         ).toList()
     }
 
-    override fun countByContestId(contestId: Long, username: String?): Long {
+    override fun countByContestId(
+        contestId: Long,
+        username: String?,
+    ): Long {
         return submissionRepository.count(
             Specification { root, _, cb ->
                 val predicates: MutableList<Predicate> = mutableListOf()
@@ -165,8 +178,9 @@ class SubmissionServiceImpl(
 
     @Transactional
     override fun getPendingSubmissionAndSetJudging(): Submission? {
-        var submission = submissionRepository.findFirstByJudgeStageOrderBySubmissionId(JudgeStage.PENDING)
-            .getOrNull()
+        var submission =
+            submissionRepository.findFirstByJudgeStageOrderBySubmissionId(JudgeStage.PENDING)
+                .getOrNull()
         if (submission != null) {
             submission.judgeStage = JudgeStage.JUDGING
             submission = submissionRepository.save(submission)

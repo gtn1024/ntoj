@@ -18,12 +18,19 @@ interface UserService {
     ): List<User>
 
     fun newUser(user: User): User
+
     fun existsByUsername(username: String): Boolean
+
     fun existsById(id: Long): Boolean
+
     fun getUserByUsername(username: String): User
+
     fun getUserById(id: Long): User
+
     fun count(): Long
+
     fun updateUser(user: User): User
+
     fun deleteUserById(id: Long)
 }
 
@@ -31,7 +38,10 @@ interface UserService {
 class UserServiceImpl(
     val userRepository: UserRepository,
 ) : UserService {
-    override fun get(page: Int, pageSize: Int): List<User> {
+    override fun get(
+        page: Int,
+        pageSize: Int,
+    ): List<User> {
         return userRepository.findAll(
             PageRequest.of(
                 page - 1,

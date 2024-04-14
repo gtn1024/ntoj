@@ -21,7 +21,6 @@ class ContestClarification(
     @Column(nullable = false) var visible: Boolean = true,
     @OneToMany(cascade = [CascadeType.ALL]) var responses: MutableList<ContestClarificationResponse> = mutableListOf(),
     var contestProblemId: Int? = null,
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "clarification_id") var clarificationId: Long? = null,
 ) : BaseEntity()
 
@@ -29,6 +28,5 @@ class ContestClarification(
 class ContestClarificationResponse(
     @Column(nullable = false, columnDefinition = "TEXT") var content: String,
     @ManyToOne @JoinColumn(nullable = false) var user: User,
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "response_id") var responseId: Long? = null,
 ) : BaseEntity()

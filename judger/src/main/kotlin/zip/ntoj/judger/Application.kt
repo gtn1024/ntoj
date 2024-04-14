@@ -116,10 +116,11 @@ private suspend fun runSelfTestSubmission(submission: GetSelfTestSubmissionRespo
         return
     }
     if (result[0].status != SandboxStatus.Accepted) {
-        val res = when (result[0].status) {
-            SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-            else -> SubmissionStatus.COMPILE_ERROR
-        }
+        val res =
+            when (result[0].status) {
+                SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                else -> SubmissionStatus.COMPILE_ERROR
+            }
         setSelfTestSubmissionResult(
             submission.submissionId,
             res,
@@ -168,10 +169,11 @@ private suspend fun runSubmission(submission: GetSubmissionResponse) {
         return
     }
     if (result[0].status != SandboxStatus.Accepted) {
-        val res = when (result[0].status) {
-            SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
-            else -> SubmissionStatus.COMPILE_ERROR
-        }
+        val res =
+            when (result[0].status) {
+                SandboxStatus.InternalError -> SubmissionStatus.SYSTEM_ERROR
+                else -> SubmissionStatus.COMPILE_ERROR
+            }
         setSubmissionResult(
             submission.submissionId,
             res,
@@ -216,9 +218,10 @@ private suspend fun unzipTestcase(testcase: Long) {
     val target = Path("testcase/$testcase")
     target.createDirectory()
     // unzip file with java api
-    val zipFile = withContext(Dispatchers.IO) {
-        ZipFile(file)
-    }
+    val zipFile =
+        withContext(Dispatchers.IO) {
+            ZipFile(file)
+        }
     zipFile.entries().asSequence().forEach { entry ->
         val targetFile = target.resolve(entry.name)
         if (entry.isDirectory) {
@@ -236,26 +239,34 @@ private suspend fun unzipTestcase(testcase: Long) {
     }
 }
 
-private suspend fun setSelfTestSubmissionJudgeStage(submissionId: Long, judgeStage: JudgeStage) {
-    val body = UpdateSelfTestSubmissionRequest(
-        submissionId = submissionId,
-        time = 0,
-        memory = 0,
-        judgeStage = judgeStage,
-        result = SubmissionStatus.JUDGING,
-    )
+private suspend fun setSelfTestSubmissionJudgeStage(
+    submissionId: Long,
+    judgeStage: JudgeStage,
+) {
+    val body =
+        UpdateSelfTestSubmissionRequest(
+            submissionId = submissionId,
+            time = 0,
+            memory = 0,
+            judgeStage = judgeStage,
+            result = SubmissionStatus.JUDGING,
+        )
     Client.Backend.updateSelfTestSubmission(submissionId, body)
 }
 
-private suspend fun setSubmissionJudgeStage(submissionId: Long, judgeStage: JudgeStage) {
-    val body = UpdateSubmissionRequest(
-        submissionId = submissionId,
-        time = 0,
-        memory = 0,
-        judgerId = Configuration.JUDGER_ID,
-        judgeStage = judgeStage,
-        result = SubmissionStatus.JUDGING,
-    )
+private suspend fun setSubmissionJudgeStage(
+    submissionId: Long,
+    judgeStage: JudgeStage,
+) {
+    val body =
+        UpdateSubmissionRequest(
+            submissionId = submissionId,
+            time = 0,
+            memory = 0,
+            judgerId = Configuration.JUDGER_ID,
+            judgeStage = judgeStage,
+            result = SubmissionStatus.JUDGING,
+        )
     Client.Backend.updateSubmission(submissionId, body)
 }
 
@@ -267,15 +278,16 @@ private suspend fun setSelfTestSubmissionResult(
     compileLog: String? = null,
     output: String? = null,
 ) {
-    val body = UpdateSelfTestSubmissionRequest(
-        submissionId = submissionId,
-        time = time,
-        memory = memory,
-        judgeStage = JudgeStage.FINISHED,
-        result = result,
-        compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
-        output = output,
-    )
+    val body =
+        UpdateSelfTestSubmissionRequest(
+            submissionId = submissionId,
+            time = time,
+            memory = memory,
+            judgeStage = JudgeStage.FINISHED,
+            result = result,
+            compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
+            output = output,
+        )
     Client.Backend.updateSelfTestSubmission(submissionId, body)
 }
 
@@ -287,16 +299,17 @@ private suspend fun setSubmissionResult(
     testcaseResult: List<TestcaseJudgeResult> = listOf(),
     compileLog: String? = null,
 ) {
-    val body = UpdateSubmissionRequest(
-        submissionId = submissionId,
-        time = time,
-        memory = memory,
-        judgerId = Configuration.JUDGER_ID,
-        judgeStage = JudgeStage.FINISHED,
-        result = result,
-        compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
-        testcaseResult = testcaseResult,
-    )
+    val body =
+        UpdateSubmissionRequest(
+            submissionId = submissionId,
+            time = time,
+            memory = memory,
+            judgerId = Configuration.JUDGER_ID,
+            judgeStage = JudgeStage.FINISHED,
+            result = result,
+            compileLog = if (result == SubmissionStatus.COMPILE_ERROR) compileLog else null,
+            testcaseResult = testcaseResult,
+        )
     Client.Backend.updateSubmission(submissionId, body)
 }
 
@@ -332,7 +345,10 @@ private fun isTestcaseExists(testcase: Long): Boolean {
     return Path("testcase/$testcase.zip").exists()
 }
 
-private fun isDownloadNeeded(testcase: Long, hash: String): Boolean {
+private fun isDownloadNeeded(
+    testcase: Long,
+    hash: String,
+): Boolean {
     if (!isTestcaseExists(testcase)) {
         return true
     }
@@ -349,29 +365,36 @@ private fun getCompileBody(
     if (language.compileCommand == null) {
         throw IllegalStateException("compile command is null")
     }
-    val compileCommand = language.compileCommand!!
-        .replace("{src}", sourceName)
-        .replace("{target}", targetName)
+    val compileCommand =
+        language.compileCommand!!
+            .replace("{src}", sourceName)
+            .replace("{target}", targetName)
     return SandboxRequest(
-        cmd = listOf(
-            Cmd(
-                args = listOf("/usr/bin/bash", "-c", compileCommand),
-                env = listOf("PATH=/usr/bin:/bin"),
-                files = listOf(
-                    MemoryFile(content = ""),
-                    Collector(name = "stdout", max = 51_200), // 50 KB
-                    Collector(name = "stderr", max = 51_200), // 50 KB
+        cmd =
+            listOf(
+                Cmd(
+                    args = listOf("/usr/bin/bash", "-c", compileCommand),
+                    env = listOf("PATH=/usr/bin:/bin"),
+                    files =
+                        listOf(
+                            MemoryFile(content = ""),
+                            // 50 KB
+                            Collector(name = "stdout", max = 51_200),
+                            // 50 KB
+                            Collector(name = "stderr", max = 51_200),
+                        ),
+                    cpuLimit = 10_000_000_000L,
+                    memoryLimit = 536_870_912L,
+                    procLimit = 50,
+                    copyIn =
+                        mapOf(
+                            sourceName to MemoryFile(content = code),
+                        ),
+                    copyOut = listOf("stdout", "stderr"),
+                    copyOutCached = listOf(targetName),
+                    // 2 MB
+                    copyOutMax = 1L * 2 * 1024 * 1024,
                 ),
-                cpuLimit = 10_000_000_000L,
-                memoryLimit = 536_870_912L,
-                procLimit = 50,
-                copyIn = mapOf(
-                    sourceName to MemoryFile(content = code),
-                ),
-                copyOut = listOf("stdout", "stderr"),
-                copyOutCached = listOf(targetName),
-                copyOutMax = 1L * 2 * 1024 * 1024, // 2 MB
             ),
-        ),
     )
 }

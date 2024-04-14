@@ -6,6 +6,7 @@ import zip.ntoj.server.repository.ContestClarificationResponseRepository
 
 interface ContestClarificationResponseService {
     fun get(id: Long): ContestClarificationResponse
+
     fun get(
         onlyVisible: Boolean = false,
         page: Int = 1,
@@ -13,13 +14,14 @@ interface ContestClarificationResponseService {
         desc: Boolean = false,
     ): List<ContestClarificationResponse>
 
-    fun count(
-        onlyVisible: Boolean = false,
-    ): Long
+    fun count(onlyVisible: Boolean = false): Long
 
     fun add(contest: ContestClarificationResponse): ContestClarificationResponse
+
     fun update(contest: ContestClarificationResponse): ContestClarificationResponse
+
     fun delete(id: Long)
+
     fun exists(id: Long): Boolean
 }
 

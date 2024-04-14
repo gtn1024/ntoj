@@ -11,6 +11,7 @@ import zip.ntoj.server.repository.ContestRepository
 
 interface ContestService {
     fun get(id: Long): Contest
+
     fun get(
         onlyVisible: Boolean = false,
         page: Int = 1,
@@ -18,13 +19,14 @@ interface ContestService {
         desc: Boolean = false,
     ): List<Contest>
 
-    fun count(
-        onlyVisible: Boolean = false,
-    ): Long
+    fun count(onlyVisible: Boolean = false): Long
 
     fun add(contest: Contest): Contest
+
     fun update(contest: Contest): Contest
+
     fun delete(id: Long)
+
     fun exists(id: Long): Boolean
 }
 
@@ -36,7 +38,12 @@ class ContestServiceImpl(
         return contestRepository.findById(id).orElseThrow { AppException("竞赛不存在", 404) }
     }
 
-    override fun get(onlyVisible: Boolean, page: Int, pageSize: Int, desc: Boolean): List<Contest> {
+    override fun get(
+        onlyVisible: Boolean,
+        page: Int,
+        pageSize: Int,
+        desc: Boolean,
+    ): List<Contest> {
         return contestRepository.findAll(
             buildSpecification(onlyVisible),
             PageRequest.of(

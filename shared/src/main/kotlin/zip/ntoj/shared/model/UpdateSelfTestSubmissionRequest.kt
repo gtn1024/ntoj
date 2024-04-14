@@ -5,9 +5,7 @@ data class UpdateSelfTestSubmissionRequest(
     val result: SubmissionStatus,
     val time: Int?,
     val memory: Int?,
-
     val compileLog: String? = null,
-
     val judgeStage: JudgeStage,
     val output: String? = null,
 )

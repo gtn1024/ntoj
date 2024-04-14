@@ -26,24 +26,29 @@ class SelfTestController(
     private val userService: UserService,
 ) {
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<SelfTestSubmissionDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<SelfTestSubmissionDto>> {
         val selfTestSubmission = selfTestSubmissionService.get(id)
         return R.success(200, "获取成功", SelfTestSubmissionDto.from(selfTestSubmission))
     }
 
     @PostMapping
     @SaCheckLogin
-    fun submit(@RequestBody selfTestSubmissionRequest: SelfTestSubmissionRequest): ResponseEntity<R<SelfTestSubmissionDto>> {
+    fun submit(
+        @RequestBody selfTestSubmissionRequest: SelfTestSubmissionRequest,
+    ): ResponseEntity<R<SelfTestSubmissionDto>> {
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        val selfTestSubmission = SelfTestSubmission(
-            language = languageService.get(selfTestSubmissionRequest.language),
-            code = selfTestSubmissionRequest.code,
-            input = selfTestSubmissionRequest.input,
-            user = user,
-            timeLimit = selfTestSubmissionRequest.timeLimit,
-            memoryLimit = selfTestSubmissionRequest.memoryLimit,
-            expectedOutput = selfTestSubmissionRequest.output,
-        )
+        val selfTestSubmission =
+            SelfTestSubmission(
+                language = languageService.get(selfTestSubmissionRequest.language),
+                code = selfTestSubmissionRequest.code,
+                input = selfTestSubmissionRequest.input,
+                user = user,
+                timeLimit = selfTestSubmissionRequest.timeLimit,
+                memoryLimit = selfTestSubmissionRequest.memoryLimit,
+                expectedOutput = selfTestSubmissionRequest.output,
+            )
         selfTestSubmissionService.add(selfTestSubmission)
         return R.success(200, "获取成功", SelfTestSubmissionDto.from(selfTestSubmission))
     }

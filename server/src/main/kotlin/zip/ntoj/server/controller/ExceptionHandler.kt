@@ -27,10 +27,15 @@ class ExceptionHandler(
         return when (e) {
             is NotLoginException -> {
                 when (e.type) {
-                    NotLoginException.INVALID_TOKEN, NotLoginException.TOKEN_TIMEOUT, NotLoginException.BE_REPLACED, NotLoginException.KICK_OUT -> R.fail(
-                        401,
-                        "token 已过期",
-                    )
+                    NotLoginException.INVALID_TOKEN,
+                    NotLoginException.TOKEN_TIMEOUT,
+                    NotLoginException.BE_REPLACED,
+                    NotLoginException.KICK_OUT,
+                    ->
+                        R.fail(
+                            401,
+                            "token 已过期",
+                        )
 
                     else -> R.fail(401, "未登录")
                 }

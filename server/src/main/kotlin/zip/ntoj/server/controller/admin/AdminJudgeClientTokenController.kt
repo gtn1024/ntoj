@@ -99,7 +99,9 @@ class AdminJudgeClientTokenController(
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<R<Unit>> {
+    fun delete(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Unit>> {
         judgeClientTokenService.delete(id)
         return R.success(200, "删除成功")
     }

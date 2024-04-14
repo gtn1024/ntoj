@@ -16,7 +16,6 @@ class User(
     var bio: String?,
     @Column(name = "user_role", columnDefinition = "int4")
     var role: UserRole = UserRole.USER,
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

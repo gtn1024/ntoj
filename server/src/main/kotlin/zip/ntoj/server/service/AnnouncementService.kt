@@ -13,19 +13,22 @@ import zip.ntoj.server.repository.AnnouncementRepository
 
 interface AnnouncementService {
     fun getAnnouncementsById(id: Long): Announcement
+
     fun getAnnouncements(
         onlyVisible: Boolean = false,
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
         desc: Boolean = false,
     ): List<Announcement>
-    fun count(
-        onlyVisible: Boolean = false,
-    ): Long
+
+    fun count(onlyVisible: Boolean = false): Long
 
     fun newAnnouncement(announcement: Announcement): Announcement
+
     fun updateAnnouncement(announcement: Announcement): Announcement
+
     fun delete(id: Long)
+
     fun existsById(id: Long): Boolean
 }
 

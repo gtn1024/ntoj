@@ -35,7 +35,9 @@ class AdminAnnouncementController(
     val announcementService: AnnouncementService,
 ) {
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<AnnouncementDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<AnnouncementDto>> {
         val announcement = announcementService.getAnnouncementsById(id)
         return R.success(
             200,
@@ -108,7 +110,9 @@ class AdminAnnouncementController(
     }
 
     @DeleteMapping("{id}")
-    fun deleteAnnouncement(@PathVariable id: Long): ResponseEntity<R<Void>> {
+    fun deleteAnnouncement(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Void>> {
         if (!announcementService.existsById(id)) return R.fail(404, "公告不存在")
         announcementService.delete(id)
         return R.success(200, "删除成功")
@@ -130,13 +134,14 @@ data class AnnouncementDto(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
 ) {
     companion object {
-        fun from(announcement: Announcement) = AnnouncementDto(
-            id = announcement.announcementId,
-            title = announcement.title,
-            content = announcement.content,
-            author = announcement.author!!.username,
-            visible = announcement.visible,
-            createdAt = announcement.createdAt,
-        )
+        fun from(announcement: Announcement) =
+            AnnouncementDto(
+                id = announcement.announcementId,
+                title = announcement.title,
+                content = announcement.content,
+                author = announcement.author!!.username,
+                visible = announcement.visible,
+                createdAt = announcement.createdAt,
+            )
     }
 }

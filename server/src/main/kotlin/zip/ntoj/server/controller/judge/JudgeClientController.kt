@@ -123,7 +123,9 @@ class JudgeClientController(
     }
 
     @GetMapping("/download_testcase/{id}")
-    fun getTestcase(@PathVariable id: Long): ResponseEntity<Resource> {
+    fun getTestcase(
+        @PathVariable id: Long,
+    ): ResponseEntity<Resource> {
         val testcase = fileUploadService.get(id)
         val file = fileService.get(testcase.path)
         val resource = InputStreamResource(file.inputStream())

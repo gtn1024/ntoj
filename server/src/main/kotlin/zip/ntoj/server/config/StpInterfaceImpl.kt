@@ -9,11 +9,17 @@ import zip.ntoj.server.service.UserService
 class StpInterfaceImpl(
     val userService: UserService,
 ) : StpInterface {
-    override fun getPermissionList(loginId: Any?, loginType: String?): List<String> {
+    override fun getPermissionList(
+        loginId: Any?,
+        loginType: String?,
+    ): List<String> {
         return listOf()
     }
 
-    override fun getRoleList(loginId: Any?, loginType: String?): List<String> {
+    override fun getRoleList(
+        loginId: Any?,
+        loginType: String?,
+    ): List<String> {
         val userId = loginId?.toString()?.toLong() ?: return listOf()
         val user = userService.getUserById(userId)
         val list = mutableListOf<String>()

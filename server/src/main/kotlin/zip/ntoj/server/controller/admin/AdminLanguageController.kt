@@ -45,7 +45,9 @@ class AdminLanguageController(
     }
 
     @GetMapping("{id}")
-    fun get(@PathVariable id: Long): ResponseEntity<R<LanguageDto>> {
+    fun get(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<LanguageDto>> {
         val language = languageService.get(id)
         return R.success(
             200,
@@ -119,7 +121,9 @@ class AdminLanguageController(
 
     @DeleteMapping("/{id}")
     @SaCheckRole(value = ["SUPER_ADMIN"], mode = SaMode.OR)
-    fun delete(@PathVariable id: Long): ResponseEntity<R<Unit>> {
+    fun delete(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Unit>> {
         languageService.delete(id)
         return R.success(200, "删除成功")
     }

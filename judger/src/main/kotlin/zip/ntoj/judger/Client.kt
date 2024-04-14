@@ -29,25 +29,27 @@ import zip.ntoj.shared.model.UpdateSubmissionRequest
 import java.io.File
 
 object Client {
-    private val client = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            jackson {
-                configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+    private val client =
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                jackson {
+                    configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                }
             }
         }
-    }
 
     object Backend {
         suspend fun getSubmission(): GetSubmissionResponse? {
-            val response = client.get("$SERVER_HOST/judge_client/get_submission") {
-                contentType(ContentType.Application.Json)
-                header("X-Judger-Token", Configuration.TOKEN)
-                header("X-Judger-ID", Configuration.JUDGER_ID)
-                header("X-Judger-OS", Configuration.OS)
-                header("X-Judger-Kernel", Configuration.KERNEL)
-                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
-            }
+            val response =
+                client.get("$SERVER_HOST/judge_client/get_submission") {
+                    contentType(ContentType.Application.Json)
+                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("X-Judger-ID", Configuration.JUDGER_ID)
+                    header("X-Judger-OS", Configuration.OS)
+                    header("X-Judger-Kernel", Configuration.KERNEL)
+                    header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                    header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
+                }
             if (response.status == Forbidden) {
                 throw IllegalStateException("Token 无效")
             }
@@ -58,15 +60,16 @@ object Client {
         }
 
         suspend fun getSelfTestSubmission(): GetSelfTestSubmissionResponse? {
-            val response = client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
-                contentType(ContentType.Application.Json)
-                header("X-Judger-Token", Configuration.TOKEN)
-                header("X-Judger-ID", Configuration.JUDGER_ID)
-                header("X-Judger-OS", Configuration.OS)
-                header("X-Judger-Kernel", Configuration.KERNEL)
-                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
-            }
+            val response =
+                client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
+                    contentType(ContentType.Application.Json)
+                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("X-Judger-ID", Configuration.JUDGER_ID)
+                    header("X-Judger-OS", Configuration.OS)
+                    header("X-Judger-Kernel", Configuration.KERNEL)
+                    header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                    header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
+                }
             if (response.status == Forbidden) {
                 throw IllegalStateException("Token 无效")
             }
@@ -76,7 +79,10 @@ object Client {
             return response.body<R<GetSelfTestSubmissionResponse>>().data
         }
 
-        suspend fun updateSubmission(submissionId: Long, submissionStatus: UpdateSubmissionRequest) {
+        suspend fun updateSubmission(
+            submissionId: Long,
+            submissionStatus: UpdateSubmissionRequest,
+        ) {
             client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
@@ -89,7 +95,10 @@ object Client {
             }
         }
 
-        suspend fun updateSelfTestSubmission(submissionId: Long, submissionStatus: UpdateSelfTestSubmissionRequest) {
+        suspend fun updateSelfTestSubmission(
+            submissionId: Long,
+            submissionStatus: UpdateSelfTestSubmissionRequest,
+        ) {
             client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
                 header("X-Judger-Token", Configuration.TOKEN)
@@ -102,17 +111,21 @@ object Client {
             }
         }
 
-        suspend fun getTestcase(fileId: Long, file: File) {
+        suspend fun getTestcase(
+            fileId: Long,
+            file: File,
+        ) {
             val url = "$SERVER_HOST/judge_client/download_testcase/$fileId"
-            val channel = client.get(url) {
-                contentType(ContentType.Application.Json)
-                header("X-Judger-Token", Configuration.TOKEN)
-                header("X-Judger-ID", Configuration.JUDGER_ID)
-                header("X-Judger-OS", Configuration.OS)
-                header("X-Judger-Kernel", Configuration.KERNEL)
-                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
-            }.bodyAsChannel()
+            val channel =
+                client.get(url) {
+                    contentType(ContentType.Application.Json)
+                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("X-Judger-ID", Configuration.JUDGER_ID)
+                    header("X-Judger-OS", Configuration.OS)
+                    header("X-Judger-Kernel", Configuration.KERNEL)
+                    header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
+                    header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
+                }.bodyAsChannel()
             while (!channel.isClosedForRead) {
                 val packet = channel.readRemaining(DEFAULT_BUFFER_SIZE.toLong())
                 while (!packet.isEmpty) {
@@ -125,10 +138,11 @@ object Client {
 
     object Sandbox {
         suspend fun run(req: SandboxRequest): List<SandboxResult> {
-            val response = client.post("$SANDBOX_SERVER/run") {
-                contentType(ContentType.Application.Json)
-                setBody(req)
-            }
+            val response =
+                client.post("$SANDBOX_SERVER/run") {
+                    contentType(ContentType.Application.Json)
+                    setBody(req)
+                }
             return response.body()
         }
 

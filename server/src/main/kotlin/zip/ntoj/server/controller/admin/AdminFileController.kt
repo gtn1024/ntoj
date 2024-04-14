@@ -25,7 +25,9 @@ class AdminFileController(
     val fileService: FileService,
 ) {
     @PostMapping
-    fun uploadFile(@RequestParam("file") multipartFile: MultipartFile): ResponseEntity<R<FileDto>> {
+    fun uploadFile(
+        @RequestParam("file") multipartFile: MultipartFile,
+    ): ResponseEntity<R<FileDto>> {
         val filename =
             "${Instant.now().toEpochMilli()}-${randomString()}.${FileNameUtil.extName(multipartFile.originalFilename)}"
         val fileUpload = fileService.uploadAsset(multipartFile.inputStream, filename)
