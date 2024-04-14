@@ -7,7 +7,7 @@ plugins {
 }
 
 allprojects {
-    group = "zip.ntoj"
+    group = "com.github.ntoj.app"
     version = "0.0.1"
 
     repositories {

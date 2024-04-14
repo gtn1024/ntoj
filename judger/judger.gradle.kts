@@ -15,5 +15,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("zip.ntoj.judger.ApplicationKt")
+    mainClass.set("com.github.ntoj.app.judger.ApplicationKt")
 }

@@ -58,7 +58,7 @@ org.springframework.beans.factory.BeanCreationException: Error creating bean wit
     at org.springframework.boot.SpringApplication.run(SpringApplication.java:310) ~[spring-boot-3.0.6.jar:3.0.6]
     at org.springframework.boot.SpringApplication.run(SpringApplication.java:1304) ~[spring-boot-3.0.6.jar:3.0.6]
     at org.springframework.boot.SpringApplication.run(SpringApplication.java:1293) ~[spring-boot-3.0.6.jar:3.0.6]
-    at zip.ntoj.server.ServerApplicationKt.main(ServerApplication.kt:13) ~[main/:na]
+    at com.github.ntoj.app.server.ServerApplicationKt.main(ServerApplication.kt:13) ~[main/:na]
     at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:na]
     at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77) ~[na:na]
     at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:na]

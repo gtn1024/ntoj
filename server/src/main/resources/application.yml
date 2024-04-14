@@ -51,6 +51,6 @@ sa-token:
 
 ntoj:
   file:
-    service-impl: zip.ntoj.server.service.FileSystemFileService
+    service-impl: com.github.ntoj.app.server.service.FileSystemFileService
     file-system:
       base-dir: ${NTOJ_FILE_BASE_DIR:data}
