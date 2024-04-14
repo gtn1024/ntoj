@@ -12,7 +12,7 @@ val ktlintTask = tasks.register<JavaExec>("ktlint") {
     classpath = configurations["ktlint"]
     mainClass.set("com.pinterest.ktlint.Main")
 
-    val output = buildDir.resolve("ktlint-report.txt")
+    val output = layout.buildDirectory.asFile.get().resolve("ktlint-report.txt")
     args("src/**/*.kt", "--reporter=plain", "--reporter=plain,output=${output.absolutePath}")
 
     inputs.files(fileTree("src") {
