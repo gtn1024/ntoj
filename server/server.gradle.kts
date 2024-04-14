@@ -1,5 +1,4 @@
 import zip.ntoj.buildsupport.bundle
-import zip.ntoj.buildsupport.lib
 
 plugins {
     id("configure-kotlin")
@@ -23,9 +22,9 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-database-postgresql:10.0.0")
-    implementation(lib("saToken-spring"))
-    implementation(lib("saToken-jwt"))
-    implementation(lib("commons-io"))
+    implementation(libs.saToken.spring)
+    implementation(libs.saToken.jwt)
+    implementation(libs.commons.io)
     testImplementation(bundle("spock"))
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

@@ -1,5 +1,3 @@
-import zip.ntoj.buildsupport.lib
-
 plugins {
     application
     id("configure-kotlin")
@@ -9,11 +7,11 @@ plugins {
 
 dependencies {
     implementation(project(":shared"))
-    implementation(lib("ktor-client-core"))
-    implementation(lib("ktor-client-cio"))
-    implementation(lib("ktor-client-content-negotiation"))
-    implementation(lib("ktor-serialization-jackson"))
-    implementation(lib("logback-classic"))
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.logback.classic)
 }
 
 application {
