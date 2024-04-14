@@ -1,6 +1,7 @@
-import { defineConfig } from 'vite'
+import { defineConfig, PluginOption } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import UnoCSS from 'unocss/vite'
+import { visualizer } from "rollup-plugin-visualizer"
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => ({
@@ -10,6 +11,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     UnoCSS(),
     react(),
+    visualizer() as PluginOption,
   ],
   server: {
     port: 2023,

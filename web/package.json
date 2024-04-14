@@ -57,7 +57,7 @@
     "eslint-plugin-react": "^7.34.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "rollup-plugin-visualizer": "5.9.2",
+    "rollup-plugin-visualizer": "^5.12.0",
     "sass": "1.69.5",
     "typescript": "5.2.2",
     "unocss": "0.59.2",

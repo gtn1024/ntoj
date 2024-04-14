@@ -143,8 +143,8 @@ devDependencies:
     specifier: ^0.4.6
     version: 0.4.6(eslint@8.57.0)
   rollup-plugin-visualizer:
-    specifier: 5.9.2
-    version: 5.9.2
+    specifier: ^5.12.0
+    version: 5.12.0
   sass:
     specifier: 1.69.5
     version: 1.69.5
@@ -6870,12 +6870,12 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup-plugin-visualizer@5.9.2:
-    resolution: {integrity: sha512-waHktD5mlWrYFrhOLbti4YgQCn1uR24nYsNuXxg7LkPH8KdTXVWR9DNY1WU0QqokyMixVXJS4J04HNrVTMP01A==}
+  /rollup-plugin-visualizer@5.12.0:
+    resolution: {integrity: sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      rollup: 2.x || 3.x
+      rollup: 2.x || 3.x || 4.x
     peerDependenciesMeta:
       rollup:
         optional: true
