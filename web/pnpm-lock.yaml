@@ -60,7 +60,7 @@ dependencies:
 devDependencies:
   '@antfu/eslint-config':
     specifier: ^2.13.3
-    version: 2.13.3(@unocss/eslint-plugin@0.59.1)(@vue/compiler-sfc@3.4.21)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react-refresh@0.4.6)(eslint-plugin-react@7.34.1)(eslint@8.57.0)(typescript@5.2.2)
+    version: 2.13.3(@unocss/eslint-plugin@0.59.2)(@vue/compiler-sfc@3.4.21)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react-refresh@0.4.6)(eslint-plugin-react@7.34.1)(eslint@8.57.0)(typescript@5.2.2)
   '@eslint/eslintrc':
     specifier: ^3.0.2
     version: 3.0.2
@@ -107,8 +107,8 @@ devDependencies:
     specifier: 0.59.2
     version: 0.59.2(eslint@8.57.0)(typescript@5.2.2)
   '@unocss/eslint-plugin':
-    specifier: ^0.59.0
-    version: 0.59.1(eslint@8.57.0)(typescript@5.2.2)
+    specifier: ^0.59.2
+    version: 0.59.2(eslint@8.57.0)(typescript@5.2.2)
   '@unocss/preset-icons':
     specifier: 0.59.2
     version: 0.59.2
@@ -226,7 +226,7 @@ packages:
       throttle-debounce: 5.0.0
     dev: false
 
-  /@antfu/eslint-config@2.13.3(@unocss/eslint-plugin@0.59.1)(@vue/compiler-sfc@3.4.21)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react-refresh@0.4.6)(eslint-plugin-react@7.34.1)(eslint@8.57.0)(typescript@5.2.2):
+  /@antfu/eslint-config@2.13.3(@unocss/eslint-plugin@0.59.2)(@vue/compiler-sfc@3.4.21)(eslint-plugin-react-hooks@4.6.0)(eslint-plugin-react-refresh@0.4.6)(eslint-plugin-react@7.34.1)(eslint@8.57.0)(typescript@5.2.2):
     resolution: {integrity: sha512-DCyrnFgWtIc0mUTn8HeVB15Z/t9oEQZk8ce6S14Kq6z42LbMfZxPu6hs4SmPFYWLJoEzYq87dxsRv3glOX+aGw==}
     hasBin: true
     peerDependencies:
@@ -274,7 +274,7 @@ packages:
       '@stylistic/eslint-plugin': 1.7.0(eslint@8.57.0)(typescript@5.2.2)
       '@typescript-eslint/eslint-plugin': 7.6.0(@typescript-eslint/parser@7.6.0)(eslint@8.57.0)(typescript@5.2.2)
       '@typescript-eslint/parser': 7.6.0(eslint@8.57.0)(typescript@5.2.2)
-      '@unocss/eslint-plugin': 0.59.1(eslint@8.57.0)(typescript@5.2.2)
+      '@unocss/eslint-plugin': 0.59.2(eslint@8.57.0)(typescript@5.2.2)
       eslint: 8.57.0
       eslint-config-flat-gitignore: 0.1.5
       eslint-flat-config-utils: 0.2.2
@@ -2513,24 +2513,12 @@ packages:
       - rollup
     dev: true
 
-  /@unocss/config@0.59.1:
-    resolution: {integrity: sha512-VQhz6mScRlvgXCrlvEYMee1VkqTCcrEtJwW3r7KTQTEfxxNymg4TZKqqNL6dp7kqdZKLHQytQokSGuLIPRaAdQ==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@unocss/core': 0.59.1
-      unconfig: 0.3.12
-    dev: true
-
   /@unocss/config@0.59.2:
     resolution: {integrity: sha512-KknR9kcid1w/8IuujZ8msE5pU930GD5e2v84H9Ftcv308yfuj+j/0zQ/ORtG8qMx+97p7uFy3xspzI2yoRYRpQ==}
     engines: {node: '>=14'}
     dependencies:
       '@unocss/core': 0.59.2
       unconfig: 0.3.12
-    dev: true
-
-  /@unocss/core@0.59.1:
-    resolution: {integrity: sha512-4T9eSmEhmxlYnz0xilIavROiEWvEcEtWixIQEaP4MqWabaRew6yN1ky4ALZZgaTUdS50EXGR3bYVz1vah9sfFw==}
     dev: true
 
   /@unocss/core@0.59.2:
@@ -2542,21 +2530,6 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@unocss/eslint-plugin': 0.59.2(eslint@8.57.0)(typescript@5.2.2)
-    transitivePeerDependencies:
-      - eslint
-      - supports-color
-      - typescript
-    dev: true
-
-  /@unocss/eslint-plugin@0.59.1(eslint@8.57.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-Ms20aFUTXPLlMjfzxfiKGAIdkFUG6nR4vzxg+CULrIMj/APMpvI4ZRLlUO5Q/9a4RxfJ4kDDRiqLle39+7p3sg==}
-    engines: {node: '>=14'}
-    dependencies:
-      '@typescript-eslint/utils': 7.6.0(eslint@8.57.0)(typescript@5.2.2)
-      '@unocss/config': 0.59.1
-      '@unocss/core': 0.59.1
-      magic-string: 0.30.9
-      synckit: 0.9.0
     transitivePeerDependencies:
       - eslint
       - supports-color
@@ -5681,15 +5654,6 @@ packages:
     resolution: {integrity: sha512-7NO5s6n10TIV96d4g2uDpG7ZDpIhMh0QNfGdJw/W47JswFcosz457wqz/b5sAKvl12sxINGFCn80NZHKwxQEXA==}
     dev: false
 
-  /mlly@1.4.1:
-    resolution: {integrity: sha512-SCDs78Q2o09jiZiE2WziwVBEqXQ02XkGdUy45cbJf+BpYRIjArXRJ1Wbowxkb+NaM9DWvS3UC9GiO/6eqvQ/pg==}
-    dependencies:
-      acorn: 8.10.0
-      pathe: 1.1.2
-      pkg-types: 1.0.3
-      ufo: 1.3.0
-    dev: true
-
   /mlly@1.6.1:
     resolution: {integrity: sha512-vLgaHvaeunuOXHSmEbZ9izxPx3USsk8KCQ8iC+aTlp5sKRSoZvwhHh5L9VbKSaVC6sJDqbyohIS76E2VmHIPAA==}
     dependencies:
@@ -6045,10 +6009,6 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /pathe@1.1.1:
-    resolution: {integrity: sha512-d+RQGp0MAYTIaDBIMmOfMwz3E+LOZnxx1HZd5R18mmCZY0QBlK0LDZfPc8FW8Ed2DlvsuE6PRjroDY+wg4+j/Q==}
-    dev: true
-
   /pathe@1.1.2:
     resolution: {integrity: sha512-whLdWMYL2TwI08hn8/ZqAbrVemu0LNaNNJZX73O6qaIdCTfXutsLhMkjdENX0qhsQ9uIimo4/aQOmXkoon2nDQ==}
     dev: true
@@ -6075,8 +6035,8 @@ packages:
     resolution: {integrity: sha512-nN7pYi0AQqJnoLPC9eHFQ8AcyaixBUOwvqc5TDnIKCMEE6I0y8P7OKA7fPexsXGCGxQDl/cmrLAp26LhcwxZ4A==}
     dependencies:
       jsonc-parser: 3.2.0
-      mlly: 1.4.1
-      pathe: 1.1.1
+      mlly: 1.6.1
+      pathe: 1.1.2
     dev: true
 
   /pluralize@8.0.0:
@@ -7515,10 +7475,6 @@ packages:
 
   /uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
-    dev: true
-
-  /ufo@1.3.0:
-    resolution: {integrity: sha512-bRn3CsoojyNStCZe0BG0Mt4Nr/4KF+rhFlnNXybgqt5pXHNFRlqinSoQaTrGyzE4X8aHplSb+TorH+COin9Yxw==}
     dev: true
 
   /ufo@1.5.3:
