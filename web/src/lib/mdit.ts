@@ -8,7 +8,7 @@ mdit.use(await Shiki({
   themes: {
     light: 'vitesse-light',
     dark: 'vitesse-dark',
-  }
+  },
 }))
 mdit.use(imgLazyload)
 mdit.use(mathjax3)

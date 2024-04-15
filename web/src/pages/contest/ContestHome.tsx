@@ -60,50 +60,50 @@ export const ContestHome: React.FC = () => {
       })
   }
   return (
-    <div p-2 flex items-start max-w="[1200px]" m-auto className={c(isMobile && 'flex-col')}>
+    <div className={c(isMobile && 'flex-col', 'p-2 flex items-start max-w-[1200px] m-auto')}>
       <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
-        <div flex flex-col px-4 gap-4>
-          <div pt-8>
+        <div className="flex flex-col gap-4 px-4">
+          <div className="pt-8">
             <MarkdownArticle data={contest?.description ?? ''} />
           </div>
         </div>
       </div>
       <div className={c(isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-1/4 min-w-280px')}>
         <div className={c('bg-white rounded-lg shadow-md pb-8 my-1')}>
-          <div pt-8 px-4>
-            <h2 font-light>{contest?.title}</h2>
+          <div className="px-4 pt-8">
+            <h2 className="font-light">{contest?.title}</h2>
           </div>
-          <div flex flex-col px-4 gap-4>
-            <div flex justify-between>
-              <span text-gray-500>创建人</span>
-              <span text-gray-500>{contest?.author}</span>
+          <div className="flex flex-col gap-4 px-4">
+            <div className="flex justify-between">
+              <span className="text-gray-500">创建人</span>
+              <span className="text-gray-500">{contest?.author}</span>
             </div>
-            <div flex justify-between>
-              <span text-gray-500>开始时间</span>
-              <span text-gray-500>{contest?.startTime}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">开始时间</span>
+              <span className="text-gray-500">{contest?.startTime}</span>
             </div>
-            <div flex justify-between>
-              <span text-gray-500>结束时间</span>
-              <span text-gray-500>{contest?.endTime}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">结束时间</span>
+              <span className="text-gray-500">{contest?.endTime}</span>
             </div>
-            <div flex justify-between>
-              <span text-gray-500>持续时间</span>
-              <span text-gray-500>{timeDiffString(timeDiff(contest?.startTime ?? '', contest?.endTime ?? ''))}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">持续时间</span>
+              <span className="text-gray-500">{timeDiffString(timeDiff(contest?.startTime ?? '', contest?.endTime ?? ''))}</span>
             </div>
-            <div flex justify-between>
-              <span text-gray-500>比赛规则</span>
-              <span text-gray-500>{contest?.type}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">比赛规则</span>
+              <span className="text-gray-500">{contest?.type}</span>
             </div>
-            <div flex justify-between>
-              <span text-gray-500>比赛人数</span>
-              <span text-gray-500>{contest?.userCount}</span>
+            <div className="flex justify-between">
+              <span className="text-gray-500">比赛人数</span>
+              <span className="text-gray-500">{contest?.userCount}</span>
             </div>
           </div>
         </div>
         {
           !contest?.hasPermission && (
             <>
-              <button w-full h-50px onClick={() => setRegisterModalOpen(true)}>
+              <button className="h-50px w-full" onClick={() => setRegisterModalOpen(true)}>
                 {userStore.user.id ? '加入比赛' : '请先登录'}
               </button>
               <Modal

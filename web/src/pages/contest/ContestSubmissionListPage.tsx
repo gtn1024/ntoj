@@ -37,29 +37,29 @@ export const ContestSubmissionListPage: React.FC = () => {
       })
   })
   return (
-    <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2 w-full>
-      <table w-full text-sm>
+    <div className="m-auto max-w-1200px w-full flex flex-col items-start gap-2 p-2">
+      <table className="w-full text-sm">
         <thead>
-          <tr bg="#eeeeee" text="#888888">
-            <th px-4 py-3 font-normal>运行ID</th>
-            <th px-4 py-3 font-normal>用户名</th>
-            <th px-4 py-3 font-normal>题号</th>
-            <th px-4 py-3 font-normal>运行结果</th>
-            <th px-4 py-3 font-normal>运行时间</th>
-            <th px-4 py-3 font-normal>使用内存</th>
-            <th px-4 py-3 font-normal>代码长度</th>
-            <th px-4 py-3 font-normal>使用语言</th>
-            <th px-4 py-3 font-normal>提交时间</th>
+          <tr className="bg-#eee text-#888">
+            <th className="px-4 py-3 font-normal">运行ID</th>
+            <th className="px-4 py-3 font-normal">用户名</th>
+            <th className="px-4 py-3 font-normal">题号</th>
+            <th className="px-4 py-3 font-normal">运行结果</th>
+            <th className="px-4 py-3 font-normal">运行时间</th>
+            <th className="px-4 py-3 font-normal">使用内存</th>
+            <th className="px-4 py-3 font-normal">代码长度</th>
+            <th className="px-4 py-3 font-normal">使用语言</th>
+            <th className="px-4 py-3 font-normal">提交时间</th>
           </tr>
         </thead>
         <tbody>
           {data?.list.map((submission, index) => (
-            <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
-              <td width="10%" px-4 py-3>
-                <div text-center>{submission.id}</div>
+            <tr key={index} className="cursor-pointer hover:bg-#f0f0f0">
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">{submission.id}</div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   {submission.user.realName && (
                     <>
                       {submission.user.realName}
@@ -70,45 +70,45 @@ export const ContestSubmissionListPage: React.FC = () => {
                   {submission.user.username}
                 </div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   <LinkComponent href={`/c/${id}/p/${submission.alias}`}>
                     {submission.alias}
                   </LinkComponent>
                 </div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center style={{ color: statusToColor(submission.result) }}>{statusToMessage(submission.result)}</div>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center" style={{ color: statusToColor(submission.result) }}>{statusToMessage(submission.result)}</div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   {submission.time}
                   ms
                 </div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   {submission.memory}
                   KB
                 </div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   {submission.codeLength}
                   B
                 </div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>{submission.language}</div>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">{submission.language}</div>
               </td>
-              <td width="20%" px-4 py-3>
-                <div text-center>{submission.submitTime}</div>
+              <td width="20%" className="px-4 py-3">
+                <div className="text-center">{submission.submitTime}</div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div flex justify-center w-full>
+      <div className="w-full flex justify-center">
         <Pagination current={current} onChange={setCurrent} total={data?.total} pageSize={20} showSizeChanger={false} />
       </div>
     </div>

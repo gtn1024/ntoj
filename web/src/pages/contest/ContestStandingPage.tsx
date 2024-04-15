@@ -238,18 +238,18 @@ export const ContestStandingPage: React.FC = () => {
   }, [startTime, contest, problems, submissions, finalStanding, freezeUnixTime, endTime, contestProgressInterval])
 
   return (
-    <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2>
-      <div w-full flex justify-between>
+    <div className="m-auto max-w-1200px flex flex-col items-start gap-2 p-2">
+      <div className="w-full flex justify-between">
         <h2>比赛排名</h2>
         <div>
           {/* 操作 */}
         </div>
       </div>
-      <div w-full flex flex-col>
-        <div w-full><Progress percent={contestProgress} showInfo={false} /></div>
-        <div w-full justify-between flex text-sm>
+      <div className="w-full flex flex-col">
+        <div className="w-full"><Progress percent={contestProgress} showInfo={false} /></div>
+        <div className="w-full flex justify-between text-sm">
           <div>{/* 进行时间 */}</div>
-          <div flex gap-1>
+          <div className="flex gap-1">
             <div style={{ backgroundColor: colorMap.FIRST_SOLVE }}>First to solve problem</div>
             <div style={{ backgroundColor: colorMap.SOLVED }}>Solved problem</div>
             <div style={{ backgroundColor: colorMap.ATTEMPTED }}>Attempted problem</div>
@@ -258,16 +258,16 @@ export const ContestStandingPage: React.FC = () => {
           <div>{/* 剩余时间 */}</div>
         </div>
       </div>
-      <div w-full>
-        <table w-full text-sm>
+      <div className="w-full">
+        <table className="w-full text-sm">
           <thead>
-            <tr bg="#eeeeee" text="#888888">
-              <th px-4 py-3 font-normal w-60px></th>
-              <th px-4 py-3 font-normal>选手</th>
-              <th px-4 py-3 font-normal w-100px>解题数量</th>
-              <th px-4 py-3 font-normal w-80px>罚时</th>
+            <tr className="bg-#eeeeee text-#888888">
+              <th className="w-60px px-4 py-3 font-normal"></th>
+              <th className="px-4 py-3 font-normal">选手</th>
+              <th className="w-100px px-4 py-3 font-normal">解题数量</th>
+              <th className="w-80px px-4 py-3 font-normal">罚时</th>
               {problems?.map(problem => (
-                <th key={problem.alias} px-4 py-3 font-normal w-14>
+                <th key={problem.alias} className="w-14 px-4 py-3 font-normal">
                   <LinkComponent href={`/c/${contestId}/p/${problem.alias}`}>
                     {problem.alias}
                   </LinkComponent>
@@ -277,21 +277,21 @@ export const ContestStandingPage: React.FC = () => {
           </thead>
           <tbody>
             {standing.map((user, index) => (
-              <tr key={user.user.username} bg={index % 2 === 0 ? '#ffffff' : '#eeeeee'}>
-                <td px-1 py-1 text-center>{index + 1}</td>
-                <td px-1 py-1 text-center>
+              <tr key={user.user.username} className={index % 2 === 0 ? 'bg-#fff' : 'bg-#eee'}>
+                <td className="px-1 py-1 text-center">{index + 1}</td>
+                <td className="px-1 py-1 text-center">
                   <div>
                     {user.user.realName && user.user.realName}
                     <br />
                     {user.user.username}
                   </div>
                 </td>
-                <td px-1 py-1 text-center>{user.solved}</td>
-                <td px-1 py-1 text-center>{penaltyToTimeString(user.penalty)}</td>
+                <td className="px-1 py-1 text-center">{user.solved}</td>
+                <td className="px-1 py-1 text-center">{penaltyToTimeString(user.penalty)}</td>
                 {problems?.map(problem => (
                   <td
                     key={problem.alias}
-                    text-center
+                    className="text-center"
                     style={{
                       backgroundColor: getCellColor(user.problems[problem.alias]),
                     }}

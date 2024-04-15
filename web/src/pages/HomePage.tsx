@@ -3,9 +3,9 @@ import { AnnouncementList } from '../components/AnnouncementList.tsx'
 
 export const HomePage: React.FC = () => {
   return (
-    <div flex justify-between m="[15px]">
-      <div w-full>
-        <div text-xl font-bold pb-4>
+    <div className="m-[15px] flex justify-between">
+      <div className="w-full">
+        <div className="pb-4 text-xl font-bold">
           <div className="i-mingcute:announcement-line" />
           {' '}
           公告

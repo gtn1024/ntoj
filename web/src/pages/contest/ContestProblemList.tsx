@@ -46,34 +46,34 @@ export const ContestProblemList: React.FC = () => {
       })
   })
   return (
-    <div p-2 flex items-start max-w="1200px" m-auto className={c(isMobile && 'flex-col')}>
-      <table w-full>
+    <div className={c(isMobile && 'flex-col', 'p-2 flex items-start max-w-1200px m-auto')}>
+      <table className="w-full">
         <thead>
-          <tr bg="#eeeeee" text="#888888">
-            <th px-4 py-3 font-normal>题号</th>
-            <th px-4 py-3 font-normal>题目</th>
-            <th px-4 py-3 font-normal>通过</th>
-            <th px-4 py-3 font-normal>提交</th>
-            <th px-4 py-3 font-normal>通过率</th>
+          <tr className="bg-#eeeeee text-#888888">
+            <th className="px-4 py-3 font-normal">题号</th>
+            <th className="px-4 py-3 font-normal">题目</th>
+            <th className="px-4 py-3 font-normal">通过</th>
+            <th className="px-4 py-3 font-normal">提交</th>
+            <th className="px-4 py-3 font-normal">通过率</th>
           </tr>
         </thead>
         <tbody>
           {problems?.map((problem, index) => (
-            <tr key={index} bg="hover:#f0f0f0" cursor-pointer>
-              <td width="10%" px-4 py-3>
-                <div text-center>{problem.alias}</div>
+            <tr key={index} className="cursor-pointer hover:bg-#f0f0f0">
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">{problem.alias}</div>
               </td>
-              <td width="60%" px-4 py-3>
+              <td width="60%" className="px-4 py-3">
                 <LinkComponent href={`/c/${id}/p/${problem.alias}`} className="text-gray-500">{problem.title}</LinkComponent>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>{ statistics?.[problem.alias]?.acceptedTimes ?? 0 }</div>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">{ statistics?.[problem.alias]?.acceptedTimes ?? 0 }</div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>{ statistics?.[problem.alias]?.submitTimes ?? 0 }</div>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">{ statistics?.[problem.alias]?.submitTimes ?? 0 }</div>
               </td>
-              <td width="10%" px-4 py-3>
-                <div text-center>
+              <td width="10%" className="px-4 py-3">
+                <div className="text-center">
                   {
                   !statistics?.[problem.alias]
                     ? '0.00%'

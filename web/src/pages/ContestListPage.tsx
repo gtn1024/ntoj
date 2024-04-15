@@ -15,7 +15,7 @@ export const ContestListPage: React.FC = () => {
       })
   }, [])
   return (
-    <div max-w="[1200px]" mx-auto py-4>
+    <div className="mx-auto max-w-[1200px] py-4">
       <div flex flex-col gap-4>
         {
           list.map((contest, idx) => {

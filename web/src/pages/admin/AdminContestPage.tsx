@@ -122,10 +122,10 @@ export const AdminContestPage: React.FC = () => {
     },
   ]
   return (
-    <div flex flex-col p-4>
-      <h2 mb-2>竞赛管理</h2>
+    <div className="flex flex-col p-4">
+      <h2 className="mb-2">竞赛管理</h2>
       <Space direction="vertical">
-        <div flex justify-between>
+        <div className="flex justify-between">
           <div>
             <button onClick={() => nav('/admin/contest/new')}>新建</button>
           </div>

@@ -79,10 +79,10 @@ export const ContestClarificationDetailPage: React.FC = () => {
       })
   }
   return (
-    <div p-2 flex flex-col items-start max-w="1200px" m-auto gap-2>
-      <div w-full rounded b="1px solid #666" px-4 py-2>
+    <div className="m-auto max-w-[1200px] flex flex-col items-start gap-2 p-2">
+      <div className="w-full b-1 b-[#666] rounded b-solid px-4 py-2">
         <h1>
-          <span flex gap-2>
+          <span className="flex gap-2">
             {clarification?.contestProblemAlias && (
               <LinkComponent href={`/c/${id}/p/${clarification.contestProblemAlias}`} className="h-full text-#888">
                 #
@@ -93,29 +93,29 @@ export const ContestClarificationDetailPage: React.FC = () => {
           </span>
         </h1>
         <article dangerouslySetInnerHTML={{ __html: mdit.render(clarification?.content ?? '') }}></article>
-        <div flex gap-2 pb-4 text="#999">
+        <div className="flex gap-2 pb-4 text-[#999]">
           <span>{clarification?.user}</span>
           <span>{clarification?.createdAt}</span>
         </div>
       </div>
-      <div w-full flex flex-col gap-1>
+      <div className="w-full flex flex-col gap-1">
         {
           clarification?.replies.sort((a, b) => b.id - a.id).map((reply, idx) => (
-            <div key={idx} w-full rounded b="1px solid #666" px-4 py-2 flex flex-col>
-              <div flex gap-2 pb-4 text="#999">
+            <div key={idx} className="w-full flex flex-col b-1 b-[#666] rounded b-solid px-4 py-2">
+              <div className="flex gap-2 pb-4 text-[#999]">
                 <span>{reply.user}</span>
                 <span>{reply.createdAt}</span>
               </div>
-              <article break-words dangerouslySetInnerHTML={{ __html: mdit.render(reply.content.replace('\n', '\n\n')) }}></article>
+              <article className="break-words" dangerouslySetInnerHTML={{ __html: mdit.render(reply.content.replace('\n', '\n\n')) }}></article>
             </div>
           ))
         }
       </div>
-      <div w-full>
+      <div className="w-full">
         {
           !clarification?.closed && (
             <>
-              <textarea w-full h="200px" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)} />
+              <textarea className="h-200px w-full" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)} />
               <button onClick={onReplySubmit}>发布</button>
             </>
           )

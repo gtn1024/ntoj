@@ -62,9 +62,9 @@ export const AdminUserEditPage: React.FC = () => {
 
   return (
     <>
-      <div h="[calc(100vh-64px)]" w-full flex justify-between>
-        <div w-full overflow-y-auto p-4>
-          <h2 text-xl>
+      <div className="h-[calc(100vh-64px)] w-full flex justify-between">
+        <div className="w-full overflow-y-auto p-4">
+          <h2 className="text-xl">
             {mode}
             用户
           </h2>

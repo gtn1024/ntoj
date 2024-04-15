@@ -45,9 +45,9 @@ export const AdminUserImportPage: React.FC = () => {
       })
   }
   return (
-    <div flex flex-col p-4>
+    <div className="flex flex-col p-4">
       <Space direction="vertical">
-        <h2 mb-2>用户导入</h2>
+        <h2 className="mb-2">用户导入</h2>
         <div>
           <p>用户</p>
           <Input.TextArea
@@ -57,7 +57,7 @@ export const AdminUserImportPage: React.FC = () => {
             onChange={e => setInputUser(e.target.value)}
           />
         </div>
-        <div flex gap-2>
+        <div className="flex gap-2">
           <Button type="primary" onClick={onClickPreview}>预览</Button>
           <Button onClick={onClickImport}>导入</Button>
         </div>
@@ -69,7 +69,7 @@ export const AdminUserImportPage: React.FC = () => {
               {' '}
               个用户
             </h3>
-            <table text-4>
+            <table className="text-4">
               <thead>
                 <tr>
                   <th>序号</th>
@@ -81,9 +81,9 @@ export const AdminUserImportPage: React.FC = () => {
                   <th>用户已存在</th>
                 </tr>
               </thead>
-              <tbody text-center>
+              <tbody className="text-center">
                 {previewData.map((user, index) => (
-                  <tr key={index} bg={user.exists ? 'red' : 'green'}>
+                  <tr key={index} className={user.exists ? 'bg-red' : 'bg-green'}>
                     <td>{index + 1}</td>
                     <td>{user.username}</td>
                     <td>{user.password}</td>

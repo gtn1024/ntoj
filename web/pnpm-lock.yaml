@@ -109,16 +109,10 @@ devDependencies:
   '@unocss/eslint-plugin':
     specifier: ^0.59.0
     version: 0.59.1(eslint@8.57.0)(typescript@5.2.2)
-  '@unocss/preset-attributify':
-    specifier: 0.59.2
-    version: 0.59.2
   '@unocss/preset-icons':
     specifier: 0.59.2
     version: 0.59.2
   '@unocss/preset-uno':
-    specifier: 0.59.2
-    version: 0.59.2
-  '@unocss/transformer-attributify-jsx':
     specifier: 0.59.2
     version: 0.59.2
   '@vitejs/plugin-react-swc':

@@ -148,7 +148,7 @@ export const RecordListPage: React.FC = () => {
   ]
 
   return (
-    <div m="[15px]">
+    <div className="m-[15px]">
       <Table
         loading={loading}
         dataSource={data}

@@ -205,10 +205,10 @@ export const SignInPage: React.FC = () => {
     <div className={c('h-screen', 'flex', 'justify-center', 'items-center', !isMobile && 'bg-[#f5f5f5]')}>
       <div className={c('flex bg-white', !isMobile && 'rounded shadow')}>
         <div className={c('p-4', !isMobile && 'min-w-[480px]', !isMobile && 'min-h-[500px]')}>
-          <div text-2xl font-bold text-center py-4>
+          <div className="py-4 text-center text-2xl font-bold">
             NTOJ
           </div>
-          <div px-8>
+          <div className="px-8">
             <Tabs defaultActiveKey="1" centered items={items} />
           </div>
         </div>

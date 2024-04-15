@@ -59,7 +59,7 @@ export const AccountComponent: React.FC<Props> = (props) => {
           <Dropdown menu={{ items }}>
             <a onClick={e => e.preventDefault()}>
               {user.username}
-              <div className="i-material-symbols:keyboard-arrow-down" w="[16px]" h="[16px]" />
+              <div className="i-material-symbols:keyboard-arrow-down h-16px w-16px" />
             </a>
           </Dropdown>
           )

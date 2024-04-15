@@ -70,7 +70,7 @@ export const AdminLanguageEditPage: React.FC = () => {
   }
 
   return (
-    <div p-4>
+    <div className="p-4">
       <Form
         name="basic"
         layout="vertical"

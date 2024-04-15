@@ -52,16 +52,16 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
     )
   }
   return (
-    <div mb="[20px]">
+    <div className="mb-[20px]">
       {props.samples?.map((item, idx) => {
         return (
           <div key={idx}>
             <div key={item.input}>
-              <h4 mb-1 font-bold>
+              <h4 className="mb-1 font-bold">
                 样例
                 {idx + 1}
               </h4>
-              <div flex flex-col>
+              <div className="flex flex-col">
                 <SampleField title="输入" data={item.input} />
                 <SampleField title="输出" data={item.output} />
               </div>

@@ -48,22 +48,22 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
         {
           !judgeMessage
             ? (
-              <div flex justify-center items-center h-full text="[#999]">
+              <div className="h-full flex items-center justify-center text-[#999]">
                 提交之后，这里将会显示运行结果
               </div>
               )
             : !isSubmissionOk
                 ? (
-                  <div flex justify-center items-center h-full gap-2 text="[#999]">
+                  <div className="h-full flex items-center justify-center gap-2 text-[#999]">
                     <div className="i-eos-icons:bubble-loading" />
                     {' '}
                     您的代码已提交，正在为您查询结果...
                   </div>
                   )
                 : (
-                  <div rounded flex flex-col h-full w-full>
+                  <div className="h-full w-full flex flex-col rounded">
                     <div style={{ color: statusToColor(judgeMessage as SubmissionStatus) }}>
-                      <div rounded-t bg="[#f0faf7]" flex gap-2 px-6 py-4>
+                      <div className="flex gap-2 rounded-t bg-[#f0faf7] px-6 py-4">
                         <div style={{ color: statusToColor(judgeMessage as SubmissionStatus), fontWeight: 'bold' }}>
                           {resultMode === 'submit'
                             ? statusToMessage(judgeMessage as SubmissionStatus)
@@ -74,14 +74,14 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                         {
                           submissionResult?.status === 'ACCEPTED' && (
                             <>
-                              <div flex items-center gap-1>
+                              <div className="flex items-center gap-1">
                                 <div className="i-mdi:clock-outline" />
                                 {' '}
                                 运行时间
                                 {submissionResult?.time}
                                 ms
                               </div>
-                              <div flex items-center gap-1>
+                              <div className="flex items-center gap-1">
                                 <div className="i-ion:hardware-chip-outline" />
                                 {' '}
                                 占用内存
@@ -92,7 +92,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                           )
                         }
                       </div>
-                      <div rounded-b flex flex-col gap-1 px-6 py-4>
+                      <div className="flex flex-col gap-1 rounded-b px-6 py-4">
                         {
                           submissionResult?.status === 'ACCEPTED' && (
                             <>
@@ -114,20 +114,20 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                     </div>
                     {
                       resultMode === 'selfTest' && submissionResult?.stage === 'FINISHED' && submissionResult?.status !== 'COMPILE_ERROR' && (
-                        <div flex flex-col>
-                          <div flex gap-4>
+                        <div className="flex flex-col">
+                          <div className="flex gap-4">
                             <div>自测输入</div>
-                            <pre flex-1 bg="#f7f8f9">{(submissionResult as SelfTestSubmission).input}</pre>
+                            <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).input}</pre>
                           </div>
                           {(submissionResult as SelfTestSubmission).expectedOutput && (
-                            <div flex gap-4>
+                            <div className="flex gap-4">
                               <div>预期输出</div>
-                              <pre flex-1 bg="#f7f8f9">{(submissionResult as SelfTestSubmission).expectedOutput}</pre>
+                              <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).expectedOutput}</pre>
                             </div>
                           )}
-                          <div flex gap-4>
+                          <div className="flex gap-4">
                             <div>实际输出</div>
-                            <pre flex-1 bg="#f7f8f9">{(submissionResult as SelfTestSubmission).output}</pre>
+                            <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).output}</pre>
                           </div>
                         </div>
                       )
@@ -140,30 +140,19 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   }
   const ToolbarInput: React.FC = () => {
     return (
-      <div flex flex-col gap-1 h-full>
+      <div className="h-full flex flex-col gap-1">
         <textarea
-          border
-          rounded
-          p-2
-          w-full
-          h-full
-          outline-none
+          className="h-full w-full border rounded p-2 outline-none"
           placeholder="输入自测用例"
           value={selfInputData}
           onChange={e => setSelfInputData(e.target.value)}
         />
         {samples.length > 0 && (
-          <div flex gap-1>
+          <div className="flex gap-1">
             {samples.map((sample, index) => (
               <button
                 key={index}
-                border
-                rounded
-                px-2
-                py-1
-                hover:bg-gray-200
-                cursor-pointer
-                outline-none
+                className="cursor-pointer border rounded px-2 py-1 outline-none hover:bg-gray-200"
                 onClick={() => {
                   setSelfInputData(sample.input)
                 }}
@@ -325,7 +314,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
 
   return (
     <>
-      <div h="40px" flex items-center justify-between mx-2>
+      <div className="mx-2 h-40px flex items-center justify-between">
         <div className="flex">
           <Select
             className={c('w-[150px]')}
@@ -337,20 +326,20 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
             options={languageOptions}
           />
         </div>
-        <div flex gap-1>
-          <button bg="inherit hover:#f3f3f6" rounded border-none cursor-pointer onClick={() => setEditorConfigDrawerOpen(true)}>
+        <div className="flex gap-1">
+          <button className="cursor-pointer rounded border-none bg-inherit hover:bg-#f3f3f6" onClick={() => setEditorConfigDrawerOpen(true)}>
             <div className="i-material-symbols:settings" />
           </button>
         </div>
         <Drawer title="编辑器设置" placement="right" onClose={() => setEditorConfigDrawerOpen(false)} open={editorConfigDrawerOpen}>
-          <div flex flex-col>
+          <div className="flex flex-col">
             <h2>通用</h2>
-            <div flex flex-col gap-4>
-              <div flex flex-col>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col">
                 <h3>主题</h3>
-                <div w-full>
+                <div className="w-full">
                   <Select
-                    w-full
+                    className="w-full"
                     value={codemirrorConfig?.theme}
                     onChange={e => setCodemirrorConfig({ ...codemirrorConfig, theme: e })}
                     options={[
@@ -360,11 +349,11 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                   />
                 </div>
               </div>
-              <div flex flex-col>
+              <div className="flex flex-col">
                 <h3>字体大小</h3>
-                <div w-full>
+                <div className="w-full">
                   <Select
-                    w-full
+                    className="w-full"
                     value={codemirrorConfig?.fontSize}
                     onChange={e => setCodemirrorConfig({ ...codemirrorConfig, fontSize: e })}
                     options={[
@@ -391,22 +380,10 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           fontSize={codemirrorConfig?.fontSize}
         />
       </div>
-      <div relative bg-white>
-        <div h="[5px]" left-0 absolute top-0 w-full>
+      <div className="relative bg-white">
+        <div className="absolute left-0 top-0 h-[5px] w-full">
           <button
-            h="[24px]"
-            w="[24px]"
-            bg-white
-            border-none
-            rounded="[12px]"
-            text="[#666]"
-            block
-            cursor-pointer
-            left="1/2"
-            ml="[-12px]"
-            absolute
-            top="[-12px]"
-            p-0
+            className="absolute left-1/2 top-[-12px] ml-[-12px] block h-24px w-24px cursor-pointer rounded-[12px] border-none bg-white p-0 text-[#666]"
             onClick={() => {
               setToolbarVisible(!toolbarVisible)
             }}
@@ -439,16 +416,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
               自测输入
             </button>
             <button
-              px-2
-              cursor-pointer
-              bg-white
-              rounded
-              hover:bg-gray-200
-              flex
-              items-center
-              border="#32ca99"
-              text="#32ca99"
-              outline-none
+              className="flex cursor-pointer items-center border-#32ca99 rounded bg-white px-2 text-#32ca99 outline-none hover:bg-gray-200"
               onClick={onSelfTest}
             >
               自测运行

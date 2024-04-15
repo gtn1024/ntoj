@@ -109,10 +109,10 @@ export const AdminJudgeClientTokenPage: React.FC = () => {
     },
   ]
   return (
-    <div flex flex-col p-4>
-      <h2 mb-2>评测机 Token 管理</h2>
+    <div className="flex flex-col p-4">
+      <h2 className="mb-2">评测机 Token 管理</h2>
       <Space direction="vertical">
-        <div flex justify-between>
+        <div className="flex justify-between">
           <div>
             <button onClick={() => nav('/admin/judge_client_token/new')}>新建</button>
           </div>
