@@ -77,8 +77,8 @@ devDependencies:
     specifier: 1.1.55
     version: 1.1.55
   '@iconify-json/mingcute':
-    specifier: 1.1.11
-    version: 1.1.11
+    specifier: 1.1.17
+    version: 1.1.17
   '@mdit/plugin-img-lazyload':
     specifier: 0.6.5
     version: 0.6.5(markdown-it@13.0.2)
@@ -1323,8 +1323,8 @@ packages:
       '@iconify/types': 2.0.0
     dev: true
 
-  /@iconify-json/mingcute@1.1.11:
-    resolution: {integrity: sha512-LHPhOVVWgC3QzTfkifWAzn/fdw6VM3V8R9XtQ+pl2+znKto5PUKDeTsO8V8rtxXaaSUcuEd5LePIC6J5eqMarA==}
+  /@iconify-json/mingcute@1.1.17:
+    resolution: {integrity: sha512-WTKnn5OicUo18dE3rkJs00sUjOIAui8Ut9yZSXamRfjzmLxuX9FKqYQAbFXaV6lw0T4QwBQ8/y4ftaWl/1Entg==}
     dependencies:
       '@iconify/types': 2.0.0
     dev: true
