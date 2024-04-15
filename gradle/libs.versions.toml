@@ -11,7 +11,7 @@ commons-io = "2.15.0"
 
 ktlint = "0.50.0"
 
-junit5 = "5.10.1"
+junit5 = "5.10.2"
 spock = "2.3-groovy-4.0"
 ktor = "2.3.6"
 jackson = "2.16.0"
