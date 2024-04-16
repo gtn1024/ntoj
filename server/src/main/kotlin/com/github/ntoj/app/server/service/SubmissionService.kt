@@ -1,5 +1,11 @@
 package com.github.ntoj.app.server.service
 
+import com.github.ntoj.app.server.exception.AppException
+import com.github.ntoj.app.server.model.Problem
+import com.github.ntoj.app.server.model.Submission
+import com.github.ntoj.app.server.repository.SubmissionRepository
+import com.github.ntoj.app.server.service.SubmissionService.SubmissionScope
+import com.github.ntoj.app.shared.model.JudgeStage
 import jakarta.persistence.criteria.Join
 import jakarta.persistence.criteria.Predicate
 import jakarta.transaction.Transactional
@@ -7,12 +13,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.Problem
-import com.github.ntoj.app.server.model.Submission
-import com.github.ntoj.app.server.repository.SubmissionRepository
-import com.github.ntoj.app.server.service.SubmissionService.SubmissionScope
-import com.github.ntoj.app.shared.model.JudgeStage
 import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {

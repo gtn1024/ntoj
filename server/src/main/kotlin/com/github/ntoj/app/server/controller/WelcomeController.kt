@@ -1,13 +1,13 @@
 package com.github.ntoj.app.server.controller
 
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
 import com.github.ntoj.app.server.config.Constant
 import com.github.ntoj.app.server.config.InformationConfig
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.shared.model.R
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

@@ -1,12 +1,12 @@
 package com.github.ntoj.app.server.config.interceptor
 
+import com.github.ntoj.app.server.model.JudgerSystemStatus
+import com.github.ntoj.app.server.service.JudgeClientTokenService
+import com.github.ntoj.app.server.service.JudgerSystemStatusService
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.HandlerInterceptor
-import com.github.ntoj.app.server.model.JudgerSystemStatus
-import com.github.ntoj.app.server.service.JudgeClientTokenService
-import com.github.ntoj.app.server.service.JudgerSystemStatusService
 import java.time.Instant
 
 @Configuration

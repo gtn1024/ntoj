@@ -2,15 +2,15 @@ package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.exception.NotLoginException
 import cn.dev33.satoken.exception.SaTokenException
+import com.github.ntoj.app.server.exception.AppException
+import com.github.ntoj.app.server.ext.fail
+import com.github.ntoj.app.shared.model.R
+import com.github.ntoj.app.shared.util.randomString
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.ext.fail
-import com.github.ntoj.app.shared.model.R
-import com.github.ntoj.app.shared.util.randomString
 
 @RestControllerAdvice
 class ExceptionHandler(

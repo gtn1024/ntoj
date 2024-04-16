@@ -1,10 +1,10 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.data.domain.PageRequest
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.User
 import com.github.ntoj.app.server.repository.UserRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
 interface UserService {

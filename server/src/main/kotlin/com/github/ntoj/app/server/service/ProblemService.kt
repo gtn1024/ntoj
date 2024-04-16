@@ -1,13 +1,13 @@
 package com.github.ntoj.app.server.service
 
+import com.github.ntoj.app.server.exception.AppException
+import com.github.ntoj.app.server.model.Problem
+import com.github.ntoj.app.server.repository.ProblemRepository
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.Problem
-import com.github.ntoj.app.server.repository.ProblemRepository
 
 interface ProblemService {
     fun get(id: Long): Problem

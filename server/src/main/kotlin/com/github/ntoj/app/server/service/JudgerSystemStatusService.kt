@@ -1,8 +1,8 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.model.JudgerSystemStatus
 import com.github.ntoj.app.server.repository.JudgerSystemStatusRepository
+import org.springframework.stereotype.Service
 
 interface JudgerSystemStatusService {
     fun findByJudgerId(id: String): JudgerSystemStatus?

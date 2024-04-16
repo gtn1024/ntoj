@@ -1,5 +1,7 @@
 package com.github.ntoj.app.server.model
 
+import com.github.ntoj.app.shared.model.JudgeStage
+import com.github.ntoj.app.shared.model.SubmissionStatus
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -9,8 +11,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
-import com.github.ntoj.app.shared.model.JudgeStage
-import com.github.ntoj.app.shared.model.SubmissionStatus
 
 @Entity(name = "t_self_test_submissions")
 class SelfTestSubmission(

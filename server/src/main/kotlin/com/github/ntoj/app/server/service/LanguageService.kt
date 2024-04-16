@@ -1,11 +1,11 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.Language
 import com.github.ntoj.app.server.repository.LanguageRepository
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
+import org.springframework.stereotype.Service
 
 interface LanguageService {
     fun get(id: Long): Language
