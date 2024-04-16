@@ -370,7 +370,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           </div>
         </Drawer>
       </div>
-      <div grow ref={editorWrapperRef}>
+      <div className="grow" ref={editorWrapperRef}>
         <CodeMirrorEditor
           editorHeight={!isMobile ? (height - hBorder - 40 - 40 - (toolbarVisible ? 160 : 0)) : 300}
           value={code}
@@ -390,8 +390,8 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           >
             {
               toolbarVisible
-                ? <div className={isMobile ? 'i-material-symbols:keyboard-arrow-up' : 'i-material-symbols:keyboard-arrow-down'} h="[24px]" w="[24px]" />
-                : <div className={isMobile ? 'i-material-symbols:keyboard-arrow-down' : 'i-material-symbols:keyboard-arrow-up'} h="[24px]" w="[24px]" />
+                ? <div className={c(isMobile ? 'i-material-symbols:keyboard-arrow-up' : 'i-material-symbols:keyboard-arrow-down', 'h-24px w-24px')} />
+                : <div className={c(isMobile ? 'i-material-symbols:keyboard-arrow-down' : 'i-material-symbols:keyboard-arrow-up', 'h-24px w-24px')} />
             }
           </button>
         </div>

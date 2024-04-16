@@ -69,7 +69,7 @@ function getCellColor(problem: StandingProblem) {
 
 function getCellContent(problem: StandingProblem) {
   return problem.tried > 0 && (
-    <div relative mx-1 my-1>
+    <div className="relative mx-1 my-1">
       {problem.success
         ? '+'
         : (problem.tryAfterFreeze > 0 ? '?' : '-')}

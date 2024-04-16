@@ -40,13 +40,13 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
   }
   const SampleField: React.FC<{ title: string, data: string }> = (props) => {
     return (
-      <div mt-1 w-full>
-        <div mb-1 flex flex-row items-center justify-between>
-          <span grow>{props.title}</span>
+      <div className="mt-1 w-full">
+        <div className="mb-1 flex flex-row items-center justify-between">
+          <span className="grow">{props.title}</span>
           <button onClick={() => copyToClipBoard(props.data)}>复制</button>
         </div>
-        <div border-0 border-l-2 border-green-300 border-solid bg-white p-2>
-          <pre m-0>{props.data}</pre>
+        <div className="border-0 border-l-2 border-green-300 border-solid bg-white p-2">
+          <pre className="m-0">{props.data}</pre>
         </div>
       </div>
     )
@@ -78,28 +78,28 @@ export const ProblemDetail: React.FC<{ data?: Problem, showProblemAlias?: boolea
 
   return (
     <div className={c(!isMobile && 'm-4')}>
-      <div p-4>
+      <div className="p-4">
         <div>
-          <h2 font-bold>
+          <h2 className="font-bold">
             {showProblemAlias && data?.alias }
             {' '}
             {data?.title}
           </h2>
         </div>
-        <div pb="[20px]" text-xs>
-          <span mr-1>
+        <div className="pb-20px text-xs">
+          <span className="mr-1">
             时间限制：
             {data?.timeLimit}
             {' '}
             ms
           </span>
-          <span mr-1>
+          <span className="mr-1">
             内存限制：
             {data?.memoryLimit}
             {' '}
             MB
           </span>
-          <span mr-1>
+          <span className="mr-1">
             代码长度限制：
             {data?.codeLength}
             {' '}

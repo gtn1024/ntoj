@@ -175,7 +175,7 @@ export const AdminProblemEditPage: React.FC = () => {
             autoComplete="off"
             ref={formRef}
           >
-            <div flex>
+            <div className="flex">
               <Form.Item label="题号" rules={[{ required: true, message: '请输入标题！' }]} name="alias" className="mr-2">
                 <Input />
               </Form.Item>
@@ -185,7 +185,7 @@ export const AdminProblemEditPage: React.FC = () => {
               </Form.Item>
             </div>
 
-            <div flex>
+            <div className="flex">
               <Form.Item
                 label="内存限制"
                 rules={[{ required: true, message: '请输入内存限制！' }]}
@@ -228,7 +228,7 @@ export const AdminProblemEditPage: React.FC = () => {
                 <>
                   {fields.map(({ key, name, ...restField }) => (
                     <div key={key} style={{ display: 'flex', marginBottom: 8, width: '100%' }}>
-                      <div w-full flex>
+                      <div className="w-full flex">
                         <Form.Item
                           {...restField}
                           className="mr-2 w-1/2"

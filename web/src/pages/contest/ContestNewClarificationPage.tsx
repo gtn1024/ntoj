@@ -64,9 +64,9 @@ export const ContestNewClarificationPage: React.FC = () => {
               <option key={i} value={board.alias}>{`${board.alias} - ${board.title}`}</option>
             ))}
           </select>
-          <input type="text" value={title} onChange={handleTitleChange} w="80%" />
+          <input type="text" value={title} onChange={handleTitleChange} className="w-80%" />
         </div>
-        <div w-full>
+        <div className="w-full">
           <textarea className="w-full" rows={20} value={content} onChange={e => handleEditorChange(e.target.value)} />
         </div>
       </div>
