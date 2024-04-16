@@ -4,6 +4,7 @@ import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import { message, notification } from 'antd'
 import { useLocalStorage } from 'react-use'
+import c from 'classnames'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { AccountComponent } from '../components/AccountComponent.tsx'
@@ -22,16 +23,13 @@ interface MenuProps {
 
 const MenuComponent: React.FC<MenuProps> = ({ items, current, setCurrent, onClick }) => {
   return (
-    <ul h-full flex items-center gap-1 list-none m-0 p-0>
+    <ul className="m-0 h-full flex list-none items-center gap-1 p-0">
       {
         items.map(item => (
           item.visible && (
             <li
               key={item.key}
-              px-2
-              cursor-pointer
-              hover:text-blue-400
-              className={current === item.key ? 'text-blue-500' : 'text-gray-500'}
+              className={c(current === item.key ? 'text-blue-500' : 'text-gray-500', 'px-2 cursor-pointer hover:text-blue-400')}
               onClick={() => {
                 setCurrent(item.key)
                 onClick?.(item)
@@ -113,11 +111,11 @@ export const ContestLayout: React.FC = () => {
     { label: '排名', key: '/standing', visible: contest?.hasPermission ?? false },
   ]
   return (
-    <div flex flex-col h-screen>
-      <div h="[48px]" border-b="1px #dddddd solid">
-        <div h-full flex items-center justify-between leading="[48px]">
-          <div flex>
-            <div bg="[#232c31]" text-white h-full px-4 mr-1>
+    <div className="h-screen flex flex-col">
+      <div className="h-48px border-b border-#ddd border-solid">
+        <div className="h-full flex items-center justify-between leading-[48px]">
+          <div className="flex">
+            <div className="mr-1 h-full bg-[#232c31] px-4 text-white">
               {contest?.title}
             </div>
             <MenuComponent
@@ -129,20 +127,18 @@ export const ContestLayout: React.FC = () => {
               }}
             />
             <div
-              px-2
-              cursor-pointer
-              text-gray-600
+              className="cursor-pointertext-gray-600 px-2"
               onClick={() => nav('/c')}
             >
               退出
             </div>
           </div>
-          <div m-4>
+          <div className="m-4">
             <AccountComponent className="flex justify-end" />
           </div>
         </div>
       </div>
-      <div grow overflow-y-auto>
+      <div className="grow overflow-y-auto">
         <Outlet />
       </div>
     </div>
