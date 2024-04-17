@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.repository
 
-import com.github.ntoj.app.server.model.Announcement
+import com.github.ntoj.app.server.model.Article
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor
 
-interface AnnouncementRepository : JpaRepository<Announcement, Long>, JpaSpecificationExecutor<Announcement>
+interface ArticleRepository : JpaRepository<Article, Long>, JpaSpecificationExecutor<Article>

@@ -1,8 +1,8 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.model.ContestClarificationResponse
 import com.github.ntoj.app.server.repository.ContestClarificationResponseRepository
+import org.springframework.stereotype.Service
 
 interface ContestClarificationResponseService {
     fun get(id: Long): ContestClarificationResponse

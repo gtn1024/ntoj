@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.ext
 
-import org.springframework.http.ResponseEntity
 import com.github.ntoj.app.shared.model.R
+import org.springframework.http.ResponseEntity
 
 fun <T> R.Companion.success(
     code: Int,

@@ -1,13 +1,13 @@
 package com.github.ntoj.app.server.service
 
+import com.github.ntoj.app.server.exception.AppException
+import com.github.ntoj.app.server.model.Contest
+import com.github.ntoj.app.server.repository.ContestRepository
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.Contest
-import com.github.ntoj.app.server.repository.ContestRepository
 
 interface ContestService {
     fun get(id: Long): Contest

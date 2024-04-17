@@ -1,10 +1,10 @@
 package com.github.ntoj.app.server.config
 
+import com.github.ntoj.app.server.service.FileService
+import com.github.ntoj.app.server.service.FileUploadService
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import com.github.ntoj.app.server.service.FileService
-import com.github.ntoj.app.server.service.FileUploadService
 
 @Configuration
 @EnableConfigurationProperties(InformationConfig::class, FileConfig::class)

@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.util
 
-import org.apache.commons.codec.digest.DigestUtils
 import com.github.ntoj.app.shared.util.randomString
+import org.apache.commons.codec.digest.DigestUtils
 
 fun getSalt() = randomString()
 

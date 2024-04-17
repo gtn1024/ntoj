@@ -1,5 +1,8 @@
 package com.github.ntoj.app.server.model
 
+import com.github.ntoj.app.shared.model.JudgeStage
+import com.github.ntoj.app.shared.model.SubmissionStatus
+import com.github.ntoj.app.shared.model.TestcaseJudgeResult
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
@@ -11,9 +14,6 @@ import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes.JSON
-import com.github.ntoj.app.shared.model.JudgeStage
-import com.github.ntoj.app.shared.model.SubmissionStatus
-import com.github.ntoj.app.shared.model.TestcaseJudgeResult
 
 @Entity(name = "t_submissions")
 class Submission(

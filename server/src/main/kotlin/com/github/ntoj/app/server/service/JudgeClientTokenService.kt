@@ -1,11 +1,11 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.data.domain.PageRequest
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.JudgeClientToken
 import com.github.ntoj.app.server.repository.JudgeClientTokenRepository
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.data.domain.PageRequest
+import org.springframework.stereotype.Service
 
 interface JudgeClientTokenService {
     fun get(id: Long): JudgeClientToken

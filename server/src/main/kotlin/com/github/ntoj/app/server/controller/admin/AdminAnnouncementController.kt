@@ -5,6 +5,13 @@ import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.github.ntoj.app.server.ext.fail
+import com.github.ntoj.app.server.ext.success
+import com.github.ntoj.app.server.model.Announcement
+import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.service.AnnouncementService
+import com.github.ntoj.app.server.service.UserService
+import com.github.ntoj.app.shared.model.R
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
 import org.springframework.http.ResponseEntity
@@ -17,13 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import com.github.ntoj.app.server.ext.fail
-import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.Announcement
-import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.service.AnnouncementService
-import com.github.ntoj.app.server.service.UserService
-import com.github.ntoj.app.shared.model.R
 import java.time.Instant
 
 @RestController

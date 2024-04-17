@@ -1,9 +1,9 @@
 package com.github.ntoj.app.server.service
 
-import org.springframework.stereotype.Service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.FileUpload
 import com.github.ntoj.app.server.repository.FileUploadRepository
+import org.springframework.stereotype.Service
 
 interface FileUploadService {
     fun add(file: FileUpload): FileUpload

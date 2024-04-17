@@ -1,11 +1,5 @@
 package com.github.ntoj.app.judger
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import org.slf4j.LoggerFactory
 import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
 import com.github.ntoj.app.shared.model.GetSubmissionResponse
 import com.github.ntoj.app.shared.model.JudgeStage
@@ -15,6 +9,12 @@ import com.github.ntoj.app.shared.model.TestcaseJudgeResult
 import com.github.ntoj.app.shared.model.UpdateSelfTestSubmissionRequest
 import com.github.ntoj.app.shared.model.UpdateSubmissionRequest
 import com.github.ntoj.app.shared.util.fileMd5
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.ConnectException
 import java.util.zip.ZipFile

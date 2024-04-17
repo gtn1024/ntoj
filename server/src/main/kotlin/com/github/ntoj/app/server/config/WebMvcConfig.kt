@@ -1,13 +1,13 @@
 package com.github.ntoj.app.server.config
 
 import cn.dev33.satoken.interceptor.SaInterceptor
+import com.github.ntoj.app.server.config.interceptor.JudgeClientInterceptor
+import com.github.ntoj.app.server.service.JudgeClientTokenService
+import com.github.ntoj.app.server.service.JudgerSystemStatusService
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import com.github.ntoj.app.server.config.interceptor.JudgeClientInterceptor
-import com.github.ntoj.app.server.service.JudgeClientTokenService
-import com.github.ntoj.app.server.service.JudgerSystemStatusService
 
 @Configuration
 class WebMvcConfig(

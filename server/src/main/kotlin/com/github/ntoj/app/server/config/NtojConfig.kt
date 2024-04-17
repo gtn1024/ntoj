@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.config
 
-import org.springframework.boot.context.properties.ConfigurationProperties
 import com.github.ntoj.app.server.service.FileSystemFileService
+import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "ntoj.information")
 data class InformationConfig(
