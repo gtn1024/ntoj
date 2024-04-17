@@ -9,6 +9,8 @@ interface ArticleService {
     fun create(article: Article): Article
 
     fun get(id: Long): Article
+
+    fun update(article: Article): Article
 }
 
 @Service
@@ -21,5 +23,9 @@ class ArticleServiceImpl(
 
     override fun get(id: Long): Article {
         return articleRepository.findById(id).orElseThrow { AppException("文章不存在", 404) }
+    }
+
+    override fun update(article: Article): Article {
+        return articleRepository.save(article)
     }
 }

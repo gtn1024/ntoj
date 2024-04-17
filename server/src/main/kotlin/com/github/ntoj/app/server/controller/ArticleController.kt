@@ -10,6 +10,7 @@ import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -49,6 +50,27 @@ class ArticleController(
 
         article = articlesService.create(article)
         return R.success(200, "创建成功", ArticleDto.from(article))
+    }
+
+    @SaCheckLogin
+    @PatchMapping("/{id}")
+    fun update(
+        @PathVariable id: Long,
+        @RequestBody articleRequest: ArticleRequest,
+    ): ResponseEntity<R<ArticleDto>> {
+        var article = articlesService.get(id)
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        require(user.userId == article.author.userId) { "未授权" }
+        if (articleRequest.title != null) {
+            require(articleRequest.title.isNotBlank()) { "文章标题不能为空" }
+            article.title = articleRequest.title
+        }
+        if (articleRequest.content != null) {
+            require(articleRequest.content.isNotBlank()) { "文章内容不能为空" }
+            article.content = articleRequest.content
+        }
+        article = articlesService.update(article)
+        return R.success(200, "修改成功", ArticleDto.from(article))
     }
 }
 
