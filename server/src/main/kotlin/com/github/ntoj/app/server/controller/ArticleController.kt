@@ -9,6 +9,8 @@ import com.github.ntoj.app.server.service.ArticleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,6 +23,13 @@ class ArticleController(
     val articlesService: ArticleService,
     val userService: UserService,
 ) {
+    @GetMapping("/{id}")
+    fun getOne(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<ArticleDto>> {
+        return R.success(200, "获取成功", ArticleDto.from(articlesService.get(id)))
+    }
+
     @SaCheckLogin
     @PostMapping
     fun create(
