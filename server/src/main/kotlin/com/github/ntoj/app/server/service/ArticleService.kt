@@ -11,6 +11,8 @@ interface ArticleService {
     fun get(id: Long): Article
 
     fun update(article: Article): Article
+
+    fun remove(id: Long)
 }
 
 @Service
@@ -27,5 +29,9 @@ class ArticleServiceImpl(
 
     override fun update(article: Article): Article {
         return articleRepository.save(article)
+    }
+
+    override fun remove(id: Long) {
+        articleRepository.deleteById(id)
     }
 }

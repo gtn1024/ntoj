@@ -9,6 +9,7 @@ import com.github.ntoj.app.server.service.ArticleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -71,6 +72,18 @@ class ArticleController(
         }
         article = articlesService.update(article)
         return R.success(200, "修改成功", ArticleDto.from(article))
+    }
+
+    @SaCheckLogin
+    @DeleteMapping("/{id}")
+    fun remove(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Unit>> {
+        val article = articlesService.get(id)
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        require(user.userId == article.author.userId) { "未授权" }
+        articlesService.remove(id)
+        return R.success(200, "删除成功")
     }
 }
 
