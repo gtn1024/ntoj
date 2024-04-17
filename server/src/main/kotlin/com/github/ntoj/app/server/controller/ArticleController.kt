@@ -4,6 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.Article
+import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.User
 import com.github.ntoj.app.server.service.ArticleService
 import com.github.ntoj.app.server.service.UserService
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 
@@ -25,6 +27,16 @@ class ArticleController(
     val articlesService: ArticleService,
     val userService: UserService,
 ) {
+    @GetMapping
+    fun getMany(
+        @RequestParam(required = false, defaultValue = "1") current: Int,
+        @RequestParam(required = false, defaultValue = "10") pageSize: Int,
+    ): ResponseEntity<R<L<ArticleDto>>> {
+        val list = articlesService.get(desc = true, page = current, pageSize = pageSize)
+        val count = articlesService.count()
+        return R.success(200, "获取成功", L(count, current, list.map { ArticleDto.from(it) }))
+    }
+
     @GetMapping("/{id}")
     fun getOne(
         @PathVariable id: Long,
