@@ -1,6 +1,13 @@
 package com.github.ntoj.app.judger
 
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.github.ntoj.app.judger.Configuration.SANDBOX_SERVER
+import com.github.ntoj.app.judger.Configuration.SERVER_HOST
+import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
+import com.github.ntoj.app.shared.model.GetSubmissionResponse
+import com.github.ntoj.app.shared.model.R
+import com.github.ntoj.app.shared.model.UpdateSelfTestSubmissionRequest
+import com.github.ntoj.app.shared.model.UpdateSubmissionRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -19,13 +26,6 @@ import io.ktor.http.contentType
 import io.ktor.serialization.jackson.jackson
 import io.ktor.utils.io.core.isEmpty
 import io.ktor.utils.io.core.readBytes
-import com.github.ntoj.app.judger.Configuration.SANDBOX_SERVER
-import com.github.ntoj.app.judger.Configuration.SERVER_HOST
-import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
-import com.github.ntoj.app.shared.model.GetSubmissionResponse
-import com.github.ntoj.app.shared.model.R
-import com.github.ntoj.app.shared.model.UpdateSelfTestSubmissionRequest
-import com.github.ntoj.app.shared.model.UpdateSubmissionRequest
 import java.io.File
 
 object Client {
