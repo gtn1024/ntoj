@@ -41,6 +41,9 @@ import ContestProblem from '../pages/contest/ContestProblem.tsx'
 import ContestProblemList from '../pages/contest/ContestProblemList.tsx'
 import ContestStandingPage from '../pages/contest/ContestStandingPage.tsx'
 import ContestSubmissionListPage from '../pages/contest/ContestSubmissionListPage.tsx'
+import { ArticleListPage } from '../pages/ArticleListPage.tsx'
+import { ArticleViewPage } from '../pages/ArticleViewPage.tsx'
+import { ArticleEditPage } from '../pages/ArticleEditPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -186,6 +189,21 @@ export const router = createBrowserRouter(
           path: 'c',
           children: [
             { index: true, element: <ContestListPage /> },
+          ],
+        },
+        {
+          path: 'article',
+          children: [
+            { index: true, element: <ArticleListPage /> },
+            { path: 'new', element: <ArticleEditPage /> },
+            {
+              path: ':id',
+              children: [
+                { index: true, element: <ArticleViewPage /> },
+                { path: 'edit', element: <ArticleEditPage /> },
+              ],
+            },
+            { path: ':id', element: <ArticleViewPage /> },
           ],
         },
       ],

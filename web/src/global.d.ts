@@ -142,6 +142,17 @@ type ContestPermission = |
   'PRIVATE' |
   'PASSWORD'
 
+interface Article {
+  id: number
+  title: string
+  content: string
+  author: {
+    username: string
+    realName?: string
+  }
+  createdAt: number
+}
+
 namespace AdminDto {
   interface User {
     id: number

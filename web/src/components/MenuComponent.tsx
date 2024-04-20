@@ -26,6 +26,10 @@ const items: MenuProps['items'] = [
     key: '/r',
   },
   {
+    label: '文章',
+    key: '/article',
+  },
+  {
     label: '关于',
     key: '/about',
   },
@@ -47,6 +51,9 @@ export const MenuComponent: React.FC<Props> = (props) => {
     }
     if (pathname.includes('/c')) {
       return setCurrent('/c')
+    }
+    if (pathname.includes('/article')) {
+      return setCurrent('/article')
     }
     if (pathname.includes('/about')) {
       return setCurrent('/about')
