@@ -5,6 +5,7 @@ import type { AxiosError } from 'axios'
 import { message } from 'antd'
 import type { HttpResponse } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
+import { timestampToDateString } from '../lib/misc.ts'
 
 export const UserProfilePage: React.FC = () => {
   const { username } = useParams()
@@ -26,7 +27,7 @@ export const UserProfilePage: React.FC = () => {
               @
               {data?.username}
             </div>
-            <div>{data?.registerAt}</div>
+            <div>{timestampToDateString((data?.createdAt || 0) * 1000)}</div>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export function toFixedNumber(score: number, decimalPlaces: number = 2): number {
   return Number.parseFloat(score.toFixed(decimalPlaces))
 }
@@ -70,4 +72,8 @@ export function userRoleToCNString(role: UserRole) {
       break
   }
   return res
+}
+
+export function timestampToDateString(timestamp: number): string {
+  return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')
 }

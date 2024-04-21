@@ -76,7 +76,7 @@ export const ContestHome: React.FC = () => {
           <div className="flex flex-col gap-4 px-4">
             <div className="flex justify-between">
               <span className="text-gray-500">创建人</span>
-              <span className="text-gray-500">{contest?.author}</span>
+              <span className="text-gray-500">{contest?.author.username}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">开始时间</span>

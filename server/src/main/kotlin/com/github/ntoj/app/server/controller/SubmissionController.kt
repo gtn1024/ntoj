@@ -6,10 +6,10 @@ import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.model.dtos.UserDto
 import com.github.ntoj.app.server.model.entities.Language
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.Submission
-import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.SubmissionService
 import com.github.ntoj.app.server.service.SubmissionService.SubmissionScope.PROBLEM
@@ -169,18 +169,6 @@ class SubmissionController(
                         title = problem.title,
                         alias = problem.alias,
                     )
-            }
-        }
-
-        data class UserDto(
-            val username: String? = null,
-        ) {
-            companion object {
-                fun from(user: User): UserDto {
-                    return UserDto(
-                        username = user.username,
-                    )
-                }
             }
         }
 

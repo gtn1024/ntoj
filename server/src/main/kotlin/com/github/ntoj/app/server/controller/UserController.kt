@@ -2,9 +2,8 @@ package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.entities.User
+import com.github.ntoj.app.server.model.dtos.UserDto
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import jakarta.validation.Valid
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import java.time.Instant
 
 @RestController
 @RequestMapping("/user")
@@ -43,27 +41,6 @@ class UserController(
         }
         userService.updateUser(user)
         return R.success(200, "修改成功")
-    }
-
-    data class UserDto(
-        val id: Long? = null,
-        val username: String? = null,
-        val realName: String? = null,
-        val bio: String? = null,
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
-        val registerAt: Instant? = null,
-    ) {
-        companion object {
-            fun from(user: User): UserDto {
-                return UserDto(
-                    id = user.userId,
-                    username = user.username,
-                    realName = user.realName,
-                    bio = user.bio,
-                    registerAt = user.createdAt,
-                )
-            }
-        }
     }
 }
 

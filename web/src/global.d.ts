@@ -13,11 +13,13 @@ interface CurrentUser {
 }
 
 interface User {
-  id?: number
-  username?: string
+  id: number
+  username: string
   realName?: string
+  email?: string
   bio?: string
-  registerAt?: string
+  createdAt: number
+  role: UserRole
 }
 
 interface Announcement {
@@ -74,9 +76,7 @@ type SubmissionStatus = |
 
 interface Submission {
   id: number
-  user: {
-    username: string
-  }
+  user: User
   code: string
   status: SubmissionStatus
   stage: JudgeStage
@@ -126,7 +126,7 @@ interface Contest {
     realName?: string
     joinAt: string
   }[]
-  author: string
+  author: User
   languages?: number[]
   allowAllLanguages: boolean
   hasPermission: boolean
@@ -146,10 +146,7 @@ interface Article {
   id: number
   title: string
   content: string
-  author: {
-    username: string
-    realName?: string
-  }
+  author: User
   createdAt: number
 }
 

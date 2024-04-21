@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import c from 'classnames'
 import { Link, useNavigate, useParams } from 'react-router-dom'
-import dayjs from 'dayjs'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import { Modal, message } from 'antd'
@@ -9,6 +8,7 @@ import { mdit } from '../lib/mdit.ts'
 import { ErrorNotFound } from '../errors.ts'
 import { type HttpResponse, http } from '../lib/Http.tsx'
 import { useUserStore } from '../stores/useUserStore.tsx'
+import { timestampToDateString } from '../lib/misc.ts'
 import s from './ArticleViewPage.module.scss'
 
 export const ArticleViewPage: React.FC = () => {
@@ -69,7 +69,7 @@ export const ArticleViewPage: React.FC = () => {
           <div>
             <div className="i-mdi:calendar" />
             {' '}
-            {dayjs((data?.createdAt || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            {timestampToDateString((data?.createdAt || 0) * 1000)}
           </div>
         </div>
         {userStore.user.username === data?.author.username && (

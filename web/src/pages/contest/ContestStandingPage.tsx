@@ -12,10 +12,7 @@ import type { ContestProblem } from './ContestProblemList.tsx'
 
 interface ContestStandingSubmission {
   id: number
-  user: {
-    username: string
-    realName?: string
-  }
+  user: User
   alias: string
   result: SubmissionStatus
   submitTime: string

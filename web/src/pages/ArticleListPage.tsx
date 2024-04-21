@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import dayjs from 'dayjs'
 import { Button, Pagination, message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
+import { timestampToDateString } from '../lib/misc.ts'
 
 const ArticleItem: React.FC<{ article: Article, className?: string }> = ({ article, className }) => {
   return (
@@ -16,7 +16,7 @@ const ArticleItem: React.FC<{ article: Article, className?: string }> = ({ artic
             { article.title }
           </Link>
           <div>
-            {dayjs(article.createdAt * 1000).format('YYYY-MM-DD HH:mm:ss')}
+            {timestampToDateString(article.createdAt * 1000)}
           </div>
         </div>
       </div>

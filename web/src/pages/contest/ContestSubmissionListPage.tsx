@@ -10,10 +10,7 @@ import { LinkComponent } from '../../components/LinkComponent.tsx'
 
 interface ContestSubmission {
   id: number
-  user: {
-    username: string
-    realName?: string
-  }
+  user: User
   alias: string
   result: SubmissionStatus
   time?: number

@@ -7,7 +7,7 @@ import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.*
+import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.entities.Contest
 import com.github.ntoj.app.server.model.entities.ContestClarification
 import com.github.ntoj.app.server.model.entities.ContestClarificationResponse
@@ -17,13 +17,25 @@ import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.Submission
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.model.entities.UserRole
-import com.github.ntoj.app.server.service.*
+import com.github.ntoj.app.server.service.ContestClarificationService
+import com.github.ntoj.app.server.service.ContestService
+import com.github.ntoj.app.server.service.LanguageService
+import com.github.ntoj.app.server.service.ProblemService
+import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.R
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 
 @RestController
@@ -166,7 +178,7 @@ class ContestController(
 
     data class ContestStandingSubmissionDto(
         val id: Long,
-        val user: UserDto,
+        val user: com.github.ntoj.app.server.model.dtos.UserDto,
         val alias: String,
         val result: SubmissionStatus,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
@@ -177,24 +189,11 @@ class ContestController(
                 alias: String,
             ) = ContestStandingSubmissionDto(
                 id = submission.submissionId!!,
-                user = submission.user?.let { UserDto.from(it) }!!,
+                user = submission.user?.let { com.github.ntoj.app.server.model.dtos.UserDto.from(it) }!!,
                 alias = alias,
                 result = submission.status,
                 submitTime = submission.createdAt!!,
             )
-        }
-
-        data class UserDto(
-            val username: String,
-            val realName: String?,
-        ) {
-            companion object {
-                fun from(user: User) =
-                    UserDto(
-                        username = user.username,
-                        realName = user.realName,
-                    )
-            }
         }
     }
 
@@ -311,7 +310,7 @@ class ContestController(
 
     data class ContestSubmissionDto(
         val id: Long,
-        val user: UserDto,
+        val user: com.github.ntoj.app.server.model.dtos.UserDto,
         val alias: String,
         val result: SubmissionStatus,
         val time: Int?,
@@ -326,7 +325,7 @@ class ContestController(
                 alias: String,
             ) = ContestSubmissionDto(
                 id = submission.submissionId!!,
-                user = UserDto.from(submission.user!!),
+                user = com.github.ntoj.app.server.model.dtos.UserDto.from(submission.user!!),
                 alias = alias,
                 result = submission.status,
                 time = submission.time,
@@ -335,19 +334,6 @@ class ContestController(
                 codeLength = submission.code?.length!!,
                 submitTime = submission.createdAt!!,
             )
-        }
-
-        data class UserDto(
-            val username: String,
-            val realName: String?,
-        ) {
-            companion object {
-                fun from(user: User) =
-                    UserDto(
-                        username = user.username,
-                        realName = user.realName,
-                    )
-            }
         }
     }
 
@@ -559,7 +545,7 @@ class ContestController(
         val permission: Contest.ContestPermission,
         val userCount: Int,
         val users: List<UserDto>,
-        val author: String,
+        val author: com.github.ntoj.app.server.model.dtos.UserDto,
         val languages: List<Long> = listOf(),
         val allowAllLanguages: Boolean,
         val hasPermission: Boolean,
@@ -601,7 +587,7 @@ class ContestController(
                     contest.users.map {
                         UserDto.from(userService.getUserById(it.userId), Instant.ofEpochMilli(it.joinAt))
                     },
-                author = contest.author.username,
+                author = com.github.ntoj.app.server.model.dtos.UserDto.from(contest.author),
                 languages = contest.languages.map { it.languageId!! },
                 allowAllLanguages = contest.allowAllLanguages,
                 hasPermission = hasPermission,
