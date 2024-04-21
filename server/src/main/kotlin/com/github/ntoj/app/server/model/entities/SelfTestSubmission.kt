@@ -1,4 +1,4 @@
-package com.github.ntoj.app.server.model
+package com.github.ntoj.app.server.model.entities
 
 import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.SubmissionStatus

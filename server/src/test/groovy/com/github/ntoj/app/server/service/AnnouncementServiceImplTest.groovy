@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import spock.lang.Specification
-import com.github.ntoj.app.server.model.Announcement
+import com.github.ntoj.app.server.model.entities.Announcement
 import com.github.ntoj.app.server.repository.AnnouncementRepository
 
 class AnnouncementServiceImplTest extends Specification {

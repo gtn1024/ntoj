@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.ContestClarification
+import com.github.ntoj.app.server.model.entities.ContestClarification
 import com.github.ntoj.app.server.repository.ContestClarificationRepository
 import org.springframework.stereotype.Service
 

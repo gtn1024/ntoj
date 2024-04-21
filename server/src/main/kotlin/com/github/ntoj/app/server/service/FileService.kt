@@ -5,7 +5,7 @@ import cn.hutool.core.io.file.FileWriter
 import cn.hutool.core.io.file.PathUtil
 import com.github.ntoj.app.server.config.FileConfig
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.FileUpload
+import com.github.ntoj.app.server.model.entities.FileUpload
 import com.github.ntoj.app.shared.util.fileMd5
 import org.apache.commons.io.FilenameUtils
 import org.springframework.stereotype.Service

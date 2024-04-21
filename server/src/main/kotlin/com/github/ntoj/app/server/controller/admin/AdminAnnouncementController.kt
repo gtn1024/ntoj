@@ -7,7 +7,7 @@ import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.Announcement
+import com.github.ntoj.app.server.model.entities.Announcement
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.service.AnnouncementService
 import com.github.ntoj.app.server.service.UserService

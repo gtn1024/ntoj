@@ -3,7 +3,7 @@ package com.github.ntoj.app.server.controller
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.SelfTestSubmission
+import com.github.ntoj.app.server.model.entities.SelfTestSubmission
 import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.SelfTestSubmissionService
 import com.github.ntoj.app.server.service.UserService

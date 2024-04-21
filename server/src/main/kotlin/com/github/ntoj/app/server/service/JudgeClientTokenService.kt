@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.JudgeClientToken
+import com.github.ntoj.app.server.model.entities.JudgeClientToken
 import com.github.ntoj.app.server.repository.JudgeClientTokenRepository
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest

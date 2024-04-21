@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.repository
 
-import com.github.ntoj.app.server.model.Submission
+import com.github.ntoj.app.server.model.entities.Submission
 import com.github.ntoj.app.shared.model.JudgeStage
 import jakarta.persistence.LockModeType
 import org.springframework.data.jpa.repository.JpaRepository

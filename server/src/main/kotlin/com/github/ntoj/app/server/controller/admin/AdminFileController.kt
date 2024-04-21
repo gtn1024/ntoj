@@ -5,7 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import cn.hutool.core.io.file.FileNameUtil
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.FileUpload
+import com.github.ntoj.app.server.model.entities.FileUpload
 import com.github.ntoj.app.server.service.FileService
 import com.github.ntoj.app.shared.model.R
 import com.github.ntoj.app.shared.util.randomString

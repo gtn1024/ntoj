@@ -1,4 +1,4 @@
-package com.github.ntoj.app.server.model
+package com.github.ntoj.app.server.model.entities
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.persistence.Column

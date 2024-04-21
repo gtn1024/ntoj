@@ -5,9 +5,9 @@ import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.model.Problem
-import com.github.ntoj.app.server.model.ProblemSample
-import com.github.ntoj.app.server.model.Submission
+import com.github.ntoj.app.server.model.entities.Problem
+import com.github.ntoj.app.server.model.entities.ProblemSample
+import com.github.ntoj.app.server.model.entities.Submission
 import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.SubmissionService

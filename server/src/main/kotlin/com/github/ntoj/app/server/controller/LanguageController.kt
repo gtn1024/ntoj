@@ -2,7 +2,7 @@ package com.github.ntoj.app.server.controller
 
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.model.Language
+import com.github.ntoj.app.server.model.entities.Language
 import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity

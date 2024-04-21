@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.config.SecurityConfig
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.User
-import com.github.ntoj.app.server.model.UserRole
+import com.github.ntoj.app.server.model.entities.User
+import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.server.util.checkPassword
 import com.github.ntoj.app.server.util.getSalt

@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.ext
 
-import com.github.ntoj.app.server.model.FileUpload
-import com.github.ntoj.app.server.model.Language
+import com.github.ntoj.app.server.model.entities.FileUpload
+import com.github.ntoj.app.server.model.entities.Language
 import com.github.ntoj.app.shared.model.LanguageDto
 import com.github.ntoj.app.shared.model.TestcaseDto
 

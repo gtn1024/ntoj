@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.Contest
+import com.github.ntoj.app.server.model.entities.Contest
 import com.github.ntoj.app.server.repository.ContestRepository
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest

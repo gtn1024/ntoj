@@ -1,4 +1,4 @@
-package com.github.ntoj.app.server.model
+package com.github.ntoj.app.server.model.entities
 
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Column

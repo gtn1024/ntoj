@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.Article
+import com.github.ntoj.app.server.model.entities.Article
 import com.github.ntoj.app.server.repository.ArticleRepository
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort

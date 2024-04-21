@@ -3,9 +3,9 @@ package com.github.ntoj.app.server.controller
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.Article
+import com.github.ntoj.app.server.model.entities.Article
 import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.model.User
+import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.ArticleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R

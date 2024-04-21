@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.FileUpload
+import com.github.ntoj.app.server.model.entities.FileUpload
 import com.github.ntoj.app.server.repository.FileUploadRepository
 import org.springframework.stereotype.Service
 

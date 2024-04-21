@@ -8,6 +8,15 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.*
+import com.github.ntoj.app.server.model.entities.Contest
+import com.github.ntoj.app.server.model.entities.ContestClarification
+import com.github.ntoj.app.server.model.entities.ContestClarificationResponse
+import com.github.ntoj.app.server.model.entities.ContestProblem
+import com.github.ntoj.app.server.model.entities.ContestUser
+import com.github.ntoj.app.server.model.entities.Problem
+import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.User
+import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.*
 import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.R

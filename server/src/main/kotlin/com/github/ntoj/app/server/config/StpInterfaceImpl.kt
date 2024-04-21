@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.config
 
 import cn.dev33.satoken.stp.StpInterface
-import com.github.ntoj.app.server.model.UserRole
+import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.UserService
 import org.springframework.stereotype.Component
 

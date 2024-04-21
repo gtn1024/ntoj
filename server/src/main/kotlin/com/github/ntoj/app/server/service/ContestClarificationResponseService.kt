@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.service
 
-import com.github.ntoj.app.server.model.ContestClarificationResponse
+import com.github.ntoj.app.server.model.entities.ContestClarificationResponse
 import com.github.ntoj.app.server.repository.ContestClarificationResponseRepository
 import org.springframework.stereotype.Service
 

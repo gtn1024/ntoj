@@ -4,7 +4,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.JudgeClientToken
+import com.github.ntoj.app.server.model.entities.JudgeClientToken
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.service.JudgeClientTokenService
 import com.github.ntoj.app.shared.model.R

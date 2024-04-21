@@ -10,9 +10,9 @@ import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.model.Language
-import com.github.ntoj.app.server.model.Problem
-import com.github.ntoj.app.server.model.ProblemSample
+import com.github.ntoj.app.server.model.entities.Language
+import com.github.ntoj.app.server.model.entities.Problem
+import com.github.ntoj.app.server.model.entities.ProblemSample
 import com.github.ntoj.app.server.service.FileService
 import com.github.ntoj.app.server.service.FileUploadService
 import com.github.ntoj.app.server.service.LanguageService

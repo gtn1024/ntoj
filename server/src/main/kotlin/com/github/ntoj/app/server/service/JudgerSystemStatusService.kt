@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.service
 
-import com.github.ntoj.app.server.model.JudgerSystemStatus
+import com.github.ntoj.app.server.model.entities.JudgerSystemStatus
 import com.github.ntoj.app.server.repository.JudgerSystemStatusRepository
 import org.springframework.stereotype.Service
 

@@ -1,7 +1,7 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.model.SelfTestSubmission
+import com.github.ntoj.app.server.model.entities.SelfTestSubmission
 import com.github.ntoj.app.server.repository.SelfTestSubmissionRepository
 import com.github.ntoj.app.shared.model.JudgeStage
 import jakarta.transaction.Transactional

@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.config.interceptor
 
-import com.github.ntoj.app.server.model.JudgerSystemStatus
+import com.github.ntoj.app.server.model.entities.JudgerSystemStatus
 import com.github.ntoj.app.server.service.JudgeClientTokenService
 import com.github.ntoj.app.server.service.JudgerSystemStatusService
 import jakarta.servlet.http.HttpServletRequest

@@ -8,13 +8,12 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.Contest
-import com.github.ntoj.app.server.model.ContestProblem
-import com.github.ntoj.app.server.model.ContestUser
 import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.model.entities.Contest
+import com.github.ntoj.app.server.model.entities.ContestProblem
+import com.github.ntoj.app.server.model.entities.ContestUser
 import com.github.ntoj.app.server.service.ContestService
 import com.github.ntoj.app.server.service.LanguageService
-import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
@@ -36,7 +35,6 @@ import java.time.Instant
 class AdminContestController(
     private val userService: UserService,
     private val contestService: ContestService,
-    private val problemService: ProblemService,
     private val languageService: LanguageService,
 ) {
     @GetMapping
