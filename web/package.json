@@ -42,7 +42,7 @@
     "@types/nprogress": "0.2.3",
     "@types/react": "18.2.37",
     "@types/react-dom": "18.2.15",
-    "@typescript-eslint/eslint-plugin": "7.6.0",
+    "@typescript-eslint/eslint-plugin": "7.7.1",
     "@typescript-eslint/parser": "7.6.0",
     "@unocss/eslint-config": "0.59.2",
     "@unocss/eslint-plugin": "^0.59.0",
