@@ -2,8 +2,8 @@ package com.github.ntoj.app.server.controller
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
-import com.github.ntoj.app.server.model.entities.Announcement
 import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.model.entities.Announcement
 import com.github.ntoj.app.server.service.AnnouncementService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity

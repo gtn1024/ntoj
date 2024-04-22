@@ -15,14 +15,15 @@ data class UserDto(
     val role: UserRole = UserRole.USER,
 ) : Serializable {
     companion object {
-        fun from(user: User) = UserDto(
-            user.createdAt!!,
-            user.username,
-            user.email,
-            user.realName,
-            user.bio,
-            user.userId!!,
-            user.role,
-        )
+        fun from(user: User) =
+            UserDto(
+                user.createdAt!!,
+                user.username,
+                user.email,
+                user.realName,
+                user.bio,
+                user.userId!!,
+                user.role,
+            )
     }
 }
