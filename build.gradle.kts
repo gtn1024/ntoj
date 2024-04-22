@@ -2,8 +2,6 @@ plugins {
     kotlin("jvm") apply false
     java
     idea
-
-    id("it.nicolasfarabegoli.conventional-commits") version "3.1.3"
 }
 
 allprojects {

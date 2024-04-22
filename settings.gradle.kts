@@ -4,6 +4,10 @@ pluginManagement {
     }
 }
 
+plugins {
+    id("org.danilopianini.gradle-pre-commit-git-hooks") version "2.0.4"
+}
+
 rootProject.name = "ntoj"
 
 require(JavaVersion.current() >= JavaVersion.VERSION_17) {
@@ -19,4 +23,17 @@ rootProject.children.forEach { it.configureBuildScriptName() }
 fun ProjectDescriptor.configureBuildScriptName() {
     buildFileName = "${name}.gradle.kts"
     children.forEach { it.configureBuildScriptName() }
+}
+
+gitHooks {
+    commitMsg { conventionalCommits() }
+    preCommit {
+        tasks("ktlintCheck")
+        appendScript {
+            """
+                cd web && pnpm run lint
+            """.trimIndent()
+        }
+    }
+    createHooks()
 }
