@@ -8,7 +8,7 @@ import java.time.Instant
 data class GroupDto(
     val createdAt: Instant,
     val name: String,
-    val users: MutableList<UserDto>,
+    val users: List<UserDto>,
     val id: Long?,
 ) : Serializable {
     companion object {
