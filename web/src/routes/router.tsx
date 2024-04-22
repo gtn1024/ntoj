@@ -44,6 +44,8 @@ import ContestSubmissionListPage from '../pages/contest/ContestSubmissionListPag
 import { ArticleListPage } from '../pages/ArticleListPage.tsx'
 import { ArticleViewPage } from '../pages/ArticleViewPage.tsx'
 import { ArticleEditPage } from '../pages/ArticleEditPage.tsx'
+import { AdminArticlePage } from '../pages/admin/AdminArticlePage.tsx'
+import { AdminArticleEditPage } from '../pages/admin/AdminArticleEditPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -99,6 +101,13 @@ export const router = createBrowserRouter(
             { path: 'import', element: <AdminUserImportPage /> },
             { path: 'new', element: <AdminUserEditPage /> },
             { path: ':id/edit', element: <AdminUserEditPage /> },
+          ],
+        },
+        {
+          path: 'article',
+          children: [
+            { index: true, element: <AdminArticlePage /> },
+            { path: ':id/edit', element: <AdminArticleEditPage /> },
           ],
         },
         {

@@ -39,6 +39,10 @@ export const AdminLayout: React.FC = () => {
       label: '竞赛',
     },
     {
+      key: '/admin/article',
+      label: '文章',
+    },
+    {
       key: '/admin/user',
       label: '用户',
     },
@@ -67,6 +71,9 @@ export const AdminLayout: React.FC = () => {
     }
     if (pathname.includes('/admin/contest')) {
       return setCurrent('/admin/contest')
+    }
+    if (pathname.includes('/admin/article')) {
+      return setCurrent('/admin/article')
     }
     if (pathname.includes('/admin/user')) {
       return setCurrent('/admin/user')
