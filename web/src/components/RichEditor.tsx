@@ -45,21 +45,20 @@ export const RichEditor: React.FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <div style={{ border: '1px solid #ccc' }}>
-        <Toolbar
-          editor={editor}
-          mode={props.mode ?? 'simple'}
-          style={{ borderBottom: '1px solid #ccc' }}
-        />
-        <Editor
-          value={props.data}
-          defaultConfig={editorConfig}
-          onCreated={setEditor}
-          onChange={editor => props.setData(editor.getHtml())}
-          mode="default"
-          style={{ height: props.height }}
-        />
-      </div>
-    </>
-  ) }
+    <div style={{ border: '1px solid #ccc' }}>
+      <Toolbar
+        editor={editor}
+        mode={props.mode ?? 'simple'}
+        style={{ borderBottom: '1px solid #ccc' }}
+      />
+      <Editor
+        value={props.data}
+        defaultConfig={editorConfig}
+        onCreated={setEditor}
+        onChange={editor => props.setData(editor.getHtml())}
+        mode="default"
+        style={{ height: props.height }}
+      />
+    </div>
+  )
+}

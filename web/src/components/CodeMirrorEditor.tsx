@@ -15,19 +15,17 @@ interface EditorProps {
 
 export const CodeMirrorEditor: React.FC<EditorProps> = (props) => {
   return (
-    <>
-      <div className={props.className}>
-        <CodeMirror
-          style={{
-            fontSize: `${props.fontSize}px` ?? '14px',
-          }}
-          value={props.value}
-          height={`${props.editorHeight}px`}
-          theme={props.theme}
-          onChange={props.setValue}
-          extensions={[loadLanguage(props.language as LanguageName)!]}
-        />
-      </div>
-    </>
+    <div className={props.className}>
+      <CodeMirror
+        style={{
+          fontSize: `${props.fontSize}px` ?? '14px',
+        }}
+        value={props.value}
+        height={`${props.editorHeight}px`}
+        theme={props.theme}
+        onChange={props.setValue}
+        extensions={[loadLanguage(props.language as LanguageName)!]}
+      />
+    </div>
   )
 }

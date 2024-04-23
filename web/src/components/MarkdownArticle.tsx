@@ -8,8 +8,6 @@ interface Props {
 export const MarkdownArticle: React.FC<Props> = (props) => {
   const html = mdit.render(props.data)
   return (
-    <>
-      <div dangerouslySetInnerHTML={{ __html: html }} />
-    </>
+    <div dangerouslySetInnerHTML={{ __html: html }} />
   )
 }

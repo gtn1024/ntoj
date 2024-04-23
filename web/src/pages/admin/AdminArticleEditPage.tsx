@@ -43,35 +43,33 @@ export const AdminArticleEditPage: React.FC = () => {
       })
   }
   return (
-    <>
-      <div className="h-[calc(100vh-64px)] w-full flex justify-between">
-        <div className="w-full overflow-y-auto p-4">
-          <h2 className="text-xl">
-            修改文章
-          </h2>
-          <Form
-            name="basic"
-            layout="vertical"
-            onFinish={onSubmit}
-            autoComplete="off"
-            ref={formRef}
-          >
-            <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
-              <Input />
-            </Form.Item>
+    <div className="h-[calc(100vh-64px)] w-full flex justify-between">
+      <div className="w-full overflow-y-auto p-4">
+        <h2 className="text-xl">
+          修改文章
+        </h2>
+        <Form
+          name="basic"
+          layout="vertical"
+          onFinish={onSubmit}
+          autoComplete="off"
+          ref={formRef}
+        >
+          <Form.Item label="标题" rules={[{ required: true, message: '请输入标题！' }]} name="title" className="grow">
+            <Input />
+          </Form.Item>
 
-            <Form.Item label="内容" rules={[{ required: true, message: '请输入内容！' }]} name="content" className="grow">
-              <Input.TextArea rows={20} />
-            </Form.Item>
+          <Form.Item label="内容" rules={[{ required: true, message: '请输入内容！' }]} name="content" className="grow">
+            <Input.TextArea rows={20} />
+          </Form.Item>
 
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                修改
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              修改
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
-    </>
+    </div>
   )
 }
