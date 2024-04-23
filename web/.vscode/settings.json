@@ -1,9 +1,4 @@
 {
-  "prettier.enable": false,
-  "editor.formatOnSave": false,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
   // Enable the ESlint flat config support
   "eslint.experimental.useFlatConfig": true,
 
@@ -44,6 +39,7 @@
     "jsonc",
     "yaml",
     "toml",
-    "astro",
+    "gql",
+    "graphql"
   ]
 }
