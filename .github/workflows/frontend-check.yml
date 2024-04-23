@@ -1,12 +1,6 @@
 name: Frontend Check
 
-on:
-  push:
-    paths:
-      - 'web/**/*'
-  pull_request:
-    paths:
-      - 'web/**/*'
+on: [ push, pull_request ]
 
 jobs:
   check:

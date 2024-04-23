@@ -1,14 +1,6 @@
 name: Backend Check
 
-on:
-  push:
-    paths-ignore:
-      - '**/*.md'
-      - 'web/**/*'
-  pull_request:
-    paths-ignore:
-      - '**/*.md'
-      - 'web/**/*'
+on: [ push, pull_request ]
 
 jobs:
   check:
