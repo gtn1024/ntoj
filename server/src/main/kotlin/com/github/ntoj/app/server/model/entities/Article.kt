@@ -13,6 +13,7 @@ class Article(
     @Column(columnDefinition = "text") var content: String,
     @ManyToOne
     var author: User,
+    @Column(nullable = false) var visible: Boolean = true,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
