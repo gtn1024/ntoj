@@ -2,12 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { FormInstance } from 'antd'
-import {
-  Button,
-  Form,
-  Input,
-  message,
-} from 'antd'
+import { Button, Form, Input, Switch, message } from 'antd'
 import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 
@@ -22,6 +17,7 @@ export const AdminArticleEditPage: React.FC = () => {
           formRef.current?.setFieldsValue({
             title: res.data.data.title,
             content: res.data.data.content,
+            visible: res.data.data.visible,
           })
         })
         .catch((err: AxiosError<HttpResponse>) => {
@@ -61,6 +57,14 @@ export const AdminArticleEditPage: React.FC = () => {
 
           <Form.Item label="内容" rules={[{ required: true, message: '请输入内容！' }]} name="content" className="grow">
             <Input.TextArea rows={20} />
+          </Form.Item>
+
+          <Form.Item
+            label="是否可见"
+            name="visible"
+            valuePropName="checked"
+          >
+            <Switch />
           </Form.Item>
 
           <Form.Item>

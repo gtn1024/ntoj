@@ -172,6 +172,7 @@ namespace AdminDto {
     title: string
     content: string
     author: AdminUser
+    visible: boolean
     createdAt: number
   }
 

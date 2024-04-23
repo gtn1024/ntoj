@@ -79,6 +79,14 @@ export const AdminArticlePage: React.FC = () => {
       },
     },
     {
+      title: '是否可见',
+      dataIndex: 'visible',
+      key: 'visible',
+      render: (value: boolean) => {
+        return (value ? '是' : '否')
+      },
+    },
+    {
       title: '创建时间',
       dataIndex: 'createdAt',
       key: 'createdAt',
