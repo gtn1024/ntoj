@@ -71,6 +71,9 @@ class AdminArticleController(
             require(articleRequest.content.isNotBlank()) { "文章内容不能为空" }
             article.content = articleRequest.content
         }
+        if (articleRequest.visible != null) {
+            article.visible = articleRequest.visible
+        }
         article = articleService.update(article)
         return R.success(200, "修改成功", ArticleDto.from(article))
     }
@@ -86,5 +89,6 @@ class AdminArticleController(
     data class ArticleRequest(
         val title: String?,
         val content: String?,
+        val visible: Boolean?,
     )
 }

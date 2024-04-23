@@ -11,6 +11,7 @@ data class ArticleDto(
     val content: String,
     val author: UserDto,
     val id: Long,
+    val visible: Boolean,
 ) : Serializable {
     companion object {
         fun from(article: Article) =
@@ -20,6 +21,7 @@ data class ArticleDto(
                 content = article.content,
                 author = UserDto.from(article.author),
                 id = article.articleId!!,
+                visible = article.visible,
             )
     }
 }

@@ -3,10 +3,12 @@ package com.github.ntoj.app.server.service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.entities.Article
 import com.github.ntoj.app.server.repository.ArticleRepository
+import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Direction.ASC
 import org.springframework.data.domain.Sort.Direction.DESC
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 
 interface ArticleService {
@@ -15,12 +17,13 @@ interface ArticleService {
     fun get(id: Long): Article
 
     fun get(
+        onlyVisible: Boolean = false,
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
         desc: Boolean = false,
     ): List<Article>
 
-    fun count(): Long
+    fun count(onlyVisible: Boolean = false): Long
 
     fun update(article: Article): Article
 
@@ -40,11 +43,13 @@ class ArticleServiceImpl(
     }
 
     override fun get(
+        onlyVisible: Boolean,
         page: Int,
         pageSize: Int,
         desc: Boolean,
     ): List<Article> {
         return articleRepository.findAll(
+            buildSpecification(onlyVisible),
             PageRequest.of(
                 page - 1,
                 pageSize,
@@ -53,8 +58,8 @@ class ArticleServiceImpl(
         ).toList()
     }
 
-    override fun count(): Long {
-        return articleRepository.count()
+    override fun count(onlyVisible: Boolean): Long {
+        return articleRepository.count(buildSpecification(onlyVisible))
     }
 
     override fun update(article: Article): Article {
@@ -63,5 +68,15 @@ class ArticleServiceImpl(
 
     override fun remove(id: Long) {
         articleRepository.deleteById(id)
+    }
+
+    private fun buildSpecification(onlyVisible: Boolean): Specification<Article> {
+        return Specification { root, _, criteriaBuilder ->
+            val predicateList = mutableListOf<Predicate>()
+            if (onlyVisible) {
+                predicateList.add(criteriaBuilder.isTrue(root.get("visible")))
+            }
+            criteriaBuilder.and(*predicateList.toTypedArray())
+        }
     }
 }
