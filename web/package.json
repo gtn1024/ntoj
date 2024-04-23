@@ -49,7 +49,7 @@
     "@vitejs/plugin-react-swc": "3.6.0",
     "eslint": "8.57.0",
     "rollup-plugin-visualizer": "5.12.0",
-    "sass": "1.69.5",
+    "sass": "1.75.0",
     "typescript": "5.4.5",
     "unocss": "0.59.4",
     "vite": "5.2.10"
