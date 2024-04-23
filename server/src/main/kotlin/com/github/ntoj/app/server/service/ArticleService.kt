@@ -25,8 +25,6 @@ interface ArticleService {
 
     fun count(onlyVisible: Boolean = false): Long
 
-    fun newArticle(article: Article): Article
-
     fun update(article: Article): Article
 
     fun remove(id: Long)
@@ -62,10 +60,6 @@ class ArticleServiceImpl(
 
     override fun count(onlyVisible: Boolean): Long {
         return articleRepository.count(buildSpecification(onlyVisible))
-    }
-
-    override fun newArticle(article: Article): Article {
-        return articleRepository.save(article)
     }
 
     override fun update(article: Article): Article {
