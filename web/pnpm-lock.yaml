@@ -58,7 +58,7 @@ importers:
         version: 2.2.5(react@18.2.0)
       zustand:
         specifier: 4.5.2
-        version: 4.5.2(@types/react@18.2.37)(immer@9.0.21)(react@18.2.0)
+        version: 4.5.2(@types/react@18.2.79)(immer@9.0.21)(react@18.2.0)
     devDependencies:
       '@antfu/eslint-config':
         specifier: 2.15.0
@@ -94,11 +94,11 @@ importers:
         specifier: 0.2.3
         version: 0.2.3
       '@types/react':
-        specifier: 18.2.37
-        version: 18.2.37
+        specifier: 18.2.79
+        version: 18.2.79
       '@types/react-dom':
-        specifier: 18.2.15
-        version: 18.2.15
+        specifier: 18.2.25
+        version: 18.2.25
       '@unocss/eslint-config':
         specifier: 0.59.4
         version: 0.59.4(eslint@8.57.0)(typescript@5.4.5)
@@ -1147,14 +1147,11 @@ packages:
   '@types/prop-types@15.7.5':
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
 
-  '@types/react-dom@18.2.15':
-    resolution: {integrity: sha512-HWMdW+7r7MR5+PZqJF6YFNSCtjz1T0dsvo/f1BV6HkV+6erD/nA7wd9NM00KVG83zf2nJ7uATPO9ttdIPvi3gg==}
+  '@types/react-dom@18.2.25':
+    resolution: {integrity: sha512-o/V48vf4MQh7juIKZU2QGDfli6p1+OOi5oXx36Hffpc9adsHeXjVp8rHuPkjd8VT8sOJ2Zp05HR7CdpGTIUFUA==}
 
-  '@types/react@18.2.37':
-    resolution: {integrity: sha512-RGAYMi2bhRgEXT3f4B92WTohopH6bIXw05FuGlmJEnv/omEn190+QYEIYxIAuIBdKgboYYdVved2p1AxZVQnaw==}
-
-  '@types/scheduler@0.16.3':
-    resolution: {integrity: sha512-5cJ8CB4yAx7BH1oMvdU0Jh9lrEXyPkar6F9G/ERswkCuvP4KQZfZkSjcMbAICCpQTN4OuZn8tz0HiKv9TGZgrQ==}
+  '@types/react@18.2.79':
+    resolution: {integrity: sha512-RwGAGXPl9kSXwdNTafkOEuFrTBD5SA2B3iEB96xi8+xu5ddUa/cpvyVCSNn+asgLCTHkb5ZxN8gbuibYJi4s1w==}
 
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
@@ -4948,17 +4945,14 @@ snapshots:
 
   '@types/prop-types@15.7.5': {}
 
-  '@types/react-dom@18.2.15':
+  '@types/react-dom@18.2.25':
     dependencies:
-      '@types/react': 18.2.37
+      '@types/react': 18.2.79
 
-  '@types/react@18.2.37':
+  '@types/react@18.2.79':
     dependencies:
       '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.3
       csstype: 3.1.2
-
-  '@types/scheduler@0.16.3': {}
 
   '@types/semver@7.5.8': {}
 
@@ -7936,10 +7930,10 @@ snapshots:
 
   yocto-queue@1.0.0: {}
 
-  zustand@4.5.2(@types/react@18.2.37)(immer@9.0.21)(react@18.2.0):
+  zustand@4.5.2(@types/react@18.2.79)(immer@9.0.21)(react@18.2.0):
     dependencies:
       use-sync-external-store: 1.2.0(react@18.2.0)
     optionalDependencies:
-      '@types/react': 18.2.37
+      '@types/react': 18.2.79
       immer: 9.0.21
       react: 18.2.0
