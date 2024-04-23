@@ -28,8 +28,8 @@ export const ContestClarificationListPage: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {clarifications?.map((clarification, index) => (
-              <tr key={index} className="cursor-pointer hover:bg-#f0f0f0">
+            {clarifications?.map(clarification => (
+              <tr key={clarification.id} className="cursor-pointer hover:bg-#f0f0f0">
                 <td width="60%" className="px-4 py-3">
                   <LinkComponent href={`/c/${id}/clarification/${clarification.id}`} className="text-gray-500">
                     <div className="text-center">

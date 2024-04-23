@@ -83,7 +83,7 @@ export const AdminUserImportPage: React.FC = () => {
               </thead>
               <tbody className="text-center">
                 {previewData.map((user, index) => (
-                  <tr key={index} className={user.exists ? 'bg-red' : 'bg-green'}>
+                  <tr key={user.username} className={user.exists ? 'bg-red' : 'bg-green'}>
                     <td>{index + 1}</td>
                     <td>{user.username}</td>
                     <td>{user.password}</td>

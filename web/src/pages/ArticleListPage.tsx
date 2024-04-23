@@ -46,8 +46,8 @@ export const ArticleListPage: React.FC = () => {
           <Button type="primary" href="/article/new">写文章</Button>
         </div>
         <div className="my-4 bg-white py-2">
-          { articles?.map((article, index) => {
-            return <ArticleItem key={index} article={article} />
+          { articles?.map((article) => {
+            return <ArticleItem key={article.id} article={article} />
           }) }
         </div>
         <div className="">

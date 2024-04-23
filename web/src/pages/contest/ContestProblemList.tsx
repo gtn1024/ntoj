@@ -58,8 +58,8 @@ export const ContestProblemList: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {problems?.map((problem, index) => (
-            <tr key={index} className="cursor-pointer hover:bg-#f0f0f0">
+          {problems?.map(problem => (
+            <tr key={problem.alias} className="cursor-pointer hover:bg-#f0f0f0">
               <td width="10%" className="px-4 py-3">
                 <div className="text-center">{problem.alias}</div>
               </td>

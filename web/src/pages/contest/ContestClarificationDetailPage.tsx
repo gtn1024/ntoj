@@ -100,8 +100,8 @@ export const ContestClarificationDetailPage: React.FC = () => {
       </div>
       <div className="w-full flex flex-col gap-1">
         {
-          clarification?.replies.sort((a, b) => b.id - a.id).map((reply, idx) => (
-            <div key={idx} className="w-full flex flex-col b-1 b-[#666] rounded b-solid px-4 py-2">
+          clarification?.replies.sort((a, b) => b.id - a.id).map(reply => (
+            <div key={reply.id} className="w-full flex flex-col b-1 b-[#666] rounded b-solid px-4 py-2">
               <div className="flex gap-2 pb-4 text-[#999]">
                 <span>{reply.user}</span>
                 <span>{reply.createdAt}</span>

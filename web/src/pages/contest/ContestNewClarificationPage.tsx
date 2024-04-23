@@ -60,8 +60,8 @@ export const ContestNewClarificationPage: React.FC = () => {
         <div className="flex gap-2 leading-8">
           <select value={selectedBoard} onChange={handleBoardChange} className="w-20%">
             <option value="all">不选择题目</option>
-            {boards.map((board, i) => (
-              <option key={i} value={board.alias}>{`${board.alias} - ${board.title}`}</option>
+            {boards.map(board => (
+              <option key={board.alias} value={board.alias}>{`${board.alias} - ${board.title}`}</option>
             ))}
           </select>
           <input type="text" value={title} onChange={handleTitleChange} className="w-80%" />

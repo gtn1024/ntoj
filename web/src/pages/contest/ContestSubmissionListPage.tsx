@@ -50,8 +50,8 @@ export const ContestSubmissionListPage: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {data?.list.map((submission, index) => (
-            <tr key={index} className="cursor-pointer hover:bg-#f0f0f0">
+          {data?.list.map(submission => (
+            <tr key={submission.id} className="cursor-pointer hover:bg-#f0f0f0">
               <td width="10%" className="px-4 py-3">
                 <div className="text-center">{submission.id}</div>
               </td>
