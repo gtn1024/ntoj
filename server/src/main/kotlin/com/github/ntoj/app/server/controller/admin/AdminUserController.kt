@@ -76,6 +76,14 @@ class AdminUserController(
         return R.success(200, "获取成功", AdminUserDto.from(user))
     }
 
+    @GetMapping("search")
+    fun search(
+        @RequestParam keyword: String,
+    ): ResponseEntity<R<List<AdminUserDto>>> {
+        val users = userService.search(keyword)
+        return R.success(200, "获取成功", users.map { AdminUserDto.from(it) })
+    }
+
     @DeleteMapping("{id}")
     fun delete(
         @PathVariable id: Long,

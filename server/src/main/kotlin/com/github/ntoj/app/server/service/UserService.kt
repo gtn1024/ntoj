@@ -3,7 +3,9 @@ package com.github.ntoj.app.server.service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.repository.UserRepository
+import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import kotlin.jvm.optionals.getOrNull
 
@@ -32,6 +34,8 @@ interface UserService {
     fun updateUser(user: User): User
 
     fun deleteUserById(id: Long)
+
+    fun search(user: String): List<User>
 }
 
 @Service
@@ -91,5 +95,26 @@ class UserServiceImpl(
 
     override fun deleteUserById(id: Long) {
         userRepository.deleteById(id)
+    }
+
+    /**
+     * search by username and realName and email like with spec
+     */
+    override fun search(user: String): List<User> {
+        val spec =
+            Specification<User> { root, _, cb ->
+                val list = mutableListOf<Predicate>()
+                if (user.isNotBlank()) {
+                    list.add(
+                        cb.or(
+                            cb.like(root.get("username"), "%$user%"),
+                            cb.like(root.get("realName"), "%$user%"),
+                            cb.like(root.get("email"), "%$user%"),
+                        ),
+                    )
+                }
+                cb.and(*list.toTypedArray())
+            }
+        return userRepository.findAll(spec)
     }
 }

@@ -151,7 +151,7 @@ interface Article {
 }
 
 namespace AdminDto {
-  interface User {
+  interface AdminUser {
     id: number
     username: string
     realName?: string
@@ -160,11 +160,18 @@ namespace AdminDto {
     createdAt: string
   }
 
+  interface AdminGroup {
+    id: number
+    name: string
+    users: User[]
+    createdAt: number
+  }
+
   interface Article {
     id: number
     title: string
     content: string
-    author: User
+    author: AdminUser
     createdAt: number
   }
 

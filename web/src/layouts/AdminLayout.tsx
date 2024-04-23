@@ -21,7 +21,7 @@ export const AdminLayout: React.FC = () => {
   } = theme.useToken()
   const { user } = useUserStore()
   const nav = useNavigate()
-  const items: MenuProps['items'] = [
+  const items = [
     {
       key: '/admin',
       label: '首页',
@@ -29,6 +29,10 @@ export const AdminLayout: React.FC = () => {
     {
       key: '/admin/announcement',
       label: '公告',
+    },
+    {
+      key: '/admin/group',
+      label: '小组',
     },
     {
       key: '/admin/problem',
@@ -63,31 +67,15 @@ export const AdminLayout: React.FC = () => {
   }
 
   useEffect(() => {
-    if (pathname.includes('/admin/announcement')) {
-      return setCurrent('/admin/announcement')
+    for (const item of items) {
+      if (item.key === '/admin') {
+        continue
+      }
+      if (pathname.includes(item.key)) {
+        return setCurrent(item.key)
+      }
     }
-    if (pathname.includes('/admin/problem')) {
-      return setCurrent('/admin/problem')
-    }
-    if (pathname.includes('/admin/contest')) {
-      return setCurrent('/admin/contest')
-    }
-    if (pathname.includes('/admin/article')) {
-      return setCurrent('/admin/article')
-    }
-    if (pathname.includes('/admin/user')) {
-      return setCurrent('/admin/user')
-    }
-    if (pathname.includes('/admin/language')) {
-      return setCurrent('/admin/language')
-    }
-    if (pathname.includes('/admin/judge_client_token')) {
-      return setCurrent('/admin/judge_client_token')
-    }
-    if (pathname.includes('/admin')) {
-      return setCurrent('/admin')
-    }
-    return setCurrent('')
+    return setCurrent('/admin')
   }, [pathname])
 
   const onClickMenu: MenuProps['onClick'] = (e) => {

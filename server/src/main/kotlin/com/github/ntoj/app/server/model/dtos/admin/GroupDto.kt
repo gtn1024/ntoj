@@ -9,7 +9,7 @@ data class GroupDto(
     val createdAt: Instant,
     val name: String,
     val users: List<UserDto>,
-    val id: Long?,
+    val id: Long,
 ) : Serializable {
     companion object {
         fun from(group: Group) =

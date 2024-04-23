@@ -20,7 +20,7 @@ export const AdminUserEditPage: React.FC = () => {
   const formRef = useRef<FormInstance>(null)
   useEffect(() => {
     if (mode === '修改' && id) {
-      http.get<AdminDto.User>(`/admin/user/${id}`)
+      http.get<AdminDto.AdminUser>(`/admin/user/${id}`)
         .then((res) => {
           formRef?.current?.setFieldsValue({
             ...res.data.data,

@@ -46,6 +46,7 @@ import { ArticleViewPage } from '../pages/ArticleViewPage.tsx'
 import { ArticleEditPage } from '../pages/ArticleEditPage.tsx'
 import { AdminArticlePage } from '../pages/admin/AdminArticlePage.tsx'
 import { AdminArticleEditPage } from '../pages/admin/AdminArticleEditPage.tsx'
+import { AdminGroupPage } from '../pages/admin/AdminGroupPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -116,6 +117,12 @@ export const router = createBrowserRouter(
             { index: true, element: <AdminAnnouncementPage /> },
             { path: 'new', element: <AdminAnnouncementEditPage /> },
             { path: ':id/edit', element: <AdminAnnouncementEditPage /> },
+          ],
+        },
+        {
+          path: 'group',
+          children: [
+            { index: true, element: <AdminGroupPage /> },
           ],
         },
         {
