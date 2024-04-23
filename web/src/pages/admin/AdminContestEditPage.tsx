@@ -1,3 +1,4 @@
+import type { SetStateAction } from 'react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -234,7 +235,7 @@ export const AdminContestEditPage: React.FC = () => {
             <Transfer
               dataSource={allLanguages}
               targetKeys={languages}
-              onChange={setLanguages}
+              onChange={v => setLanguages(v as SetStateAction<string[]>)}
               render={item => item.title}
             />
           </Form.Item>

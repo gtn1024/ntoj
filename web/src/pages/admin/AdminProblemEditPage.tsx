@@ -1,5 +1,6 @@
 import type { FormInstance, UploadFile, UploadProps } from 'antd'
 import { Button, Form, Input, InputNumber, Space, Switch, Transfer, Upload, message } from 'antd'
+import type { SetStateAction } from 'react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -282,7 +283,7 @@ export const AdminProblemEditPage: React.FC = () => {
             <Transfer
               dataSource={allLanguages}
               targetKeys={languages}
-              onChange={setLanguages}
+              onChange={v => setLanguages(v as SetStateAction<string[]>)}
               render={item => item.title}
             />
           </Form.Item>
