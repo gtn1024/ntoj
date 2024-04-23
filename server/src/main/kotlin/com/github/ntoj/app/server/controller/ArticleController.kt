@@ -32,8 +32,8 @@ class ArticleController(
         @RequestParam(required = false, defaultValue = "1") current: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
     ): ResponseEntity<R<L<ArticleDto>>> {
-        val list = articlesService.get(desc = true, page = current, pageSize = pageSize)
-        val count = articlesService.count()
+        val list = articlesService.get(onlyVisible = true, desc = true, page = current, pageSize = pageSize)
+        val count = articlesService.count(true)
         return R.success(200, "获取成功", L(count, current, list.map { ArticleDto.from(it) }))
     }
 
