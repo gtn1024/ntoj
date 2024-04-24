@@ -47,6 +47,7 @@ import { ArticleEditPage } from '../pages/ArticleEditPage.tsx'
 import { AdminArticlePage } from '../pages/admin/AdminArticlePage.tsx'
 import { AdminArticleEditPage } from '../pages/admin/AdminArticleEditPage.tsx'
 import { AdminGroupPage } from '../pages/admin/AdminGroupPage.tsx'
+import { GroupListPage } from '../pages/GroupListPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -220,6 +221,12 @@ export const router = createBrowserRouter(
               ],
             },
             { path: ':id', element: <ArticleViewPage /> },
+          ],
+        },
+        {
+          path: 'group',
+          children: [
+            { index: true, element: <GroupListPage /> },
           ],
         },
       ],

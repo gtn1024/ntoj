@@ -8,7 +8,7 @@ interface Props {
   className?: string
 }
 
-const items: MenuProps['items'] = [
+const items = [
   {
     label: '首页',
     key: '/',
@@ -30,6 +30,10 @@ const items: MenuProps['items'] = [
     key: '/article',
   },
   {
+    label: '小组',
+    key: '/group',
+  },
+  {
     label: '关于',
     key: '/about',
   },
@@ -43,25 +47,15 @@ export const MenuComponent: React.FC<Props> = (props) => {
   const { pathname } = useLocation()
 
   useEffect(() => {
-    if (pathname.includes('/p')) {
-      return setCurrent('/p')
+    for (const item of items) {
+      if (item.key === '/') {
+        continue
+      }
+      if (pathname.includes(item.key)) {
+        return setCurrent(item.key)
+      }
     }
-    if (pathname.includes('/r')) {
-      return setCurrent('/r')
-    }
-    if (pathname.includes('/c')) {
-      return setCurrent('/c')
-    }
-    if (pathname.includes('/article')) {
-      return setCurrent('/article')
-    }
-    if (pathname.includes('/about')) {
-      return setCurrent('/about')
-    }
-    if (pathname.includes('/')) {
-      return setCurrent('/')
-    }
-    return setCurrent('')
+    return setCurrent('/')
   }, [pathname])
 
   const onClick: MenuProps['onClick'] = (e) => {
@@ -78,7 +72,7 @@ export const MenuComponent: React.FC<Props> = (props) => {
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"
-            items={items}
+            items={items as MenuProps['items']}
           />
           )
         : (
