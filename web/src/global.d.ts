@@ -13,6 +13,7 @@ interface CurrentUser {
   groups?: {
     id: number
     name: string
+    userNumber: number
   }[]
 }
 
@@ -27,6 +28,7 @@ interface User {
   groups: {
     id: number
     name: string
+    userNumber: number
   }[]
 }
 

@@ -33,12 +33,14 @@ data class UserDto(
     data class UserGroupDto(
         val id: Long,
         val name: String,
+        val userNumber: Int,
     ) {
         companion object {
             fun from(group: Group) =
                 UserGroupDto(
                     group.groupId!!,
                     group.name,
+                    group.users.size,
                 )
         }
     }
