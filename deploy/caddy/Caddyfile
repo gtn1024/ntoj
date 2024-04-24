@@ -1,0 +1,14 @@
+:80 {
+  route /* {
+    root * /path/to/frontend/build
+    try files {path} /index.html
+    file_server
+  }
+  route /api/* {
+    uri strip_prefix /api
+    reverse_proxy http://127.0.0.1:18080
+  }
+  route /upload/* {
+    reverse_proxy http://127.0.0.1:18080
+  }
+}

@@ -28,3 +28,7 @@ Web 端主要使用了 [TypeScript](https://www.typescriptlang.org/)、[React](h
 Web 端开发指南见 [web/README.md](web/README.md)。
 
 评测机开发指南见 [judger/README.md](judger/README.md)。
+
+## 部署指南（WIP）
+
+[Caddy 配置文件](deploy/caddy/Caddyfile)
