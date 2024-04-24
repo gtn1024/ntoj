@@ -34,7 +34,7 @@ export const GroupListPage: FC = () => {
         <Row>
           {userStore.user.groups?.map((group) => {
             return (
-              <Col span={6} key={group.id}>
+              <Col xs={24} sm={12} md={8} lg={6} key={group.id}>
                 <GroupItem group={group} />
               </Col>
             )
