@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.ManyToMany
 
 @Entity(name = "t_users")
 class User(
@@ -16,6 +17,8 @@ class User(
     var bio: String?,
     @Column(name = "user_role", columnDefinition = "int4")
     var role: UserRole = UserRole.USER,
+    @ManyToMany(mappedBy = "users")
+    var groups: List<Group> = mutableListOf(),
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
