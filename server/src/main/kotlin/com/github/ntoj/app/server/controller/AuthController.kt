@@ -3,10 +3,10 @@ package com.github.ntoj.app.server.controller
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.SaLoginConfig
 import cn.dev33.satoken.stp.StpUtil
-import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.config.SecurityConfig
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
+import com.github.ntoj.app.server.model.dtos.UserDto
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.UserService
@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import java.time.Instant
 
 @RestController
 @RequestMapping("/auth")
@@ -41,7 +40,7 @@ class AuthController(
         return R.success(
             200,
             "登录成功",
-            LoginResponse(userLogin(username, password, user), CurrentUserDto.from(user)),
+            LoginResponse(userLogin(username, password, user), UserDto.from(user)),
         )
     }
 
@@ -80,8 +79,8 @@ class AuthController(
 
     @GetMapping("/current")
     @SaCheckLogin
-    fun getCurrentUser(): ResponseEntity<R<CurrentUserDto>> {
-        return R.success(200, "获取成功", CurrentUserDto.from(userService.getUserById(StpUtil.getLoginIdAsLong())))
+    fun getCurrentUser(): ResponseEntity<R<UserDto>> {
+        return R.success(200, "获取成功", UserDto.from(userService.getUserById(StpUtil.getLoginIdAsLong())))
     }
 }
 
@@ -95,30 +94,5 @@ data class UserRequest(
 
 data class LoginResponse(
     val token: String,
-    val user: CurrentUserDto,
+    val user: UserDto,
 )
-
-data class CurrentUserDto(
-    val id: Long? = null,
-    val username: String? = null,
-    val email: String? = null,
-    val realName: String? = null,
-    val bio: String? = null,
-    val role: UserRole? = UserRole.USER,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    val registerAt: Instant? = null,
-) {
-    companion object {
-        fun from(user: User): CurrentUserDto {
-            return CurrentUserDto(
-                id = user.userId,
-                username = user.username,
-                email = user.email,
-                realName = user.realName,
-                bio = user.bio,
-                role = user.role,
-                registerAt = user.createdAt,
-            )
-        }
-    }
-}

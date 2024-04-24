@@ -5,11 +5,15 @@ type UserRole = 'BANNED' | 'USER' | 'ADMIN' | 'SUPER_ADMIN'
 interface CurrentUser {
   id?: number
   username?: string
-  email?: string
   realName?: string
+  email?: string
   bio?: string
+  createdAt?: number
   role?: UserRole
-  registerAt?: number
+  groups?: {
+    id: number
+    name: string
+  }[]
 }
 
 interface User {
@@ -20,6 +24,10 @@ interface User {
   bio?: string
   createdAt: number
   role: UserRole
+  groups: {
+    id: number
+    name: string
+  }[]
 }
 
 interface Announcement {
