@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { useSearchParams } from 'react-router-dom'
 
 export function toFixedNumber(score: number, decimalPlaces: number = 2): number {
   return Number.parseFloat(score.toFixed(decimalPlaces))
@@ -76,4 +77,9 @@ export function userRoleToCNString(role: UserRole) {
 
 export function timestampToDateString(timestamp: number): string {
   return dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')
+}
+
+export function useQueryParam(query: string): string {
+  const [searchParams] = useSearchParams()
+  return searchParams.get(query) || ''
 }

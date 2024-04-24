@@ -148,6 +148,7 @@ interface Article {
   content: string
   author: User
   createdAt: number
+  problemAlias?: string
 }
 
 namespace AdminDto {

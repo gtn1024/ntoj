@@ -14,6 +14,7 @@ class Article(
     @ManyToOne
     var author: User,
     @Column(nullable = false) var visible: Boolean = true,
+    var problemAlias: String? = null,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")

@@ -55,9 +55,20 @@ export const ArticleViewPage: React.FC = () => {
   return (
     <div className="mx-auto max-w-1200px">
       <div className="my-4 border rounded-md bg-white p-4">
-        <h1 className="text-lg font-bold">
-          {data?.title}
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-lg font-bold">
+            {data?.title}
+          </h1>
+          <div className="text-4">
+            {data?.problemAlias && (
+              <Link to={`/p/${data?.problemAlias}`}>
+                <div className="i-mdi:book-open-variant" />
+                {' '}
+                查看题目
+              </Link>
+            )}
+          </div>
+        </div>
         <div className="flex justify-between">
           <div>
             <div className="i-mdi:account" />

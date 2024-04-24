@@ -21,9 +21,13 @@ interface ArticleService {
         page: Int = 1,
         pageSize: Int = Int.MAX_VALUE,
         desc: Boolean = false,
+        problemAlias: String? = null,
     ): List<Article>
 
-    fun count(onlyVisible: Boolean = false): Long
+    fun count(
+        onlyVisible: Boolean = false,
+        problemAlias: String? = null,
+    ): Long
 
     fun update(article: Article): Article
 
@@ -47,9 +51,10 @@ class ArticleServiceImpl(
         page: Int,
         pageSize: Int,
         desc: Boolean,
+        problemAlias: String?,
     ): List<Article> {
         return articleRepository.findAll(
-            buildSpecification(onlyVisible),
+            buildSpecification(onlyVisible, problemAlias),
             PageRequest.of(
                 page - 1,
                 pageSize,
@@ -58,8 +63,11 @@ class ArticleServiceImpl(
         ).toList()
     }
 
-    override fun count(onlyVisible: Boolean): Long {
-        return articleRepository.count(buildSpecification(onlyVisible))
+    override fun count(
+        onlyVisible: Boolean,
+        problemAlias: String?,
+    ): Long {
+        return articleRepository.count(buildSpecification(onlyVisible, problemAlias))
     }
 
     override fun update(article: Article): Article {
@@ -70,11 +78,17 @@ class ArticleServiceImpl(
         articleRepository.deleteById(id)
     }
 
-    private fun buildSpecification(onlyVisible: Boolean): Specification<Article> {
+    private fun buildSpecification(
+        onlyVisible: Boolean,
+        problemAlias: String?,
+    ): Specification<Article> {
         return Specification { root, _, criteriaBuilder ->
             val predicateList = mutableListOf<Predicate>()
             if (onlyVisible) {
                 predicateList.add(criteriaBuilder.isTrue(root.get("visible")))
+            }
+            if (problemAlias != null && problemAlias != "") {
+                predicateList.add(criteriaBuilder.equal(root.get<String?>("problemAlias"), problemAlias))
             }
             criteriaBuilder.and(*predicateList.toTypedArray())
         }

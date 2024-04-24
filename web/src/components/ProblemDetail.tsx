@@ -1,6 +1,7 @@
 import React from 'react'
 import { message } from 'antd'
 import c from 'classnames'
+import { Link } from 'react-router-dom'
 import { mdit } from '../lib/mdit.ts'
 import { useLayout } from '../hooks/useLayout.ts'
 
@@ -79,12 +80,19 @@ export const ProblemDetail: React.FC<{ data?: Problem, showProblemAlias?: boolea
   return (
     <div className={c(!isMobile && 'm-4')}>
       <div className="p-4">
-        <div>
+        <div className="flex items-center justify-between">
           <h2 className="font-bold">
-            {showProblemAlias && data?.alias }
+            {showProblemAlias && data?.alias}
             {' '}
             {data?.title}
           </h2>
+          <div className="text-4">
+            <Link to={`/article?problemAlias=${data?.alias || ''}`}>
+              <div className="i-mdi:book-open-variant" />
+              {' '}
+              查看题解
+            </Link>
+          </div>
         </div>
         <div className="pb-20px text-xs">
           <span className="mr-1">

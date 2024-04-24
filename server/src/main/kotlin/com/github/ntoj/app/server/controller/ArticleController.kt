@@ -31,9 +31,17 @@ class ArticleController(
     fun getMany(
         @RequestParam(required = false, defaultValue = "1") current: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(required = false) problemAlias: String?,
     ): ResponseEntity<R<L<ArticleDto>>> {
-        val list = articlesService.get(onlyVisible = true, desc = true, page = current, pageSize = pageSize)
-        val count = articlesService.count(true)
+        val list =
+            articlesService.get(
+                onlyVisible = true,
+                desc = true,
+                page = current,
+                pageSize = pageSize,
+                problemAlias = problemAlias,
+            )
+        val count = articlesService.count(true, problemAlias)
         return R.success(200, "获取成功", L(count, current, list.map { ArticleDto.from(it) }))
     }
 
@@ -60,6 +68,9 @@ class ArticleController(
                 content = articleRequest.content,
                 author = user,
             )
+        if (articleRequest.problemAlias != "") {
+            article.problemAlias = articleRequest.problemAlias
+        }
 
         article = articlesService.create(article)
         return R.success(200, "创建成功", ArticleDto.from(article))
@@ -102,6 +113,7 @@ class ArticleController(
 data class ArticleRequest(
     val title: String?,
     val content: String?,
+    val problemAlias: String,
 )
 
 data class ArticleDto(
@@ -110,6 +122,7 @@ data class ArticleDto(
     val content: String,
     val author: UserDto,
     val createdAt: Instant,
+    val problemAlias: String?,
 ) {
     companion object {
         fun from(article: Article) =
@@ -119,6 +132,7 @@ data class ArticleDto(
                 content = article.content,
                 author = UserDto.from(article.author),
                 createdAt = article.createdAt!!,
+                problemAlias = article.problemAlias,
             )
     }
 }
