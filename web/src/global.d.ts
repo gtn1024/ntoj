@@ -32,6 +32,16 @@ interface User {
   }[]
 }
 
+interface Group {
+  id: number
+  name: string
+  users: Array<{
+    id: number
+    username: string
+    realName?: string
+  }>
+}
+
 interface Announcement {
   id?: number
   title?: string
