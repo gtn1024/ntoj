@@ -22,6 +22,7 @@ class Submission(
     @JoinColumn(name = "user_id")
     var user: User?,
     @ManyToOne
+    @JoinColumn(name = "problem_id")
     var problem: Problem? = null,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
