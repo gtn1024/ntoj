@@ -41,6 +41,6 @@ class ContestClarification(
 @Entity(name = "t_contest_clarification_responses")
 class ContestClarificationResponse(
     @Column(nullable = false, columnDefinition = "TEXT") var content: String,
-    @ManyToOne @JoinColumn(nullable = false) var user: User,
+    @ManyToOne @JoinColumn(name = "user_id", nullable = false) var user: User,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "response_id") var responseId: Long? = null,
 ) : BaseEntity()
