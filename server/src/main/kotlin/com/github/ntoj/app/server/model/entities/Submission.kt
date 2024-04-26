@@ -28,7 +28,7 @@ class Submission(
     @Enumerated(EnumType.STRING)
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     var contestId: Long? = null,
-    @OneToOne var language: Language? = null,
+    @OneToOne @JoinColumn(name = "language_id") var language: Language? = null,
     // 64KB
     @Column(columnDefinition = "text", length = 65_536)
     var code: String? = null,
