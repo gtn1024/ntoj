@@ -9,12 +9,14 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
 
 @Entity(name = "t_self_test_submissions")
 class SelfTestSubmission(
     @ManyToOne
+    @JoinColumn(name = "user_id")
     var user: User,
     @OneToOne var language: Language,
     // 64KB
