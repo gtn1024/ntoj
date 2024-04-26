@@ -34,10 +34,11 @@ class Problem(
     )
     var languages: List<Language> = mutableListOf(),
     var allowAllLanguages: Boolean,
-    @OneToOne var testCases: FileUpload?,
+    @OneToOne @JoinColumn(name = "testcase_file_id") var testCases: FileUpload?,
     @JdbcTypeCode(JSON) var samples: List<ProblemSample>? = mutableListOf(),
     @Column(columnDefinition = "text") var note: String?,
     @ManyToOne
+    @JoinColumn(name = "author_user_id")
     var author: User?,
     var visible: Boolean? = null,
     @Column(nullable = false) var submitTimes: Long = 0,
