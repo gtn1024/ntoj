@@ -217,16 +217,16 @@ class ContestController(
     fun getProblem(
         @PathVariable id: Long,
         @PathVariable alias: String,
-    ): ResponseEntity<R<Problem>> {
+    ): ResponseEntity<R<ProblemController.ProblemDto>> {
         val contest = contestService.get(id)
         val problem =
             contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
                 problemService.get(it.problemId)
-            }
+            } ?: throw AppException("题目不存在", 404)
         return R.success(
             200,
             "获取成功",
-            problem,
+            ProblemController.ProblemDto.from(problem),
         )
     }
 
