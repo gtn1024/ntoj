@@ -18,7 +18,7 @@ class SelfTestSubmission(
     @ManyToOne
     @JoinColumn(name = "user_id")
     var user: User,
-    @OneToOne var language: Language,
+    @OneToOne @JoinColumn(name = "language_id") var language: Language,
     // 64KB
     @Column(columnDefinition = "text", length = 65_536, nullable = false)
     var code: String,
