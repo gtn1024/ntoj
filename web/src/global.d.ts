@@ -40,6 +40,12 @@ interface Group {
     username: string
     realName?: string
   }>
+  homeworks: Array<{
+    id: number
+    title: string
+    startTime: number
+    endTime: number
+  }>
 }
 
 interface Announcement {

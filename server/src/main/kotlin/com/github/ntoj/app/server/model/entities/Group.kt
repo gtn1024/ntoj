@@ -19,6 +19,8 @@ class Group(
         inverseJoinColumns = [JoinColumn(name = "user_id")],
     )
     var users: List<User> = mutableListOf(),
+    @ManyToMany(mappedBy = "groups")
+    var homeworks: List<Homework> = mutableListOf(),
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_id")
