@@ -5,6 +5,7 @@ import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 
 @Entity(name = "t_announcements")
@@ -12,6 +13,7 @@ class Announcement(
     var title: String?,
     @Column(columnDefinition = "text") var content: String?,
     @ManyToOne
+    @JoinColumn(name = "author_user_id")
     var author: User?,
     var visible: Boolean? = null,
     @Id
