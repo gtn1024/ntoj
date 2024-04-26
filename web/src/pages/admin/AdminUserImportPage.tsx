@@ -52,7 +52,7 @@ export const AdminUserImportPage: React.FC = () => {
           <p>用户</p>
           <Input.TextArea
             rows={10}
-            placeholder={'输入用户信息，每行一个，使用 Tab 分隔，格式：用户名\t密码\t真实姓名\t电子邮箱\t用户权限'}
+            placeholder={'输入用户信息，每行一个，使用 Tab 分隔，格式：用户名\t密码\t电子邮箱\t真实姓名\t用户权限'}
             value={inputUser}
             onChange={e => setInputUser(e.target.value)}
           />
