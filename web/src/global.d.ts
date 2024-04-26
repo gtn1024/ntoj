@@ -172,6 +172,18 @@ interface Article {
 }
 
 namespace AdminDto {
+  interface Homework {
+    id: number
+    title: string
+    startTime: number
+    endTime: number
+    problems: Array<{
+      id: number
+      alias: string
+      title: string
+    }>
+  }
+
   interface AdminUser {
     id: number
     username: string

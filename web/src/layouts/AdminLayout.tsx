@@ -39,6 +39,10 @@ export const AdminLayout: React.FC = () => {
       label: '题目',
     },
     {
+      key: '/admin/homework',
+      label: '作业',
+    },
+    {
       key: '/admin/contest',
       label: '竞赛',
     },
