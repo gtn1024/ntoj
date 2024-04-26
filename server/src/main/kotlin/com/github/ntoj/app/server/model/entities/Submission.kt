@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
-import jakarta.persistence.OneToOne
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes.JSON
 
@@ -28,7 +27,7 @@ class Submission(
     @Enumerated(EnumType.STRING)
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     var contestId: Long? = null,
-    @OneToOne @JoinColumn(name = "language_id") var language: Language? = null,
+    @ManyToOne @JoinColumn(name = "language_id") var language: Language? = null,
     // 64KB
     @Column(columnDefinition = "text", length = 65_536)
     var code: String? = null,
