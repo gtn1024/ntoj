@@ -15,7 +15,7 @@ import jakarta.persistence.OneToMany
 class ContestClarification(
     @Column(nullable = false) var title: String,
     @Column(nullable = false, columnDefinition = "TEXT") var content: String,
-    @ManyToOne @JoinColumn(nullable = false) var user: User,
+    @ManyToOne @JoinColumn(name = "user_id", nullable = false) var user: User,
     @ManyToOne
     @JoinColumn(name = "contest_id", nullable = false)
     @JoinTable(
