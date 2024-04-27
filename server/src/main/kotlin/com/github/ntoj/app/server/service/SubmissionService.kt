@@ -3,9 +3,11 @@ package com.github.ntoj.app.server.service
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.repository.SubmissionRepository
 import com.github.ntoj.app.server.service.SubmissionService.SubmissionScope
 import com.github.ntoj.app.shared.model.JudgeStage
+import com.github.ntoj.app.shared.model.SubmissionStatus
 import jakarta.persistence.criteria.Join
 import jakarta.persistence.criteria.Predicate
 import jakarta.transaction.Transactional
@@ -13,6 +15,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
+import java.time.Instant
 import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
@@ -58,6 +61,12 @@ interface SubmissionService {
     fun new(submission: Submission): Submission
 
     fun update(submission: Submission): Submission
+
+    fun getSolvedHomeworkProblemSubmission(
+        user: User,
+        problem: Problem,
+        endTime: Instant,
+    ): Submission?
 }
 
 @Service
@@ -194,5 +203,24 @@ class SubmissionServiceImpl(
 
     override fun update(submission: Submission): Submission {
         return submissionRepository.save(submission)
+    }
+
+    override fun getSolvedHomeworkProblemSubmission(
+        user: User,
+        problem: Problem,
+        endTime: Instant,
+    ): Submission? {
+        val spec =
+            Specification<Submission> { root, query, cb ->
+                val predicates: MutableList<Predicate> = mutableListOf()
+                predicates.add(cb.equal(root.get<User>("user"), user))
+                predicates.add(cb.equal(root.get<Problem>("problem"), problem))
+                predicates.add(cb.equal(root.get<SubmissionStatus>("status"), SubmissionStatus.ACCEPTED))
+                predicates.add(cb.equal(root.get<Submission.SubmissionOrigin>("origin"), Submission.SubmissionOrigin.PROBLEM))
+                predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), endTime))
+                query.orderBy(cb.desc(root.get<Long>("submissionId")))
+                return@Specification cb.and(*predicates.toTypedArray())
+            }
+        return submissionRepository.findAll(spec).firstOrNull()
     }
 }

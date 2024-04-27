@@ -78,6 +78,18 @@ interface Problem {
   acceptedTimes: number
 }
 
+interface Homework {
+  id: number
+  title: string
+  startTime: number
+  endTime: number
+  problems: Array<{
+    id: number
+    alias: string
+    title: string
+  }>
+}
+
 interface TestcaseDto {
   fileId: number
 }
