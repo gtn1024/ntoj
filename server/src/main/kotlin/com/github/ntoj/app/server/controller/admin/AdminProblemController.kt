@@ -220,6 +220,14 @@ class AdminProblemController(
         }
         return true
     }
+
+    @GetMapping("search")
+    fun search(
+        @RequestParam keyword: String,
+    ): ResponseEntity<R<List<ProblemDto>>> {
+        val problems = problemService.search(keyword)
+        return R.success(200, "获取成功", problems.map { ProblemDto.from(it) })
+    }
 }
 
 data class ProblemRequest(

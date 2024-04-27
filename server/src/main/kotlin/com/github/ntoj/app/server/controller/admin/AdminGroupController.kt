@@ -59,6 +59,14 @@ class AdminGroupController(
         )
     }
 
+    @GetMapping("search")
+    fun search(
+        @RequestParam keyword: String,
+    ): ResponseEntity<R<List<GroupDto>>> {
+        val groups = groupService.search(keyword)
+        return R.success(200, "获取成功", groups.map { GroupDto.from(it) })
+    }
+
     @PostMapping
     fun create(
         @RequestBody groupRequest: GroupRequest,

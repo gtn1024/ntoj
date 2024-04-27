@@ -188,6 +188,10 @@ namespace AdminDto {
       alias: string
       title: string
     }>
+    groups: Array<{
+      id: number
+      name: string
+    }>
   }
 
   interface AdminUser {

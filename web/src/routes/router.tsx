@@ -50,6 +50,7 @@ import { AdminGroupPage } from '../pages/admin/AdminGroupPage.tsx'
 import { GroupListPage } from '../pages/GroupListPage.tsx'
 import { GroupPage } from '../pages/GroupPage.tsx'
 import { AdminHomeworkPage } from '../pages/admin/AdminHomeworkPage.tsx'
+import { AdminHomeworkEditPage } from '../pages/admin/AdminHomeworkEditPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -140,6 +141,8 @@ export const router = createBrowserRouter(
           path: 'homework',
           children: [
             { index: true, element: <AdminHomeworkPage /> },
+            { path: 'create', element: <AdminHomeworkEditPage /> },
+            { path: ':id/edit', element: <AdminHomeworkEditPage /> },
           ],
         },
         {

@@ -30,6 +30,8 @@ interface ProblemService {
     fun delete(id: Long)
 
     fun exists(id: Long): Boolean
+
+    fun search(keyword: String): List<Problem>
 }
 
 @Service
@@ -91,5 +93,22 @@ class ProblemServiceImpl(
             }
             criteriaBuilder.and(*predicateList.toTypedArray())
         }
+    }
+
+    override fun search(keyword: String): List<Problem> {
+        val spec =
+            Specification<Problem> { root, _, cb ->
+                val list = mutableListOf<Predicate>()
+                if (keyword.isNotBlank()) {
+                    list.add(
+                        cb.or(
+                            cb.like(root.get("title"), "%$keyword%"),
+                            cb.like(root.get("alias"), "%$keyword%"),
+                        ),
+                    )
+                }
+                cb.and(*list.toTypedArray())
+            }
+        return problemRepository.findAll(spec)
     }
 }
