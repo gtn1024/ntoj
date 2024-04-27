@@ -56,6 +56,10 @@ export const AdminHomeworkPage: React.FC = () => {
       })
   }
 
+  const exportHomeworkData = (id: number) => {
+    void http.get(`/admin/homework/${id}/export`, {}, { responseType: 'blob' })
+  }
+
   const onCreateHomeworkClick = () => {
     nav('/admin/homework/create')
   }
@@ -114,6 +118,13 @@ export const AdminHomeworkPage: React.FC = () => {
             >
               <Button type="link">删除</Button>
             </Popconfirm>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => exportHomeworkData(value)}
+            >
+              导出
+            </Button>
           </Space>
         )
       },

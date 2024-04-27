@@ -7,10 +7,16 @@ import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.HomeworkDto
 import com.github.ntoj.app.server.model.entities.Homework
+import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.GroupService
 import com.github.ntoj.app.server.service.HomeworkService
 import com.github.ntoj.app.server.service.ProblemService
+import com.github.ntoj.app.server.service.SubmissionService
 import com.github.ntoj.app.shared.model.R
+import org.springframework.core.io.InputStreamResource
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -31,6 +37,7 @@ class AdminHomeworkController(
     val homeworkService: HomeworkService,
     val problemService: ProblemService,
     val groupService: GroupService,
+    val submissionService: SubmissionService,
 ) {
     @GetMapping("{id}")
     fun get(
@@ -102,6 +109,65 @@ class AdminHomeworkController(
         homework = homeworkService.update(homework)
         return R.success(200, "修改成功", HomeworkDto.from(homework))
     }
+
+    @GetMapping("{id}/export")
+    fun export(
+        @PathVariable id: Long,
+    ): ResponseEntity<InputStreamResource> {
+        val homework = homeworkService.get(id)
+        val users = homework.groups.flatMap { it.users }.distinctBy { it.userId }
+        val problems = homework.problems
+        val sb = StringBuilder()
+        sb.append("Username,RealName,Solved")
+        for (i in problems.indices) {
+            sb.append(",${problems[i].problemId}-${problems[i].alias}")
+        }
+        sb.append("\n")
+        val list = mutableListOf<HomeworkUserData>()
+        for (user in users) {
+            val submissionData = mutableMapOf<Long, Submission>()
+            for (i in problems.indices) {
+                val submission = submissionService.getSolvedHomeworkProblemSubmission(user, problems[i], homework.endTime)
+                if (submission != null) {
+                    submissionData[problems[i].problemId!!] = submission
+                }
+                list.add(
+                    HomeworkUserData(
+                        user,
+                        problems.count { submissionData[it.problemId!!] != null },
+                        submissionData,
+                    ),
+                )
+            }
+        }
+        list.sortByDescending { it.solved }
+        for (userData in list) {
+            sb.append("${userData.user.username},${userData.user.realName},${userData.solved}")
+            for (i in problems.indices) {
+                sb.append(",")
+                if (userData.submissionData[problems[i].problemId!!] != null) {
+                    sb.append("ACCEPTED")
+                }
+            }
+            sb.append("\n")
+        }
+        val filename = "homework_${homework.homeworkId}.csv"
+        val csv = sb.toString()
+        val file = InputStreamResource(csv.byteInputStream())
+        return ResponseEntity.ok()
+            .header(
+                HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=" +
+                    filename,
+            )
+            .contentType(MediaType.parseMediaType("text/csv")).body(file)
+    }
+
+    data class HomeworkUserData(
+        val user: User,
+        var solved: Int,
+        var submissionData: Map<Long, Submission>,
+    )
 
     @DeleteMapping("/{id}")
     fun remove(
