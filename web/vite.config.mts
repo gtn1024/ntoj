@@ -36,17 +36,4 @@ export default defineConfig(({ command }) => ({
       'top-level-await': true,
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        experimentalMinChunkSize: 256000,
-        manualChunks: function manualChunks(id: string) {
-          if (id.includes('node_modules')) {
-            const packageName = id.replace(/\\/g, '/').split('node_modules/').pop().split('/')[0].split('-')[0]
-            return `n.${packageName.replace('@', '')}`
-          }
-        },
-      },
-    },
-  },
 }))
