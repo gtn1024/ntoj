@@ -61,7 +61,7 @@ export const ProblemPage: React.FC = () => {
   return (
     <div className={c('flex', isMobile ? ['flex-col'] : ['h-[calc(100vh-64px-80px)]'])}>
       <div className={c(!isMobile && ['w-1/2', 'overflow-y-auto'])}>
-        <ProblemDetail data={data} showProblemAlias={true} />
+        <ProblemDetail data={data} showProblemAlias />
       </div>
       <div className={c('flex', 'flex-col', !isMobile ? ['w-1/2'] : ['p-2'])}>
         <ProblemEditComponent

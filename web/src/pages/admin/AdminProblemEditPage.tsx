@@ -320,7 +320,7 @@ export const AdminProblemEditPage: React.FC = () => {
       </div>
       <div className="w-1/2 overflow-y-auto p-4">
         <h2 className="text-xl">预览</h2>
-        <ProblemDetail data={{ ...data } as Problem} showProblemAlias={true} />
+        <ProblemDetail data={{ ...data } as Problem} showProblemAlias />
       </div>
     </div>
   )
