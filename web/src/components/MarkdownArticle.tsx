@@ -5,8 +5,8 @@ interface Props {
   data: string
 }
 
-export const MarkdownArticle: React.FC<Props> = (props) => {
-  const html = mdit.render(props.data)
+export const MarkdownArticle: React.FC<Props> = ({ data }) => {
+  const html = mdit.render(data)
   return (
     <div dangerouslySetInnerHTML={{ __html: html }} />
   )

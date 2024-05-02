@@ -39,7 +39,7 @@ const items = [
   },
 ]
 
-export const MenuComponent: React.FC<Props> = (props) => {
+export const MenuComponent: React.FC<Props> = ({ className }) => {
   const [current, setCurrent] = useState<string>('')
   const nav = useNavigate()
   const { isMobile } = useLayout()
@@ -64,11 +64,11 @@ export const MenuComponent: React.FC<Props> = (props) => {
   }
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       {!isMobile
         ? (
           <Menu
-            className={props.className}
+            className={className}
             onClick={onClick}
             selectedKeys={[current]}
             mode="horizontal"

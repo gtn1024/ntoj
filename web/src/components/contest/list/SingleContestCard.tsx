@@ -23,13 +23,13 @@ function permissionToString(permission: ContestPermission): string {
   return res
 }
 
-export const SingleContestCard: React.FC<Props> = (props) => {
+export const SingleContestCard: React.FC<Props> = ({ contest }) => {
   return (
     <div className={c('flex flex-col', 'p-3', 'border-l-4 border-l-[#54ab4f] border-solid border-[#dddddd]')}>
       <div className={c('py-2')}>
         <h2>
-          <Link to={`/c/${props.contest.id}`}>
-            {props.contest.title}
+          <Link to={`/c/${contest.id}`}>
+            {contest.title}
           </Link>
         </h2>
       </div>
@@ -38,31 +38,31 @@ export const SingleContestCard: React.FC<Props> = (props) => {
           <div className="i-mdi:calendar" />
           {' '}
           <span>
-            {props.contest.startTime}
+            {contest.startTime}
             {' '}
             ~
             {' '}
-            {props.contest.endTime}
+            {contest.endTime}
           </span>
         </div>
         <div className={c('flex gap-2')}>
           <div>
             <div className="i-mdi:clock-outline" />
             {' '}
-            <span>{timeDiffString(timeDiff(props.contest.startTime, props.contest.endTime))}</span>
+            <span>{timeDiffString(timeDiff(contest.startTime, contest.endTime))}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
           <div>
             <div className="i-material-symbols:gavel-rounded" />
             {' '}
-            <span>{props.contest.type}</span>
+            <span>{contest.type}</span>
           </div>
           <span className={c('text-gray-400')}>|</span>
           <div>
             <div className="i-mdi:account-multiple" />
             {' '}
             <span>
-              {props.contest.userCount}
+              {contest.userCount}
               {' '}
               人
             </span>
@@ -71,7 +71,7 @@ export const SingleContestCard: React.FC<Props> = (props) => {
           <div>
             <div className="i-material-symbols:lock-open-outline" />
             {' '}
-            <span>{permissionToString(props.contest.permission)}</span>
+            <span>{permissionToString(contest.permission)}</span>
           </div>
         </div>
       </div>

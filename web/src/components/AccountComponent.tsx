@@ -9,7 +9,7 @@ interface Props {
   className?: string
 }
 
-export const AccountComponent: React.FC<Props> = (props) => {
+export const AccountComponent: React.FC<Props> = ({ className }) => {
   const location = useLocation()
   const { user, clearUser } = useUserStore()
   const nav = useNavigate()
@@ -53,7 +53,7 @@ export const AccountComponent: React.FC<Props> = (props) => {
     items = items?.filter(item => item?.key !== 'admin')
   }
   return (
-    <div className={props.className}>
+    <div className={className}>
       {user.id
         ? (
           <Dropdown menu={{ items }}>

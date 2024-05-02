@@ -29,7 +29,7 @@ interface ProblemSampleSectionProps {
   samples?: ProblemSample[]
 }
 
-const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
+const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = ({ samples }) => {
   const copyToClipBoard = (data: string) => {
     navigator.clipboard.writeText(data)
       .then(() => {
@@ -39,22 +39,22 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
         void message.error('复制失败')
       })
   }
-  const SampleField: React.FC<{ title: string, data: string }> = (props) => {
+  const SampleField: React.FC<{ title: string, data: string }> = ({ title, data }) => {
     return (
       <div className="mt-1 w-full">
         <div className="mb-1 flex flex-row items-center justify-between">
-          <span className="grow">{props.title}</span>
-          <button type="button" onClick={() => copyToClipBoard(props.data)}>复制</button>
+          <span className="grow">{title}</span>
+          <button type="button" onClick={() => copyToClipBoard(data)}>复制</button>
         </div>
         <div className="border-0 border-l-2 border-green-300 border-solid bg-white p-2">
-          <pre className="m-0">{props.data}</pre>
+          <pre className="m-0">{data}</pre>
         </div>
       </div>
     )
   }
   return (
     <div className="mb-[20px]">
-      {props.samples?.map((item, idx) => {
+      {samples?.map((item, idx) => {
         return (
           <div key={idx}>
             <div key={item.input}>

@@ -16,7 +16,7 @@ interface FileUpload {
   url: string
   hash: string
 }
-export const RichEditor: React.FC<Props> = (props) => {
+export const RichEditor: React.FC<Props> = ({ mode, height, data, setData }) => {
   const [editor, setEditor] = useState<IDomEditor | null>(null) // TS 语法
 
   useEffect(() => {
@@ -48,16 +48,16 @@ export const RichEditor: React.FC<Props> = (props) => {
     <div style={{ border: '1px solid #ccc' }}>
       <Toolbar
         editor={editor}
-        mode={props.mode ?? 'simple'}
+        mode={mode ?? 'simple'}
         style={{ borderBottom: '1px solid #ccc' }}
       />
       <Editor
-        value={props.data}
+        value={data}
         defaultConfig={editorConfig}
         onCreated={setEditor}
-        onChange={editor => props.setData(editor.getHtml())}
+        onChange={editor => setData(editor.getHtml())}
         mode="default"
-        style={{ height: props.height }}
+        style={{ height }}
       />
     </div>
   )
