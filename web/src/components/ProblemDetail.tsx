@@ -44,7 +44,7 @@ const ProblemSampleSection: React.FC<ProblemSampleSectionProps> = (props) => {
       <div className="mt-1 w-full">
         <div className="mb-1 flex flex-row items-center justify-between">
           <span className="grow">{props.title}</span>
-          <button onClick={() => copyToClipBoard(props.data)}>复制</button>
+          <button type="button" onClick={() => copyToClipBoard(props.data)}>复制</button>
         </div>
         <div className="border-0 border-l-2 border-green-300 border-solid bg-white p-2">
           <pre className="m-0">{props.data}</pre>

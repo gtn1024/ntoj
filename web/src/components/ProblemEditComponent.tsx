@@ -151,6 +151,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           <div className="flex gap-1">
             {samples.map((sample, index) => (
               <button
+                type="button"
                 key={index}
                 className="cursor-pointer border rounded px-2 py-1 outline-none hover:bg-gray-200"
                 onClick={() => {
@@ -327,7 +328,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
           />
         </div>
         <div className="flex gap-1">
-          <button className="cursor-pointer rounded border-none bg-inherit hover:bg-#f3f3f6" onClick={() => setEditorConfigDrawerOpen(true)}>
+          <button type="button" className="cursor-pointer rounded border-none bg-inherit hover:bg-#f3f3f6" onClick={() => setEditorConfigDrawerOpen(true)}>
             <div className="i-material-symbols:settings" />
           </button>
         </div>
@@ -383,6 +384,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
       <div className="relative bg-white">
         <div className="absolute left-0 top-0 h-[5px] w-full">
           <button
+            type="button"
             className="absolute left-1/2 top-[-12px] ml-[-12px] block h-24px w-24px cursor-pointer rounded-[12px] border-none bg-white p-0 text-[#666]"
             onClick={() => {
               setToolbarVisible(!toolbarVisible)
@@ -398,6 +400,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
         <div className={c('flex', 'justify-between', 'mx-2', 'py-1')}>
           <div className={c('flex', 'gap-1')}>
             <button
+              type="button"
               className={c('px-2', 'border-none', 'cursor-pointer', 'rounded', 'hover:bg-gray-200', (toolbarVisible && toolbarSection === 'result') ? 'bg-gray-200' : 'bg-white')}
               onClick={() => {
                 setToolbarVisible(true)
@@ -407,6 +410,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
               运行结果
             </button>
             <button
+              type="button"
               className={c('px-2', 'border-none', 'cursor-pointer', 'bg-white', 'rounded', 'hover:bg-gray-200', (toolbarVisible && toolbarSection === 'input') ? 'bg-gray-200' : 'bg-white')}
               onClick={() => {
                 setToolbarVisible(true)
@@ -416,6 +420,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
               自测输入
             </button>
             <button
+              type="button"
               className="flex cursor-pointer items-center border-#32ca99 rounded bg-white px-2 text-#32ca99 outline-none hover:bg-gray-200"
               onClick={onSelfTest}
             >

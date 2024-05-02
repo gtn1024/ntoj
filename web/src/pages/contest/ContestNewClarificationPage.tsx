@@ -71,7 +71,7 @@ export const ContestNewClarificationPage: React.FC = () => {
         </div>
       </div>
       <div>
-        <button onClick={onSubmit}>
+        <button type="button" onClick={onSubmit}>
           提交
         </button>
       </div>

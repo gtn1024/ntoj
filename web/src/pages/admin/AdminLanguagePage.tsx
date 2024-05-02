@@ -109,7 +109,7 @@ export const AdminLanguagePage: React.FC = () => {
       <Space direction="vertical">
         <div className="flex justify-between">
           <div>
-            <button onClick={() => nav('/admin/language/new')}>新建</button>
+            <button type="button" onClick={() => nav('/admin/language/new')}>新建</button>
           </div>
         </div>
         <div>

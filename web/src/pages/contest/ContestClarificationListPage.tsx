@@ -15,7 +15,7 @@ export const ContestClarificationListPage: React.FC = () => {
   return (
     <div className={c(isMobile && 'flex-col', 'p-2 flex flex-col items-start max-w-[1200px] m-auto gap-2')}>
       <div className="w-full flex justify-end">
-        <button onClick={() => nav(`/c/${id}/clarification/new`)}>发起提问</button>
+        <button type="button" onClick={() => nav(`/c/${id}/clarification/new`)}>发起提问</button>
       </div>
       <div className="w-full">
         <table className="w-full">

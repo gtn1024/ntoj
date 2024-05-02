@@ -136,7 +136,7 @@ export const AdminHomeworkPage: React.FC = () => {
       <Space direction="vertical">
         <div className="flex justify-between">
           <div>
-            <button onClick={onCreateHomeworkClick}>新建</button>
+            <button type="button" onClick={onCreateHomeworkClick}>新建</button>
           </div>
         </div>
         <div>

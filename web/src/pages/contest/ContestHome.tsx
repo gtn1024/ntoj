@@ -103,7 +103,7 @@ export const ContestHome: React.FC = () => {
         {
           !contest?.hasPermission && (
             <>
-              <button className="h-50px w-full" onClick={() => setRegisterModalOpen(true)}>
+              <button type="button" className="h-50px w-full" onClick={() => setRegisterModalOpen(true)}>
                 {userStore.user.id ? '加入比赛' : '请先登录'}
               </button>
               <Modal

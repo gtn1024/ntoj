@@ -123,10 +123,10 @@ export const AdminUserPage: React.FC = () => {
       <Space direction="vertical">
         <div className="flex justify-between">
           <div>
-            <button onClick={() => nav('/admin/user/new')}>新建</button>
+            <button type="button" onClick={() => nav('/admin/user/new')}>新建</button>
           </div>
           <div>
-            <button onClick={() => nav('/admin/user/import')}>导入用户</button>
+            <button type="button" onClick={() => nav('/admin/user/import')}>导入用户</button>
           </div>
         </div>
         <div>

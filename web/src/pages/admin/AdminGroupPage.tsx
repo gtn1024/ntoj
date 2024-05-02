@@ -178,7 +178,7 @@ export const AdminGroupPage: React.FC = () => {
       <Space direction="vertical">
         <div className="flex justify-between">
           <div>
-            <button onClick={onCreateGroupClick}>新建</button>
+            <button type="button" onClick={onCreateGroupClick}>新建</button>
           </div>
         </div>
         <div>

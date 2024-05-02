@@ -116,15 +116,15 @@ export const ContestClarificationDetailPage: React.FC = () => {
           !clarification?.closed && (
             <>
               <textarea className="h-200px w-full" placeholder="回复内容" value={replyContent} onChange={e => setReplyContent(e.target.value)} />
-              <button onClick={onReplySubmit}>发布</button>
+              <button type="button" onClick={onReplySubmit}>发布</button>
             </>
           )
         }
         {
           userStore.user.role && (['ADMIN', 'SUPER_ADMIN', 'COACH'] as UserRole[]).includes(userStore.user.role) && (
             <>
-              <button onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
-              <button onClick={onStickyClarification}>{clarification?.sticky ? '取消置顶' : '置顶'}</button>
+              <button type="button" onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
+              <button type="button" onClick={onStickyClarification}>{clarification?.sticky ? '取消置顶' : '置顶'}</button>
             </>
           )
         }
