@@ -60,7 +60,7 @@ export const RecordPage: React.FC = () => {
               </div>
               <div>
                 {!!data?.testcaseResult?.length && (
-                  <table className="w-full border-1">
+                  <table className="w-full border-1 border-gray-200 border-solid">
                     <thead>
                       <tr className="text-gray-500 leading-8">
                         <th className="px-2 text-left">#</th>
