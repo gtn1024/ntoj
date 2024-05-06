@@ -18,7 +18,7 @@ ktlint_standard_no-wildcard-imports = disabled
 trim_trailing_whitespace = false
 indent_size = 2
 
-[*.{yml,yaml,json,xml,js,jsx,ts,tsx}]
+[*.{yml,yaml,json,xml,js,jsx,ts,tsx,css,scss}]
 indent_style = space
 indent_size = 2
 
