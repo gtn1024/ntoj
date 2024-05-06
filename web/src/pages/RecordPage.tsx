@@ -7,8 +7,8 @@ import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
 import { toFixedNumber } from '../lib/misc.ts'
-import { mdit } from '../lib/mdit.ts'
 import { useLanguages } from '../hooks/useLanguages.ts'
+import { CodeHighlight } from '../components/CodeHighlight.tsx'
 
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
@@ -22,6 +22,12 @@ export const RecordPage: React.FC = () => {
     }
     return languages[data.lang]?.display || data.lang
   }, [languages, data])
+  const highlightLanguage = useMemo(() => {
+    if (!languages || !data) {
+      return 'plaintext'
+    }
+    return languages[data.lang]?.highlight || 'plaintext'
+  }, [data, languages])
   useEffect(() => {
     void http.get<Submission>(`/submission/${id}`)
       .then((res) => {
@@ -62,10 +68,7 @@ export const RecordPage: React.FC = () => {
                   </pre>
                 </div>
               )}
-              <div>
-                {/* TODO: 重构为组件 */}
-                <div dangerouslySetInnerHTML={{ __html: mdit.render(`\`\`\`\n${data?.code}\n\`\`\``) }}></div>
-              </div>
+              <CodeHighlight code={data?.code} lang={highlightLanguage} />
               <div>
                 {!!data?.testcaseResult?.length && (
                   <table className="w-full border-1 border-gray-200 border-solid">
