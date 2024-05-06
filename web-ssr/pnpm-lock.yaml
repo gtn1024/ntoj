@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@next/env':
+        specifier: ^14.2.3
+        version: 14.2.3
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0

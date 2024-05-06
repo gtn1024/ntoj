@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 2024",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 2024",
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/env": "^14.2.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.378.0",
