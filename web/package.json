@@ -10,14 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@uiw/codemirror-extensions-langs": "4.21.25",
-    "@uiw/react-codemirror": "4.21.25",
+    "@uiw/codemirror-extensions-langs": "4.22.0",
+    "@uiw/react-codemirror": "4.22.0",
     "@wangeditor/editor": "5.1.23",
     "@wangeditor/editor-for-react": "1.0.6",
-    "antd": "5.16.4",
+    "antd": "5.17.0",
     "axios": "1.6.8",
     "classnames": "2.5.1",
-    "dayjs": "1.11.10",
+    "dayjs": "1.11.11",
     "lodash": "4.17.21",
     "markdown-it": "14.1.0",
     "markdown-it-mathjax3": "4.3.2",
