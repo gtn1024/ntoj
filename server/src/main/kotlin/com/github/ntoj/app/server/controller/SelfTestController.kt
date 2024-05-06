@@ -2,6 +2,7 @@ package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.stp.StpUtil
+import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.entities.SelfTestSubmission
 import com.github.ntoj.app.server.service.LanguageService
@@ -39,15 +40,18 @@ class SelfTestController(
         @RequestBody selfTestSubmissionRequest: SelfTestSubmissionRequest,
     ): ResponseEntity<R<SelfTestSubmissionDto>> {
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        if (!languageService.exists(selfTestSubmissionRequest.lang)) {
+            throw AppException("语言不存在", 400)
+        }
         val selfTestSubmission =
             SelfTestSubmission(
-                language = languageService.get(selfTestSubmissionRequest.language),
                 code = selfTestSubmissionRequest.code,
                 input = selfTestSubmissionRequest.input,
                 user = user,
                 timeLimit = selfTestSubmissionRequest.timeLimit,
                 memoryLimit = selfTestSubmissionRequest.memoryLimit,
                 expectedOutput = selfTestSubmissionRequest.output,
+                lang = selfTestSubmissionRequest.lang,
             )
         selfTestSubmissionService.add(selfTestSubmission)
         return R.success(200, "获取成功", SelfTestSubmissionDto.from(selfTestSubmission))
@@ -55,6 +59,7 @@ class SelfTestController(
 
     data class SelfTestSubmissionRequest(
         val language: Long,
+        val lang: String,
         val code: String,
         val input: String,
         val output: String?,

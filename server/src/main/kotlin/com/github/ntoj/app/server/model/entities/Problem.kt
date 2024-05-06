@@ -7,8 +7,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToOne
 import org.hibernate.annotations.JdbcTypeCode
@@ -26,14 +24,6 @@ class Problem(
     var memoryLimit: Int?,
     var judgeTimes: Int?,
     var codeLength: Int = 16,
-    @ManyToMany
-    @JoinTable(
-        name = "t_problems_languages",
-        joinColumns = [JoinColumn(name = "problem_id")],
-        inverseJoinColumns = [JoinColumn(name = "language_id")],
-    )
-    var languages: List<Language> = mutableListOf(),
-    var allowAllLanguages: Boolean,
     @OneToOne @JoinColumn(name = "testcase_file_id") var testCases: FileUpload?,
     @JdbcTypeCode(JSON) var samples: List<ProblemSample>? = mutableListOf(),
     @Column(columnDefinition = "text") var note: String?,

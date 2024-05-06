@@ -4,18 +4,19 @@ import type { TablePaginationConfig } from 'antd'
 import { Button, Table, message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
+import type { ColumnsType } from 'antd/es/table'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { useUserStore } from '../stores/useUserStore.tsx'
 import { hasAdminPermissions } from '../lib/UserUtils.ts'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
+import { useLanguages } from '../hooks/useLanguages.ts'
 
 interface SubmissionDto {
   id: number
   status: SubmissionStatus
   time?: number
   memory?: number
-  language?: string
   user: {
     username: string
   }
@@ -46,6 +47,7 @@ export const RecordListPage: React.FC = () => {
       })
     },
   })
+  const { languages } = useLanguages()
   const {
     data,
     error,
@@ -74,7 +76,7 @@ export const RecordListPage: React.FC = () => {
         void message.error(err.response?.data.message ?? '重测失败')
       })
   }
-  const columns = [
+  const columns: ColumnsType<SubmissionDto> = [
     {
       title: '运行ID',
       dataIndex: 'id',
@@ -127,8 +129,11 @@ export const RecordListPage: React.FC = () => {
     },
     {
       title: '语言',
-      dataIndex: 'language',
-      key: 'language',
+      dataIndex: 'lang',
+      key: 'lang',
+      render(value: string) {
+        return languages?.[value]?.display || value
+      },
     },
     {
       title: '提交时间',

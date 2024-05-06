@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.UserDto
-import com.github.ntoj.app.server.model.entities.Language
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.Submission
 import com.github.ntoj.app.server.service.ProblemService
@@ -54,7 +53,7 @@ class SubmissionController(
         val status: SubmissionStatus,
         val time: Int? = null,
         val memory: Int? = null,
-        val language: String? = null,
+        val lang: String,
         val user: SubmissionUserDto,
         val problem: SubmissionProblemDto,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
@@ -66,7 +65,7 @@ class SubmissionController(
                     status = submission.status,
                     time = submission.time,
                     memory = submission.memory,
-                    language = submission.language?.languageName,
+                    lang = submission.lang,
                     user = SubmissionUserDto.from(submission),
                     problem = SubmissionProblemDto.from(submission),
                     submitTime = submission.createdAt!!,
@@ -135,7 +134,7 @@ class SubmissionController(
         val stage: JudgeStage,
         val memory: Int?,
         val time: Int?,
-        val language: LanguageDto,
+        val lang: String,
         val problem: ProblemDto,
         val compileLog: String?,
         val testcaseResult: List<TestcaseJudgeResult>?,
@@ -153,7 +152,7 @@ class SubmissionController(
                     testcaseResult = submission.testcaseResult,
                     memory = submission.memory,
                     time = submission.time,
-                    language = LanguageDto.from(submission.language!!),
+                    lang = submission.lang,
                     submitTime = submission.createdAt!!,
                     problem = ProblemDto.from(submission.problem!!),
                 )
@@ -169,18 +168,6 @@ class SubmissionController(
                         title = problem.title,
                         alias = problem.alias,
                     )
-            }
-        }
-
-        data class LanguageDto(
-            val languageName: String,
-        ) {
-            companion object {
-                fun from(language: Language): LanguageDto {
-                    return LanguageDto(
-                        languageName = language.languageName,
-                    )
-                }
             }
         }
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import c from 'classnames'
 import { useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -6,14 +6,14 @@ import { message } from 'antd'
 import useSWR from 'swr'
 import ProblemEditComponent from '../../components/ProblemEditComponent.tsx'
 import { useLayout } from '../../hooks/useLayout.ts'
-import type { HttpResponse, L } from '../../lib/Http.tsx'
+import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { ProblemDetail } from '../../components/ProblemDetail.tsx'
+import { useLanguages } from '../../hooks/useLanguages.ts'
 
 export const ContestProblem: React.FC = () => {
   const { isMobile } = useLayout()
   const { id: contestId, alias } = useParams()
-  const [languageOptions, setLanguageOptions] = useState<{ value: string, label: string }[]>([])
   const [data, setData] = useState<Problem>()
   const { data: contest } = useSWR(`/contest/${contestId}`, async (path) => {
     return http.get<Contest>(path)
@@ -25,45 +25,29 @@ export const ContestProblem: React.FC = () => {
         throw err
       })
   })
+
+  const { languages } = useLanguages()
+  const languageOptions = useMemo(() => {
+    if (!languages)
+      return []
+    const keys = Object.keys(languages)
+    return keys.map((key) => {
+      return {
+        value: key,
+        label: languages[key].display,
+      }
+    })
+  }, [languages])
   useEffect(() => {
     if (contest) {
-      Promise.all([
-        http.get<L<{
-          id: number
-          name: string
-        }>>('/language')
-          .then((res) => {
-            return res.data.data.list
-          })
-          .catch((err: AxiosError<HttpResponse>) => {
-            throw err
-          }),
-        http.get<Problem>(`/contest/${contestId}/problem/${alias}`)
-          .then((res) => {
-            return res.data.data
-          })
-          .catch((err: AxiosError) => {
-            throw err
-          }),
-      ])
-        .then(([languages, problem]) => {
-          setData(problem)
-          const availableLanguages = languages
-            .filter((language) => {
-              return contest?.allowAllLanguages || contest?.languages?.includes(language.id)
-            })
-          setLanguageOptions(
-            availableLanguages
-              .sort((a, b) => {
-                return a.name.localeCompare(b.name)
-              })
-              .map(language => ({
-                value: language.id.toString(),
-                label: language.name,
-              })),
-          )
+      http.get<Problem>(`/contest/${contestId}/problem/${alias}`)
+        .then((res) => {
+          return res.data.data
         })
-        .catch((err) => {
+        .then((problem) => {
+          setData(problem)
+        })
+        .catch((err: AxiosError) => {
           void message.error('题目获取失败！')
           throw err
         })

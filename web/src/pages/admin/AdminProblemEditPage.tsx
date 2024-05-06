@@ -1,12 +1,11 @@
 import type { FormInstance, UploadFile, UploadProps } from 'antd'
-import { Button, Form, Input, InputNumber, Space, Switch, Transfer, Upload, message } from 'antd'
-import type { SetStateAction } from 'react'
+import { Button, Form, Input, InputNumber, Space, Switch, Upload, message } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
 import type { RcFile } from 'antd/es/upload'
 import c from 'classnames'
-import type { HttpResponse, L } from '../../lib/Http.tsx'
+import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { ProblemDetail } from '../../components/ProblemDetail.tsx'
 
@@ -24,15 +23,12 @@ export const AdminProblemEditPage: React.FC = () => {
   const nav = useNavigate()
   const formRef = useRef<FormInstance>(null)
   const [data, setData] = useState<AdminDto.Problem>()
-  const [languages, setLanguages] = useState<string[]>([])
-  const [allLanguages, setAllLanguages] = useState<{ key: string, title: string }[]>([])
   const [testcaseFileId, setTestcaseFileId] = useState<number>()
   useEffect(() => {
     if (mode === '修改' && id) {
       http.get<AdminDto.Problem>(`/admin/problem/${id}`)
         .then((res) => {
           setData(res.data.data)
-          setLanguages(res.data.data.languages?.map(l => l.toString()) ?? [])
           setTestcaseFileId(res.data.data.testcase?.fileId)
           formRef?.current?.setFieldsValue({
             alias: res.data.data.alias ?? '',
@@ -46,8 +42,6 @@ export const AdminProblemEditPage: React.FC = () => {
             samples: res.data.data.samples ?? [{ input: '', output: '' }],
             note: res.data.data.note ?? '',
             visible: res.data.data.visible ?? false,
-            languages,
-            allowAllLanguages: res.data.data.allowAllLanguages ?? false,
             codeLength: res.data.data.codeLength ?? 16,
           })
         })
@@ -56,15 +50,6 @@ export const AdminProblemEditPage: React.FC = () => {
           throw err
         })
     }
-    http.get<L<AdminDto.Language>>('/admin/language')
-      .then((res) => {
-        const ls = res.data.data.list
-        setAllLanguages(ls.map(l => ({ key: l.id.toString(), title: l.languageName })))
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '获取语言失败')
-        throw err
-      })
   }, [mode, id, formRef])
 
   const onSubmit = (v: Params) => {
@@ -72,7 +57,7 @@ export const AdminProblemEditPage: React.FC = () => {
       void message.error('请上传测试数据')
       return
     }
-    const data = { ...v, languages: languages.map(Number), testcase: testcaseFileId }
+    const data = { ...v, testcase: testcaseFileId }
     if (mode === '新建') {
       http.post<AdminDto.Problem>('/admin/problem', data)
         .then(() => {
@@ -266,10 +251,6 @@ export const AdminProblemEditPage: React.FC = () => {
             <Input.TextArea rows={4} />
           </Form.Item>
 
-          <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-
           <Form.Item
             label="代码长度限制"
             rules={[{ required: true, message: '请输入代码长度限制！' }]}
@@ -277,15 +258,6 @@ export const AdminProblemEditPage: React.FC = () => {
             initialValue={16}
           >
             <InputNumber addonAfter="KB" />
-          </Form.Item>
-
-          <Form.Item label="语言" name="languages">
-            <Transfer
-              dataSource={allLanguages}
-              targetKeys={languages}
-              onChange={v => setLanguages(v as SetStateAction<string[]>)}
-              render={item => item.title}
-            />
           </Form.Item>
 
           <Form.Item label="测试数据" className={c('flex')}>

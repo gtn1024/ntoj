@@ -10,12 +10,10 @@ import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
-import com.github.ntoj.app.server.model.entities.Language
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.ProblemSample
 import com.github.ntoj.app.server.service.FileService
 import com.github.ntoj.app.server.service.FileUploadService
-import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
@@ -49,7 +47,6 @@ import java.time.Instant
 class AdminProblemController(
     val problemService: ProblemService,
     val userService: UserService,
-    val languageService: LanguageService,
     val fileService: FileService,
     val fileUploadService: FileUploadService,
 ) {
@@ -65,17 +62,12 @@ class AdminProblemController(
         )
     }
 
-    private fun languageIdToLanguage(id: Long): Language {
-        return languageService.get(id)
-    }
-
     @PostMapping
     fun create(
         @RequestBody @Valid
         problemRequest: ProblemRequest,
     ): ResponseEntity<R<ProblemDto>> {
         val author = userService.getUserById(StpUtil.getLoginIdAsLong())
-        val languages = problemRequest.languages.map { languageIdToLanguage(it) }
         val testcase = fileUploadService.get(problemRequest.testcase)
         return R.success(
             200,
@@ -94,11 +86,9 @@ class AdminProblemController(
                         samples = problemRequest.samples,
                         note = problemRequest.note,
                         visible = problemRequest.visible,
-                        languages = languages,
                         author = author,
                         judgeTimes = 1,
                         testCases = testcase,
-                        allowAllLanguages = problemRequest.allowAllLanguages,
                         codeLength = problemRequest.codeLength,
                     ),
                 ),
@@ -113,8 +103,6 @@ class AdminProblemController(
         @PathVariable id: Long,
     ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(id)
-        val testcase = fileUploadService.get(problemRequest.testcase)
-        val languages = problemRequest.languages.map { languageIdToLanguage(it) }
         problem.alias = problemRequest.alias
         problem.title = problemRequest.title
         problem.background = problemRequest.background
@@ -126,9 +114,6 @@ class AdminProblemController(
         problem.samples = problemRequest.samples
         problem.note = problemRequest.note
         problem.visible = problemRequest.visible
-        problem.languages = languages
-        problem.testCases = testcase
-        problem.allowAllLanguages = problemRequest.allowAllLanguages
         problem.codeLength = problemRequest.codeLength
         return R.success(
             200,
@@ -241,10 +226,8 @@ data class ProblemRequest(
     val memoryLimit: Int? = 64,
     val samples: List<ProblemSample> = mutableListOf(),
     val note: String?,
-    val languages: List<Long> = listOf(),
     val visible: Boolean? = null,
     val testcase: Long,
-    val allowAllLanguages: Boolean,
     val codeLength: Int,
 )
 
@@ -263,8 +246,6 @@ data class ProblemDto(
     val note: String?,
     val author: String?,
     val visible: Boolean?,
-    val languages: List<Long> = listOf(),
-    val allowAllLanguages: Boolean,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
     val testcase: TestcaseDto,
     val codeLength: Int,
@@ -287,8 +268,6 @@ data class ProblemDto(
                 author = problem.author?.username,
                 createdAt = problem.createdAt,
                 visible = problem.visible,
-                languages = problem.languages.map { it.languageId!! },
-                allowAllLanguages = problem.allowAllLanguages,
                 testcase = TestcaseDto.from(problem.testCases!!),
                 codeLength = problem.codeLength,
             )

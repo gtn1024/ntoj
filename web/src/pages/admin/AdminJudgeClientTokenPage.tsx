@@ -29,7 +29,7 @@ export const AdminJudgeClientTokenPage: React.FC = () => {
     error,
     mutate,
   } = useSWR(`/admin/judge_client_token?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
-    return http.get<L<AdminDto.Language>>(path)
+    return http.get<L<AdminDto.JudgeClientToken>>(path)
       .then((res) => {
         setPagination({
           ...pagination,
@@ -55,7 +55,7 @@ export const AdminJudgeClientTokenPage: React.FC = () => {
       })
   }
 
-  const columns: ColumnsType<AdminDto.Language> = [
+  const columns: ColumnsType<AdminDto.JudgeClientToken> = [
     {
       title: 'ID',
       dataIndex: 'id',

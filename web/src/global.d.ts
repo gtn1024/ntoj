@@ -71,8 +71,6 @@ interface Problem {
   samples: ProblemSample[]
   note?: string
   author?: string
-  languages?: number[]
-  allowAllLanguages: boolean
   codeLength: number
   submitTimes: number
   acceptedTimes: number
@@ -121,9 +119,7 @@ interface Submission {
   memory?: number
   time?: number
   compileLog?: string
-  language: {
-    languageName: string
-  }
+  lang: string
   problem: {
     alias: string
     title: string
@@ -165,8 +161,6 @@ interface Contest {
     joinAt: string
   }[]
   author: User
-  languages?: number[]
-  allowAllLanguages: boolean
   hasPermission: boolean
   freezeTime?: number
   showFinalBoard: boolean
@@ -243,8 +237,6 @@ namespace AdminDto {
     password?: string
     problems: ContestProblem[]
     users: number[]
-    languages: number[]
-    allowAllLanguages: boolean
     visible: boolean
     showFinalBoard: boolean
     author: string
@@ -262,18 +254,6 @@ namespace AdminDto {
     enabled: boolean
   }
 
-  interface Language {
-    id: number
-    languageName: string
-    compileCommand?: string
-    executeCommand?: string
-    enabled: boolean
-    memoryLimitRate?: number
-    timeLimitRate?: number
-    sourceFilename?: string
-    targetFilename?: string
-  }
-
   interface Problem {
     id: number
     title: string
@@ -289,8 +269,6 @@ namespace AdminDto {
     note?: string
     author?: string
     visible?: boolean
-    languages?: number[]
-    allowAllLanguages: boolean
     createdAt?: string
     testcase: TestcaseDto
     codeLength: number

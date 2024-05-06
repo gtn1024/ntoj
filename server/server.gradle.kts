@@ -19,6 +19,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.flywaydb:flyway-database-postgresql:10.0.0")
     implementation(libs.saToken.spring)

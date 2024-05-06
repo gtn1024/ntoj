@@ -146,9 +146,11 @@ object Client {
             return response.body()
         }
 
-        suspend fun deleteFile(fileId: String) {
-            val url = "$SANDBOX_SERVER/file/$fileId"
-            client.delete(url)
+        suspend fun deleteFile(fileId: String?) {
+            if (fileId != null) {
+                val url = "$SANDBOX_SERVER/file/$fileId"
+                client.delete(url)
+            }
         }
 
         suspend fun version(): SandboxVersion {

@@ -58,25 +58,24 @@ class ProblemController(
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
     ): ResponseEntity<R<SubmissionDto>> {
         val problem = problemService.get(alias)
-        if (!problem.allowAllLanguages && problem.languages.none { it.languageId == problemSubmissionRequest.language }) {
-            throw AppException("不支持的语言", 400)
-        }
         if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
             throw AppException("代码长度超过限制", 400)
         }
         problem.submitTimes = (problem.submitTimes + 1).coerceAtLeast(problem.acceptedTimes + 1)
         problemService.update(problem)
-        val language = languageService.get(problemSubmissionRequest.language)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        if (!languageService.exists(problemSubmissionRequest.lang)) {
+            throw AppException("语言不存在", 400)
+        }
         var submission =
             Submission(
                 user = user,
                 problem = problem,
                 origin = Submission.SubmissionOrigin.PROBLEM,
-                language = language,
                 code = problemSubmissionRequest.code,
                 status = SubmissionStatus.PENDING,
                 judgeStage = JudgeStage.PENDING,
+                lang = problemSubmissionRequest.lang,
             )
         submission = submissionService.new(submission)
         return R.success(200, "提交成功", SubmissionDto.from(submission))
@@ -111,8 +110,6 @@ class ProblemController(
         val samples: List<ProblemSample>,
         val note: String?,
         val author: String?,
-        val languages: List<Long> = listOf(),
-        val allowAllLanguages: Boolean,
         val codeLength: Int,
         val submitTimes: Long,
         val acceptedTimes: Long,
@@ -133,8 +130,6 @@ class ProblemController(
                     samples = problem.samples ?: listOf(),
                     note = problem.note,
                     author = problem.author?.username,
-                    languages = problem.languages.map { it.languageId!! },
-                    allowAllLanguages = problem.allowAllLanguages,
                     codeLength = problem.codeLength,
                     submitTimes = problem.submitTimes,
                     acceptedTimes = problem.acceptedTimes,
@@ -164,5 +159,5 @@ class ProblemController(
 
 data class ProblemSubmissionRequest(
     val code: String,
-    val language: Long,
+    val lang: String,
 )

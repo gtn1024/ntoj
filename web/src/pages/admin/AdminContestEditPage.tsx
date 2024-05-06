@@ -1,4 +1,3 @@
-import type { SetStateAction } from 'react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import type { AxiosError } from 'axios'
@@ -14,7 +13,6 @@ import {
   Space,
   Switch,
   Table,
-  Transfer,
   message,
 } from 'antd'
 import dayjs from 'dayjs'
@@ -27,8 +25,6 @@ export const AdminContestEditPage: React.FC = () => {
   const { pathname } = useLocation()
   const mode = pathname.split('/').pop() === 'new' ? '新建' : '修改'
   const { id } = useParams()
-  const [languages, setLanguages] = useState<string[]>([])
-  const [allLanguages, setAllLanguages] = useState<{ key: string, title: string }[]>([])
   const formRef = useRef<FormInstance>(null)
   const modalFormRef = useRef<FormInstance>(null)
   const [contestPermission, setContestPermission] = useState<ContestPermission>('PUBLIC')
@@ -42,7 +38,6 @@ export const AdminContestEditPage: React.FC = () => {
     if (mode === '修改' && id) {
       http.get<AdminDto.Contest>(`/admin/contest/${id}`)
         .then((res) => {
-          setLanguages(res.data.data.languages.map(l => l.toString()) ?? [])
           setProblems(res.data.data.problems)
           setUsers(res.data.data.users)
           formRef?.current?.setFieldsValue({
@@ -58,15 +53,6 @@ export const AdminContestEditPage: React.FC = () => {
           throw err
         })
     }
-    http.get<L<AdminDto.Language>>('/admin/language')
-      .then((res) => {
-        const ls = res.data.data.list
-        setAllLanguages(ls.map(l => ({ key: l.id.toString(), title: l.languageName })))
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '获取语言失败')
-        throw err
-      })
     http.get<L<AdminDto.Problem>>('/admin/problem')
       .then((res) => {
         setAllProblems(res.data.data.list)
@@ -81,7 +67,6 @@ export const AdminContestEditPage: React.FC = () => {
     const params = {
       ...v,
       users,
-      languages: languages.map(l => Number.parseInt(l)),
       problems: problems.sort((a, b) => a.contestProblemIndex - b.contestProblemIndex),
       startTime: v.time[0].unix(),
       endTime: v.time[1].unix(),
@@ -224,19 +209,6 @@ export const AdminContestEditPage: React.FC = () => {
               options={[
                 { value: 'ICPC', label: 'ICPC' },
               ]}
-            />
-          </Form.Item>
-
-          <Form.Item label="允许所有语言" name="allowAllLanguages" valuePropName="checked">
-            <Switch />
-          </Form.Item>
-
-          <Form.Item label="语言" name="languages">
-            <Transfer
-              dataSource={allLanguages}
-              targetKeys={languages}
-              onChange={v => setLanguages(v as SetStateAction<string[]>)}
-              render={item => item.title}
             />
           </Form.Item>
 

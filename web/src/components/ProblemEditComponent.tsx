@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import type { AxiosError } from 'axios'
 import { Button, Drawer, Select, message } from 'antd'
 import c from 'classnames'
@@ -8,13 +8,14 @@ import { http } from '../lib/Http.tsx'
 import { useLayout } from '../hooks/useLayout.ts'
 import { useCodemirrorConfig } from '../hooks/useCodemirrorConfig.ts'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
+import { useLanguages } from '../hooks/useLanguages.ts'
 import { CodeMirrorEditor } from './CodeMirrorEditor.tsx'
 
 interface Props {
   hBorder: number
   submitUrl: string
   codeLengthLimit: number
-  languageOptions: { value: string, label: string }[]
+  languageOptions?: { value: string, label: string }[]
   samples: { input: string, output: string }[]
   timeLimit: number
   memoryLimit: number
@@ -26,7 +27,6 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   const [language, setLanguage] = useState<string>()
   const [judgeMessage, setJudgeMessage] = useState<SubmissionStatus | JudgeStage | '正在提交'>()
   const [intervalId, setIntervalId] = useState<number | null>(null)
-  const [editorLanguage, setEditorLanguage] = useState('cpp')
   const [toolbarVisible, setToolbarVisible] = useState(false)
   const [toolbarSection, setToolbarSection] = useState<'result' | 'input'>('result')
   const [isSubmissionOk, setIsSubmissionOk] = useState(false)
@@ -35,6 +35,14 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   const [editorConfigDrawerOpen, setEditorConfigDrawerOpen] = useState(false)
   const [resultMode, setResultMode] = useState<'submit' | 'selfTest'>('submit')
   const { codemirrorConfig, setCodemirrorConfig } = useCodemirrorConfig()
+
+  const { languages } = useLanguages()
+  const editorLanguage = useMemo(() => {
+    if (!languages || !language) {
+      return 'cpp'
+    }
+    return languages[language].editor || 'cpp'
+  }, [languages, language])
 
   useEffect(() => {
     if (samples.length > 0) {
@@ -188,7 +196,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
     setIsSubmissionOk(false)
     setToolbarVisible(true)
     setJudgeMessage('正在提交')
-    http.post<Submission>(submitUrl, { code, language: Number.parseInt(language) })
+    http.post<Submission>(submitUrl, { code, lang: language })
       .then((res) => {
         setJudgeMessage(res.data.data.status)
         const id = window.setInterval(() => {
@@ -243,7 +251,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
     setJudgeMessage('正在提交')
     const output = samples.findLast(sample => sample.input === selfInputData)?.output ?? null
     const data = {
-      language: Number.parseInt(language),
+      lang: language,
       code,
       input: selfInputData,
       output,
@@ -281,38 +289,6 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   const editorWrapperRef = useRef<HTMLDivElement>(null)
   const { height } = useWindowSize()
 
-  function languageLabelToEditorLanguage(id: string) {
-    const label = languageOptions.find(language => language.value === id)?.label.toLowerCase()
-    if (!label) {
-      return 'cpp'
-    }
-    if (label.includes('c++') || label.toLowerCase().includes('cpp')) {
-      return 'cpp'
-    }
-    if (label.includes('c#') || label.toLowerCase().includes('csharp')) {
-      return 'csharp'
-    }
-    if (label.includes('java')) {
-      return 'java'
-    }
-    if (label.includes('py')) {
-      return 'python'
-    }
-    if (label.includes('go')) {
-      return 'go'
-    }
-    if (label.includes('rust')) {
-      return 'rust'
-    }
-    if (label.includes('pascal')) {
-      return 'pascal'
-    }
-    if (label.includes('c')) {
-      return 'c'
-    }
-    return 'cpp'
-  }
-
   return (
     <>
       <div className="mx-2 h-40px flex items-center justify-between">
@@ -322,7 +298,6 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
             value={language}
             onChange={(e) => {
               setLanguage(e)
-              setEditorLanguage(languageLabelToEditorLanguage(e))
             }}
             options={languageOptions}
           />

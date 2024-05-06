@@ -1,57 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import type { AxiosError } from 'axios'
 import { message } from 'antd'
 import c from 'classnames'
-import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { ProblemDetail } from '../components/ProblemDetail.tsx'
 import { useLayout } from '../hooks/useLayout.ts'
 import ProblemEditComponent from '../components/ProblemEditComponent.tsx'
+import { useLanguages } from '../hooks/useLanguages.ts'
 
 export const ProblemPage: React.FC = () => {
   const nav = useNavigate()
   const { isMobile } = useLayout()
   const { alias } = useParams()
-  const [languageOptions, setLanguageOptions] = useState<{ value: string, label: string }[]>([])
   const [data, setData] = useState<Problem>()
 
+  const { languages } = useLanguages()
+  const languageOptions = useMemo(() => {
+    if (!languages)
+      return []
+    const keys = Object.keys(languages)
+    return keys.map((key) => {
+      return {
+        value: key,
+        label: languages[key].display,
+      }
+    })
+  }, [languages])
+
   useEffect(() => {
-    Promise.all([
-      http.get<L<{
-        id: number
-        name: string
-      }>>('/language')
-        .then((res) => {
-          return res.data.data.list
-        })
-        .catch((err: AxiosError<HttpResponse>) => {
-          throw err
-        }),
-      http.get<Problem>(`/problem/${alias ?? ''}`)
-        .then((res) => {
-          return res.data.data
-        })
-        .catch((err: AxiosError) => {
-          throw err
-        }),
-    ])
-      .then(([languages, problem]) => {
+    http.get<Problem>(`/problem/${alias ?? ''}`)
+      .then((res) => {
+        return res.data.data
+      })
+      .then((problem) => {
         setData(problem)
-        const availableLanguages = languages
-          .filter((language) => {
-            return problem.allowAllLanguages || problem.languages?.includes(language.id)
-          })
-        setLanguageOptions(
-          availableLanguages
-            .sort((a, b) => {
-              return a.name.localeCompare(b.name)
-            })
-            .map(language => ({
-              value: language.id.toString(),
-              label: language.name,
-            })),
-        )
       })
       .catch((err) => {
         void message.error('题目获取失败！')

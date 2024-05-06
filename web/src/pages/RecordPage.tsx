@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import c from 'classnames'
 import type { AxiosError } from 'axios'
@@ -8,12 +8,20 @@ import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
 import { toFixedNumber } from '../lib/misc.ts'
 import { mdit } from '../lib/mdit.ts'
+import { useLanguages } from '../hooks/useLanguages.ts'
 
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
   const [data, setData] = useState<Submission>()
   const [score, setScore] = useState<number>(0)
   const { isMobile } = useLayout()
+  const { languages } = useLanguages()
+  const languageName = useMemo(() => {
+    if (!languages || !data) {
+      return ''
+    }
+    return languages[data.lang]?.display || data.lang
+  }, [languages, data])
   useEffect(() => {
     void http.get<Submission>(`/submission/${id}`)
       .then((res) => {
@@ -122,7 +130,7 @@ export const RecordPage: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">语言</span>
-                <span className="text-gray-500">{data?.language.languageName}</span>
+                <span className="text-gray-500">{languageName}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">题目</span>

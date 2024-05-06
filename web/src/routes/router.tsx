@@ -26,8 +26,6 @@ import AdminContestPage from '../pages/admin/AdminContestPage.tsx'
 import AdminHomePage from '../pages/admin/AdminHomePage.tsx'
 import AdminJudgeClientTokenEditPage from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
 import AdminJudgeClientTokenPage from '../pages/admin/AdminJudgeClientTokenPage.tsx'
-import AdminLanguageEditPage from '../pages/admin/AdminLanguageEditPage.tsx'
-import AdminLanguagePage from '../pages/admin/AdminLanguagePage.tsx'
 import AdminProblemEditPage from '../pages/admin/AdminProblemEditPage.tsx'
 import AdminProblemPage from '../pages/admin/AdminProblemPage.tsx'
 import AdminUserEditPage from '../pages/admin/AdminUserEditPage.tsx'
@@ -152,23 +150,6 @@ export const router = createBrowserRouter(
             { index: true, element: <AdminContestPage /> },
             { path: 'new', element: <AdminContestEditPage /> },
             { path: ':id/edit', element: <AdminContestEditPage /> },
-          ],
-        },
-        {
-          path: 'language',
-          loader: async () => {
-            await adminLoader()
-            const user = useUserStore.getState().user
-            if (user.role === 'SUPER_ADMIN') {
-              return true
-            } else {
-              throw new ErrorForbidden()
-            }
-          },
-          children: [
-            { index: true, element: <AdminLanguagePage /> },
-            { path: 'new', element: <AdminLanguageEditPage /> },
-            { path: ':id/edit', element: <AdminLanguageEditPage /> },
           ],
         },
         {

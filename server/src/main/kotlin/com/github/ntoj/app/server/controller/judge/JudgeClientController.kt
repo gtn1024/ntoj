@@ -10,7 +10,7 @@ import com.github.ntoj.app.server.service.SubmissionService
 import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
 import com.github.ntoj.app.shared.model.GetSubmissionResponse
 import com.github.ntoj.app.shared.model.JudgeStage
-import com.github.ntoj.app.shared.model.LanguageDto
+import com.github.ntoj.app.shared.model.LanguageStructure
 import com.github.ntoj.app.shared.model.R
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import com.github.ntoj.app.shared.model.TestcaseDto
@@ -36,6 +36,7 @@ class JudgeClientController(
     val fileUploadService: FileUploadService,
     val fileService: FileService,
     private val problemService: ProblemService,
+    private val languages: Map<String, LanguageStructure>,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {
@@ -46,6 +47,12 @@ class JudgeClientController(
     fun getSubmission(): ResponseEntity<R<GetSubmissionResponse>> {
         val submission =
             submissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功", null)
+        val languageStructure = languages[submission.lang]
+        if (languageStructure == null) {
+            submission.status = SubmissionStatus.SYSTEM_ERROR
+            submissionService.update(submission)
+            return R.success(204, "获取成功", null)
+        }
         return R.success(
             200,
             "获取成功",
@@ -53,7 +60,7 @@ class JudgeClientController(
                 submissionId = submission.submissionId!!,
                 problemId = submission.problem?.problemId!!,
                 code = submission.code!!,
-                language = LanguageDto.from(submission.language!!),
+                lang = languageStructure,
                 testcase = TestcaseDto.from(submission.problem!!.testCases!!),
                 timeLimit = submission.problem!!.timeLimit!!,
                 memoryLimit = submission.problem!!.memoryLimit!!,
@@ -65,13 +72,19 @@ class JudgeClientController(
     fun getSelfTestSubmission(): ResponseEntity<R<GetSelfTestSubmissionResponse>> {
         val submission =
             selfTestSubmissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功")
+        val languageStructure = languages[submission.lang]
+        if (languageStructure == null) {
+            submission.status = SubmissionStatus.SYSTEM_ERROR
+            selfTestSubmissionService.update(submission)
+            return R.success(204, "获取成功", null)
+        }
         return R.success(
             200,
             "获取成功",
             GetSelfTestSubmissionResponse(
                 submissionId = submission.selfTestSubmissionId!!,
                 code = submission.code,
-                language = LanguageDto.from(submission.language),
+                lang = languageStructure,
                 timeLimit = submission.timeLimit,
                 memoryLimit = submission.memoryLimit,
                 input = submission.input,

@@ -13,7 +13,6 @@ import com.github.ntoj.app.server.model.entities.Contest
 import com.github.ntoj.app.server.model.entities.ContestProblem
 import com.github.ntoj.app.server.model.entities.ContestUser
 import com.github.ntoj.app.server.service.ContestService
-import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
@@ -35,7 +34,6 @@ import java.time.Instant
 class AdminContestController(
     private val userService: UserService,
     private val contestService: ContestService,
-    private val languageService: LanguageService,
 ) {
     @GetMapping
     fun index(
@@ -87,7 +85,6 @@ class AdminContestController(
                 type = request.type,
                 permission = request.permission,
                 password = request.password,
-                allowAllLanguages = request.allowAllLanguages,
                 visible = request.visible,
                 showFinalBoard = request.showFinalBoard,
                 author = author,
@@ -97,7 +94,6 @@ class AdminContestController(
                         if (!userService.existsById(it)) throw AppException("用户不存在", 404)
                         ContestUser(userId = it, Instant.now().toEpochMilli())
                     }.toMutableList(),
-                languages = request.languages.map { languageService.get(it) },
             )
         contest = contestService.add(contest)
         return R.success(200, "添加成功", AdminContestDto.from(contest))
@@ -123,8 +119,6 @@ class AdminContestController(
                 if (!userService.existsById(it)) throw AppException("用户不存在", 404)
                 ContestUser(userId = it, Instant.now().toEpochMilli())
             }.toMutableList()
-        contest.languages = request.languages.map { languageService.get(it) }
-        contest.allowAllLanguages = request.allowAllLanguages
         contest.visible = request.visible
         contest.showFinalBoard = request.showFinalBoard
         contest = contestService.update(contest)
@@ -142,8 +136,6 @@ class AdminContestController(
         val password: String?,
         val problems: List<ContestProblem> = listOf(),
         val users: List<Long> = listOf(),
-        val languages: List<Long> = listOf(),
-        val allowAllLanguages: Boolean = false,
         val visible: Boolean = false,
         val showFinalBoard: Boolean = false,
     )
@@ -160,8 +152,6 @@ class AdminContestController(
         val password: String?,
         val problems: List<ContestProblem> = listOf(),
         val users: List<Long> = listOf(),
-        val languages: List<Long> = listOf(),
-        val allowAllLanguages: Boolean,
         val visible: Boolean,
         val showFinalBoard: Boolean,
         val author: String,
@@ -180,8 +170,6 @@ class AdminContestController(
                     password = contest.password,
                     problems = contest.problems,
                     users = contest.users.map { it.userId },
-                    languages = contest.languages.map { it.languageId!! },
-                    allowAllLanguages = contest.allowAllLanguages,
                     visible = contest.visible,
                     showFinalBoard = contest.showFinalBoard,
                     author = contest.author.username,

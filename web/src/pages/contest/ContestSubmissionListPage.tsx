@@ -7,6 +7,7 @@ import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../../lib/SubmissionUtils.ts'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
+import { useLanguages } from '../../hooks/useLanguages.ts'
 
 interface ContestSubmission {
   id: number
@@ -15,7 +16,7 @@ interface ContestSubmission {
   result: SubmissionStatus
   time?: number
   memory?: number
-  language: string
+  lang: string
   codeLength: number
   submitTime: string
 }
@@ -33,6 +34,7 @@ export const ContestSubmissionListPage: React.FC = () => {
         throw err
       })
   })
+  const { languages } = useLanguages()
   return (
     <div className="m-auto max-w-1200px w-full flex flex-col items-start gap-2 p-2">
       <table className="w-full text-sm">
@@ -96,7 +98,7 @@ export const ContestSubmissionListPage: React.FC = () => {
                 </div>
               </td>
               <td width="10%" className="px-4 py-3">
-                <div className="text-center">{submission.language}</div>
+                <div className="text-center">{languages?.[submission.lang]?.display || submission.lang}</div>
               </td>
               <td width="20%" className="px-4 py-3">
                 <div className="text-center">{submission.submitTime}</div>

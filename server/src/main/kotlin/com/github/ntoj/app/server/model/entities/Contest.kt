@@ -10,8 +10,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes.JSON
@@ -31,14 +29,6 @@ class Contest(
     var author: User,
     @JdbcTypeCode(JSON) @Column(nullable = false) var problems: List<ContestProblem> = listOf(),
     @JdbcTypeCode(JSON) @Column(nullable = false) var users: MutableList<ContestUser> = mutableListOf(),
-    @ManyToMany
-    @JoinTable(
-        name = "t_contests_languages",
-        joinColumns = [JoinColumn(name = "contest_id")],
-        inverseJoinColumns = [JoinColumn(name = "language_id")],
-    )
-    var languages: List<Language> = mutableListOf(),
-    @Column(nullable = false) var allowAllLanguages: Boolean,
     @Column(nullable = false) var visible: Boolean = true,
     @Column(nullable = false) var showFinalBoard: Boolean = false,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "contest_id") var contestId: Long? = null,

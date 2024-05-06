@@ -238,9 +238,6 @@ class ContestController(
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
     ): ResponseEntity<R<ProblemController.SubmissionDto>> {
         val contest = contestService.get(id)
-        if (!contest.allowAllLanguages && contest.languages.none { it.languageId == problemSubmissionRequest.language }) {
-            throw AppException("不支持的语言", 400)
-        }
         val problem =
             contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
                 problemService.get(it.problemId)
@@ -248,18 +245,20 @@ class ContestController(
         if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
             throw AppException("代码长度超过限制", 400)
         }
-        val language = languageService.get(problemSubmissionRequest.language)
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        if (!languageService.exists(problemSubmissionRequest.lang)) {
+            throw AppException("语言不存在", 400)
+        }
         var submission =
             Submission(
                 user = user,
                 problem = problem,
                 origin = Submission.SubmissionOrigin.CONTEST,
                 contestId = id,
-                language = language,
                 code = problemSubmissionRequest.code,
                 status = SubmissionStatus.PENDING,
                 judgeStage = JudgeStage.PENDING,
+                lang = problemSubmissionRequest.lang,
             )
         submission =
             submissionService
@@ -315,7 +314,7 @@ class ContestController(
         val result: SubmissionStatus,
         val time: Int?,
         val memory: Int?,
-        val language: String,
+        val lang: String,
         val codeLength: Int,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
@@ -330,7 +329,7 @@ class ContestController(
                 result = submission.status,
                 time = submission.time,
                 memory = submission.memory,
-                language = submission.language?.languageName!!,
+                lang = submission.lang,
                 codeLength = submission.code?.length!!,
                 submitTime = submission.createdAt!!,
             )
@@ -546,8 +545,6 @@ class ContestController(
         val userCount: Int,
         val users: List<UserDto>,
         val author: com.github.ntoj.app.server.model.dtos.UserDto,
-        val languages: List<Long> = listOf(),
-        val allowAllLanguages: Boolean,
         val hasPermission: Boolean,
         val freezeTime: Int?,
         val showFinalBoard: Boolean,
@@ -588,8 +585,6 @@ class ContestController(
                         UserDto.from(userService.getUserById(it.userId), Instant.ofEpochMilli(it.joinAt))
                     },
                 author = com.github.ntoj.app.server.model.dtos.UserDto.from(contest.author),
-                languages = contest.languages.map { it.languageId!! },
-                allowAllLanguages = contest.allowAllLanguages,
                 hasPermission = hasPermission,
                 freezeTime = contest.freezeTime,
                 showFinalBoard = contest.showFinalBoard,

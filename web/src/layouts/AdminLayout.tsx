@@ -55,17 +55,12 @@ export const AdminLayout: React.FC = () => {
       label: '用户',
     },
     {
-      key: '/admin/language',
-      label: '语言',
-    },
-    {
       key: '/admin/judge_client_token',
       label: '评测机',
     },
   ]
 
   if (user.role !== 'SUPER_ADMIN') {
-    items.pop()
     items.pop()
     items.pop()
   }

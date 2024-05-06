@@ -2,7 +2,7 @@ package com.github.ntoj.app.judger
 
 import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
 import com.github.ntoj.app.shared.model.GetSubmissionResponse
-import com.github.ntoj.app.shared.model.LanguageDto
+import com.github.ntoj.app.shared.model.LanguageStructure
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import com.github.ntoj.app.shared.model.TestcaseJudgeResult
 import com.github.ntoj.app.shared.util.ZipUtils
@@ -12,17 +12,17 @@ import java.io.File
 
 object TestcaseRunner {
     suspend fun runTestcase(
-        targetName: String,
         submission: GetSubmissionResponse,
-        fileId: String,
+        fileId: String?,
     ): JudgeResult {
+        val code = submission.code
         val number = getTestcaseNumber(submission.testcase.fileId)
         var maxTime = 0L
         var maxMemory = 0L
         val testcaseJudgeResults = mutableListOf<TestcaseJudgeResult>()
         var judgeResult = SubmissionStatus.ACCEPTED
         for (i in 1..number) {
-            runSingleTestcase(submission, targetName, fileId, i).let {
+            runSingleTestcase(submission, code, fileId, i).let {
                 testcaseJudgeResults.add(it)
                 maxTime = maxTime.coerceAtLeast(it.time)
                 maxMemory = maxMemory.coerceAtLeast(it.memory)
@@ -35,14 +35,14 @@ object TestcaseRunner {
     }
 
     suspend fun runSelfTest(
-        targetName: String,
         submission: GetSelfTestSubmissionResponse,
-        fileId: String,
+        fileId: String?,
         inData: String,
         expectedOutput: String?,
     ): SelfTestJudgeResult {
+        val code = submission.code
         val body =
-            getRunBody(submission.language, submission.timeLimit, submission.memoryLimit, targetName, inData, fileId)
+            getRunBody(submission.lang, submission.timeLimit, submission.memoryLimit, inData, code, fileId)
         val result = Client.Sandbox.run(body)
         if (result.size != 1) {
             return SelfTestJudgeResult(SubmissionStatus.SYSTEM_ERROR, 0, 0, null)
@@ -76,13 +76,13 @@ object TestcaseRunner {
 
     private suspend fun runSingleTestcase(
         submission: GetSubmissionResponse,
-        targetName: String,
-        fileId: String,
+        code: String,
+        fileId: String?,
         idx: Int,
     ): TestcaseJudgeResult {
         val inData = File("testcase/${submission.testcase.fileId}/$idx.in").readText()
         val body =
-            getRunBody(submission.language, submission.timeLimit, submission.memoryLimit, targetName, inData, fileId)
+            getRunBody(submission.lang, submission.timeLimit, submission.memoryLimit, inData, code, fileId)
         val result = Client.Sandbox.run(body)
         if (result.size != 1) {
             return TestcaseJudgeResult(SubmissionStatus.SYSTEM_ERROR, 0, 0)
@@ -111,18 +111,18 @@ object TestcaseRunner {
     }
 
     private fun getRunBody(
-        language: LanguageDto,
+        language: LanguageStructure,
         timeLimit: Int,
         memoryLimit: Int,
-        targetName: String,
         inData: String,
-        fileId: String,
+        code: String,
+        fileId: String?,
     ): SandboxRequest {
-        val executeCommand =
-            language.executeCommand!!
-                .replace("{target}", targetName)
-        val memoryLimitRate = language.memoryLimitRate ?: 1
-        val timeLimitRate = language.timeLimitRate ?: 1
+        val targetName = if (language.compile == null) language.source else language.target
+        val runData = if (language.compile == null) MemoryFile(code) else PreparedFile(fileId!!)
+        val executeCommand = language.execute
+        val memoryLimitRate = language.memoryLimitRate.toInt()
+        val timeLimitRate = language.timeLimitRate.toInt()
         return SandboxRequest(
             cmd =
                 listOf(
@@ -144,7 +144,7 @@ object TestcaseRunner {
                         procLimit = 50,
                         copyIn =
                             mapOf(
-                                targetName to PreparedFile(fileId),
+                                targetName to runData,
                             ),
                         // 2 MB
                         copyOutMax = 1L * 2 * 1024 * 1024,
