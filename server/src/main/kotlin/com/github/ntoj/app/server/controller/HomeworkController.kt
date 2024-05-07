@@ -85,7 +85,8 @@ class HomeworkController(
         user: User,
         group: Group,
     ): Boolean {
-        return user.groups.contains(group)
+        val groups = userService.getUserGroups(user)
+        return groups.contains(group)
     }
 
     data class HomeworkProblemStatus(

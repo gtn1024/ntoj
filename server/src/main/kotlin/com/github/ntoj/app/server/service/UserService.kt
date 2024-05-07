@@ -1,7 +1,9 @@
 package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
+import com.github.ntoj.app.server.model.entities.Group
 import com.github.ntoj.app.server.model.entities.User
+import com.github.ntoj.app.server.repository.GroupRepository
 import com.github.ntoj.app.server.repository.UserRepository
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
@@ -34,11 +36,14 @@ interface UserService {
     fun updateUser(user: User): User
 
     fun search(user: String): List<User>
+
+    fun getUserGroups(user: User): List<Group>
 }
 
 @Service
 class UserServiceImpl(
     val userRepository: UserRepository,
+    val groupRepository: GroupRepository,
 ) : UserService {
     override fun get(
         page: Int,
@@ -110,5 +115,9 @@ class UserServiceImpl(
                 cb.and(*list.toTypedArray())
             }
         return userRepository.findAll(spec)
+    }
+
+    override fun getUserGroups(user: User): List<Group> {
+        return groupRepository.findAllByUsersContains(user)
     }
 }

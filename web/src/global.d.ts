@@ -25,11 +25,6 @@ interface User {
   bio?: string
   createdAt: number
   role: UserRole
-  groups: {
-    id: number
-    name: string
-    userNumber: number
-  }[]
 }
 
 interface Group {
