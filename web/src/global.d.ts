@@ -44,12 +44,12 @@ interface Group {
 }
 
 interface Announcement {
-  id?: number
-  title?: string
-  content?: string
-  author?: string
+  id: number
+  title: string
+  content: string
+  author: string
   visible?: boolean
-  createdAt?: number
+  createdAt: number
 }
 
 interface Problem {

@@ -10,11 +10,11 @@ import jakarta.persistence.ManyToOne
 
 @Entity(name = "t_announcements")
 class Announcement(
-    var title: String?,
-    @Column(columnDefinition = "text") var content: String?,
+    @Column(nullable = false) var title: String,
+    @Column(nullable = false, columnDefinition = "text") var content: String,
     @ManyToOne
-    @JoinColumn(name = "author_user_id")
-    var author: User?,
+    @JoinColumn(name = "author_user_id", nullable = false)
+    var author: User,
     var visible: Boolean? = null,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

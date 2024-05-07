@@ -30,7 +30,7 @@ export const AnnouncementList: React.FC = () => {
           >
             <List.Item.Meta
               title={(
-                <Link to={`/a/${item.id ?? 0}`} style={{ fontWeight: 'bold' }}>
+                <Link to={`/a/${item.id}`} style={{ fontWeight: 'bold' }}>
                   {' '}
                   {item.title}
                   {' '}

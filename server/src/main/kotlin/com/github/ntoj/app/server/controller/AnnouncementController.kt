@@ -39,20 +39,20 @@ class AnnouncementController(
 }
 
 data class AnnouncementDto(
-    val id: Long?,
-    val title: String?,
-    val content: String?,
-    val author: String?,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
+    val id: Long,
+    val title: String,
+    val content: String,
+    val author: String,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
 ) {
     companion object {
         fun from(announcement: Announcement) =
             AnnouncementDto(
-                id = announcement.announcementId,
+                id = announcement.announcementId!!,
                 title = announcement.title,
                 content = announcement.content,
-                author = announcement.author!!.username,
-                createdAt = announcement.createdAt,
+                author = announcement.author.username,
+                createdAt = announcement.createdAt!!,
             )
     }
 }

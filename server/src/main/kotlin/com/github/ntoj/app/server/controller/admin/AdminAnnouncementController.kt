@@ -76,8 +76,8 @@ class AdminAnnouncementController(
             AnnouncementDto.from(
                 announcementService.newAnnouncement(
                     Announcement(
-                        title = announcementRequest.title!!,
-                        content = announcementRequest.content!!,
+                        title = announcementRequest.title,
+                        content = announcementRequest.content,
                         visible = announcementRequest.visible ?: false,
                         author = author,
                     ),
@@ -93,15 +93,9 @@ class AdminAnnouncementController(
         @PathVariable id: Long,
     ): ResponseEntity<R<AnnouncementDto>> {
         val announcement = announcementService.getAnnouncementsById(id)
-        if (announcement.title != announcementRequest.title) {
-            announcement.title = announcementRequest.title
-        }
-        if (announcement.content != announcementRequest.content) {
-            announcement.content = announcementRequest.content
-        }
-        if (announcement.visible != announcementRequest.visible) {
-            announcement.visible = announcementRequest.visible
-        }
+        announcement.title = announcementRequest.title
+        announcement.content = announcementRequest.content
+        announcement.visible = announcementRequest.visible
         return R.success(
             200,
             "修改成功",
@@ -120,28 +114,28 @@ class AdminAnnouncementController(
 }
 
 data class AnnouncementRequest(
-    @field:NotEmpty(message = "标题不能为空") val title: String?,
-    @field:NotEmpty(message = "内容不能为空") val content: String?,
+    @field:NotEmpty(message = "标题不能为空") val title: String,
+    @field:NotEmpty(message = "内容不能为空") val content: String,
     val visible: Boolean? = null,
 )
 
 data class AnnouncementDto(
-    val id: Long?,
-    val title: String?,
-    val content: String?,
-    val author: String?,
+    val id: Long,
+    val title: String,
+    val content: String,
+    val author: String,
     val visible: Boolean?,
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant?,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
 ) {
     companion object {
         fun from(announcement: Announcement) =
             AnnouncementDto(
-                id = announcement.announcementId,
+                id = announcement.announcementId!!,
                 title = announcement.title,
                 content = announcement.content,
-                author = announcement.author!!.username,
+                author = announcement.author.username,
                 visible = announcement.visible,
-                createdAt = announcement.createdAt,
+                createdAt = announcement.createdAt!!,
             )
     }
 }

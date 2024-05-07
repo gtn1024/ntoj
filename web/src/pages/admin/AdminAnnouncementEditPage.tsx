@@ -25,10 +25,10 @@ export const AdminAnnouncementEditPage: React.FC = () => {
       http.get<Announcement>(`/admin/announcement/${id}`)
         .then((res) => {
           formRef?.current?.setFieldsValue({
-            title: res.data.data.title ?? '',
-            visible: res.data.data.visible ?? false,
+            title: res.data.data.title,
+            visible: res.data.data.visible || false,
           })
-          setContent(res.data.data.content ?? '')
+          setContent(res.data.data.content)
         })
         .catch((err: AxiosError<HttpResponse>) => {
           void message.error(err.response?.data.message ?? '获取公告失败')
