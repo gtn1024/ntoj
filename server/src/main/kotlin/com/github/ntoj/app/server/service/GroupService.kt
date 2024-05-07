@@ -6,6 +6,7 @@ import com.github.ntoj.app.server.model.entities.Homework
 import com.github.ntoj.app.server.repository.GroupRepository
 import com.github.ntoj.app.server.repository.HomeworkRepository
 import jakarta.persistence.criteria.Predicate
+import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.domain.Sort.Direction.ASC
@@ -70,7 +71,10 @@ class GroupServiceImpl(
         return groupRepository.save(group)
     }
 
+    @Transactional
     override fun remove(id: Long) {
+        val group = get(id)
+        homeworkRepository.deleteGroupFromHomeworks(group)
         groupRepository.deleteById(id)
     }
 
