@@ -60,12 +60,12 @@ interface Problem {
   description?: string
   inputDescription?: string
   outputDescription?: string
-  timeLimit?: number
-  memoryLimit?: number
+  timeLimit: number
+  memoryLimit: number
   judgeTimes?: number
   samples: ProblemSample[]
   note?: string
-  author?: string
+  author: string
   codeLength: number
   submitTimes: number
   acceptedTimes: number
@@ -257,14 +257,14 @@ namespace AdminDto {
     description?: string
     inputDescription?: string
     outputDescription?: string
-    timeLimit?: number
-    memoryLimit?: number
+    timeLimit: number
+    memoryLimit: number
     judgeTimes?: number
     samples: ProblemSample[]
     note?: string
-    author?: string
+    author: string
     visible?: boolean
-    createdAt?: string
+    createdAt: string
     testcase: TestcaseDto
     codeLength: number
   }

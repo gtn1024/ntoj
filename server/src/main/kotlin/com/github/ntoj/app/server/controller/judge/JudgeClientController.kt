@@ -61,9 +61,9 @@ class JudgeClientController(
                 problemId = submission.problem.problemId!!,
                 code = submission.code,
                 lang = languageStructure,
-                testcase = TestcaseDto.from(submission.problem.testCases!!),
-                timeLimit = submission.problem.timeLimit!!,
-                memoryLimit = submission.problem.memoryLimit!!,
+                testcase = TestcaseDto.from(submission.problem.testCases),
+                timeLimit = submission.problem.timeLimit,
+                memoryLimit = submission.problem.memoryLimit,
             ),
         )
     }

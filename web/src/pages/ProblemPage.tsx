@@ -52,8 +52,8 @@ export const ProblemPage: React.FC = () => {
           languageOptions={languageOptions}
           codeLengthLimit={data?.codeLength ?? 16}
           samples={data?.samples ?? []}
-          timeLimit={data?.timeLimit ?? 1000}
-          memoryLimit={data?.memoryLimit ?? 256}
+          timeLimit={data?.timeLimit || 1000}
+          memoryLimit={data?.memoryLimit || 256}
         />
       </div>
     </div>

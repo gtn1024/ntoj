@@ -159,8 +159,8 @@ class SubmissionController(
         }
 
         data class ProblemDto(
-            val title: String?,
-            val alias: String?,
+            val title: String,
+            val alias: String,
         ) {
             companion object {
                 fun from(problem: Problem): ProblemDto =

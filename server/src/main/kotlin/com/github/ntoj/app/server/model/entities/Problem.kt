@@ -20,16 +20,16 @@ class Problem(
     @Column(columnDefinition = "text") var description: String?,
     @Column(columnDefinition = "text") var inputDescription: String?,
     @Column(columnDefinition = "text") var outputDescription: String?,
-    var timeLimit: Int?,
-    var memoryLimit: Int?,
+    @Column(nullable = false) var timeLimit: Int = 1000,
+    @Column(nullable = false) var memoryLimit: Int = 256,
     var judgeTimes: Int?,
-    var codeLength: Int = 16,
-    @OneToOne @JoinColumn(name = "testcase_file_id") var testCases: FileUpload?,
-    @JdbcTypeCode(JSON) var samples: List<ProblemSample>? = mutableListOf(),
+    @Column(nullable = false) var codeLength: Int = 16,
+    @OneToOne @JoinColumn(name = "testcase_file_id", nullable = false) var testCases: FileUpload,
+    @JdbcTypeCode(JSON) var samples: List<ProblemSample> = mutableListOf(),
     @Column(columnDefinition = "text") var note: String?,
     @ManyToOne
-    @JoinColumn(name = "author_user_id")
-    var author: User?,
+    @JoinColumn(name = "author_user_id", nullable = false)
+    var author: User,
     var visible: Boolean? = null,
     @Column(nullable = false) var submitTimes: Long = 0,
     @Column(nullable = false) var acceptedTimes: Long = 0,
