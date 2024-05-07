@@ -17,7 +17,6 @@ import com.github.ntoj.app.server.util.hashPassword
 import com.github.ntoj.app.shared.model.R
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotEmpty
-import jakarta.validation.constraints.Size
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -72,8 +71,6 @@ class AuthController(
                 password = hashPassword(request.password!!, salt),
                 salt = salt,
                 email = request.email,
-                displayName = request.displayName,
-                bio = request.bio,
                 role = if (userService.count() == 0L) UserRole.SUPER_ADMIN else UserRole.USER,
             ),
         )
@@ -135,8 +132,6 @@ data class UserRequest(
     @field:NotEmpty(message = "用户名不能为空") val username: String,
     @field:NotEmpty(message = "密码不能为空") val password: String?,
     @field:NotEmpty(message = "邮箱不能为空") val email: String?,
-    @field:NotEmpty(message = "显示名不能为空") val displayName: String?,
-    @field:Size(max = 100, message = "签名长度最多为100") val bio: String?,
 )
 
 data class LoginResponse(
