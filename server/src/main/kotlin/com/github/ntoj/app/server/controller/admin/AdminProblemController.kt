@@ -226,7 +226,7 @@ data class ProblemRequest(
     val memoryLimit: Int = 256,
     val samples: List<ProblemSample> = mutableListOf(),
     val note: String?,
-    val visible: Boolean? = null,
+    val visible: Boolean = true,
     val testcase: Long,
     val codeLength: Int,
 )
@@ -245,7 +245,7 @@ data class ProblemDto(
     val samples: List<ProblemSample>,
     val note: String?,
     val author: String,
-    val visible: Boolean?,
+    val visible: Boolean,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
     val testcase: TestcaseDto,
     val codeLength: Int,

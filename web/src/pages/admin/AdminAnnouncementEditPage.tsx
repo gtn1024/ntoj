@@ -26,7 +26,7 @@ export const AdminAnnouncementEditPage: React.FC = () => {
         .then((res) => {
           formRef?.current?.setFieldsValue({
             title: res.data.data.title,
-            visible: res.data.data.visible || false,
+            visible: res.data.data.visible,
           })
           setContent(res.data.data.content)
         })

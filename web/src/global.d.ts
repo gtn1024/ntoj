@@ -48,7 +48,7 @@ interface Announcement {
   title: string
   content: string
   author: string
-  visible?: boolean
+  visible: boolean
   createdAt: number
 }
 
@@ -263,7 +263,7 @@ namespace AdminDto {
     samples: ProblemSample[]
     note?: string
     author: string
-    visible?: boolean
+    visible: boolean
     createdAt: string
     testcase: TestcaseDto
     codeLength: number

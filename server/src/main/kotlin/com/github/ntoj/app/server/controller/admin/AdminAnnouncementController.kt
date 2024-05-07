@@ -78,7 +78,7 @@ class AdminAnnouncementController(
                     Announcement(
                         title = announcementRequest.title,
                         content = announcementRequest.content,
-                        visible = announcementRequest.visible ?: false,
+                        visible = announcementRequest.visible,
                         author = author,
                     ),
                 ),
@@ -116,7 +116,7 @@ class AdminAnnouncementController(
 data class AnnouncementRequest(
     @field:NotEmpty(message = "标题不能为空") val title: String,
     @field:NotEmpty(message = "内容不能为空") val content: String,
-    val visible: Boolean? = null,
+    val visible: Boolean = true,
 )
 
 data class AnnouncementDto(
@@ -124,7 +124,7 @@ data class AnnouncementDto(
     val title: String,
     val content: String,
     val author: String,
-    val visible: Boolean?,
+    val visible: Boolean,
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
 ) {
     companion object {

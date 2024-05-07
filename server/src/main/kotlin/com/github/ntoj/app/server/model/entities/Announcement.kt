@@ -15,7 +15,7 @@ class Announcement(
     @ManyToOne
     @JoinColumn(name = "author_user_id", nullable = false)
     var author: User,
-    var visible: Boolean? = null,
+    @Column(nullable = false) var visible: Boolean = true,
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "announcement_id")

@@ -41,7 +41,7 @@ export const AdminProblemEditPage: React.FC = () => {
             memoryLimit: res.data.data.memoryLimit,
             samples: res.data.data.samples ?? [{ input: '', output: '' }],
             note: res.data.data.note ?? '',
-            visible: res.data.data.visible ?? false,
+            visible: res.data.data.visible,
             codeLength: res.data.data.codeLength ?? 16,
           })
         })

@@ -30,7 +30,7 @@ class Problem(
     @ManyToOne
     @JoinColumn(name = "author_user_id", nullable = false)
     var author: User,
-    var visible: Boolean? = null,
+    @Column(nullable = false) var visible: Boolean = true,
     @Column(nullable = false) var submitTimes: Long = 0,
     @Column(nullable = false) var acceptedTimes: Long = 0,
     @Id
