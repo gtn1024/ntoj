@@ -20,7 +20,7 @@ interface SignUpProps {
   password: string
   password2: string
   email: string
-  realName: string
+  displayName: string
 }
 
 interface SignInResponse {
@@ -182,11 +182,11 @@ export const SignInPage: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            label="真实姓名"
-            name="realName"
+            label="显示名"
+            name="displayName"
             rules={[
-              { required: true, message: '请输入真实姓名！' },
-              { max: 4, message: '真实姓名最长为4个字符！' },
+              { required: true, message: '请输入显示名！' },
+              { max: 4, message: '显示名最长为4个字符！' },
             ]}
           >
             <Input maxLength={4} />

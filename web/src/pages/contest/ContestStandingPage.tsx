@@ -30,7 +30,7 @@ interface StandingProblem {
 interface Standing {
   user: {
     username: string
-    realName?: string
+    displayName?: string
   }
   solved: number
   penalty: number
@@ -159,7 +159,7 @@ export const ContestStandingPage: React.FC = () => {
       tempData[user.username] = {
         user: {
           username: user.username,
-          realName: user.realName,
+          displayName: user.displayName,
         },
         solved: 0,
         penalty: 0,
@@ -278,7 +278,7 @@ export const ContestStandingPage: React.FC = () => {
                 <td className="px-1 py-1 text-center">{index + 1}</td>
                 <td className="px-1 py-1 text-center">
                   <div>
-                    {user.user.realName && user.user.realName}
+                    {user.user.displayName && user.user.displayName}
                     <br />
                     {user.user.username}
                   </div>

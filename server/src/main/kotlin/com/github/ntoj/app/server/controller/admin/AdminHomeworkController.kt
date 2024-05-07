@@ -142,7 +142,7 @@ class AdminHomeworkController(
         }
         list.sortByDescending { it.solved }
         for (userData in list) {
-            sb.append("${userData.user.username},${userData.user.realName},${userData.solved}")
+            sb.append("${userData.user.username},${userData.user.displayName},${userData.solved}")
             for (i in problems.indices) {
                 sb.append(",")
                 if (userData.submissionData[problems[i].problemId!!] != null) {

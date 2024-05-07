@@ -26,11 +26,11 @@ data class GroupDto(
 
     data class GroupUserDto(
         val username: String,
-        val realName: String?,
+        val displayName: String?,
         val id: Long,
     ) : Serializable {
         companion object {
-            fun from(user: User) = GroupUserDto(user.username, user.realName, user.userId!!)
+            fun from(user: User) = GroupUserDto(user.username, user.displayName, user.userId!!)
         }
     }
 

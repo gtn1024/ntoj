@@ -7,7 +7,7 @@ import { type HttpResponse, http } from '../../lib/Http.tsx'
 interface UserPreview {
   username: string
   password: string
-  realName: string
+  displayName: string
   email: string
   role: UserRole
   exists: boolean
@@ -52,7 +52,7 @@ export const AdminUserImportPage: React.FC = () => {
           <p>用户</p>
           <Input.TextArea
             rows={10}
-            placeholder={'输入用户信息，每行一个，使用 Tab 分隔，格式：用户名\t密码\t电子邮箱\t真实姓名\t用户权限'}
+            placeholder={'输入用户信息，每行一个，使用 Tab 分隔，格式：用户名\t密码\t电子邮箱\t显示名\t用户权限'}
             value={inputUser}
             onChange={e => setInputUser(e.target.value)}
           />
@@ -75,7 +75,7 @@ export const AdminUserImportPage: React.FC = () => {
                   <th>序号</th>
                   <th>用户名</th>
                   <th>密码</th>
-                  <th>真实姓名</th>
+                  <th>显示名</th>
                   <th>电子邮箱</th>
                   <th>用户权限</th>
                   <th>用户已存在</th>
@@ -87,7 +87,7 @@ export const AdminUserImportPage: React.FC = () => {
                     <td>{index + 1}</td>
                     <td>{user.username}</td>
                     <td>{user.password}</td>
-                    <td>{user.realName}</td>
+                    <td>{user.displayName}</td>
                     <td>{user.email}</td>
                     <td>{user.role}</td>
                     <td>{user.exists ? '是' : '否'}</td>

@@ -87,7 +87,7 @@ export const AdminUserEditPage: React.FC = () => {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item label="真实姓名" rules={[{ required: true, message: '请输入真实姓名！' }]} name="realName" className="grow">
+          <Form.Item label="显示名" rules={[{ required: true, message: '请输入显示名！' }]} name="displayName" className="grow">
             <Input />
           </Form.Item>
 

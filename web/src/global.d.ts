@@ -5,7 +5,7 @@ type UserRole = 'BANNED' | 'USER' | 'ADMIN' | 'SUPER_ADMIN'
 interface CurrentUser {
   id?: number
   username?: string
-  realName?: string
+  displayName?: string
   email?: string
   bio?: string
   createdAt?: number
@@ -20,7 +20,7 @@ interface CurrentUser {
 interface User {
   id: number
   username: string
-  realName?: string
+  displayName?: string
   email?: string
   bio?: string
   createdAt: number
@@ -33,7 +33,7 @@ interface Group {
   users: Array<{
     id: number
     username: string
-    realName?: string
+    displayName?: string
   }>
   homeworks: Array<{
     id: number
@@ -152,7 +152,7 @@ interface Contest {
   userCount: number
   users: {
     username: string
-    realName?: string
+    displayName?: string
     joinAt: string
   }[]
   author: User
@@ -198,7 +198,7 @@ namespace AdminDto {
   interface AdminUser {
     id: number
     username: string
-    realName?: string
+    displayName?: string
     role: UserRole
     email?: string
     createdAt: string

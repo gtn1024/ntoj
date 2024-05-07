@@ -61,14 +61,14 @@ export const GroupPage: FC = () => {
                 <thead>
                   <tr>
                     <th className="p-2">用户名</th>
-                    <th className="p-2">姓名</th>
+                    <th className="p-2">显示名</th>
                   </tr>
                 </thead>
                 <tbody>
                   {data?.users.map(user => (
                     <tr key={user.id} className="text-center">
                       <td className="p-2"><Link to={`/u/${user.username}`}>{user.username}</Link></td>
-                      <td className="p-2">{user.realName}</td>
+                      <td className="p-2">{user.displayName}</td>
                     </tr>
                   ))}
                 </tbody>

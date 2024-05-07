@@ -551,7 +551,7 @@ class ContestController(
     ) {
         data class UserDto(
             val username: String,
-            val realName: String?,
+            val displayName: String?,
             @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val joinAt: Instant,
         ) {
             companion object {
@@ -560,7 +560,7 @@ class ContestController(
                     joinAt: Instant,
                 ) = UserDto(
                     username = user.username,
-                    realName = user.realName,
+                    displayName = user.displayName,
                     joinAt = joinAt,
                 )
             }

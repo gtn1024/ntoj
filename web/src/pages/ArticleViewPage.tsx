@@ -74,7 +74,7 @@ export const ArticleViewPage: React.FC = () => {
             <div className="i-mdi:account" />
             {' '}
             <Link to={`/u/${data?.author.username}`}>
-              {data?.author.realName}
+              {data?.author.displayName}
             </Link>
           </div>
           <div>

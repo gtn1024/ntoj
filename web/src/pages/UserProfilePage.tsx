@@ -22,7 +22,7 @@ export const UserProfilePage: React.FC = () => {
       <div className="h-[500px] w-[700px] border-1 border-[#e0e0e0] rounded-2xl border-solid bg-white shadow">
         <div className="m-[20px] flex items-center justify-between">
           <div>
-            <div className="text-xl font-bold">{data?.realName}</div>
+            <div className="text-xl font-bold">{data?.displayName}</div>
             <div>
               @
               {data?.username}

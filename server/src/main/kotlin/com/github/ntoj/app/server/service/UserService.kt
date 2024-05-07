@@ -97,7 +97,7 @@ class UserServiceImpl(
     }
 
     /**
-     * search by username and realName and email like with spec
+     * search by username and displayName and email like with spec
      */
     override fun search(user: String): List<User> {
         val spec =
@@ -107,7 +107,7 @@ class UserServiceImpl(
                     list.add(
                         cb.or(
                             cb.like(root.get("username"), "%$user%"),
-                            cb.like(root.get("realName"), "%$user%"),
+                            cb.like(root.get("displayName"), "%$user%"),
                             cb.like(root.get("email"), "%$user%"),
                         ),
                     )

@@ -35,7 +35,7 @@ class AdminUserController(
         val id: Long,
         val username: String,
         val email: String?,
-        val realName: String?,
+        val displayName: String?,
         val role: UserRole,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
     ) {
@@ -45,7 +45,7 @@ class AdminUserController(
                     user.userId!!,
                     user.username,
                     user.email,
-                    user.realName,
+                    user.displayName,
                     user.role,
                     user.createdAt!!,
                 )
@@ -88,7 +88,7 @@ class AdminUserController(
     ): ResponseEntity<R<AdminUserDto>> {
         requireNotNull(request.username) { "用户名不能为空" }
         requireNotNull(request.password) { "密码不能为空" }
-        requireNotNull(request.realName) { "真实姓名不能为空" }
+        requireNotNull(request.displayName) { "显示名不能为空" }
         requireNotNull(request.email) { "邮箱不能为空" }
         requireNotNull(request.role) { "角色不能为空" }
         val salt = getSalt()
@@ -98,7 +98,7 @@ class AdminUserController(
                 password = hashPassword(request.password, salt),
                 salt = salt,
                 email = request.email,
-                realName = request.realName,
+                displayName = request.displayName,
                 role = request.role,
                 bio = null,
             )
@@ -123,8 +123,8 @@ class AdminUserController(
         if (request.email != null) {
             user.email = request.email
         }
-        if (request.realName != null) {
-            user.realName = request.realName
+        if (request.displayName != null) {
+            user.displayName = request.displayName
         }
         if (request.role != null) {
             user.role = request.role
@@ -143,7 +143,7 @@ class AdminUserController(
                 UserPreviewDto(
                     it.username,
                     it.password!!,
-                    it.realName!!,
+                    it.displayName!!,
                     it.email!!,
                     it.role,
                     userService.existsByUsername(it.username),
@@ -179,7 +179,7 @@ class AdminUserController(
                 username = split[0],
                 password = split[1],
                 email = split[2],
-                realName = split[3],
+                displayName = split[3],
                 role = UserRole.valueOf(split[4]),
                 bio = null,
                 salt = null,
@@ -190,7 +190,7 @@ class AdminUserController(
     data class UserPreviewDto(
         val username: String,
         val password: String,
-        val realName: String,
+        val displayName: String,
         val email: String,
         val role: UserRole,
         val exists: Boolean,
@@ -200,7 +200,7 @@ class AdminUserController(
         val username: String?,
         val password: String?,
         val email: String?,
-        val realName: String?,
+        val displayName: String?,
         val role: UserRole?,
     )
 }

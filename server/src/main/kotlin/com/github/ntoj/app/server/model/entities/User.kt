@@ -12,7 +12,7 @@ class User(
     var password: String?,
     var salt: String?,
     var email: String?,
-    @Column(name = "real_name") var realName: String?,
+    @Column(name = "display_name") var displayName: String?,
     var bio: String?,
     @Column(name = "user_role", columnDefinition = "int4")
     var role: UserRole = UserRole.USER,

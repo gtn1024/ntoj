@@ -59,9 +59,9 @@ export const AdminUserPage: React.FC = () => {
       },
     },
     {
-      title: '真实姓名',
-      dataIndex: 'realName',
-      key: 'realName',
+      title: '显示名',
+      dataIndex: 'displayName',
+      key: 'displayName',
     },
     {
       title: '注册时间',

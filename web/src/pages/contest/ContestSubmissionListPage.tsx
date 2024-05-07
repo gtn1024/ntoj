@@ -59,9 +59,9 @@ export const ContestSubmissionListPage: React.FC = () => {
               </td>
               <td width="10%" className="px-4 py-3">
                 <div className="text-center">
-                  {submission.user.realName && (
+                  {submission.user.displayName && (
                     <>
-                      {submission.user.realName}
+                      {submission.user.displayName}
                       {' '}
                       <br />
                     </>

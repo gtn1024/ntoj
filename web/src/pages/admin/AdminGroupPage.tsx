@@ -93,8 +93,8 @@ export const AdminGroupPage: React.FC = () => {
         setGroupName(res.data.data.name)
         setGroupUsers(res.data.data.users.map((user) => {
           let label = user.username
-          if (user.realName) {
-            label += ` (${user.realName})`
+          if (user.displayName) {
+            label += ` (${user.displayName})`
           }
           return ({
             label,
@@ -161,8 +161,8 @@ export const AdminGroupPage: React.FC = () => {
         const users = res.data.data
         return users.map((user) => {
           let label = user.username
-          if (user.realName) {
-            label += ` (${user.realName})`
+          if (user.displayName) {
+            label += ` (${user.displayName})`
           }
           return ({
             label,
