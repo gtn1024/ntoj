@@ -79,7 +79,7 @@ class SubmissionController(
             companion object {
                 fun from(submission: Submission): SubmissionUserDto {
                     return SubmissionUserDto(
-                        username = submission.user?.username!!,
+                        username = submission.user.username,
                     )
                 }
             }
@@ -92,8 +92,8 @@ class SubmissionController(
             companion object {
                 fun from(submission: Submission): SubmissionProblemDto {
                     return SubmissionProblemDto(
-                        title = submission.problem?.title!!,
-                        alias = submission.problem?.alias!!,
+                        title = submission.problem.title,
+                        alias = submission.problem.alias,
                     )
                 }
             }
@@ -115,7 +115,7 @@ class SubmissionController(
         @PathVariable id: Long,
     ): ResponseEntity<R<Void>> {
         val submission = submissionService.get(id)
-        val problem = problemService.get(submission.problem?.problemId!!)
+        val problem = problemService.get(submission.problem.problemId!!)
         if (submission.status == SubmissionStatus.ACCEPTED) {
             problem.acceptedTimes--
             problemService.update(problem)
@@ -137,7 +137,7 @@ class SubmissionController(
         val lang: String,
         val problem: ProblemDto,
         val compileLog: String?,
-        val testcaseResult: List<TestcaseJudgeResult>?,
+        val testcaseResult: List<TestcaseJudgeResult>,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val submitTime: Instant,
     ) {
         companion object {
@@ -145,16 +145,16 @@ class SubmissionController(
                 SubmissionDto(
                     id = submission.submissionId!!,
                     status = submission.status,
-                    user = UserDto.from(submission.user!!),
+                    user = UserDto.from(submission.user),
                     stage = submission.judgeStage,
-                    code = submission.code!!,
+                    code = submission.code,
                     compileLog = submission.compileLog,
                     testcaseResult = submission.testcaseResult,
                     memory = submission.memory,
                     time = submission.time,
                     lang = submission.lang,
                     submitTime = submission.createdAt!!,
-                    problem = ProblemDto.from(submission.problem!!),
+                    problem = ProblemDto.from(submission.problem),
                 )
         }
 

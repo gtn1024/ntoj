@@ -58,12 +58,12 @@ class JudgeClientController(
             "获取成功",
             GetSubmissionResponse(
                 submissionId = submission.submissionId!!,
-                problemId = submission.problem?.problemId!!,
-                code = submission.code!!,
+                problemId = submission.problem.problemId!!,
+                code = submission.code,
                 lang = languageStructure,
-                testcase = TestcaseDto.from(submission.problem!!.testCases!!),
-                timeLimit = submission.problem!!.timeLimit!!,
-                memoryLimit = submission.problem!!.memoryLimit!!,
+                testcase = TestcaseDto.from(submission.problem.testCases!!),
+                timeLimit = submission.problem.timeLimit!!,
+                memoryLimit = submission.problem.memoryLimit!!,
             ),
         )
     }
@@ -99,7 +99,7 @@ class JudgeClientController(
         @RequestBody submissionStatus: UpdateSubmissionRequest,
     ): ResponseEntity<R<Void>> {
         val submission = submissionService.get(submissionId)
-        val problem = problemService.get(submission.problem?.problemId!!)
+        val problem = problemService.get(submission.problem.problemId!!)
         if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
             submission.status = submissionStatus.result
             submission.time = submissionStatus.time

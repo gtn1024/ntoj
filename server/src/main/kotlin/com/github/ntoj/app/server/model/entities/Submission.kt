@@ -18,19 +18,19 @@ import org.hibernate.type.SqlTypes.JSON
 @Entity(name = "t_submissions")
 class Submission(
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    var user: User?,
+    @JoinColumn(name = "user_id", nullable = false)
+    var user: User,
     @ManyToOne
-    @JoinColumn(name = "problem_id")
-    var problem: Problem? = null,
+    @JoinColumn(name = "problem_id", nullable = false)
+    var problem: Problem,
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var origin: SubmissionOrigin = SubmissionOrigin.PROBLEM,
     var contestId: Long? = null,
     @Column(nullable = false) var lang: String,
     // 64KB
-    @Column(columnDefinition = "text", length = 65_536)
-    var code: String? = null,
+    @Column(columnDefinition = "text", length = 65_536, nullable = false)
+    var code: String,
     @Enumerated(EnumType.STRING)
     var status: SubmissionStatus = SubmissionStatus.PENDING,
     var time: Int? = null,
@@ -45,7 +45,7 @@ class Submission(
     @Column(name = "submission_id")
     var submissionId: Long? = null,
     @JdbcTypeCode(JSON)
-    var testcaseResult: List<TestcaseJudgeResult>? = mutableListOf(),
+    var testcaseResult: List<TestcaseJudgeResult> = mutableListOf(),
 ) : BaseEntity() {
     enum class SubmissionOrigin {
         PROBLEM, // 0

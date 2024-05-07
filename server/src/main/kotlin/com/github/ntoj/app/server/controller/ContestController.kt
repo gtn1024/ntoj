@@ -135,7 +135,7 @@ class ContestController(
             problems.associate { contestProblem ->
                 var submitTimes: Long = 0
                 var acceptedTimes: Long = 0
-                submissions.filter { it.problem?.problemId == contestProblem.problemId }.forEach {
+                submissions.filter { it.problem.problemId == contestProblem.problemId }.forEach {
                     submitTimes++
                     if (it.status == SubmissionStatus.ACCEPTED) {
                         acceptedTimes++
@@ -169,7 +169,7 @@ class ContestController(
             submissions.map {
                 ContestStandingSubmissionDto.from(
                     it,
-                    problems.find { problem -> problem.problemId == it.problem?.problemId }
+                    problems.find { problem -> problem.problemId == it.problem.problemId }
                         ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }!!,
                 )
             },
@@ -189,7 +189,7 @@ class ContestController(
                 alias: String,
             ) = ContestStandingSubmissionDto(
                 id = submission.submissionId!!,
-                user = submission.user?.let { com.github.ntoj.app.server.model.dtos.UserDto.from(it) }!!,
+                user = submission.user.let { com.github.ntoj.app.server.model.dtos.UserDto.from(it) },
                 alias = alias,
                 result = submission.status,
                 submitTime = submission.createdAt!!,
@@ -299,7 +299,7 @@ class ContestController(
                 list =
                     submissions.map {
                         val alias =
-                            contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
+                            contest.problems.find { problem -> problem.problemId == it.problem.problemId }
                                 ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }
                         ContestSubmissionDto.from(it, alias!!)
                     },
@@ -324,13 +324,13 @@ class ContestController(
                 alias: String,
             ) = ContestSubmissionDto(
                 id = submission.submissionId!!,
-                user = com.github.ntoj.app.server.model.dtos.UserDto.from(submission.user!!),
+                user = com.github.ntoj.app.server.model.dtos.UserDto.from(submission.user),
                 alias = alias,
                 result = submission.status,
                 time = submission.time,
                 memory = submission.memory,
                 lang = submission.lang,
-                codeLength = submission.code?.length!!,
+                codeLength = submission.code.length,
                 submitTime = submission.createdAt!!,
             )
         }
