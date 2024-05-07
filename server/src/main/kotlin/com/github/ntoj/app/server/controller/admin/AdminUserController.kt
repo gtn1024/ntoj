@@ -5,7 +5,6 @@ import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.entities.User
@@ -15,7 +14,6 @@ import com.github.ntoj.app.server.util.getSalt
 import com.github.ntoj.app.server.util.hashPassword
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -82,15 +80,6 @@ class AdminUserController(
     ): ResponseEntity<R<List<AdminUserDto>>> {
         val users = userService.search(keyword)
         return R.success(200, "获取成功", users.map { AdminUserDto.from(it) })
-    }
-
-    @DeleteMapping("{id}")
-    fun delete(
-        @PathVariable id: Long,
-    ): ResponseEntity<R<Void>> {
-        if (!userService.existsById(id)) return R.fail(404, "用户不存在")
-        userService.deleteUserById(id)
-        return R.success(200, "删除成功")
     }
 
     @PostMapping

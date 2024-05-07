@@ -33,8 +33,6 @@ interface UserService {
 
     fun updateUser(user: User): User
 
-    fun deleteUserById(id: Long)
-
     fun search(user: String): List<User>
 }
 
@@ -91,10 +89,6 @@ class UserServiceImpl(
             throw AppException("用户名已存在", 400)
         }
         return userRepository.save(user)
-    }
-
-    override fun deleteUserById(id: Long) {
-        userRepository.deleteById(id)
     }
 
     /**

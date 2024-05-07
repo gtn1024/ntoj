@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import type { TablePaginationConfig } from 'antd'
-import { Button, Popconfirm, Space, Table, message } from 'antd'
+import { Button, Space, Table, message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import type { ColumnsType } from 'antd/es/table'
@@ -28,7 +28,6 @@ export const AdminUserPage: React.FC = () => {
   const {
     data,
     error,
-    mutate,
   } = useSWR(`/admin/user?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
     return http.get<L<AdminDto.AdminUser>>(path)
       .then((res) => {
@@ -44,17 +43,6 @@ export const AdminUserPage: React.FC = () => {
       })
   })
   const loading = !data && !error
-  const deleteUser = (id: number) => {
-    http.delete(`/admin/user/${id}`)
-      .then(() => {
-        void message.success('删除成功')
-        void mutate()
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '删除失败')
-        throw err
-      })
-  }
 
   const columns: ColumnsType<AdminDto.AdminUser> = [
     {
@@ -103,15 +91,6 @@ export const AdminUserPage: React.FC = () => {
             >
               编辑
             </Button>
-            <Popconfirm
-              title="删除"
-              description="确认删除这一项吗？"
-              onConfirm={() => deleteUser(value ?? 0)}
-              okText="确认"
-              cancelText="取消"
-            >
-              <Button type="link">删除</Button>
-            </Popconfirm>
           </Space>
         )
       },
