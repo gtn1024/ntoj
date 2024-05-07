@@ -27,7 +27,7 @@ class ContestClarification(
     @Column(nullable = false) var sticky: Boolean = false,
     @Column(nullable = false) var closed: Boolean = false,
     @Column(nullable = false) var visible: Boolean = true,
-    @OneToMany(cascade = [CascadeType.ALL])
+    @OneToMany(cascade = [CascadeType.ALL], targetEntity = ContestClarificationResponse::class)
     @JoinTable(
         name = "t_contest_clarifications_responses",
         joinColumns = [JoinColumn(name = "clarification_id")],

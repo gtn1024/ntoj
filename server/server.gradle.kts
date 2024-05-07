@@ -32,6 +32,12 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.Embeddable")
+    annotation("jakarta.persistence.MappedSuperclass")
+}
+
 flyway {
     url = "jdbc:postgresql://${System.getenv("PG_HOST") ?: "localhost"}:${System.getenv("PG_PORT") ?: "15432"}/${
         System.getenv("PG_DATABASE") ?: "ntoj"

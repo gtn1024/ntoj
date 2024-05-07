@@ -15,14 +15,14 @@ class Homework(
     var title: String,
     var startTime: Instant,
     var endTime: Instant,
-    @ManyToMany
+    @ManyToMany(targetEntity = Group::class)
     @JoinTable(
         name = "t_homeworks_groups",
         joinColumns = [JoinColumn(name = "homework_id")],
         inverseJoinColumns = [JoinColumn(name = "group_id")],
     )
     var groups: List<Group> = mutableListOf(),
-    @ManyToMany
+    @ManyToMany(targetEntity = Problem::class)
     @JoinTable(
         name = "t_homeworks_problems",
         joinColumns = [JoinColumn(name = "homework_id")],

@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToMany
 @Entity(name = "t_groups")
 class Group(
     var name: String,
-    @ManyToMany
+    @ManyToMany(targetEntity = User::class)
     @JoinTable(
         name = "t_groups_users",
         joinColumns = [JoinColumn(name = "group_id")],
