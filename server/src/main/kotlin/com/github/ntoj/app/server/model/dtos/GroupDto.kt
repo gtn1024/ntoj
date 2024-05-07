@@ -13,13 +13,15 @@ data class GroupDto(
     val id: Long,
 ) : Serializable {
     companion object {
-        fun from(group: Group) =
-            GroupDto(
-                name = group.name,
-                users = group.users.map { GroupUserDto.from(it) },
-                homeworks = group.homeworks.map { GroupHomeworkDto.from(it) },
-                id = group.groupId!!,
-            )
+        fun from(
+            group: Group,
+            homeworks: List<Homework>,
+        ) = GroupDto(
+            name = group.name,
+            users = group.users.map { GroupUserDto.from(it) },
+            homeworks = homeworks.map { GroupHomeworkDto.from(it) },
+            id = group.groupId!!,
+        )
     }
 
     data class GroupUserDto(

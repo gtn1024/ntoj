@@ -2,7 +2,9 @@ package com.github.ntoj.app.server.service
 
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.model.entities.Group
+import com.github.ntoj.app.server.model.entities.Homework
 import com.github.ntoj.app.server.repository.GroupRepository
+import com.github.ntoj.app.server.repository.HomeworkRepository
 import jakarta.persistence.criteria.Predicate
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -29,10 +31,15 @@ interface GroupService {
     fun remove(id: Long)
 
     fun search(keyword: String): List<Group>
+
+    fun getGroupHomeworks(group: Group): List<Homework>
 }
 
 @Service
-class GroupServiceImpl(private val groupRepository: GroupRepository) : GroupService {
+class GroupServiceImpl(
+    private val groupRepository: GroupRepository,
+    private val homeworkRepository: HomeworkRepository,
+) : GroupService {
     override fun create(group: Group): Group {
         return groupRepository.save(group)
     }
@@ -81,5 +88,9 @@ class GroupServiceImpl(private val groupRepository: GroupRepository) : GroupServ
                 cb.and(*list.toTypedArray())
             }
         return groupRepository.findAll(spec)
+    }
+
+    override fun getGroupHomeworks(group: Group): List<Homework> {
+        return homeworkRepository.findAllByGroupsContains(group)
     }
 }

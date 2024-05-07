@@ -30,6 +30,7 @@ class GroupController(
         if (!group.users.contains(user)) {
             throw AppException("无权限", 403)
         }
-        return R.success(200, "获取成功", GroupDto.from(group))
+        val homeworks = groupService.getGroupHomeworks(group)
+        return R.success(200, "获取成功", GroupDto.from(group, homeworks))
     }
 }
