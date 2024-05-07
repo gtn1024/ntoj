@@ -17,7 +17,7 @@ ktor = "2.3.10"
 jackson = "2.17.1"
 logback = "1.5.6"
 
-groovy = "4.0.15"
+groovy = "4.0.21"
 
 [libraries]
 saToken-spring = { module = "cn.dev33:sa-token-spring-boot3-starter", version.ref = "sa-token" }
