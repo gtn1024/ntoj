@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.service
 
-import com.github.ntoj.app.shared.model.LanguageStructure
+import com.github.ntoj.app.server.config.system.LanguageMap
 import org.springframework.stereotype.Service
 
 interface LanguageService {
@@ -9,7 +9,7 @@ interface LanguageService {
 
 @Service
 class LanguageServiceImpl(
-    private val languages: Map<String, LanguageStructure>,
+    private val languages: LanguageMap,
 ) : LanguageService {
     override fun exists(id: String): Boolean {
         return languages.containsKey(id)

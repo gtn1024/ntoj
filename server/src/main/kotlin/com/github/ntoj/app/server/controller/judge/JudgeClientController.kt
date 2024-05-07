@@ -1,5 +1,6 @@
 package com.github.ntoj.app.server.controller.judge
 
+import com.github.ntoj.app.server.config.system.LanguageMap
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.service.FileService
@@ -10,7 +11,6 @@ import com.github.ntoj.app.server.service.SubmissionService
 import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
 import com.github.ntoj.app.shared.model.GetSubmissionResponse
 import com.github.ntoj.app.shared.model.JudgeStage
-import com.github.ntoj.app.shared.model.LanguageStructure
 import com.github.ntoj.app.shared.model.R
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import com.github.ntoj.app.shared.model.TestcaseDto
@@ -36,7 +36,7 @@ class JudgeClientController(
     val fileUploadService: FileUploadService,
     val fileService: FileService,
     private val problemService: ProblemService,
-    private val languages: Map<String, LanguageStructure>,
+    private val languages: LanguageMap,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {

@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import kotlin.jvm.optionals.getOrNull
 
+typealias LanguageMap = Map<String, LanguageStructure>
+
 @Configuration
 class SystemConfiguration(
     val systemRepository: SystemRepository,
@@ -25,7 +27,7 @@ class SystemConfiguration(
     }
 
     @Bean
-    fun languages(): Map<String, LanguageStructure> {
+    fun languages(): LanguageMap {
         val defaultLanguages =
             """
             bash:
@@ -131,7 +133,7 @@ class SystemConfiguration(
             systemRepository.save(system)
         }
         val languagesYaml = system.value.value as String
-        val languages = yamlObjectMapper.readValue<Map<String, LanguageStructure>>(languagesYaml)
+        val languages = yamlObjectMapper.readValue<LanguageMap>(languagesYaml)
         return languages
     }
 }
