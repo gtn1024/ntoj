@@ -51,7 +51,7 @@ class AuthController(
         password: String,
         user: User,
     ): String {
-        if (!checkPassword(password, user.salt!!, user.password!!)) {
+        if (!checkPassword(password, user.salt, user.password)) {
             throw AppException("密码错误", 401)
         }
         StpUtil.login(user.userId, SaLoginConfig.setTimeout(securityConfig.tokenExpireTime))
@@ -68,7 +68,7 @@ class AuthController(
         userService.newUser(
             User(
                 username = request.username,
-                password = hashPassword(request.password!!, salt),
+                password = hashPassword(request.password, salt),
                 salt = salt,
                 email = request.email,
                 role = if (userService.count() == 0L) UserRole.SUPER_ADMIN else UserRole.USER,
@@ -130,8 +130,8 @@ data class CurrentUser(
 
 data class UserRequest(
     @field:NotEmpty(message = "用户名不能为空") val username: String,
-    @field:NotEmpty(message = "密码不能为空") val password: String?,
-    @field:NotEmpty(message = "邮箱不能为空") val email: String?,
+    @field:NotEmpty(message = "密码不能为空") val password: String,
+    @field:NotEmpty(message = "邮箱不能为空") val email: String,
 )
 
 data class LoginResponse(

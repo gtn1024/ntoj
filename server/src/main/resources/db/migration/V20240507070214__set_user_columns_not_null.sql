@@ -1,0 +1,8 @@
+ALTER TABLE t_users
+    ALTER COLUMN email SET NOT NULL;
+
+ALTER TABLE t_users
+    ALTER COLUMN password SET NOT NULL;
+
+ALTER TABLE t_users
+    ALTER COLUMN salt SET NOT NULL;

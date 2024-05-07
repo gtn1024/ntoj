@@ -181,8 +181,7 @@ class AdminUserController(
                 email = split[2],
                 displayName = split[3],
                 role = UserRole.valueOf(split[4]),
-                bio = null,
-                salt = null,
+                salt = getSalt(),
             )
         }
     }
