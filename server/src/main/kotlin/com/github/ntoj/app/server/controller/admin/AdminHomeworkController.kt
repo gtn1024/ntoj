@@ -3,6 +3,7 @@ package com.github.ntoj.app.server.controller.admin
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
+import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.HomeworkDto
@@ -13,6 +14,7 @@ import com.github.ntoj.app.server.service.GroupService
 import com.github.ntoj.app.server.service.HomeworkService
 import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.HttpHeaders
@@ -38,6 +40,7 @@ class AdminHomeworkController(
     val problemService: ProblemService,
     val groupService: GroupService,
     val submissionService: SubmissionService,
+    val userService: UserService,
 ) {
     @GetMapping("{id}")
     fun get(
@@ -73,6 +76,7 @@ class AdminHomeworkController(
     fun create(
         @RequestBody homeworkRequest: HomeworkRequest,
     ): ResponseEntity<R<HomeworkDto>> {
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         var homework =
             Homework(
                 homeworkRequest.title,
@@ -84,6 +88,7 @@ class AdminHomeworkController(
                 homeworkRequest.problems.map {
                     problemService.get(it)
                 },
+                user,
             )
         homework = homeworkService.create(homework)
         return R.success(200, "创建成功", HomeworkDto.from(homework))
