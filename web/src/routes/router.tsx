@@ -86,6 +86,7 @@ export const router = createBrowserRouter(
       path: '/admin',
       element: <AdminLayout />,
       errorElement: <ErrorPage />,
+      loader: rootLoader,
       children: [
         { index: true, element: <AdminHomePage /> },
         {
