@@ -7,7 +7,6 @@ import type { HttpResponse } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { LinkComponent } from '../../components/LinkComponent.tsx'
 import { mdit } from '../../lib/mdit.ts'
-import { useUserStore } from '../../stores/useUserStore.tsx'
 
 interface ClarificationReplyDto {
   id: number
@@ -28,7 +27,6 @@ interface ContestClarificationDetailDto {
   sticky: boolean
 }
 export const ContestClarificationDetailPage: React.FC = () => {
-  const userStore = useUserStore()
   const [replyContent, setReplyContent] = useState('')
   const { id, clarificationId } = useParams()
   const { data: clarification, mutate } = useSWR(`/contest/${id}/clarification/${clarificationId}`, async (path: string) => {
@@ -38,6 +36,16 @@ export const ContestClarificationDetailPage: React.FC = () => {
       })
       .catch((err: AxiosError<HttpResponse>) => {
         void message.error(err.response?.data.message ?? '获取疑问列表失败')
+        throw err
+      })
+  })
+  const { data: isManager } = useSWR(`/contest/${id}/isManager`, async (path: string) => {
+    return http.get<boolean>(path)
+      .then((res) => {
+        return res.data.data
+      })
+      .catch((err: AxiosError<HttpResponse>) => {
+        void message.error(err.response?.data.message ?? '获取权限失败')
         throw err
       })
   })
@@ -121,7 +129,7 @@ export const ContestClarificationDetailPage: React.FC = () => {
           )
         }
         {
-          userStore.user.role && (['ADMIN', 'SUPER_ADMIN', 'COACH'] as UserRole[]).includes(userStore.user.role) && (
+          isManager && (
             <>
               <button type="button" onClick={onCloseClarification}>{clarification?.closed ? '开启' : '关闭'}</button>
               <button type="button" onClick={onStickyClarification}>{clarification?.sticky ? '取消置顶' : '置顶'}</button>

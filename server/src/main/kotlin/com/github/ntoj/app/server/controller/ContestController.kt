@@ -2,8 +2,6 @@ package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckPermission
-import cn.dev33.satoken.annotation.SaCheckRole
-import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
@@ -386,12 +384,15 @@ class ContestController(
 
     @PatchMapping("{id}/clarification/{clarificationId}/close")
     @SaCheckLogin
-    @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
     fun closeClarification(
         @PathVariable id: Long,
         @PathVariable clarificationId: Long,
     ): ResponseEntity<R<Void>> {
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
+        if (!isUserManagerForContest(user, contest)) {
+            throw AppException("无权限", 403)
+        }
         val clarification = contestClarificationService.get(clarificationId)
         if (clarification.contest.contestId != contest.contestId) {
             throw AppException("该问题不属于该比赛", 400)
@@ -403,12 +404,15 @@ class ContestController(
 
     @PatchMapping("{id}/clarification/{clarificationId}/sticky")
     @SaCheckLogin
-    @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
     fun stickyClarification(
         @PathVariable id: Long,
         @PathVariable clarificationId: Long,
     ): ResponseEntity<R<Void>> {
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
+        if (!isUserManagerForContest(user, contest)) {
+            throw AppException("无权限", 403)
+        }
         val clarification = contestClarificationService.get(clarificationId)
         if (clarification.contest.contestId != contest.contestId) {
             throw AppException("该问题不属于该比赛", 400)
@@ -452,6 +456,24 @@ class ContestController(
         clarification.responses.add(response)
         contestClarificationService.update(clarification)
         return R.success(200, "提交成功")
+    }
+
+    @GetMapping("{id}/isManager")
+    @SaCheckLogin
+    fun isManager(
+        @PathVariable id: Long,
+    ): ResponseEntity<R<Boolean>> {
+        val contest = contestService.get(id)
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
+        val hasPermission = isUserManagerForContest(user, contest)
+        return R.success(200, "获取成功", hasPermission)
+    }
+
+    private fun isUserManagerForContest(
+        user: User,
+        contest: Contest,
+    ): Boolean {
+        return contest.author.userId == user.userId || contest.manager.any { it.userId == user.userId }
     }
 
     data class ContestProblemStatisticsDto(
