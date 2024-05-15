@@ -1,5 +1,6 @@
 package com.github.ntoj.app.server.controller.judge
 
+import cn.dev33.satoken.annotation.SaCheckPermission
 import com.github.ntoj.app.server.config.system.LanguageMap
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
@@ -30,6 +31,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/judge_client")
+@SaCheckPermission(value = ["PERM_JUDGE"])
 class JudgeClientController(
     val submissionService: SubmissionService,
     val selfTestSubmissionService: SelfTestSubmissionService,

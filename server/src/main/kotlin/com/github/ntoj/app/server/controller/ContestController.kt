@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
@@ -40,6 +41,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/contest")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class ContestController(
     private val contestService: ContestService,
     private val problemService: ProblemService,
@@ -89,7 +91,7 @@ class ContestController(
     }
 
     @PostMapping("{id}/register")
-    @SaCheckLogin
+    @SaCheckPermission(value = ["PERM_ATTEND_CONTEST"])
     fun contestRegister(
         @PathVariable id: Long,
         @RequestBody contestRegisterRequest: ContestRegisterRequest,

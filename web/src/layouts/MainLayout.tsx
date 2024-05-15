@@ -4,10 +4,12 @@ import { Outlet } from 'react-router-dom'
 import { MenuComponent } from '../components/MenuComponent.tsx'
 import { AccountComponent } from '../components/AccountComponent.tsx'
 import { useInformationStore } from '../stores/useInformationStore.tsx'
+import { useRoles } from '../hooks/useRoles.ts'
 
 const { Header, Content, Footer } = Layout
 export const MainLayout: React.FC = () => {
   const { information } = useInformationStore()
+  useRoles()
   const {
     token: { colorBgContainer },
   } = theme.useToken()

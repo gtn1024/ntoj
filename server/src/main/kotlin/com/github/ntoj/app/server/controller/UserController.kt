@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.controller
 
-import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.dtos.UserDto
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/user")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class UserController(
     val userService: UserService,
 ) {
@@ -30,7 +31,7 @@ class UserController(
     }
 
     @PatchMapping
-    @SaCheckLogin
+    @SaCheckPermission(value = ["PERM_USER_PROFILE"])
     fun updateUser(
         @RequestBody @Valid
         userUpdateRequest: UserUpdateRequest,

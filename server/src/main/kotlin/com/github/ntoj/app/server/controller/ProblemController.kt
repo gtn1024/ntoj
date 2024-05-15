@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller
 
-import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
+import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/problem")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class ProblemController(
     val problemService: ProblemService,
     val userService: UserService,
@@ -37,22 +39,26 @@ class ProblemController(
         @RequestParam(required = false, defaultValue = "1") current: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
     ): ResponseEntity<R<L<ProblemListDto>>> {
-        val list =
-            problemService.get(onlyVisible = true, page = current, pageSize = pageSize)
-        val count = problemService.count(true)
+        val onlyVisible = !StpUtil.hasPermission("PERM_VIEW_HIDDEN_PROBLEMS")
+        val list = problemService.get(onlyVisible, page = current, pageSize = pageSize)
+        val count = problemService.count(onlyVisible)
         return R.success(200, "获取成功", L(count, current, list.map { ProblemListDto.from(it) }))
     }
 
     @GetMapping("/{alias}")
+    @SaCheckPermission(value = ["PERM_VIEW_PROBLEMS", "PERM_VIEW_HIDDEN_PROBLEMS"], mode = SaMode.OR)
     fun get(
         @PathVariable alias: String,
     ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(alias)
+        if (!problem.visible && StpUtil.hasPermission("PERM_VIEW_HIDDEN_PROBLEMS")) {
+            throw AppException("题目不存在", 404)
+        }
         return R.success(200, "获取成功", ProblemDto.from(problem))
     }
 
     @PostMapping("/{alias}/submit")
-    @SaCheckLogin
+    @SaCheckPermission(value = ["PERM_SUBMIT_PROBLEM"])
     fun submitCode(
         @PathVariable alias: String,
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,

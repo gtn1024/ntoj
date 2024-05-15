@@ -7,7 +7,7 @@ import { AdminLayout } from '../layouts/AdminLayout.tsx'
 import { useUserStore } from '../stores/useUserStore.tsx'
 import { getToken } from '../lib/token.ts'
 import { http } from '../lib/Http.tsx'
-import { ErrorForbidden, ErrorUnauthorized } from '../errors.ts'
+import { ErrorUnauthorized } from '../errors.ts'
 import { ErrorPage } from '../pages/ErrorPage.tsx'
 import { ContestLayout } from '../layouts/ContestLayout.tsx'
 import NotFoundPage from '../pages/404.tsx'
@@ -24,8 +24,6 @@ import AdminAnnouncementPage from '../pages/admin/AdminAnnouncementPage.tsx'
 import AdminContestEditPage from '../pages/admin/AdminContestEditPage.tsx'
 import AdminContestPage from '../pages/admin/AdminContestPage.tsx'
 import AdminHomePage from '../pages/admin/AdminHomePage.tsx'
-import AdminJudgeClientTokenEditPage from '../pages/admin/AdminJudgeClientTokenEditPage.tsx'
-import AdminJudgeClientTokenPage from '../pages/admin/AdminJudgeClientTokenPage.tsx'
 import AdminProblemEditPage from '../pages/admin/AdminProblemEditPage.tsx'
 import AdminProblemPage from '../pages/admin/AdminProblemPage.tsx'
 import AdminUserEditPage from '../pages/admin/AdminUserEditPage.tsx'
@@ -50,6 +48,8 @@ import { GroupPage } from '../pages/GroupPage.tsx'
 import { AdminHomeworkPage } from '../pages/admin/AdminHomeworkPage.tsx'
 import { AdminHomeworkEditPage } from '../pages/admin/AdminHomeworkEditPage.tsx'
 import { HomeworkPage } from '../pages/HomeworkPage.tsx'
+import AdminRolePage from '../pages/admin/AdminRolePage.tsx'
+import { AdminPermissionPage } from '../pages/admin/AdminPermissionPage.tsx'
 
 async function rootLoader() {
   const user = useUserStore.getState().user
@@ -61,7 +61,10 @@ async function rootLoader() {
       .then((res) => {
         useUserStore.setState({
           ...useUserStore.getState(),
-          user: res.data.data,
+          user: {
+            ...res.data.data,
+            iPermission: BigInt(res.data.data.permission || '0'),
+          },
         })
         return true
       })
@@ -71,18 +74,6 @@ async function rootLoader() {
         throw err
       })
   })
-}
-
-async function adminLoader() {
-  return rootLoader()
-    .then(() => {
-      const user = useUserStore.getState().user
-      if (user.role === 'ADMIN' || user.role === 'SUPER_ADMIN') {
-        return true
-      } else {
-        throw new ErrorForbidden()
-      }
-    })
 }
 
 export const router = createBrowserRouter(
@@ -95,7 +86,6 @@ export const router = createBrowserRouter(
       path: '/admin',
       element: <AdminLayout />,
       errorElement: <ErrorPage />,
-      loader: adminLoader,
       children: [
         { index: true, element: <AdminHomePage /> },
         {
@@ -153,20 +143,15 @@ export const router = createBrowserRouter(
           ],
         },
         {
-          path: 'judge_client_token',
-          loader: async () => {
-            await adminLoader()
-            const user = useUserStore.getState().user
-            if (user.role === 'SUPER_ADMIN') {
-              return true
-            } else {
-              throw new ErrorForbidden()
-            }
-          },
+          path: 'role',
           children: [
-            { index: true, element: <AdminJudgeClientTokenPage /> },
-            { path: 'new', element: <AdminJudgeClientTokenEditPage /> },
-            { path: ':id/edit', element: <AdminJudgeClientTokenEditPage /> },
+            { index: true, element: <AdminRolePage /> },
+          ],
+        },
+        {
+          path: 'permission',
+          children: [
+            { index: true, element: <AdminPermissionPage /> },
           ],
         },
       ],

@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller.admin
 
 import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
@@ -83,6 +84,7 @@ class AdminUserController(
     }
 
     @PostMapping
+    @SaCheckPermission(value = ["PERM_REGISTER_USER"])
     fun add(
         @RequestBody request: UserRequest,
     ): ResponseEntity<R<AdminUserDto>> {
@@ -153,6 +155,7 @@ class AdminUserController(
     }
 
     @PostMapping("user_import")
+    @SaCheckPermission(value = ["PERM_REGISTER_USER"])
     fun userImport(
         @RequestBody request: UserImportRequest,
     ): ResponseEntity<R<Void>> {

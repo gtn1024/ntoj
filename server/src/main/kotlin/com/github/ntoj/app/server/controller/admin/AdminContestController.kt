@@ -1,12 +1,10 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.entities.Contest
@@ -29,8 +27,6 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/contest")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminContestController(
     private val userService: UserService,
     private val contestService: ContestService,
@@ -62,15 +58,20 @@ class AdminContestController(
     }
 
     @DeleteMapping("{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_OWN_CONTESTS", "PERM_EDIT_ALL_CONTESTS"], mode = SaMode.OR)
     fun delete(
         @PathVariable id: Long,
     ): ResponseEntity<R<Void>> {
-        if (!contestService.exists(id)) return R.fail(404, "竞赛不存在")
+        val contest = contestService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_ALL_CONTESTS") && contest.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         contestService.delete(id)
         return R.success(200, "删除成功")
     }
 
     @PostMapping
+    @SaCheckPermission(value = ["PERM_CREATE_CONTEST"])
     fun add(
         @RequestBody request: ContestRequest,
     ): ResponseEntity<R<AdminContestDto>> {
@@ -100,11 +101,15 @@ class AdminContestController(
     }
 
     @PatchMapping("{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_OWN_CONTESTS", "PERM_EDIT_ALL_CONTESTS"], mode = SaMode.OR)
     fun update(
         @RequestBody request: ContestRequest,
         @PathVariable id: Long,
     ): ResponseEntity<R<AdminContestDto>> {
         var contest = contestService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_ALL_CONTESTS") && contest.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         contest.title = request.title
         contest.description = request.description
         contest.startTime = Instant.ofEpochSecond(request.startTime)

@@ -6,6 +6,8 @@ import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { timestampToDateString, useQueryParam } from '../lib/misc.ts'
+import { useUserPermission } from '../hooks/useUserPermission.ts'
+import { PERM, checkPermission } from '../lib/Permission.ts'
 
 const ArticleItem: React.FC<{ article: Article, className?: string }> = ({ article, className }) => {
   return (
@@ -25,6 +27,7 @@ const ArticleItem: React.FC<{ article: Article, className?: string }> = ({ artic
 }
 
 export const ArticleListPage: React.FC = () => {
+  const permission = useUserPermission()
   const nav = useNavigate()
   const problemAlias = useQueryParam('problemAlias')
   const [currentPage, setCurrentPage] = useState(1)
@@ -70,7 +73,9 @@ export const ArticleListPage: React.FC = () => {
             )}
           </div>
           <div>
-            <Button type="primary" href={problemAlias === '' ? '/article/new' : `/article/new?problemAlias=${problemAlias}`}>写文章</Button>
+            {checkPermission(permission, PERM.PERM_CREATE_ARTICLE) && (
+              <Button type="primary" href={problemAlias === '' ? '/article/new' : `/article/new?problemAlias=${problemAlias}`}>写文章</Button>
+            )}
           </div>
         </div>
         <div className="my-4 bg-white py-2">

@@ -1,8 +1,5 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
-import cn.dev33.satoken.annotation.SaMode
 import cn.hutool.core.io.file.FileNameUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.entities.FileUpload
@@ -19,8 +16,6 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/file")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminFileController(
     val fileService: FileService,
 ) {

@@ -1,6 +1,6 @@
 package com.github.ntoj.app.server.controller
 
-import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
@@ -23,6 +23,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/article")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class ArticleController(
     val articlesService: ArticleService,
     val userService: UserService,
@@ -46,14 +47,15 @@ class ArticleController(
     }
 
     @GetMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_VIEW_ARTICLE"])
     fun getOne(
         @PathVariable id: Long,
     ): ResponseEntity<R<ArticleDto>> {
         return R.success(200, "获取成功", ArticleDto.from(articlesService.get(id)))
     }
 
-    @SaCheckLogin
     @PostMapping
+    @SaCheckPermission(value = ["PERM_CREATE_ARTICLE"])
     fun create(
         @RequestBody articleRequest: ArticleRequest,
     ): ResponseEntity<R<ArticleDto>> {
@@ -76,8 +78,8 @@ class ArticleController(
         return R.success(200, "创建成功", ArticleDto.from(article))
     }
 
-    @SaCheckLogin
     @PatchMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_OWN_ARTICLES"])
     fun update(
         @PathVariable id: Long,
         @RequestBody articleRequest: ArticleRequest,
@@ -97,8 +99,8 @@ class ArticleController(
         return R.success(200, "修改成功", ArticleDto.from(article))
     }
 
-    @SaCheckLogin
     @DeleteMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_OWN_ARTICLES"])
     fun remove(
         @PathVariable id: Long,
     ): ResponseEntity<R<Unit>> {

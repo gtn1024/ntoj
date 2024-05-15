@@ -1,12 +1,10 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
-import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
@@ -42,8 +40,6 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/problem")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminProblemController(
     val problemService: ProblemService,
     val userService: UserService,
@@ -63,6 +59,7 @@ class AdminProblemController(
     }
 
     @PostMapping
+    @SaCheckPermission(value = ["PERM_PROBLEM_CREATE"])
     fun create(
         @RequestBody @Valid
         problemRequest: ProblemRequest,
@@ -97,12 +94,16 @@ class AdminProblemController(
     }
 
     @PatchMapping("{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_ALL_PROBLEMS", "PERM_EDIT_OWN_PROBLEMS"], mode = SaMode.OR)
     fun update(
         @RequestBody @Valid
         problemRequest: ProblemRequest,
         @PathVariable id: Long,
     ): ResponseEntity<R<ProblemDto>> {
         val problem = problemService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_ALL_PROBLEMS") && problem.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         problem.alias = problemRequest.alias
         problem.title = problemRequest.title
         problem.background = problemRequest.background
@@ -141,15 +142,20 @@ class AdminProblemController(
     }
 
     @DeleteMapping("{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_ALL_PROBLEMS", "PERM_EDIT_OWN_PROBLEMS"], mode = SaMode.OR)
     fun delete(
         @PathVariable id: Long,
     ): ResponseEntity<R<Void>> {
-        if (!problemService.exists(id)) return R.fail(404, "题目不存在")
+        val problem = problemService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_ALL_PROBLEMS") && problem.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         problemService.delete(id)
         return R.success(200, "删除成功")
     }
 
     @PostMapping("uploadTestcase")
+    @SaCheckPermission(value = ["PERM_PROBLEM_CREATE", "PERM_EDIT_ALL_PROBLEMS", "PERM_EDIT_OWN_PROBLEMS"], mode = SaMode.OR)
     fun updateTestcase(
         @RequestParam("file") multipartFile: MultipartFile,
     ): ResponseEntity<R<TestcaseDto>> {
@@ -176,6 +182,7 @@ class AdminProblemController(
     }
 
     @GetMapping("/download_testcase/{id}")
+    @SaCheckPermission(value = ["PERM_PROBLEM_CREATE", "PERM_EDIT_ALL_PROBLEMS", "PERM_EDIT_OWN_PROBLEMS"], mode = SaMode.OR)
     fun getTestcase(
         @PathVariable id: Long,
     ): ResponseEntity<Resource> {

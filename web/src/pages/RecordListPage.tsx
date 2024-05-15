@@ -7,10 +7,10 @@ import type { AxiosError } from 'axios'
 import type { ColumnsType } from 'antd/es/table'
 import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
-import { useUserStore } from '../stores/useUserStore.tsx'
-import { hasAdminPermissions } from '../lib/UserUtils.ts'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLanguages } from '../hooks/useLanguages.ts'
+import { useUserPermission } from '../hooks/useUserPermission.ts'
+import { PERM, checkPermission } from '../lib/Permission.ts'
 
 interface SubmissionDto {
   id: number
@@ -28,7 +28,7 @@ interface SubmissionDto {
 }
 
 export const RecordListPage: React.FC = () => {
-  const userStore = useUserStore()
+  const permission = useUserPermission()
   const [searchParams, setSearchParams] = useSearchParams()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number.parseInt(searchParams.get('current') ?? '1'),
@@ -140,7 +140,7 @@ export const RecordListPage: React.FC = () => {
       dataIndex: 'submitTime',
       key: 'submitTime',
     },
-    hasAdminPermissions(userStore.user.role)
+    checkPermission(permission, PERM.PERM_REJUDGE_RECORD)
       ? ({
           title: '操作',
           render: (_value: string, record: SubmissionDto) => {

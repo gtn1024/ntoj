@@ -1,15 +1,19 @@
 package com.github.ntoj.app.server.controller
 
-import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.SaLoginConfig
 import cn.dev33.satoken.stp.StpUtil
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer
 import com.github.ntoj.app.server.config.SecurityConfig
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.dtos.UserDto
 import com.github.ntoj.app.server.model.entities.Group
+import com.github.ntoj.app.server.model.entities.Permission
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.model.entities.UserRole
+import com.github.ntoj.app.server.service.PermissionRoleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.server.util.checkPassword
 import com.github.ntoj.app.server.util.getSalt
@@ -25,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.io.Serializable
+import java.math.BigInteger
 import java.time.Instant
 
 @RestController
@@ -32,6 +37,7 @@ import java.time.Instant
 class AuthController(
     val userService: UserService,
     val securityConfig: SecurityConfig,
+    val permissionRoleService: PermissionRoleService,
 ) {
     @GetMapping("/login")
     fun login(
@@ -53,6 +59,11 @@ class AuthController(
     ): String {
         if (!checkPassword(password, user.salt, user.password)) {
             throw AppException("密码错误", 401)
+        }
+        val permission = permissionRoleService.getPermission(user.userRole)
+        val PERM_USER_PROFILE = Permission["PERM_USER_PROFILE"]!!
+        if ((permission and PERM_USER_PROFILE) != PERM_USER_PROFILE) {
+            throw AppException("用户无权登录", 403)
         }
         StpUtil.login(user.userId, SaLoginConfig.setTimeout(securityConfig.tokenExpireTime))
         return StpUtil.getTokenInfo().getTokenValue()
@@ -78,11 +89,12 @@ class AuthController(
     }
 
     @GetMapping("/current")
-    @SaCheckLogin
+    @SaCheckPermission(value = ["PERM_USER_PROFILE"])
     fun getCurrentUser(): ResponseEntity<R<CurrentUser>> {
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val groups = userService.getUserGroups(user)
-        return R.success(200, "获取成功", CurrentUser.from(user, groups))
+        val permission = permissionRoleService.getPermission(user.userRole)
+        return R.success(200, "获取成功", CurrentUser.from(user, groups, permission))
     }
 }
 
@@ -94,12 +106,14 @@ data class CurrentUser(
     val bio: String? = null,
     val id: Long,
     val role: UserRole = UserRole.USER,
+    @field:JsonSerialize(using = ToStringSerializer::class) val permission: BigInteger,
     val groups: List<UserGroupDto> = emptyList(),
 ) : Serializable {
     companion object {
         fun from(
             user: User,
             groups: List<Group>,
+            permission: BigInteger,
         ) = CurrentUser(
             user.createdAt!!,
             user.username,
@@ -108,6 +122,7 @@ data class CurrentUser(
             user.bio,
             user.userId!!,
             user.role,
+            permission,
             groups.map { UserGroupDto.from(it) },
         )
     }

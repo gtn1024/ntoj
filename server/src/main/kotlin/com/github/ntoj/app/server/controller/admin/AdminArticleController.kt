@@ -1,8 +1,6 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
-import cn.dev33.satoken.annotation.SaMode
+import cn.dev33.satoken.annotation.SaCheckPermission
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.ArticleDto
@@ -21,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin/article")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminArticleController(
     val userService: UserService,
     val articleService: ArticleService,
@@ -58,6 +54,7 @@ class AdminArticleController(
     }
 
     @PatchMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_ALL_ARTICLES"])
     fun update(
         @PathVariable id: Long,
         @RequestBody articleRequest: ArticleRequest,
@@ -79,6 +76,7 @@ class AdminArticleController(
     }
 
     @DeleteMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_ALL_ARTICLES"])
     fun remove(
         @PathVariable id: Long,
     ): ResponseEntity<R<Unit>> {

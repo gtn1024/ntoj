@@ -1,7 +1,6 @@
 package com.github.ntoj.app.server.controller
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
@@ -27,6 +26,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/submission")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class SubmissionController(
     private val submissionService: SubmissionService,
     private val problemService: ProblemService,
@@ -109,8 +109,7 @@ class SubmissionController(
     }
 
     @PostMapping("/{id}/rejudge")
-    @SaCheckLogin
-    @SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
+    @SaCheckPermission(value = ["PERM_REJUDGE_RECORD"], mode = SaMode.OR)
     fun rejudge(
         @PathVariable id: Long,
     ): ResponseEntity<R<Void>> {

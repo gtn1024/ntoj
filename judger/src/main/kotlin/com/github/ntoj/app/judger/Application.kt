@@ -17,6 +17,8 @@ import kotlinx.coroutines.withContext
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.ConnectException
+import java.util.Timer
+import java.util.TimerTask
 import java.util.zip.ZipFile
 import kotlin.io.path.ExperimentalPathApi
 import kotlin.io.path.Path
@@ -32,7 +34,6 @@ fun showMessage() {
     LOGGER.info("Server Host:    ${Configuration.SERVER_HOST}")
     LOGGER.info("Sandbox Server: ${Configuration.SANDBOX_SERVER}")
     LOGGER.info("Judger ID:      ${Configuration.JUDGER_ID}")
-    LOGGER.info("Token:          ${Configuration.TOKEN}")
     LOGGER.info("Thread Count:   ${Configuration.THREAD_COUNT}")
     LOGGER.info("System info:")
     LOGGER.info("  OS:           ${Configuration.OS}")
@@ -53,6 +54,11 @@ suspend fun sandboxAvailable(): Boolean {
 suspend fun run(id: Int) {
     var connected = false
     while (true) {
+        if (Configuration.token == null) {
+            refreshToken()
+            delay(5000)
+            continue
+        }
         try {
             if (!sandboxAvailable()) {
                 LOGGER.error("(#$id) Sandbox server connect failed. Retry in 5s.")
@@ -92,11 +98,35 @@ suspend fun run(id: Int) {
     }
 }
 
+suspend fun refreshToken() {
+    val token = Client.Backend.getToken()
+    Configuration.token = token
+    LOGGER.info("Token refreshed.")
+}
+
+val timer = Timer()
+
+fun registerTokenRefresh() {
+    timer.scheduleAtFixedRate(
+        object : TimerTask() {
+            override fun run() {
+                runBlocking {
+                    refreshToken()
+                }
+            }
+        },
+        1000,
+        8 * 60 * 60 * 1000,
+    )
+}
+
 fun main() {
     showMessage()
+    registerTokenRefresh()
     runBlocking {
         repeat(Configuration.THREAD_COUNT) { id ->
             launch {
+                delay(5000)
                 run(id)
             }
         }

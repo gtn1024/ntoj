@@ -1,9 +1,9 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
+import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.HomeworkDto
@@ -33,8 +33,6 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/homework")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminHomeworkController(
     val homeworkService: HomeworkService,
     val problemService: ProblemService,
@@ -73,6 +71,7 @@ class AdminHomeworkController(
     }
 
     @PostMapping
+    @SaCheckPermission(value = ["PERM_CREATE_HOMEWORK"])
     fun create(
         @RequestBody homeworkRequest: HomeworkRequest,
     ): ResponseEntity<R<HomeworkDto>> {
@@ -95,11 +94,15 @@ class AdminHomeworkController(
     }
 
     @PatchMapping("{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_HOMEWORK", "PERM_EDIT_OWN_HOMEWORK"], mode = SaMode.OR)
     fun update(
         @PathVariable id: Long,
         @RequestBody homeworkRequest: HomeworkRequest,
     ): ResponseEntity<R<HomeworkDto>> {
         var homework = homeworkService.get(id)
+        if (StpUtil.hasPermission("PERM_EDIT_HOMEWORK") && homework.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         homework.title = homeworkRequest.title
         homework.startTime = Instant.ofEpochSecond(homeworkRequest.startTime)
         homework.endTime = Instant.ofEpochSecond(homeworkRequest.endTime)
@@ -175,9 +178,14 @@ class AdminHomeworkController(
     )
 
     @DeleteMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_HOMEWORK", "PERM_EDIT_OWN_HOMEWORK"], mode = SaMode.OR)
     fun remove(
         @PathVariable id: Long,
     ): ResponseEntity<R<Unit>> {
+        val homework = homeworkService.get(id)
+        if (StpUtil.hasPermission("PERM_EDIT_HOMEWORK") && homework.author.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         homeworkService.remove(id)
         return R.success(200, "删除成功")
     }

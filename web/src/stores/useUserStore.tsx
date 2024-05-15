@@ -14,6 +14,7 @@ export const useUserStore = create<UserStore>(set => ({
       user: {
         ...state.user,
         ...user,
+        iPermission: BigInt(user.permission || '0'),
       },
     }))
   },

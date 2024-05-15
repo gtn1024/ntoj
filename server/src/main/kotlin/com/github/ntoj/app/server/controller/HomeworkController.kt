@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/homework")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class HomeworkController(
     val homeworkService: HomeworkService,
     val userService: UserService,

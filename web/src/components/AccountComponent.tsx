@@ -20,7 +20,7 @@ export const AccountComponent: React.FC<Props> = ({ className }) => {
     void message.success('退出登录成功')
     nav(`/sign_in?redirect=${redirect}`)
   }
-  let items: MenuProps['items'] = [
+  const items: MenuProps['items'] = [
     {
       key: 'user-center',
       label: (
@@ -49,9 +49,6 @@ export const AccountComponent: React.FC<Props> = ({ className }) => {
       ),
     },
   ]
-  if (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN') {
-    items = items?.filter(item => item?.key !== 'admin')
-  }
   return (
     <div className={className}>
       {user.id

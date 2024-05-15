@@ -14,8 +14,13 @@ object Configuration {
     /** 沙箱地址 */
     val SANDBOX_SERVER = System.getenv("SANDBOX_SERVER") ?: "http://127.0.0.1:5050"
 
-    /** 评测机与服务端通信的 Token */
-    val TOKEN = System.getenv("TOKEN") ?: throw IllegalStateException("TOKEN is not set")
+    var token: String? = null
+
+    /** 评测账号用户名 */
+    val USERNAME = System.getenv("USERNAME") ?: throw IllegalStateException("USERNAME is not set")
+
+    /** 评测账号密码 */
+    val PASSWORD = System.getenv("PASSWORD") ?: throw IllegalStateException("PASSWORD is not set")
 
     /** 评测机 ID */
     val JUDGER_ID = getJudgerId()

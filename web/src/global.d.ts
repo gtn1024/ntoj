@@ -15,6 +15,8 @@ interface CurrentUser {
     name: string
     userNumber: number
   }[]
+  permission?: string
+  iPermission?: bigint
 }
 
 interface User {
@@ -193,6 +195,7 @@ namespace AdminDto {
       id: number
       name: string
     }>
+    author: string
   }
 
   interface AdminUser {
@@ -240,13 +243,6 @@ namespace AdminDto {
   interface ContestProblem {
     contestProblemIndex: number
     problemId: number
-  }
-
-  interface JudgeClientToken {
-    id: number
-    name: string
-    token: string
-    enabled: boolean
   }
 
   interface Problem {

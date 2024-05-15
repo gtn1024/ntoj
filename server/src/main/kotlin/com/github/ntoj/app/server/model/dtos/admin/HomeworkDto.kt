@@ -15,6 +15,7 @@ data class HomeworkDto(
     val endTime: Instant,
     val problems: List<ProblemDto>,
     val groups: List<GroupDto>,
+    val author: String,
     val id: Long,
 ) : Serializable {
     companion object {
@@ -25,6 +26,7 @@ data class HomeworkDto(
                 homework.endTime,
                 homework.problems.map { ProblemDto.from(it) },
                 homework.groups.map { GroupDto.from(it) },
+                homework.author.username,
                 homework.homeworkId!!,
             )
     }

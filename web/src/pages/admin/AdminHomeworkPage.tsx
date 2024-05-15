@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import type { TablePaginationConfig } from 'antd'
 import { Button, Popconfirm, Space, Table, message } from 'antd'
 import useSWR from 'swr'
@@ -8,9 +8,17 @@ import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { timestampToDateString } from '../../lib/misc.ts'
+import { PERM, checkPermission } from '../../lib/Permission.ts'
+import { useUserPermission } from '../../hooks/useUserPermission.ts'
+import { useUserStore } from '../../stores/useUserStore.tsx'
 
 export const AdminHomeworkPage: React.FC = () => {
   const nav = useNavigate()
+  const permission = useUserPermission()
+  const userStore = useUserStore()
+  const username = useMemo(() => {
+    return userStore.user?.username
+  }, [userStore])
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 20,
@@ -24,6 +32,14 @@ export const AdminHomeworkPage: React.FC = () => {
       })
     },
   })
+
+  const isAbleToEdit = (permission: bigint, author: string) => {
+    if (author === username) {
+      return checkPermission(permission, PERM.PERM_EDIT_OWN_PROBLEMS)
+    } else {
+      return checkPermission(permission, PERM.PERM_EDIT_ALL_PROBLEMS)
+    }
+  }
 
   const {
     data,
@@ -97,12 +113,13 @@ export const AdminHomeworkPage: React.FC = () => {
     {
       title: '操作',
       dataIndex: 'id',
-      render: (value: number) => {
+      render: (value: number, record) => {
         return (
           <Space>
             <Button
               type="link"
               size="small"
+              disabled={!isAbleToEdit(permission, record.author)}
               onClick={() => {
                 nav(`/admin/homework/${value ?? 0}/edit`)
               }}
@@ -116,7 +133,12 @@ export const AdminHomeworkPage: React.FC = () => {
               okText="确认"
               cancelText="取消"
             >
-              <Button type="link">删除</Button>
+              <Button
+                type="link"
+                disabled={!isAbleToEdit(permission, record.author)}
+              >
+                删除
+              </Button>
             </Popconfirm>
             <Button
               type="link"
@@ -136,7 +158,7 @@ export const AdminHomeworkPage: React.FC = () => {
       <Space direction="vertical">
         <div className="flex justify-between">
           <div>
-            <button type="button" onClick={onCreateHomeworkClick}>新建</button>
+            {checkPermission(permission, PERM.PERM_CREATE_HOMEWORK) && (<button type="button" onClick={onCreateHomeworkClick}>新建</button>)}
           </div>
         </div>
         <div>

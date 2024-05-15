@@ -1,5 +1,6 @@
 package com.github.ntoj.app.server.controller
 
+import cn.dev33.satoken.annotation.SaCheckPermission
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
@@ -16,6 +17,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/announcement")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class AnnouncementController(
     val announcementService: AnnouncementService,
 ) {

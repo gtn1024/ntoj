@@ -55,15 +55,14 @@ export const AdminLayout: React.FC = () => {
       label: '用户',
     },
     {
-      key: '/admin/judge_client_token',
-      label: '评测机',
+      key: '/admin/role',
+      label: '角色',
+    },
+    {
+      key: '/admin/permission',
+      label: '权限',
     },
   ]
-
-  if (user.role !== 'SUPER_ADMIN') {
-    items.pop()
-    items.pop()
-  }
 
   useEffect(() => {
     for (const item of items) {

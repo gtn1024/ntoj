@@ -1,8 +1,6 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
-import cn.dev33.satoken.annotation.SaCheckRole
-import cn.dev33.satoken.annotation.SaMode
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.StpUtil
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.ext.fail
@@ -28,8 +26,7 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/announcement")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
+@SaCheckPermission(value = ["PERM_EDIT_ANNOUNCEMENT"])
 class AdminAnnouncementController(
     val userService: UserService,
     val announcementService: AnnouncementService,

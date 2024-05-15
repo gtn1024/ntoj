@@ -43,7 +43,7 @@ object Client {
             val response =
                 client.get("$SERVER_HOST/judge_client/get_submission") {
                     contentType(ContentType.Application.Json)
-                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("Authorization", "Bearer ${Configuration.token}")
                     header("X-Judger-ID", Configuration.JUDGER_ID)
                     header("X-Judger-OS", Configuration.OS)
                     header("X-Judger-Kernel", Configuration.KERNEL)
@@ -63,7 +63,7 @@ object Client {
             val response =
                 client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
                     contentType(ContentType.Application.Json)
-                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("Authorization", "Bearer ${Configuration.token}")
                     header("X-Judger-ID", Configuration.JUDGER_ID)
                     header("X-Judger-OS", Configuration.OS)
                     header("X-Judger-Kernel", Configuration.KERNEL)
@@ -85,7 +85,7 @@ object Client {
         ) {
             client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
-                header("X-Judger-Token", Configuration.TOKEN)
+                header("Authorization", "Bearer ${Configuration.token}")
                 header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
@@ -101,7 +101,7 @@ object Client {
         ) {
             client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
                 contentType(ContentType.Application.Json)
-                header("X-Judger-Token", Configuration.TOKEN)
+                header("Authorization", "Bearer ${Configuration.token}")
                 header("X-Judger-ID", Configuration.JUDGER_ID)
                 header("X-Judger-OS", Configuration.OS)
                 header("X-Judger-Kernel", Configuration.KERNEL)
@@ -119,7 +119,7 @@ object Client {
             val channel =
                 client.get(url) {
                     contentType(ContentType.Application.Json)
-                    header("X-Judger-Token", Configuration.TOKEN)
+                    header("Authorization", "Bearer ${Configuration.token}")
                     header("X-Judger-ID", Configuration.JUDGER_ID)
                     header("X-Judger-OS", Configuration.OS)
                     header("X-Judger-Kernel", Configuration.KERNEL)
@@ -133,6 +133,19 @@ object Client {
                     file.appendBytes(bytes)
                 }
             }
+        }
+
+        data class LoginResponse(
+            val token: String,
+        )
+
+        suspend fun getToken(): String? {
+            val response =
+                client.get("$SERVER_HOST/auth/login?username=${Configuration.USERNAME}&password=${Configuration.PASSWORD}") {
+                    contentType(ContentType.Application.Json)
+                    header("X-Judger-ID", Configuration.JUDGER_ID)
+                }
+            return response.body<R<LoginResponse>>().data?.token
         }
     }
 

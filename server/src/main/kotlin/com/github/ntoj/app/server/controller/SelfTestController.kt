@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller
 
 import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/self_test")
+@SaCheckPermission(value = ["PERM_VIEW"])
 class SelfTestController(
     private val selfTestSubmissionService: SelfTestSubmissionService,
     private val languageService: LanguageService,
