@@ -203,6 +203,7 @@ namespace AdminDto {
     username: string
     displayName?: string
     role: UserRole
+    userRole: string
     email?: string
     createdAt: string
   }

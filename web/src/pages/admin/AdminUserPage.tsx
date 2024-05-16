@@ -7,7 +7,6 @@ import type { AxiosError } from 'axios'
 import type { ColumnsType } from 'antd/es/table'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
-import { userRoleToCNString } from '../../lib/misc.ts'
 
 export const AdminUserPage: React.FC = () => {
   const nav = useNavigate()
@@ -70,11 +69,8 @@ export const AdminUserPage: React.FC = () => {
     },
     {
       title: '用户权限',
-      dataIndex: 'role',
-      key: 'role',
-      render: (value: UserRole) => {
-        return userRoleToCNString(value)
-      },
+      dataIndex: 'userRole',
+      key: 'userRole',
     },
     {
       title: '操作',
@@ -100,10 +96,7 @@ export const AdminUserPage: React.FC = () => {
     <div className="flex flex-col p-4">
       <h2 className="mb-2">用户管理</h2>
       <Space direction="vertical">
-        <div className="flex justify-between">
-          <div>
-            <button type="button" onClick={() => nav('/admin/user/new')}>新建</button>
-          </div>
+        <div className="flex justify-end">
           <div>
             <button type="button" onClick={() => nav('/admin/user/import')}>导入用户</button>
           </div>

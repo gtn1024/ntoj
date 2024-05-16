@@ -1,15 +1,13 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckPermission
-import cn.dev33.satoken.annotation.SaCheckRole
-import cn.dev33.satoken.annotation.SaMode
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.model.entities.UserRole
+import com.github.ntoj.app.server.service.PermissionRoleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.server.util.getSalt
 import com.github.ntoj.app.server.util.hashPassword
@@ -27,10 +25,9 @@ import java.time.Instant
 
 @RestController
 @RequestMapping("/admin/user")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminUserController(
     private val userService: UserService,
+    private val permissionRoleService: PermissionRoleService,
 ) {
     data class AdminUserDto(
         val id: Long,
@@ -38,6 +35,7 @@ class AdminUserController(
         val email: String?,
         val displayName: String?,
         val role: UserRole,
+        val userRole: String,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
     ) {
         companion object {
@@ -48,6 +46,7 @@ class AdminUserController(
                     user.email,
                     user.displayName,
                     user.role,
+                    user.userRole,
                     user.createdAt!!,
                 )
         }
@@ -108,31 +107,23 @@ class AdminUserController(
         return R.success(200, "添加成功", AdminUserDto.from(user))
     }
 
-    @PatchMapping("{id}")
-    fun update(
-        @RequestBody request: UserRequest,
+    @PatchMapping("{id}/setRole")
+    @SaCheckPermission(value = ["PERM_SET_PERM"])
+    fun setUserRole(
         @PathVariable id: Long,
-    ): ResponseEntity<R<AdminUserDto>> {
+        @RequestParam role: String,
+    ): ResponseEntity<R<Unit>> {
         val user = userService.getUserById(id)
-        if (request.username != null) {
-            user.username = request.username
-        }
-        if (request.password != null) {
-            val salt = getSalt()
-            user.password = hashPassword(request.password, salt)
-            user.salt = salt
-        }
-        if (request.email != null) {
-            user.email = request.email
-        }
-        if (request.displayName != null) {
-            user.displayName = request.displayName
-        }
-        if (request.role != null) {
-            user.role = request.role
-        }
+        val userRole =
+            when (role) {
+                "root" -> "root"
+                "default" -> "default"
+                "guest" -> "default"
+                else -> if (permissionRoleService.get(role) == null) "default" else role
+            }
+        user.userRole = userRole
         userService.updateUser(user)
-        return R.success(200, "更新成功", AdminUserDto.from(user))
+        return R.success(200, "设置成功")
     }
 
     @PostMapping("user_import_preview")

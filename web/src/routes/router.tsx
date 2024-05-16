@@ -94,7 +94,6 @@ export const router = createBrowserRouter(
           children: [
             { index: true, element: <AdminUserPage /> },
             { path: 'import', element: <AdminUserImportPage /> },
-            { path: 'new', element: <AdminUserEditPage /> },
             { path: ':id/edit', element: <AdminUserEditPage /> },
           ],
         },
