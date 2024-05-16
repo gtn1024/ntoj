@@ -1,6 +1,7 @@
 package com.github.ntoj.app.server.controller.admin
 
 import cn.dev33.satoken.annotation.SaCheckLogin
+import cn.dev33.satoken.annotation.SaCheckPermission
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
@@ -69,6 +70,7 @@ class AdminGroupController(
     }
 
     @PostMapping
+    @SaCheckPermission(value = ["PERM_CREATE_GROUP"])
     fun create(
         @RequestBody groupRequest: GroupRequest,
     ): ResponseEntity<R<GroupDto>> {

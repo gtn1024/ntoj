@@ -58,6 +58,8 @@ val Permission: Map<String, BigInteger> =
         "PERM_CREATE_HOMEWORK" to (BIG_1 shl 50),
         "PERM_EDIT_HOMEWORK" to (BIG_1 shl 51),
         "PERM_EDIT_OWN_HOMEWORK" to (BIG_1 shl 52),
+        // group
+        "PERM_CREATE_GROUP" to (BIG_1 shl 60),
     )
 
 val PERM_GUEST = Permission["PERM_VIEW"]!!
