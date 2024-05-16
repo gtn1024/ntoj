@@ -3,6 +3,7 @@ package com.github.ntoj.app.server.controller.admin
 import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
+import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.GroupDto
@@ -72,6 +73,7 @@ class AdminGroupController(
         @RequestBody groupRequest: GroupRequest,
     ): ResponseEntity<R<GroupDto>> {
         require(groupRequest.name.isNotBlank()) { "组名不能为空" }
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         var group =
             Group(
                 name = groupRequest.name,
@@ -79,6 +81,7 @@ class AdminGroupController(
                     groupRequest.users.map { uid ->
                         userService.getUserById(uid)
                     },
+                creator = user,
             )
         group = groupService.create(group)
         return R.success(201, "创建成功", GroupDto.from(group))
