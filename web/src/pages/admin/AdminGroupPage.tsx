@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import type { TablePaginationConfig } from 'antd'
 import { Button, Input, Modal, Popconfirm, Space, Table, message } from 'antd'
 import useSWR from 'swr'
@@ -7,8 +7,23 @@ import type { AxiosError } from 'axios'
 import type { HttpResponse, L } from '../../lib/Http.tsx'
 import { http } from '../../lib/Http.tsx'
 import { DebounceSelect } from '../../components/antd/DebounceSelect.tsx'
+import { useUserPermission } from '../../hooks/useUserPermission.ts'
+import { PERM, checkPermission } from '../../lib/Permission.ts'
+import { useUserStore } from '../../stores/useUserStore.tsx'
 
 export const AdminGroupPage: React.FC = () => {
+  const permission = useUserPermission()
+  const userStore = useUserStore()
+  const username = useMemo(() => {
+    return userStore.user?.username
+  }, [userStore])
+  const isAbleToEdit = (permission: bigint, author: string) => {
+    if (author === username) {
+      return checkPermission(permission, PERM.PERM_EDIT_OWN_GROUP)
+    } else {
+      return checkPermission(permission, PERM.PERM_EDIT_GROUP)
+    }
+  }
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: 1,
     pageSize: 20,
@@ -125,12 +140,13 @@ export const AdminGroupPage: React.FC = () => {
     {
       title: '操作',
       dataIndex: 'id',
-      render: (value: number) => {
+      render: (value: number, record) => {
         return (
           <Space>
             <Button
               type="link"
               size="small"
+              disabled={!isAbleToEdit(permission, record.creator)}
               onClick={() => {
                 setMode('修改小组')
                 setUpdateGroupId(value)
@@ -147,7 +163,12 @@ export const AdminGroupPage: React.FC = () => {
               okText="确认"
               cancelText="取消"
             >
-              <Button type="link">删除</Button>
+              <Button
+                type="link"
+                disabled={!isAbleToEdit(permission, record.creator)}
+              >
+                删除
+              </Button>
             </Popconfirm>
           </Space>
         )

@@ -39,6 +39,8 @@ export const PERM = {
 
   // group
   PERM_CREATE_GROUP: 1n << 60n,
+  PERM_EDIT_GROUP: 1n << 61n,
+  PERM_EDIT_OWN_GROUP: 1n << 62n,
 }
 
 interface Permission {
@@ -83,6 +85,8 @@ export const PERMS = [
   Perm('homework', PERM.PERM_EDIT_OWN_HOMEWORK, 'Edit own homework'),
 
   Perm('group', PERM.PERM_CREATE_GROUP, 'Create group'),
+  Perm('group', PERM.PERM_EDIT_GROUP, 'Edit group'),
+  Perm('group', PERM.PERM_EDIT_OWN_GROUP, 'Edit own group'),
 ]
 
 export const PERMS_BY_FAMILY: Record<string, Permission[]> = {}

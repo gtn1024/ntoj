@@ -211,6 +211,7 @@ namespace AdminDto {
     id: number
     name: string
     users: User[]
+    creator: string
     createdAt: number
   }
 

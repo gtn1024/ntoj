@@ -9,6 +9,7 @@ data class GroupDto(
     val createdAt: Instant,
     val name: String,
     val users: List<UserDto>,
+    val creator: String,
     val id: Long,
 ) : Serializable {
     companion object {
@@ -17,6 +18,7 @@ data class GroupDto(
                 createdAt = group.createdAt!!,
                 name = group.name,
                 users = group.users.map { UserDto.from(it) }.toMutableList(),
+                creator = group.creator.username,
                 id = group.groupId!!,
             )
     }

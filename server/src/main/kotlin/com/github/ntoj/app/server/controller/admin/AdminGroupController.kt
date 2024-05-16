@@ -1,10 +1,9 @@
 package com.github.ntoj.app.server.controller.admin
 
-import cn.dev33.satoken.annotation.SaCheckLogin
 import cn.dev33.satoken.annotation.SaCheckPermission
-import cn.dev33.satoken.annotation.SaCheckRole
 import cn.dev33.satoken.annotation.SaMode
 import cn.dev33.satoken.stp.StpUtil
+import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.GroupDto
@@ -25,8 +24,6 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/admin/group")
-@SaCheckLogin
-@SaCheckRole(value = ["COACH", "ADMIN", "SUPER_ADMIN"], mode = SaMode.OR)
 class AdminGroupController(
     private val groupService: GroupService,
     private val userService: UserService,
@@ -90,12 +87,16 @@ class AdminGroupController(
     }
 
     @PatchMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_GROUP", "PERM_EDIT_OWN_GROUP"], mode = SaMode.OR)
     fun update(
         @PathVariable id: Long,
         @RequestBody groupRequest: GroupRequest,
     ): ResponseEntity<R<GroupDto>> {
         require(groupRequest.name.isNotBlank()) { "组名不能为空" }
         var group = groupService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_GROUP") && group.creator.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         group.name = groupRequest.name
         group.users =
             groupRequest.users.map { uid ->
@@ -106,9 +107,14 @@ class AdminGroupController(
     }
 
     @DeleteMapping("/{id}")
+    @SaCheckPermission(value = ["PERM_EDIT_GROUP", "PERM_EDIT_OWN_GROUP"], mode = SaMode.OR)
     fun remove(
         @PathVariable id: Long,
     ): ResponseEntity<R<Unit>> {
+        val group = groupService.get(id)
+        if (!StpUtil.getPermissionList().contains("PERM_EDIT_GROUP") && group.creator.userId != StpUtil.getLoginIdAsLong()) {
+            throw AppException("无权限", 403)
+        }
         groupService.remove(id)
         return R.success(200, "删除成功")
     }
