@@ -6,7 +6,6 @@ import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.entities.User
-import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.PermissionRoleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.server.util.getSalt
@@ -34,7 +33,6 @@ class AdminUserController(
         val username: String,
         val email: String?,
         val displayName: String?,
-        val role: UserRole,
         val userRole: String,
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8") val createdAt: Instant,
     ) {
@@ -45,7 +43,6 @@ class AdminUserController(
                     user.username,
                     user.email,
                     user.displayName,
-                    user.role,
                     user.userRole,
                     user.createdAt!!,
                 )
@@ -82,31 +79,6 @@ class AdminUserController(
         return R.success(200, "获取成功", users.map { AdminUserDto.from(it) })
     }
 
-    @PostMapping
-    @SaCheckPermission(value = ["PERM_REGISTER_USER"])
-    fun add(
-        @RequestBody request: UserRequest,
-    ): ResponseEntity<R<AdminUserDto>> {
-        requireNotNull(request.username) { "用户名不能为空" }
-        requireNotNull(request.password) { "密码不能为空" }
-        requireNotNull(request.displayName) { "显示名不能为空" }
-        requireNotNull(request.email) { "邮箱不能为空" }
-        requireNotNull(request.role) { "角色不能为空" }
-        val salt = getSalt()
-        val user =
-            User(
-                username = request.username,
-                password = hashPassword(request.password, salt),
-                salt = salt,
-                email = request.email,
-                displayName = request.displayName,
-                role = request.role,
-                bio = null,
-            )
-        userService.newUser(user)
-        return R.success(200, "添加成功", AdminUserDto.from(user))
-    }
-
     @PatchMapping("{id}/setRole")
     @SaCheckPermission(value = ["PERM_SET_PERM"])
     fun setUserRole(
@@ -138,7 +110,6 @@ class AdminUserController(
                     it.password!!,
                     it.displayName!!,
                     it.email!!,
-                    it.role,
                     userService.existsByUsername(it.username),
                 )
             }
@@ -168,13 +139,12 @@ class AdminUserController(
     private fun getImportUsers(s: String): List<User> {
         return s.trim().split("\n").map {
             val split = it.split("\t")
-            if (split.size != 5) throw AppException("格式错误", 400)
+            if (split.size != 4) throw AppException("格式错误", 400)
             User(
                 username = split[0],
                 password = split[1],
                 email = split[2],
                 displayName = split[3],
-                role = UserRole.valueOf(split[4]),
                 salt = getSalt(),
             )
         }
@@ -185,7 +155,6 @@ class AdminUserController(
         val password: String,
         val displayName: String,
         val email: String,
-        val role: UserRole,
         val exists: Boolean,
     )
 
@@ -194,6 +163,5 @@ class AdminUserController(
         val password: String?,
         val email: String?,
         val displayName: String?,
-        val role: UserRole?,
     )
 }

@@ -12,7 +12,6 @@ import com.github.ntoj.app.server.model.dtos.UserDto
 import com.github.ntoj.app.server.model.entities.Group
 import com.github.ntoj.app.server.model.entities.Permission
 import com.github.ntoj.app.server.model.entities.User
-import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.PermissionRoleService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.server.util.checkPassword
@@ -82,7 +81,7 @@ class AuthController(
                 password = hashPassword(request.password, salt),
                 salt = salt,
                 email = request.email,
-                role = if (userService.count() == 0L) UserRole.SUPER_ADMIN else UserRole.USER,
+                userRole = if (userService.count() == 0L) "root" else "default",
             ),
         )
         return R.success(200, "注册成功")
@@ -105,7 +104,6 @@ data class CurrentUser(
     val displayName: String? = null,
     val bio: String? = null,
     val id: Long,
-    val role: UserRole = UserRole.USER,
     @field:JsonSerialize(using = ToStringSerializer::class) val permission: BigInteger,
     val groups: List<UserGroupDto> = emptyList(),
 ) : Serializable {
@@ -121,7 +119,6 @@ data class CurrentUser(
             user.displayName,
             user.bio,
             user.userId!!,
-            user.role,
             permission,
             groups.map { UserGroupDto.from(it) },
         )

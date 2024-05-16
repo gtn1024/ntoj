@@ -3,7 +3,6 @@ package com.github.ntoj.app.server.config
 import cn.dev33.satoken.stp.StpInterface
 import com.github.ntoj.app.server.model.entities.PERM_GUEST
 import com.github.ntoj.app.server.model.entities.Permission
-import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.PermissionRoleService
 import com.github.ntoj.app.server.service.UserService
 import org.springframework.stereotype.Component
@@ -44,13 +43,7 @@ class StpInterfaceImpl(
     ): List<String> {
         val userId = loginId?.toString()?.toLong() ?: return listOf()
         val user = userService.getUserById(userId)
-        val list = mutableListOf<String>()
-        if (user.role.ordinal > 0) {
-            list += UserRole.USER.name
-        }
-        if (user.role.ordinal > 1) {
-            list += user.role.name
-        }
+        val list = listOf(user.userRole)
         return list
     }
 }

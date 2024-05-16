@@ -1,7 +1,5 @@
 let isDev: boolean
 
-type UserRole = 'BANNED' | 'USER' | 'ADMIN' | 'SUPER_ADMIN'
-
 interface CurrentUser {
   id?: number
   username?: string
@@ -9,7 +7,6 @@ interface CurrentUser {
   email?: string
   bio?: string
   createdAt?: number
-  role?: UserRole
   groups?: {
     id: number
     name: string
@@ -26,7 +23,6 @@ interface User {
   email?: string
   bio?: string
   createdAt: number
-  role: UserRole
 }
 
 interface Group {

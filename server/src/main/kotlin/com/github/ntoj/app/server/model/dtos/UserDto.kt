@@ -1,7 +1,6 @@
 package com.github.ntoj.app.server.model.dtos
 
 import com.github.ntoj.app.server.model.entities.User
-import com.github.ntoj.app.server.model.entities.UserRole
 import java.io.Serializable
 import java.time.Instant
 
@@ -12,7 +11,6 @@ data class UserDto(
     val displayName: String? = null,
     val bio: String? = null,
     val id: Long,
-    val role: UserRole = UserRole.USER,
 ) : Serializable {
     companion object {
         fun from(user: User) =
@@ -23,7 +21,6 @@ data class UserDto(
                 user.displayName,
                 user.bio,
                 user.userId!!,
-                user.role,
             )
     }
 }

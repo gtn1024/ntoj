@@ -15,7 +15,6 @@ import com.github.ntoj.app.server.model.entities.ContestUser
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.Submission
 import com.github.ntoj.app.server.model.entities.User
-import com.github.ntoj.app.server.model.entities.UserRole
 import com.github.ntoj.app.server.service.ContestClarificationService
 import com.github.ntoj.app.server.service.ContestService
 import com.github.ntoj.app.server.service.LanguageService
@@ -48,6 +47,13 @@ class ContestController(
     private val submissionService: SubmissionService,
     private val contestClarificationService: ContestClarificationService,
 ) {
+    private fun hasContestManagementPermission(
+        user: User?,
+        contest: Contest,
+    ): Boolean {
+        return contest.author.userId == user?.userId || contest.manager.any { it.userId == user?.userId }
+    }
+
     @GetMapping
     fun index(
         @RequestParam(required = false, defaultValue = "1") current: Int,
@@ -274,16 +280,12 @@ class ContestController(
         @RequestParam(required = false, defaultValue = "20") pageSize: Int,
         @RequestParam(required = false) username: String?,
     ): ResponseEntity<R<L<ContestSubmissionDto>>> {
-        fun hasAdminPermission(role: UserRole): Boolean {
-            return role.ordinal >= 2
-        }
-
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
         val filteredUsername =
             if (Instant.now() >= contest.endTime) {
                 username
-            } else if (hasAdminPermission(user.role)) {
+            } else if (hasContestManagementPermission(user, contest)) {
                 username
             } else {
                 user.username
@@ -340,6 +342,7 @@ class ContestController(
     fun getClarifications(
         @PathVariable id: Long,
     ): ResponseEntity<R<List<ContestClarificationDto>>> {
+        val contest = contestService.get(id)
         var user: User? = null
         if (StpUtil.isLogin()) {
             user = userService.getUserById(StpUtil.getLoginIdAsLong())
@@ -349,7 +352,7 @@ class ContestController(
                 .filter {
                     if (it.sticky) {
                         true
-                    } else if (user != null && user.role.ordinal > 1) {
+                    } else if (hasContestManagementPermission(user, contest)) {
                         true
                     } else {
                         user?.let { user -> it.user.userId == user.userId } ?: false
