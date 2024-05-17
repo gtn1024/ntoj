@@ -10,13 +10,11 @@ import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import jakarta.persistence.criteria.Join
 import jakarta.persistence.criteria.Predicate
-import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
 import java.time.Instant
-import kotlin.jvm.optionals.getOrNull
 
 interface SubmissionService {
     enum class SubmissionScope {
@@ -55,8 +53,6 @@ interface SubmissionService {
         contestId: Long,
         username: String? = null,
     ): Long
-
-    fun getPendingSubmissionAndSetJudging(): Submission?
 
     fun new(submission: Submission): Submission
 
@@ -190,18 +186,6 @@ class SubmissionServiceImpl(
                 return@Specification cb.and(*predicates.toTypedArray())
             },
         )
-    }
-
-    @Transactional
-    override fun getPendingSubmissionAndSetJudging(): Submission? {
-        var submission =
-            submissionRepository.findFirstByJudgeStageOrderBySubmissionId(JudgeStage.PENDING)
-                .getOrNull()
-        if (submission != null) {
-            submission.judgeStage = JudgeStage.JUDGING
-            submission = submissionRepository.save(submission)
-        }
-        return submission
     }
 
     override fun new(submission: Submission): Submission {

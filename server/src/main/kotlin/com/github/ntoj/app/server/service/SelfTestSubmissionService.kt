@@ -5,19 +5,15 @@ import com.github.ntoj.app.server.model.entities.SelfTestSubmission
 import com.github.ntoj.app.server.repository.SelfTestSubmissionRepository
 import com.github.ntoj.app.shared.model.JudgeStage
 import jakarta.persistence.criteria.Predicate
-import jakarta.transaction.Transactional
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
-import kotlin.jvm.optionals.getOrNull
 
 interface SelfTestSubmissionService {
     fun get(id: Long): SelfTestSubmission
 
     fun add(selfTestSubmission: SelfTestSubmission)
-
-    fun getPendingSubmissionAndSetJudging(): SelfTestSubmission?
 
     fun update(submission: SelfTestSubmission)
 
@@ -39,18 +35,6 @@ class SelfTestSubmissionServiceImpl(
 
     override fun add(selfTestSubmission: SelfTestSubmission) {
         selfTestSubmissionRepository.save(selfTestSubmission)
-    }
-
-    @Transactional
-    override fun getPendingSubmissionAndSetJudging(): SelfTestSubmission? {
-        var submission =
-            selfTestSubmissionRepository.findFirstByJudgeStageOrderBySelfTestSubmissionId(JudgeStage.PENDING)
-                .getOrNull()
-        if (submission != null) {
-            submission.judgeStage = JudgeStage.JUDGING
-            submission = selfTestSubmissionRepository.save(submission)
-        }
-        return submission
     }
 
     override fun update(submission: SelfTestSubmission) {
