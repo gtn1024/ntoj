@@ -54,6 +54,7 @@ suspend fun sandboxAvailable(): Boolean {
 suspend fun run(id: Int) {
     var connected = false
     while (true) {
+        delay(300)
         if (Configuration.token == null) {
             refreshToken()
             delay(5000)

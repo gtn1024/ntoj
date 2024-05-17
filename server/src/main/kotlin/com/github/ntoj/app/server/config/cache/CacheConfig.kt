@@ -20,6 +20,7 @@ class CacheConfig {
             listOf(
                 buildCache("contestStatistic", ticker, 5, TimeUnit.SECONDS),
                 buildCache("contestStanding", ticker, 5, TimeUnit.SECONDS),
+                buildCache("user", ticker, 1, TimeUnit.MINUTES),
             ),
         )
         return manager

@@ -6,6 +6,8 @@ import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.repository.GroupRepository
 import com.github.ntoj.app.server.repository.UserRepository
 import jakarta.persistence.criteria.Predicate
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jpa.domain.Specification
 import org.springframework.stereotype.Service
@@ -57,6 +59,7 @@ class UserServiceImpl(
         ).toList()
     }
 
+    @CacheEvict("user", allEntries = true)
     override fun newUser(user: User): User {
         if (!isUsernameValid(user.username)) {
             throw AppException("用户名不合法", 400)
@@ -76,10 +79,12 @@ class UserServiceImpl(
         return userRepository.existsById(id)
     }
 
+    @Cacheable("user", key = "#root.methodName +'_tk_'+ #username")
     override fun getUserByUsername(username: String): User {
         return userRepository.findByUsername(username).orElseThrow { AppException("用户不存在", 404) }
     }
 
+    @Cacheable("user", key = "#root.methodName +'_tk_'+ #id")
     override fun getUserById(id: Long): User {
         return userRepository.findById(id).orElseThrow { AppException("用户不存在", 404) }
     }
@@ -88,6 +93,7 @@ class UserServiceImpl(
         return userRepository.count()
     }
 
+    @CacheEvict("user", allEntries = true)
     override fun updateUser(user: User): User {
         val userInDb = userRepository.findByUsername(user.username).getOrNull()
         if (userInDb != null && userInDb.userId != user.userId) {
