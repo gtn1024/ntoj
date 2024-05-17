@@ -9,7 +9,6 @@ interface UserPreview {
   password: string
   displayName: string
   email: string
-  role: UserRole
   exists: boolean
 }
 
@@ -77,7 +76,6 @@ export const AdminUserImportPage: React.FC = () => {
                   <th>密码</th>
                   <th>显示名</th>
                   <th>电子邮箱</th>
-                  <th>用户权限</th>
                   <th>用户已存在</th>
                 </tr>
               </thead>
@@ -89,7 +87,6 @@ export const AdminUserImportPage: React.FC = () => {
                     <td>{user.password}</td>
                     <td>{user.displayName}</td>
                     <td>{user.email}</td>
-                    <td>{user.role}</td>
                     <td>{user.exists ? '是' : '否'}</td>
                   </tr>
                 ))}
