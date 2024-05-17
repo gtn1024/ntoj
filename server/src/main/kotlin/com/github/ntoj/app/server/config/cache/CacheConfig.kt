@@ -18,7 +18,6 @@ class CacheConfig {
         val manager = SimpleCacheManager()
         manager.setCaches(
             listOf(
-                buildCache("judgertoken", ticker, 15, TimeUnit.SECONDS),
                 buildCache("contestStatistic", ticker, 5, TimeUnit.SECONDS),
                 buildCache("contestStanding", ticker, 5, TimeUnit.SECONDS),
             ),
