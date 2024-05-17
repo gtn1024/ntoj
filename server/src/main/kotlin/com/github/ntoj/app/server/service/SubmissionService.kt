@@ -67,6 +67,13 @@ interface SubmissionService {
         problem: Problem,
         endTime: Instant,
     ): Submission?
+
+    fun getPendingSubmissions(
+        limit: Int,
+        from: Long = 1,
+    ): List<Submission>
+
+    fun setJudging(submissionId: Long): Submission
 }
 
 @Service
@@ -216,11 +223,41 @@ class SubmissionServiceImpl(
                 predicates.add(cb.equal(root.get<User>("user"), user))
                 predicates.add(cb.equal(root.get<Problem>("problem"), problem))
                 predicates.add(cb.equal(root.get<SubmissionStatus>("status"), SubmissionStatus.ACCEPTED))
-                predicates.add(cb.equal(root.get<Submission.SubmissionOrigin>("origin"), Submission.SubmissionOrigin.PROBLEM))
+                predicates.add(
+                    cb.equal(
+                        root.get<Submission.SubmissionOrigin>("origin"),
+                        Submission.SubmissionOrigin.PROBLEM,
+                    ),
+                )
                 predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), endTime))
                 query.orderBy(cb.desc(root.get<Long>("submissionId")))
                 return@Specification cb.and(*predicates.toTypedArray())
             }
         return submissionRepository.findAll(spec).firstOrNull()
+    }
+
+    override fun getPendingSubmissions(
+        limit: Int,
+        from: Long,
+    ): List<Submission> {
+        return submissionRepository.findAll(
+            Specification { root, _, cb ->
+                val predicates: MutableList<Predicate> = mutableListOf()
+                predicates.add(cb.equal(root.get<JudgeStage>("judgeStage"), JudgeStage.PENDING))
+                predicates.add(cb.greaterThanOrEqualTo(root.get("submissionId"), from))
+                return@Specification cb.and(*predicates.toTypedArray())
+            },
+            PageRequest.of(
+                0,
+                limit,
+                Sort.by(Sort.Direction.ASC, "submissionId"),
+            ),
+        ).toList()
+    }
+
+    override fun setJudging(submissionId: Long): Submission {
+        val submission = submissionRepository.findById(submissionId).orElseThrow { AppException("提交不存在", 404) }
+        submission.judgeStage = JudgeStage.JUDGING
+        return submissionRepository.save(submission)
     }
 }

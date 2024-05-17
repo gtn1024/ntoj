@@ -1,6 +1,8 @@
 package com.github.ntoj.app.server.controller.judge
 
 import cn.dev33.satoken.annotation.SaCheckPermission
+import com.github.ntoj.app.server.config.SelfTestSubmissionQueueManager
+import com.github.ntoj.app.server.config.SubmissionQueueManager
 import com.github.ntoj.app.server.config.system.LanguageMap
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
@@ -39,6 +41,8 @@ class JudgeClientController(
     val fileService: FileService,
     private val problemService: ProblemService,
     private val languages: LanguageMap,
+    private val submissionQueueManager: SubmissionQueueManager,
+    private val selfTestSubmissionQueueManager: SelfTestSubmissionQueueManager,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {
@@ -47,8 +51,8 @@ class JudgeClientController(
 
     @GetMapping("/get_submission")
     fun getSubmission(): ResponseEntity<R<GetSubmissionResponse>> {
-        val submission =
-            submissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功", null)
+        val submission = submissionQueueManager.getOneOrNull() ?: return R.success(204, "获取成功", null)
+        submissionService.setJudging(submission.submissionId!!)
         val languageStructure = languages[submission.lang]
         if (languageStructure == null) {
             submission.status = SubmissionStatus.SYSTEM_ERROR
@@ -72,8 +76,8 @@ class JudgeClientController(
 
     @GetMapping("/get_self_test_submission")
     fun getSelfTestSubmission(): ResponseEntity<R<GetSelfTestSubmissionResponse>> {
-        val submission =
-            selfTestSubmissionService.getPendingSubmissionAndSetJudging() ?: return R.success(204, "获取成功")
+        val submission = selfTestSubmissionQueueManager.getOneOrNull() ?: return R.success(204, "获取成功")
+        selfTestSubmissionService.setJudging(submission.selfTestSubmissionId!!)
         val languageStructure = languages[submission.lang]
         if (languageStructure == null) {
             submission.status = SubmissionStatus.SYSTEM_ERROR
