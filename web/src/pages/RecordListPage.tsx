@@ -51,7 +51,7 @@ export const RecordListPage: React.FC = () => {
   const {
     data,
     error,
-  } = useSWR(`/submission/list?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
+  } = useSWR(`/record?current=${pagination.current ?? 1}&pageSize=${pagination.pageSize ?? 20}`, async (path) => {
     return http.get<L<SubmissionDto>>(path)
       .then((res) => {
         const data = res.data.data
@@ -68,7 +68,7 @@ export const RecordListPage: React.FC = () => {
   })
   const loading = !data && !error
   const rejudge = (id: number) => {
-    http.post(`/submission/${id}/rejudge`)
+    http.post(`/record/${id}/rejudge`)
       .then(() => {
         void message.success('已开始重测')
       })

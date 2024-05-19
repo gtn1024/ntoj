@@ -3,11 +3,11 @@ package com.github.ntoj.app.judger
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.github.ntoj.app.judger.Configuration.SANDBOX_SERVER
 import com.github.ntoj.app.judger.Configuration.SERVER_HOST
-import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
-import com.github.ntoj.app.shared.model.GetSubmissionResponse
+import com.github.ntoj.app.shared.model.JudgeStage
+import com.github.ntoj.app.shared.model.JudgerRecordDto
 import com.github.ntoj.app.shared.model.R
-import com.github.ntoj.app.shared.model.UpdateSelfTestSubmissionRequest
-import com.github.ntoj.app.shared.model.UpdateSubmissionRequest
+import com.github.ntoj.app.shared.model.SubmissionStatus
+import com.github.ntoj.app.shared.model.UpdateRecordRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -39,16 +39,11 @@ object Client {
         }
 
     object Backend {
-        suspend fun getSubmission(): GetSubmissionResponse? {
+        suspend fun get(): JudgerRecordDto? {
             val response =
-                client.get("$SERVER_HOST/judge_client/get_submission") {
+                client.get("$SERVER_HOST/judge_client/get") {
                     contentType(ContentType.Application.Json)
                     header("Authorization", "Bearer ${Configuration.token}")
-                    header("X-Judger-ID", Configuration.JUDGER_ID)
-                    header("X-Judger-OS", Configuration.OS)
-                    header("X-Judger-Kernel", Configuration.KERNEL)
-                    header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                    header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
                 }
             if (response.status == Forbidden) {
                 throw IllegalStateException("Token 无效")
@@ -56,58 +51,32 @@ object Client {
             if (response.status == NoContent) {
                 return null
             }
-            return response.body<R<GetSubmissionResponse>>().data
+            return response.body<R<JudgerRecordDto>>().data
         }
 
-        suspend fun getSelfTestSubmission(): GetSelfTestSubmissionResponse? {
-            val response =
-                client.get("$SERVER_HOST/judge_client/get_self_test_submission") {
-                    contentType(ContentType.Application.Json)
-                    header("Authorization", "Bearer ${Configuration.token}")
-                    header("X-Judger-ID", Configuration.JUDGER_ID)
-                    header("X-Judger-OS", Configuration.OS)
-                    header("X-Judger-Kernel", Configuration.KERNEL)
-                    header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                    header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
+        suspend fun update(
+            recordId: String,
+            stage: JudgeStage?,
+            status: SubmissionStatus?,
+            request: UpdateRecordRequest?,
+        ) {
+            val param = StringBuilder()
+            if (stage != null) {
+                param.append("stage=$stage")
+            }
+            if (status != null) {
+                if (param.isNotEmpty()) {
+                    param.append("&")
                 }
-            if (response.status == Forbidden) {
-                throw IllegalStateException("Token 无效")
+                param.append("status=$status")
             }
-            if (response.status == NoContent) {
-                return null
-            }
-            return response.body<R<GetSelfTestSubmissionResponse>>().data
-        }
-
-        suspend fun updateSubmission(
-            submissionId: Long,
-            submissionStatus: UpdateSubmissionRequest,
-        ) {
-            client.patch("$SERVER_HOST/judge_client/update_submission/$submissionId") {
+            client.patch("$SERVER_HOST/judge_client/update/$recordId?$param") {
                 contentType(ContentType.Application.Json)
                 header("Authorization", "Bearer ${Configuration.token}")
-                header("X-Judger-ID", Configuration.JUDGER_ID)
-                header("X-Judger-OS", Configuration.OS)
-                header("X-Judger-Kernel", Configuration.KERNEL)
-                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
-                setBody(submissionStatus)
-            }
-        }
 
-        suspend fun updateSelfTestSubmission(
-            submissionId: Long,
-            submissionStatus: UpdateSelfTestSubmissionRequest,
-        ) {
-            client.patch("$SERVER_HOST/judge_client/update_self_test_submission/$submissionId") {
-                contentType(ContentType.Application.Json)
-                header("Authorization", "Bearer ${Configuration.token}")
-                header("X-Judger-ID", Configuration.JUDGER_ID)
-                header("X-Judger-OS", Configuration.OS)
-                header("X-Judger-Kernel", Configuration.KERNEL)
-                header("X-Judger-Memory-Used", Configuration.memoryUsed().toString())
-                header("X-Judger-Memory-Total", Configuration.memoryTotal().toString())
-                setBody(submissionStatus)
+                if (request != null) {
+                    setBody(request)
+                }
             }
         }
 

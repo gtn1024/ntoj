@@ -103,38 +103,29 @@ type SubmissionStatus = |
   'PRESENTATION_ERROR' |
   'DEPRECATED'
 
-interface Submission {
-  id: number
+interface RecordDto {
+  createdAt: number
   user: User
+  problem: {
+    title: string
+    alias: string
+  } | null
+  origin: string
+  lang: string
   code: string
   status: SubmissionStatus
   stage: JudgeStage
-  memory?: number
-  time?: number
-  compileLog?: string
-  lang: string
-  problem: {
-    alias: string
-    title: string
-  }
-  submitTime: string
-  testcaseResult?: {
+  time: number | null
+  memory: number | null
+  compileLog: string | null
+  testcaseResult: {
     status: SubmissionStatus
     time: number
     memory: number
+    input: string
+    output: string
   }[]
-}
-
-interface SelfTestSubmission {
-  id: number
-  status: SubmissionStatus
-  stage: JudgeStage
-  memory?: number
-  time?: number
-  compileLog?: string
-  input: string
-  output?: string
-  expectedOutput?: string
+  id: string
 }
 
 type JudgeStage = 'PENDING' | 'COMPILING' | 'JUDGING' | 'FINISHED'
@@ -198,7 +189,6 @@ namespace AdminDto {
     id: number
     username: string
     displayName?: string
-    role: UserRole
     userRole: string
     email?: string
     createdAt: string

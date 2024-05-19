@@ -9,7 +9,7 @@ import { timestampToDateString } from '../lib/misc.ts'
 interface HomeworkStatus {
   [key: string]: {
     solved: boolean
-    submissionId?: number
+    recordId?: string
   }
 }
 
@@ -77,7 +77,7 @@ export const HomeworkPage: FC = () => {
                     <tr key={problem.id} className="text-center">
                       <td className="p-2">
                         {homeworkStatus && homeworkStatus[problem.id]?.solved && (
-                          <Link to={`/r/${homeworkStatus[problem.id].submissionId}`}>
+                          <Link to={`/r/${homeworkStatus[problem.id].recordId}`}>
                             <div className="i-mdi:check text-green-500" />
                           </Link>
                         )}

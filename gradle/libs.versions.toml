@@ -9,6 +9,8 @@ sa-token = "1.37.0"
 commons-codec = "1.17.0"
 commons-io = "2.16.1"
 
+hutool = "5.8.26"
+
 ktlint = "0.50.0"
 
 junit5 = "5.10.2"
@@ -24,6 +26,7 @@ saToken-spring = { module = "cn.dev33:sa-token-spring-boot3-starter", version.re
 saToken-jwt = { module = "cn.dev33:sa-token-jwt", version.ref = "sa-token" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commons-codec" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commons-io" }
+hutool-core = { module = "cn.hutool:hutool-core", version.ref = "hutool" }
 ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
 
 junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }

@@ -139,10 +139,3 @@ data class JudgeResult(
     val maxTime: Long,
     val maxMemory: Long,
 )
-
-data class SelfTestJudgeResult(
-    val status: SubmissionStatus,
-    val time: Long,
-    val memory: Long,
-    val output: String?,
-)

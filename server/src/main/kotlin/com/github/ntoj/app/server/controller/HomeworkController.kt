@@ -10,7 +10,7 @@ import com.github.ntoj.app.server.model.entities.Group
 import com.github.ntoj.app.server.model.entities.Homework
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.HomeworkService
-import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.http.ResponseEntity
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController
 class HomeworkController(
     val homeworkService: HomeworkService,
     val userService: UserService,
-    val submissionService: SubmissionService,
+    private val recordService: RecordService,
 ) {
     @SaCheckLogin
     @GetMapping("{id}")
@@ -61,11 +61,11 @@ class HomeworkController(
     ): Map<Long, HomeworkProblemStatus> {
         val status: MutableMap<Long, HomeworkProblemStatus> = mutableMapOf()
         for (problem in homework.problems) {
-            val submission = submissionService.getSolvedHomeworkProblemSubmission(user, problem, homework.endTime)
+            val record = recordService.getSolvedHomeworkProblemRecord(user, problem, homework.endTime)
             status[problem.problemId!!] =
                 HomeworkProblemStatus(
-                    solved = submission != null,
-                    submissionId = submission?.submissionId,
+                    solved = record != null,
+                    recordId = record?.recordId,
                 )
         }
         return status
@@ -93,6 +93,6 @@ class HomeworkController(
 
     data class HomeworkProblemStatus(
         val solved: Boolean,
-        val submissionId: Long?,
+        val recordId: String?,
     )
 }

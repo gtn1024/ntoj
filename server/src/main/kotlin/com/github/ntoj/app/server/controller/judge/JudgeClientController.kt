@@ -1,24 +1,20 @@
 package com.github.ntoj.app.server.controller.judge
 
 import cn.dev33.satoken.annotation.SaCheckPermission
-import com.github.ntoj.app.server.config.SelfTestSubmissionQueueManager
-import com.github.ntoj.app.server.config.SubmissionQueueManager
+import com.github.ntoj.app.server.config.RecordQueueManager
 import com.github.ntoj.app.server.config.system.LanguageMap
+import com.github.ntoj.app.server.ext.fail
 import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.service.FileService
 import com.github.ntoj.app.server.service.FileUploadService
-import com.github.ntoj.app.server.service.ProblemService
-import com.github.ntoj.app.server.service.SelfTestSubmissionService
-import com.github.ntoj.app.server.service.SubmissionService
-import com.github.ntoj.app.shared.model.GetSelfTestSubmissionResponse
-import com.github.ntoj.app.shared.model.GetSubmissionResponse
+import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.shared.model.JudgeStage
+import com.github.ntoj.app.shared.model.JudgerRecordDto
 import com.github.ntoj.app.shared.model.R
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import com.github.ntoj.app.shared.model.TestcaseDto
-import com.github.ntoj.app.shared.model.UpdateSelfTestSubmissionRequest
-import com.github.ntoj.app.shared.model.UpdateSubmissionRequest
+import com.github.ntoj.app.shared.model.UpdateRecordRequest
 import org.springframework.core.io.InputStreamResource
 import org.springframework.core.io.Resource
 import org.springframework.http.MediaType
@@ -28,6 +24,7 @@ import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import java.time.Instant
 
@@ -35,110 +32,62 @@ import java.time.Instant
 @RequestMapping("/judge_client")
 @SaCheckPermission(value = ["PERM_JUDGE"])
 class JudgeClientController(
-    val submissionService: SubmissionService,
-    val selfTestSubmissionService: SelfTestSubmissionService,
     val fileUploadService: FileUploadService,
     val fileService: FileService,
-    private val problemService: ProblemService,
     private val languages: LanguageMap,
-    private val submissionQueueManager: SubmissionQueueManager,
-    private val selfTestSubmissionQueueManager: SelfTestSubmissionQueueManager,
+    private val recordQueueManager: RecordQueueManager,
+    private val recordService: RecordService,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {
         return R.success(200, "Pong", PingResponse("Pong"))
     }
 
-    @GetMapping("/get_submission")
-    fun getSubmission(): ResponseEntity<R<GetSubmissionResponse>> {
-        val submission = submissionQueueManager.getOneOrNull() ?: return R.success(204, "获取成功", null)
-        submissionService.setJudging(submission.submissionId!!)
-        val languageStructure = languages[submission.lang]
-        if (languageStructure == null) {
-            submission.status = SubmissionStatus.SYSTEM_ERROR
-            submissionService.update(submission)
-            return R.success(204, "获取成功", null)
-        }
-        return R.success(
-            200,
-            "获取成功",
-            GetSubmissionResponse(
-                submissionId = submission.submissionId!!,
-                problemId = submission.problem.problemId!!,
-                code = submission.code,
-                lang = languageStructure,
-                testcase = TestcaseDto.from(submission.problem.testCases),
-                timeLimit = submission.problem.timeLimit,
-                memoryLimit = submission.problem.memoryLimit,
-            ),
-        )
-    }
-
-    @GetMapping("/get_self_test_submission")
-    fun getSelfTestSubmission(): ResponseEntity<R<GetSelfTestSubmissionResponse>> {
-        val submission = selfTestSubmissionQueueManager.getOneOrNull() ?: return R.success(204, "获取成功")
-        selfTestSubmissionService.setJudging(submission.selfTestSubmissionId!!)
-        val languageStructure = languages[submission.lang]
-        if (languageStructure == null) {
-            submission.status = SubmissionStatus.SYSTEM_ERROR
-            selfTestSubmissionService.update(submission)
-            return R.success(204, "获取成功", null)
-        }
-        return R.success(
-            200,
-            "获取成功",
-            GetSelfTestSubmissionResponse(
-                submissionId = submission.selfTestSubmissionId!!,
-                code = submission.code,
-                lang = languageStructure,
-                timeLimit = submission.timeLimit,
-                memoryLimit = submission.memoryLimit,
-                input = submission.input,
-                expectedOutput = submission.expectedOutput,
-            ),
-        )
-    }
-
-    @PatchMapping("/update_submission/{submissionId}")
-    fun updateSubmission(
-        @PathVariable submissionId: Long,
-        @RequestBody submissionStatus: UpdateSubmissionRequest,
+    @PatchMapping("/update/{recordId}")
+    fun update(
+        @PathVariable recordId: String,
+        @RequestParam(required = false) status: SubmissionStatus?,
+        @RequestParam(required = false) stage: JudgeStage?,
+        @RequestBody(required = false) request: UpdateRecordRequest?,
     ): ResponseEntity<R<Void>> {
-        val submission = submissionService.get(submissionId)
-        val problem = problemService.get(submission.problem.problemId!!)
-        if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
-            submission.status = submissionStatus.result
-            submission.time = submissionStatus.time
-            submission.memory = submissionStatus.memory
-            submission.judgerId = submissionStatus.judgerId
-            submission.testcaseResult = submissionStatus.testcaseResult
-            submission.compileLog = submissionStatus.compileLog
-            if (submissionStatus.result == SubmissionStatus.ACCEPTED && submission.contestId == null) {
-                problem.acceptedTimes++
-                problemService.update(problem)
-            }
+        val record = recordService.get(recordId) ?: return R.fail(404, "记录不存在")
+        require(status != null || stage != null) { "status 和 stage 至少需要一个" }
+        if (stage != null) record.stage = stage
+        if (status != null) record.status = status
+        if (request != null) {
+            record.time = request.time
+            record.memory = request.memory
+            record.judgerId = request.judgerId
+            record.testcaseResult = request.testcaseResult
+            record.compileLog = request.compileLog
         }
-        submission.judgeStage = submissionStatus.judgeStage
-        submissionService.update(submission)
+        recordService.update(record)
         return R.success(200, "更新成功")
     }
 
-    @PatchMapping("/update_self_test_submission/{submissionId}")
-    fun updateSelfTestSubmission(
-        @PathVariable submissionId: Long,
-        @RequestBody submissionStatus: UpdateSelfTestSubmissionRequest,
-    ): ResponseEntity<R<Void>> {
-        val submission = selfTestSubmissionService.get(submissionId)
-        if (submissionStatus.judgeStage == JudgeStage.FINISHED) {
-            submission.status = submissionStatus.result
-            submission.time = submissionStatus.time
-            submission.memory = submissionStatus.memory
-            submission.compileLog = submissionStatus.compileLog
-            submission.output = submissionStatus.output
+    @GetMapping("/get")
+    fun get(): ResponseEntity<R<JudgerRecordDto>> {
+        val record = recordQueueManager.getOneOrNull() ?: return R.success(204, "获取成功")
+        recordService.setJudging(record.recordId!!)
+        val languageStructure = languages[record.lang]
+        if (languageStructure == null) {
+            record.status = SubmissionStatus.SYSTEM_ERROR
+            recordService.update(record)
+            return R.success(204, "获取成功", null)
         }
-        submission.judgeStage = submissionStatus.judgeStage
-        selfTestSubmissionService.update(submission)
-        return R.success(200, "更新成功")
+        val response =
+            JudgerRecordDto(
+                record.recordId!!,
+                record.problem?.problemId,
+                record.code,
+                languageStructure,
+                testcase = if (record.problem != null) TestcaseDto.from(record.problem!!.testCases) else null,
+                timeLimit = record.problem?.timeLimit ?: 1000,
+                memoryLimit = record.problem?.memoryLimit ?: 256,
+                origin = record.origin,
+                input = record.selfTestInput,
+            )
+        return R.success(200, "获取成功", response)
     }
 
     @GetMapping("/download_testcase/{id}")

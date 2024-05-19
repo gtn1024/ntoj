@@ -6,4 +6,5 @@ plugins {
 dependencies {
     api(libs.commons.codec)
     api(libs.bundles.jackson)
+    api(libs.hutool.core)
 }

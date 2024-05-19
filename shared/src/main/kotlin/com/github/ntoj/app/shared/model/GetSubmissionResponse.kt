@@ -1,24 +1,22 @@
 package com.github.ntoj.app.shared.model
 
-data class GetSubmissionResponse(
-    val submissionId: Long,
-    val problemId: Long,
+data class JudgerRecordDto(
+    val recordId: String,
+    val problemId: Long?,
     val code: String,
     val lang: LanguageStructure,
-    val testcase: TestcaseDto,
+    val testcase: TestcaseDto?,
     val timeLimit: Int,
     val memoryLimit: Int,
+    val origin: RecordOrigin,
+    val input: String?,
 )
 
-data class GetSelfTestSubmissionResponse(
-    val submissionId: Long,
-    val code: String,
-    val lang: LanguageStructure,
-    val timeLimit: Int,
-    val memoryLimit: Int,
-    val input: String,
-    val expectedOutput: String?,
-)
+enum class RecordOrigin {
+    PROBLEM,
+    CONTEST,
+    SELF_TEST,
+}
 
 data class TestcaseDto(
     val fileId: Long,

@@ -21,7 +21,7 @@ interface Props {
   memoryLimit: number
 }
 
-export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, codeLengthLimit, languageOptions, samples, timeLimit, memoryLimit }) => {
+export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, codeLengthLimit, languageOptions, samples }) => {
   const { isMobile } = useLayout()
   const [code, setCode] = useState('')
   const [language, setLanguage] = useState<string>()
@@ -31,7 +31,7 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
   const [toolbarSection, setToolbarSection] = useState<'result' | 'input'>('result')
   const [isSubmissionOk, setIsSubmissionOk] = useState(false)
   const [selfInputData, setSelfInputData] = useState(samples[0]?.input ?? '')
-  const [submissionResult, setSubmissionResult] = useState<Submission | SelfTestSubmission>()
+  const [submissionResult, setSubmissionResult] = useState<RecordDto>()
   const [editorConfigDrawerOpen, setEditorConfigDrawerOpen] = useState(false)
   const [resultMode, setResultMode] = useState<'submit' | 'selfTest'>('submit')
   const { codemirrorConfig, setCodemirrorConfig } = useCodemirrorConfig()
@@ -125,17 +125,11 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
                         <div className="flex flex-col">
                           <div className="flex gap-4">
                             <div>自测输入</div>
-                            <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).input}</pre>
+                            <pre className="flex-1 bg-#f7f8f9">{submissionResult.testcaseResult[0].input}</pre>
                           </div>
-                          {(submissionResult as SelfTestSubmission).expectedOutput && (
-                            <div className="flex gap-4">
-                              <div>预期输出</div>
-                              <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).expectedOutput}</pre>
-                            </div>
-                          )}
                           <div className="flex gap-4">
                             <div>实际输出</div>
-                            <pre className="flex-1 bg-#f7f8f9">{(submissionResult as SelfTestSubmission).output}</pre>
+                            <pre className="flex-1 bg-#f7f8f9">{submissionResult.testcaseResult[0].output}</pre>
                           </div>
                         </div>
                       )
@@ -175,32 +169,22 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
       </div>
     )
   }
-  const onSubmitCode = () => {
-    if (!language) {
-      void message.error('请选择语言')
-      return
+
+  const getSubmitBody = (code: string, lang: string, selfTest: boolean, input?: string) => {
+    const body: any = { code, lang }
+    if (selfTest) {
+      body.selfTest = true
+      body.input = input!
     }
-    if (!code.length) {
-      void message.error('请输入代码')
-      return
-    }
-    if (code.length > (codeLengthLimit ?? 0) * 1024) {
-      void message.error('代码长度超过限制')
-      return
-    }
-    if (intervalId) {
-      clearInterval(intervalId)
-    }
-    setResultMode('submit')
-    setToolbarSection('result')
-    setIsSubmissionOk(false)
-    setToolbarVisible(true)
-    setJudgeMessage('正在提交')
-    http.post<Submission>(submitUrl, { code, lang: language })
+    return body
+  }
+
+  const sendSubmitRequest = (body: any) => {
+    http.post<RecordDto>(submitUrl, body)
       .then((res) => {
         setJudgeMessage(res.data.data.status)
         const id = window.setInterval(() => {
-          http.get<Submission>(`/submission/${res.data.data.id}`)
+          http.get<RecordDto>(`/record/${res.data.data.id}`)
             .then((res) => {
               if (res.data.data.stage === 'FINISHED') {
                 setSubmissionResult(res.data.data)
@@ -222,6 +206,31 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
         void message.error(err.response?.data.message ?? '提交失败')
         throw err
       })
+  }
+
+  const onSubmitCode = () => {
+    if (!language) {
+      void message.error('请选择语言')
+      return
+    }
+    if (!code.length) {
+      void message.error('请输入代码')
+      return
+    }
+    if (code.length > (codeLengthLimit ?? 0) * 1024) {
+      void message.error('代码长度超过限制')
+      return
+    }
+    if (intervalId) {
+      clearInterval(intervalId)
+    }
+    setResultMode('submit')
+    setToolbarSection('result')
+    setIsSubmissionOk(false)
+    setToolbarVisible(true)
+    setJudgeMessage('正在提交')
+    const body = getSubmitBody(code, language, false)
+    sendSubmitRequest(body)
   }
 
   const onSelfTest = () => {
@@ -249,41 +258,8 @@ export const ProblemEditComponent: React.FC<Props> = ({ hBorder, submitUrl, code
     setIsSubmissionOk(false)
     setToolbarVisible(true)
     setJudgeMessage('正在提交')
-    const output = samples.findLast(sample => sample.input === selfInputData)?.output ?? null
-    const data = {
-      lang: language,
-      code,
-      input: selfInputData,
-      output,
-      timeLimit,
-      memoryLimit,
-    }
-    http.post<SelfTestSubmission>('/self_test', data)
-      .then((res) => {
-        setJudgeMessage(res.data.data.status)
-        const id = window.setInterval(() => {
-          http.get<SelfTestSubmission>(`/self_test/${res.data.data.id}`)
-            .then((res) => {
-              if (res.data.data.stage === 'FINISHED') {
-                setSubmissionResult(res.data.data)
-                setIsSubmissionOk(true)
-                setJudgeMessage(res.data.data.status)
-                clearInterval(id)
-              } else {
-                setJudgeMessage(res.data.data.stage)
-              }
-            })
-            .catch((err: AxiosError<HttpResponse>) => {
-              void message.error(err.response?.data.message)
-              throw err
-            })
-        }, 1500)
-        setIntervalId(id)
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '提交失败')
-        throw err
-      })
+    const body = getSubmitBody(code, language, true, selfInputData)
+    sendSubmitRequest(body)
   }
 
   const editorWrapperRef = useRef<HTMLDivElement>(null)

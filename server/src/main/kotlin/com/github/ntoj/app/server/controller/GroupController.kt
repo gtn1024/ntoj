@@ -29,7 +29,7 @@ class GroupController(
     ): ResponseEntity<R<GroupDto>> {
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val group = groupService.get(id)
-        if (!group.users.contains(user)) {
+        if (!group.users.map { it.userId }.contains(user.userId)) {
             throw AppException("无权限", 403)
         }
         val homeworks = groupService.getGroupHomeworks(group)

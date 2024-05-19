@@ -1,19 +1,33 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import c from 'classnames'
-import type { AxiosError } from 'axios'
-import type { HttpResponse } from '../lib/Http.tsx'
+import useSWR from 'swr'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLayout } from '../hooks/useLayout.ts'
-import { toFixedNumber } from '../lib/misc.ts'
+import { timestampToDateString, toFixedNumber } from '../lib/misc.ts'
 import { useLanguages } from '../hooks/useLanguages.ts'
 import { CodeHighlight } from '../components/CodeHighlight.tsx'
 
 export const RecordPage: React.FC = () => {
   const { id } = useParams()
-  const [data, setData] = useState<Submission>()
-  const [score, setScore] = useState<number>(0)
+  const { data } = useSWR(`/record/${id}`, async (path) => {
+    return http.get<RecordDto>(path)
+      .then((res) => {
+        return res.data.data
+      })
+  })
+  const score = useMemo(() => {
+    if (data && data.testcaseResult && !!data.testcaseResult.length) {
+      return data.testcaseResult.reduce((acc, cur) => {
+        if (cur.status === 'ACCEPTED') {
+          return acc + 1
+        }
+        return acc
+      }, 0)
+    }
+    return 0
+  }, [data])
   const { isMobile } = useLayout()
   const { languages } = useLanguages()
   const languageName = useMemo(() => {
@@ -28,25 +42,6 @@ export const RecordPage: React.FC = () => {
     }
     return languages[data.lang]?.highlight || 'plaintext'
   }, [data, languages])
-  useEffect(() => {
-    void http.get<Submission>(`/submission/${id}`)
-      .then((res) => {
-        const data = res.data.data
-        setData(data)
-        if (data.testcaseResult && !!data.testcaseResult.length) {
-          const score = data.testcaseResult.reduce((acc, cur) => {
-            if (cur.status === 'ACCEPTED') {
-              return acc + 1
-            }
-            return acc
-          }, 0)
-          setScore(100 * score / data.testcaseResult.length)
-        }
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        throw err
-      })
-  }, [id])
 
   return (
     <div>
@@ -129,7 +124,7 @@ export const RecordPage: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">提交时间</span>
-                <span className="text-gray-500">{data?.submitTime}</span>
+                <span className="text-gray-500">{timestampToDateString((data?.createdAt || 0) * 1000)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-500">语言</span>
@@ -138,7 +133,7 @@ export const RecordPage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-500">题目</span>
                 <span className="text-gray-500">
-                  <Link to={`/p/${data?.problem.alias}`}>{data?.problem.title}</Link>
+                  <Link to={`/p/${data?.problem?.alias}`}>{data?.problem?.title}</Link>
                 </span>
               </div>
             </div>

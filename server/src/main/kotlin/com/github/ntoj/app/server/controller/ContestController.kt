@@ -7,22 +7,23 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.model.dtos.RecordDto
 import com.github.ntoj.app.server.model.entities.Contest
 import com.github.ntoj.app.server.model.entities.ContestClarification
 import com.github.ntoj.app.server.model.entities.ContestClarificationResponse
 import com.github.ntoj.app.server.model.entities.ContestProblem
 import com.github.ntoj.app.server.model.entities.ContestUser
 import com.github.ntoj.app.server.model.entities.Problem
-import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.Record
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.ContestClarificationService
 import com.github.ntoj.app.server.service.ContestService
 import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.ProblemService
-import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.server.service.UserService
-import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.R
+import com.github.ntoj.app.shared.model.RecordOrigin
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.ResponseEntity
@@ -44,8 +45,8 @@ class ContestController(
     private val problemService: ProblemService,
     private val languageService: LanguageService,
     private val userService: UserService,
-    private val submissionService: SubmissionService,
     private val contestClarificationService: ContestClarificationService,
+    private val recordService: RecordService,
 ) {
     private fun hasContestManagementPermission(
         user: User?,
@@ -129,8 +130,8 @@ class ContestController(
     ): ResponseEntity<R<Map<String, ContestProblemStatisticsDto>>> {
         val contest = contestService.get(id)
         val problems = contest.problems
-        val submissions =
-            submissionService.getByContestId(id).filter {
+        val records =
+            recordService.getByContest(id).filter {
                 it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
             }.filter {
                 it.status != SubmissionStatus.COMPILE_ERROR
@@ -141,7 +142,7 @@ class ContestController(
             problems.associate { contestProblem ->
                 var submitTimes: Long = 0
                 var acceptedTimes: Long = 0
-                submissions.filter { it.problem.problemId == contestProblem.problemId }.forEach {
+                records.filter { it.problem?.problemId == contestProblem.problemId }.forEach {
                     submitTimes++
                     if (it.status == SubmissionStatus.ACCEPTED) {
                         acceptedTimes++
@@ -160,11 +161,11 @@ class ContestController(
     @Cacheable("contestStanding", key = "#root.methodName +'_tk_'+ #id")
     fun getStanding(
         @PathVariable id: Long,
-    ): ResponseEntity<R<List<ContestStandingSubmissionDto>>> {
+    ): ResponseEntity<R<List<ContestStandingRecordDto>>> {
         val contest = contestService.get(id)
         val problems = contest.problems
-        val submissions =
-            submissionService.getByContestId(id)
+        val records =
+            recordService.getByContest(id)
                 .reversed()
                 .filter {
                     it.createdAt!! >= contest.startTime && it.createdAt!! <= contest.endTime
@@ -172,18 +173,18 @@ class ContestController(
         return R.success(
             200,
             "获取成功",
-            submissions.map {
-                ContestStandingSubmissionDto.from(
+            records.map {
+                ContestStandingRecordDto.from(
                     it,
-                    problems.find { problem -> problem.problemId == it.problem.problemId }
+                    problems.find { problem -> problem.problemId == it.problem?.problemId }
                         ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }!!,
                 )
             },
         )
     }
 
-    data class ContestStandingSubmissionDto(
-        val id: Long,
+    data class ContestStandingRecordDto(
+        val id: String,
         val user: com.github.ntoj.app.server.model.dtos.UserDto,
         val alias: String,
         val result: SubmissionStatus,
@@ -191,14 +192,14 @@ class ContestController(
     ) {
         companion object {
             fun from(
-                submission: Submission,
+                record: Record,
                 alias: String,
-            ) = ContestStandingSubmissionDto(
-                id = submission.submissionId!!,
-                user = submission.user.let { com.github.ntoj.app.server.model.dtos.UserDto.from(it) },
+            ) = ContestStandingRecordDto(
+                id = record.recordId!!,
+                user = record.user.let { com.github.ntoj.app.server.model.dtos.UserDto.from(it) },
                 alias = alias,
-                result = submission.status,
-                submitTime = submission.createdAt!!,
+                result = record.status,
+                submitTime = record.createdAt!!,
             )
         }
     }
@@ -242,34 +243,35 @@ class ContestController(
         @PathVariable id: Long,
         @PathVariable alias: String,
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
-    ): ResponseEntity<R<ProblemController.SubmissionDto>> {
+    ): ResponseEntity<R<RecordDto>> {
+        val (code, lang, input, selfTest) = problemSubmissionRequest
+        require(languageService.exists(lang)) { "语言不存在" }
+        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
         val contest = contestService.get(id)
         val problem =
             contest.problems.find { it.contestProblemIndex == alphabetToNumber(alias) }?.let {
                 problemService.get(it.problemId)
             } ?: throw AppException("题目不存在", 404)
-        if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
-            throw AppException("代码长度超过限制", 400)
+        require(code.length <= problem.codeLength * 1024) { "代码长度超过限制" }
+        if (selfTest) {
+            require(!input.isNullOrBlank()) { "自测输入不能为空" }
         }
-        val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        if (!languageService.exists(problemSubmissionRequest.lang)) {
-            throw AppException("语言不存在", 400)
-        }
-        var submission =
-            Submission(
-                user = user,
-                problem = problem,
-                origin = Submission.SubmissionOrigin.CONTEST,
-                contestId = id,
-                code = problemSubmissionRequest.code,
-                status = SubmissionStatus.PENDING,
-                judgeStage = JudgeStage.PENDING,
-                lang = problemSubmissionRequest.lang,
+        val record =
+            Record(
+                user,
+                problem,
+                RecordOrigin.CONTEST,
+                contest,
+                problemSubmissionRequest.lang,
+                selfTestInput = null,
+                problemSubmissionRequest.code,
             )
-        submission =
-            submissionService
-                .new(submission)
-        return R.success(200, "提交成功", ProblemController.SubmissionDto.from(submission))
+        if (selfTest) {
+            record.origin = RecordOrigin.SELF_TEST
+            record.selfTestInput = input
+        }
+        recordService.create(record)
+        return R.success(200, "提交成功", RecordDto.from(record))
     }
 
     @GetMapping("{id}/submission")
@@ -290,8 +292,8 @@ class ContestController(
             } else {
                 user.username
             }
-        val submissions = submissionService.getByContestId(id, current, pageSize, true, filteredUsername)
-        val count = submissionService.countByContestId(id, filteredUsername)
+        val records = recordService.getByContest(id, current, pageSize, true, filteredUsername)
+        val count = recordService.countByContest(id, filteredUsername)
         return R.success(
             200,
             "获取成功",
@@ -299,9 +301,9 @@ class ContestController(
                 total = count,
                 page = current,
                 list =
-                    submissions.map {
+                    records.map {
                         val alias =
-                            contest.problems.find { problem -> problem.problemId == it.problem.problemId }
+                            contest.problems.find { problem -> problem.problemId == it.problem?.problemId }
                                 ?.let { problem -> numberToAlphabet(problem.contestProblemIndex) }
                         ContestSubmissionDto.from(it, alias!!)
                     },
@@ -310,7 +312,7 @@ class ContestController(
     }
 
     data class ContestSubmissionDto(
-        val id: Long,
+        val id: String,
         val user: com.github.ntoj.app.server.model.dtos.UserDto,
         val alias: String,
         val result: SubmissionStatus,
@@ -322,18 +324,18 @@ class ContestController(
     ) {
         companion object {
             fun from(
-                submission: Submission,
+                record: Record,
                 alias: String,
             ) = ContestSubmissionDto(
-                id = submission.submissionId!!,
-                user = com.github.ntoj.app.server.model.dtos.UserDto.from(submission.user),
+                id = record.recordId!!,
+                user = com.github.ntoj.app.server.model.dtos.UserDto.from(record.user),
                 alias = alias,
-                result = submission.status,
-                time = submission.time,
-                memory = submission.memory,
-                lang = submission.lang,
-                codeLength = submission.code.length,
-                submitTime = submission.createdAt!!,
+                result = record.status,
+                time = record.time,
+                memory = record.memory,
+                lang = record.lang,
+                codeLength = record.code.length,
+                submitTime = record.createdAt!!,
             )
         }
     }

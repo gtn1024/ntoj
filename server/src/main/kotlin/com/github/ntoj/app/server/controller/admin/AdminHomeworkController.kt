@@ -8,12 +8,12 @@ import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
 import com.github.ntoj.app.server.model.dtos.admin.HomeworkDto
 import com.github.ntoj.app.server.model.entities.Homework
-import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.Record
 import com.github.ntoj.app.server.model.entities.User
 import com.github.ntoj.app.server.service.GroupService
 import com.github.ntoj.app.server.service.HomeworkService
 import com.github.ntoj.app.server.service.ProblemService
-import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.server.service.UserService
 import com.github.ntoj.app.shared.model.R
 import org.springframework.core.io.InputStreamResource
@@ -37,8 +37,8 @@ class AdminHomeworkController(
     val homeworkService: HomeworkService,
     val problemService: ProblemService,
     val groupService: GroupService,
-    val submissionService: SubmissionService,
     val userService: UserService,
+    private val recordService: RecordService,
 ) {
     @GetMapping("{id}")
     fun get(
@@ -133,17 +133,17 @@ class AdminHomeworkController(
         sb.append("\n")
         val list = mutableListOf<HomeworkUserData>()
         for (user in users) {
-            val submissionData = mutableMapOf<Long, Submission>()
+            val recordData = mutableMapOf<Long, Record>()
             for (i in problems.indices) {
-                val submission = submissionService.getSolvedHomeworkProblemSubmission(user, problems[i], homework.endTime)
-                if (submission != null) {
-                    submissionData[problems[i].problemId!!] = submission
+                val record = recordService.getSolvedHomeworkProblemRecord(user, problems[i], homework.endTime)
+                if (record != null) {
+                    recordData[problems[i].problemId!!] = record
                 }
                 list.add(
                     HomeworkUserData(
                         user,
-                        problems.count { submissionData[it.problemId!!] != null },
-                        submissionData,
+                        problems.count { recordData[it.problemId!!] != null },
+                        recordData,
                     ),
                 )
             }
@@ -153,7 +153,7 @@ class AdminHomeworkController(
             sb.append("${userData.user.username},${userData.user.displayName},${userData.solved}")
             for (i in problems.indices) {
                 sb.append(",")
-                if (userData.submissionData[problems[i].problemId!!] != null) {
+                if (userData.recordData[problems[i].problemId!!] != null) {
                     sb.append("ACCEPTED")
                 }
             }
@@ -174,7 +174,7 @@ class AdminHomeworkController(
     data class HomeworkUserData(
         val user: User,
         var solved: Int,
-        var submissionData: Map<Long, Submission>,
+        var recordData: Map<Long, Record>,
     )
 
     @DeleteMapping("/{id}")

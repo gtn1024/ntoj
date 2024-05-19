@@ -45,4 +45,6 @@ data class TestcaseJudgeResult(
     @JsonProperty("status") val status: SubmissionStatus,
     @JsonProperty("time") val time: Long,
     @JsonProperty("memory") val memory: Long,
+    @JsonProperty("input", required = false) val input: String?,
+    @JsonProperty("output", required = false) val output: String?,
 )

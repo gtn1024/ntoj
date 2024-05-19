@@ -6,16 +6,16 @@ import cn.dev33.satoken.stp.StpUtil
 import com.github.ntoj.app.server.exception.AppException
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.model.L
+import com.github.ntoj.app.server.model.dtos.RecordDto
 import com.github.ntoj.app.server.model.entities.Problem
 import com.github.ntoj.app.server.model.entities.ProblemSample
-import com.github.ntoj.app.server.model.entities.Submission
+import com.github.ntoj.app.server.model.entities.Record
 import com.github.ntoj.app.server.service.LanguageService
 import com.github.ntoj.app.server.service.ProblemService
-import com.github.ntoj.app.server.service.SubmissionService
+import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.server.service.UserService
-import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.R
-import com.github.ntoj.app.shared.model.SubmissionStatus
+import com.github.ntoj.app.shared.model.RecordOrigin
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -31,8 +31,8 @@ import org.springframework.web.bind.annotation.RestController
 class ProblemController(
     val problemService: ProblemService,
     val userService: UserService,
-    val submissionService: SubmissionService,
     val languageService: LanguageService,
+    private val recordService: RecordService,
 ) {
     @GetMapping
     fun index(
@@ -62,44 +62,34 @@ class ProblemController(
     fun submitCode(
         @PathVariable alias: String,
         @RequestBody problemSubmissionRequest: ProblemSubmissionRequest,
-    ): ResponseEntity<R<SubmissionDto>> {
-        val problem = problemService.get(alias)
-        if (problemSubmissionRequest.code.length > problem.codeLength * 1024) {
-            throw AppException("代码长度超过限制", 400)
-        }
-        problem.submitTimes = (problem.submitTimes + 1).coerceAtLeast(problem.acceptedTimes + 1)
-        problemService.update(problem)
+    ): ResponseEntity<R<RecordDto>> {
+        val (code, lang, input, selfTest) = problemSubmissionRequest
+        require(languageService.exists(lang)) { "语言不存在" }
         val user = userService.getUserById(StpUtil.getLoginIdAsLong())
-        if (!languageService.exists(problemSubmissionRequest.lang)) {
-            throw AppException("语言不存在", 400)
+        val problem = problemService.get(alias)
+        require(code.length <= problem.codeLength * 1024) { "代码长度超过限制" }
+        if (selfTest) {
+            require(!input.isNullOrBlank()) { "自测输入不能为空" }
         }
-        var submission =
-            Submission(
-                user = user,
-                problem = problem,
-                origin = Submission.SubmissionOrigin.PROBLEM,
-                code = problemSubmissionRequest.code,
-                status = SubmissionStatus.PENDING,
-                judgeStage = JudgeStage.PENDING,
-                lang = problemSubmissionRequest.lang,
+        val record =
+            Record(
+                user,
+                problem,
+                RecordOrigin.PROBLEM,
+                contest = null,
+                problemSubmissionRequest.lang,
+                selfTestInput = null,
+                problemSubmissionRequest.code,
             )
-        submission = submissionService.new(submission)
-        return R.success(200, "提交成功", SubmissionDto.from(submission))
-    }
-
-    data class SubmissionDto(
-        val id: Long,
-        val status: SubmissionStatus,
-        val stage: JudgeStage,
-    ) {
-        companion object {
-            fun from(submission: Submission) =
-                SubmissionDto(
-                    id = submission.submissionId!!,
-                    status = submission.status,
-                    stage = submission.judgeStage,
-                )
+        if (selfTest) {
+            record.origin = RecordOrigin.SELF_TEST
+            record.selfTestInput = input
+        } else {
+            problem.submitTimes = (problem.submitTimes + 1).coerceAtLeast(problem.acceptedTimes + 1)
+            problemService.update(problem)
         }
+        recordService.create(record)
+        return R.success(200, "提交成功", RecordDto.from(record))
     }
 
     data class ProblemDto(
@@ -166,4 +156,6 @@ class ProblemController(
 data class ProblemSubmissionRequest(
     val code: String,
     val lang: String,
+    val input: String?,
+    val selfTest: Boolean = false,
 )
