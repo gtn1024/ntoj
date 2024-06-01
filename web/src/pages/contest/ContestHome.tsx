@@ -59,6 +59,16 @@ export const ContestHome: React.FC = () => {
         setConfirmLoading(false)
       })
   }
+
+  const registerButtonOnClick = () => {
+    if (userStore.user.id) {
+      setRegisterModalOpen(true)
+    } else {
+      const redirect = encodeURIComponent(`${location.pathname}${location.search}`)
+      nav(`/sign_in?redirect=${redirect}`)
+    }
+  }
+
   return (
     <div className={c(isMobile && 'flex-col', 'p-2 flex items-start max-w-[1200px] m-auto')}>
       <div className={c('bg-white rounded-lg shadow-md pb-8 my-1', isMobile ? 'w-11/12 mx-auto' : 'mx-2 w-3/4')}>
@@ -103,7 +113,7 @@ export const ContestHome: React.FC = () => {
         {
           !contest?.hasPermission && (
             <>
-              <button type="button" className="h-50px w-full" onClick={() => setRegisterModalOpen(true)}>
+              <button type="button" className="h-50px w-full" onClick={registerButtonOnClick}>
                 {userStore.user.id ? '加入比赛' : '请先登录'}
               </button>
               <Modal
