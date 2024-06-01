@@ -3,7 +3,6 @@ package com.github.ntoj.app.server.config
 import cn.dev33.satoken.context.SaHolder
 import cn.dev33.satoken.filter.SaServletFilter
 import cn.dev33.satoken.jwt.SaJwtUtil
-import cn.dev33.satoken.jwt.StpLogicJwtForStateless
 import cn.dev33.satoken.router.SaHttpMethod
 import cn.dev33.satoken.router.SaRouter
 import cn.dev33.satoken.stp.StpLogic
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Configuration
 class SaTokenConfig {
     @Bean
     fun getStpLogicJwt(): StpLogic? {
-        return StpLogicJwtForStateless()
+        return CustomStpLogicJwtForStateless()
     }
 
     @Autowired

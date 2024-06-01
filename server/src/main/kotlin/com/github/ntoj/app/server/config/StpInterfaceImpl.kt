@@ -18,7 +18,7 @@ class StpInterfaceImpl(
         loginType: String?,
     ): List<String> {
         val permission: BigInteger
-        if (loginId == null) {
+        if (loginId == null || loginId == -1L) {
             permission = permissionRoleService.get("guest")?.permission ?: PERM_GUEST
         } else {
             val userId = loginId.toString().toLong()
@@ -41,7 +41,10 @@ class StpInterfaceImpl(
         loginId: Any?,
         loginType: String?,
     ): List<String> {
-        val userId = loginId?.toString()?.toLong() ?: return listOf()
+        if (loginId == null || loginId == -1L) {
+            return listOf("guest")
+        }
+        val userId = loginId.toString().toLong()
         val user = userService.getUserById(userId)
         val list = listOf(user.userRole)
         return list
