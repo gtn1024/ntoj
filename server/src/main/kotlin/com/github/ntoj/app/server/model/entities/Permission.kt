@@ -64,7 +64,10 @@ val Permission: Map<String, BigInteger> =
         "PERM_EDIT_OWN_GROUP" to (BIG_1 shl 62),
     )
 
-val PERM_GUEST = Permission["PERM_VIEW"]!!
+val PERM_GUEST =
+    Permission["PERM_VIEW"]!! or
+        Permission["PERM_VIEW_PROBLEMS"]!! or
+        Permission["PERM_VIEW_ARTICLE"]!!
 
 val PERM_DEFAULT =
     Permission["PERM_VIEW"]!! or
