@@ -5,7 +5,7 @@ spring-boot = "3.2.5"
 
 flyway = "9.22.3"
 
-sa-token = "1.37.0"
+sa-token = "1.38.0"
 commons-codec = "1.17.0"
 commons-io = "2.16.1"
 
