@@ -35,6 +35,7 @@ class ProblemController(
     private val recordService: RecordService,
 ) {
     @GetMapping
+    @SaCheckPermission(value = ["PERM_VIEW_PROBLEMS"])
     fun index(
         @RequestParam(required = false, defaultValue = "1") current: Int,
         @RequestParam(required = false, defaultValue = "10") pageSize: Int,
