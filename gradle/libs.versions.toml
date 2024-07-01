@@ -3,7 +3,7 @@ kotlin = "1.9.23"
 
 spring-boot = "3.2.5"
 
-flyway = "9.22.3"
+flyway = "10.15.2"
 
 sa-token = "1.38.0"
 commons-codec = "1.17.0"
