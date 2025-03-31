@@ -117,9 +117,7 @@ export const RecordPage: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-500">提交者</span>
                 <span className="text-gray-500">
-                  <Link to={`/u/${data?.user.username}`}>
-                    {data?.user.username}
-                  </Link>
+                  {data?.user.username}
                 </span>
               </div>
               <div className="flex justify-between">

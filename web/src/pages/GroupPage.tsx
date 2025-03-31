@@ -67,7 +67,7 @@ export const GroupPage: FC = () => {
                 <tbody>
                   {data?.users.map(user => (
                     <tr key={user.id} className="text-center">
-                      <td className="p-2"><Link to={`/u/${user.username}`}>{user.username}</Link></td>
+                      <td className="p-2">{user.username}</td>
                       <td className="p-2">{user.displayName}</td>
                     </tr>
                   ))}

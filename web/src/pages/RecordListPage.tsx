@@ -108,7 +108,7 @@ export const RecordListPage: React.FC = () => {
     {
       title: '提交者',
       render: (_value: string, record: SubmissionDto) => {
-        return <Link to={`/u/${record.user.username ?? ''}`}>{record.user.username}</Link>
+        return record.user.username
       },
     },
     {

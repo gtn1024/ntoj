@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import type { TablePaginationConfig } from 'antd'
 import { Button, Space, Table, message } from 'antd'
 import useSWR from 'swr'
@@ -53,14 +53,6 @@ export const AdminUserPage: React.FC = () => {
       title: '用户名',
       dataIndex: 'username',
       key: 'username',
-      render: (value) => {
-        return <Link to={`/u/${value}`}>{value}</Link>
-      },
-    },
-    {
-      title: '显示名',
-      dataIndex: 'displayName',
-      key: 'displayName',
     },
     {
       title: '注册时间',
