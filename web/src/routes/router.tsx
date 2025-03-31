@@ -163,7 +163,6 @@ export const router = createBrowserRouter(
       loader: rootLoader,
       children: [
         { index: true, element: <HomePage /> },
-        { path: 'about', element: <div>About</div> },
         {
           path: 'p',
           children: [

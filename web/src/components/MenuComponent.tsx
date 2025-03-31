@@ -33,10 +33,6 @@ const items = [
     label: '小组',
     key: '/group',
   },
-  {
-    label: '关于',
-    key: '/about',
-  },
 ]
 
 export const MenuComponent: React.FC<Props> = ({ className }) => {
