@@ -18,7 +18,6 @@ import ProblemListPage from '../pages/ProblemListPage.tsx'
 import ProblemPage from '../pages/ProblemPage.tsx'
 import RecordListPage from '../pages/RecordListPage.tsx'
 import RecordPage from '../pages/RecordPage.tsx'
-import UserProfilePage from '../pages/UserProfilePage.tsx'
 import AdminAnnouncementEditPage from '../pages/admin/AdminAnnouncementEditPage.tsx'
 import AdminAnnouncementPage from '../pages/admin/AdminAnnouncementPage.tsx'
 import AdminContestEditPage from '../pages/admin/AdminContestEditPage.tsx'
@@ -171,7 +170,6 @@ export const router = createBrowserRouter(
           ],
         },
         { path: 'a/:id', element: <AnnouncementPage /> },
-        { path: 'u/:username', element: <UserProfilePage /> },
         {
           path: 'r',
           children: [

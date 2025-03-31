@@ -22,14 +22,6 @@ export const AccountComponent: React.FC<Props> = ({ className }) => {
   }
   const items: MenuProps['items'] = [
     {
-      key: 'user-center',
-      label: (
-        <Link to={`/u/${user.username ?? ''}`}>
-          个人中心
-        </Link>
-      ),
-    },
-    {
       key: 'admin',
       label: (
         <Link to="/admin">
@@ -49,6 +41,7 @@ export const AccountComponent: React.FC<Props> = ({ className }) => {
       ),
     },
   ]
+
   return (
     <div className={className}>
       {user.id
