@@ -15,7 +15,7 @@
     "@wangeditor/editor": "5.1.23",
     "@wangeditor/editor-for-react": "1.0.6",
     "antd": "5.17.2",
-    "axios": "1.6.8",
+    "axios": "1.8.2",
     "classnames": "2.5.1",
     "dayjs": "1.11.11",
     "lodash": "4.17.21",
