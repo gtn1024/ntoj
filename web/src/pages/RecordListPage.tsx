@@ -137,8 +137,19 @@ export const RecordListPage: React.FC = () => {
     },
     {
       title: '提交时间',
-      dataIndex: 'submitTime',
-      key: 'submitTime',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render(value: number) {
+        // YYYY-MM-DD HH:mm:ss
+        return new Date(value * 1000).toLocaleString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        })
+      }
     },
     checkPermission(permission, PERM.PERM_REJUDGE_RECORD)
       ? ({
