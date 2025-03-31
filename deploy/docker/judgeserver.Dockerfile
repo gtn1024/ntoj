@@ -15,9 +15,3 @@ RUN apt update && \
     mono-complete \
     nodejs \
     unzip
-
-RUN wget https://github.com/JetBrains/kotlin/releases/download/v1.9.20/kotlin-compiler-1.9.20.zip -O /tmp/kotlin.zip && \
-    unzip /tmp/kotlin.zip -d /usr/lib && \
-    rm /tmp/kotlin.zip && \
-    ln -s /usr/lib/kotlinc/bin/kotlinc /usr/bin/kotlinc && \
-    ln -s /usr/lib/kotlinc/bin/kotlin /usr/bin/kotlin

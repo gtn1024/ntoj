@@ -23,3 +23,10 @@
 ```shell
 $ ./gradlew :judger:shadowJar
 ```
+
+## Docker 构建指南
+
+```shell
+$ docker build . -f docker/judgeserver.cn.Dockerfile -t ntoj-judgeserver:0.0.2
+$ docker run -d --name=ntoj-judgeserver --privileged --shm-size=256m -p 5050:5050 ntoj-judgeserver:0.0.2               
+```
