@@ -26,7 +26,7 @@ export const MainLayout: React.FC = () => {
         <Outlet />
       </Content>
       <Footer className="h-[80px] flex flex-col items-center justify-center bg-white text-center">
-        <div>NTOJ ©2023</div>
+        <div>NTOJ ©2025</div>
         <div>
           {information.beian ? `备案号：${information.beian}` : null}
         </div>

@@ -15,7 +15,7 @@ export default defineConfig(({ command }) => ({
     visualizer() as PluginOption,
   ],
   server: {
-    port: 2023,
+    port: 2025,
     fs: {
       strict: true,
     },
