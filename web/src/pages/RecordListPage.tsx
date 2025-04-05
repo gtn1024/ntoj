@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import type { TablePaginationConfig } from 'antd'
-import { Button, Table, message } from 'antd'
+import { Table, message } from 'antd'
 import useSWR from 'swr'
 import type { AxiosError } from 'axios'
 import type { ColumnsType } from 'antd/es/table'
@@ -9,8 +9,6 @@ import type { HttpResponse, L } from '../lib/Http.tsx'
 import { http } from '../lib/Http.tsx'
 import { statusToColor, statusToMessage } from '../lib/SubmissionUtils.ts'
 import { useLanguages } from '../hooks/useLanguages.ts'
-import { useUserPermission } from '../hooks/useUserPermission.ts'
-import { PERM, checkPermission } from '../lib/Permission.ts'
 
 interface SubmissionDto {
   id: number
@@ -28,7 +26,6 @@ interface SubmissionDto {
 }
 
 export const RecordListPage: React.FC = () => {
-  const permission = useUserPermission()
   const [searchParams, setSearchParams] = useSearchParams()
   const [pagination, setPagination] = useState<TablePaginationConfig>({
     current: Number.parseInt(searchParams.get('current') ?? '1'),
@@ -67,15 +64,6 @@ export const RecordListPage: React.FC = () => {
       })
   })
   const loading = !data && !error
-  const rejudge = (id: number) => {
-    http.post(`/record/${id}/rejudge`)
-      .then(() => {
-        void message.success('已开始重测')
-      })
-      .catch((err: AxiosError<HttpResponse>) => {
-        void message.error(err.response?.data.message ?? '重测失败')
-      })
-  }
   const columns: ColumnsType<SubmissionDto> = [
     {
       title: '运行ID',
@@ -149,18 +137,8 @@ export const RecordListPage: React.FC = () => {
           minute: '2-digit',
           second: '2-digit',
         })
-      }
+      },
     },
-    checkPermission(permission, PERM.PERM_REJUDGE_RECORD)
-      ? ({
-          title: '操作',
-          render: (_value: string, record: SubmissionDto) => {
-            return (
-              <Button onClick={() => rejudge(record.id)}>重测</Button>
-            )
-          },
-        })
-      : {},
   ]
 
   return (
