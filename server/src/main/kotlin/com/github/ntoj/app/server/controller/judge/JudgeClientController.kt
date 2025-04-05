@@ -8,10 +8,12 @@ import com.github.ntoj.app.server.ext.from
 import com.github.ntoj.app.server.ext.success
 import com.github.ntoj.app.server.service.FileService
 import com.github.ntoj.app.server.service.FileUploadService
+import com.github.ntoj.app.server.service.ProblemService
 import com.github.ntoj.app.server.service.RecordService
 import com.github.ntoj.app.shared.model.JudgeStage
 import com.github.ntoj.app.shared.model.JudgerRecordDto
 import com.github.ntoj.app.shared.model.R
+import com.github.ntoj.app.shared.model.RecordOrigin
 import com.github.ntoj.app.shared.model.SubmissionStatus
 import com.github.ntoj.app.shared.model.TestcaseDto
 import com.github.ntoj.app.shared.model.UpdateRecordRequest
@@ -37,6 +39,7 @@ class JudgeClientController(
     private val languages: LanguageMap,
     private val recordQueueManager: RecordQueueManager,
     private val recordService: RecordService,
+    private val problemService: ProblemService,
 ) {
     @GetMapping("/ping")
     fun ping(): ResponseEntity<R<PingResponse>> {
@@ -54,6 +57,11 @@ class JudgeClientController(
         require(status != null || stage != null) { "status 和 stage 至少需要一个" }
         if (stage != null) record.stage = stage
         if (status != null) record.status = status
+        if (record.origin != RecordOrigin.SELF_TEST && status == SubmissionStatus.ACCEPTED) {
+            val problem = problemService.get(record.problem!!.problemId!!)
+            problem.acceptedTimes += 1
+            problemService.update(problem)
+        }
         if (request != null) {
             record.time = request.time
             record.memory = request.memory
