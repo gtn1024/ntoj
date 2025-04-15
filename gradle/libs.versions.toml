@@ -15,7 +15,7 @@ ktlint = "0.50.0"
 
 junit5 = "5.10.2"
 spock = "2.3-groovy-4.0"
-ktor = "2.3.10"
+ktor = "2.3.11"
 jackson = "2.17.1"
 logback = "1.5.6"
 
